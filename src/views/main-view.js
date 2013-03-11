@@ -5,7 +5,7 @@ define(['app'], function(app) {
 		$content: null,
 
 		render: function() {
-			this.$el.html("Main View");
+			this.$el.html("<a href='#'>Main View</a>");
 			if (!this.$content)
 				this.$content = $("<div />").appendTo(this.$el);
 			return this;

@@ -14,15 +14,23 @@ define(["require", "app"], function(require, app) {
 		},
 
 		projects: function() {
-			require(["views/projects-view"], function(ProjectsView) {
-				app.mainView.setContentView(new ProjectsView());
+			require(["views/projects-view", "models/projects", "data/projects"], 
+			function(ProjectsView, Projects, DataProjects) {
+				var projects = new Projects();
+				projects.reset(DataProjects);
+				app.mainView.setContentView(new ProjectsView({
+					model: projects
+				}));
 			});
 		},
 
 		project: function(id) {
-			require(["views/project-view"], function(ProjectView) {
+			require(["views/project-view", "models/projects", "data/projects"], 
+			function(ProjectView, Projects, DataProjects) {
+				var projects = new Projects();
+				projects.reset(DataProjects);
 				app.mainView.setContentView(new ProjectView({
-					model: id
+					model: projects.get(id)
 				}));
 			});
 		}

@@ -4,9 +4,14 @@ define(function() {
 
 		render: function() {
 			this.$el.html("projects-view");
-			for (var i = 0; i < 10; ++i) {
-				this.$el.append($("<a />").attr("href", "#/project/" + i).html("Project " + i));
-			}
+			
+			this.$el.append(
+				$("<ul />").append(this.model.map(function(model) {
+					return $("<li />").append(
+						$("<a />").attr("href", "#/project/" + model.get("id")).text(model.get("title"))
+					);
+			})));
+
 			return this;
 		}
 

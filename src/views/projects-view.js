@@ -1,6 +1,6 @@
-define(function() {
+define(["views/common/content-view"], function(ContentView) {
 
-	return Backbone.View.extend({
+	var ProjectsView = ContentView.extend({
 
 		render: function() {
 			this.$el.html("projects-view");
@@ -12,9 +12,11 @@ define(function() {
 					);
 			})));
 
-			return this;
+			return ProjectsView.__super__.render.call(this);
 		}
 
 	});
+
+	return ProjectsView;
 
 });

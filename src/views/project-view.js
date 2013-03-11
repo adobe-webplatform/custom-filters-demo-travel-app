@@ -1,12 +1,13 @@
-define(function() {
+define(["views/common/content-view"], function(ContentView) {
 
-	return Backbone.View.extend({
+	var ProjectView = ContentView.extend({
 
 		render: function() {
 			this.$el.html("project-view: " + this.model.get("title"));
-			return this;
+			return ProjectView.__super__.render.call(this);
 		}
 
 	});
-
+	
+	return ProjectView;
 });

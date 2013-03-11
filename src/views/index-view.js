@@ -1,12 +1,14 @@
-define(function() {
+define(["views/common/content-view"], function(ContentView) {
 
-	return Backbone.View.extend({
+	var IndexView = ContentView.extend({
 
 		render: function() {
 			this.$el.html("index-view<br /><a href='#projects'>Projects</a>");
-			return this;
+			return IndexView.__super__.render.call(this);
 		}
 
 	});
+
+	return IndexView;
 
 });

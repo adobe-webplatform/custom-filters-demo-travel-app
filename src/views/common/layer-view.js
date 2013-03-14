@@ -31,6 +31,54 @@ define(["utils/rect", "utils/transform", "utils/request-animation-frame"], funct
             return children;
         },
 
+        append: function(view) {
+            this.$el.append(view.$el);
+            return this._childAdded(view);
+        },
+
+        before: function(view, otherView) {
+            otherView.$el.before(view.$el);
+            return this._childAdded(view);
+        },
+
+        after: function(view, otherView) {
+            otherView.$el.after(view.$el);
+            return this._childAdded(view);
+        },
+
+        remove: function(view) {
+            if (!view) {
+                var parentView = this.parent();
+                if (parentView)
+                    parentView.remove(this);
+                else
+                    this.$el.remove();
+                return;
+            }
+            view.$el.remove();
+            return this._childRemoved(view);
+        },
+
+        _childAdded: function(view) {
+            view.setNeedsLayout(true);
+            return this;
+        },
+
+        _childRemoved: function(view) {
+            this.setNeedsLayout(true);
+            return this;
+        },
+
+        addClass: function(className) {
+            this.$el.addClass(className);
+            return this;
+        },
+
+        removeClass: function(className) {
+            this.$el.removeClass(className);
+            return this;
+        },
+
         parent: function() {
             var parent = this.$el.parent();
             for (; parent.length; parent = parent.parent()) {
@@ -47,21 +95,38 @@ define(["utils/rect", "utils/transform", "utils/request-animation-frame"], funct
             this.layout();
         },
 
-        layout: function() {
+        layoutChildren: function() {
             _.each(this.childrenViews(), function(view) {
                 view.layoutIfNeeded();
             });
+        },
+
+        layout: function() {
+            this.layoutChildren();
+            this.setNeedsLayout(false);
         },
 
         setNeedsLayout: function(needsLayout) {
             if (this._needsLayout == needsLayout)
                 return;
             this._needsLayout = needsLayout;
-            if (needsLayout) {
+            if (needsLayout && this.$el.parent().length) {
                 var parentView = this.parent();
-                if (parentView)
+                if (parentView) {
                     parentView.setNeedsLayout(needsLayout);
+                } else {
+                    requestAnimationFrame.once("before", this.onBeforeUpdate, this);
+                }
             }
+        },
+
+        onBeforeUpdate: function() {
+            this.layoutIfNeeded();
+        },
+
+        updateLayout: function() {
+            this.setNeedsLayout(true);
+            return this;
         },
 
         setBounds: function(bounds) {

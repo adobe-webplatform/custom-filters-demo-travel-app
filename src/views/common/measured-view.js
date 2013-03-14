@@ -9,6 +9,12 @@ define(["views/common/layer-view"], function(LayerView) {
 			return MeasuredView.__super__.render.call(this);
 		},
 
+		setContent: function(html) {
+			this.$contentView.html(html);
+			this.setNeedsLayout(true);
+			return this;
+		},
+
 		content: function() {
 			return this.$contentView;
 		},
@@ -18,14 +24,11 @@ define(["views/common/layer-view"], function(LayerView) {
 		},
 
 		layout: function() {
-			MeasuredView.__super__.layout.call(this);
+			this.layoutChildren();
 			this.bounds()
 				.setWidth(this.$contentView.outerWidth())
 				.setHeight(this.$contentView.outerHeight());
-		},
-
-		updateSize: function() {
-			this.setNeedsLayout(true);
+			this.setNeedsLayout(false);
 		}
 	});
 

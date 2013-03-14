@@ -1,59 +1,64 @@
 define(['app', 
-		'views/common/layer-view', 
-		'views/common/measured-view', 
-		'utils/request-animation-frame'], 
-	function(app, LayerView, MeasuredView, requestAnimationFrame) {
+        'views/common/layer-view', 
+        'views/common/measured-view',
+        'views/common/vertical-box-view'], 
+    function(app, 
+             LayerView,
+             MeasuredView,
+             VerticalBoxView) {
 
-	var MainView = LayerView.extend({
+    var MainView = LayerView.extend({
 
-		$content: null,
+        $content: null,
 
-		initialize: function() {
-			requestAnimationFrame.on("before", this.onBeforeUpdate, this);
-		},
+        initialize: function() {
+        },
 
-		render: function() {
-			this.$el.html("<a href='#'>Main View</a>");
-			if (!this.$content)
-				this.$content = $("<div />").appendTo(this.$el);
+        render: function() {
+            this.$el.html("<a href='#'>Main View</a>");
+            if (!this.$content)
+                this.$content = $("<div />").appendTo(this.$el);
 
-			var layer1 = new LayerView();
-			var layer2 = new LayerView();
+            var layer1 = new LayerView();
+            var layer2 = new LayerView();
 
-			this.$el.append(layer1.render().$el.addClass("blue-box"))
-					.append(layer2.render().$el.addClass("red-box"));
+            this.append(layer1.render().addClass("blue-box"))
+                .append(layer2.render().addClass("red-box"));
 
-			layer1.bounds().setX(100).setY(200).setWidth(100).setHeight(100);
-			layer1.transform().rotate(20);
+            layer1.bounds().setX(100).setY(200).setWidth(100).setHeight(100);
+            layer1.transform().rotate(20);
 
-			layer2.bounds().setX(300).setY(300).setWidth(200).setHeight(100);
-			layer2.transform().perspective(100).rotateX(20);
+            layer2.bounds().setX(300).setY(300).setWidth(200).setHeight(100);
+            layer2.transform().perspective(100).rotateX(20);
 
-			var layer3 = new MeasuredView();
-			layer3.bounds().setX(300).setY(300);
-			this.$el.append(layer3.render().$el.addClass("green-box"));
-			layer3.content().text("Box of the right size");
-			layer3.updateSize();
+            var layer3 = new MeasuredView();
+            layer3.bounds().setX(300).setY(300);
+            this.append(layer3.render().addClass("green-box"));
+            layer3.setContent("Box of the right size");
 
-			return this;
-		},
+            var layer4 = new VerticalBoxView();
+            layer4.bounds().setX(100).setY(50);
+            this.append(layer4.render().addClass("blue-box"));
+            layer4.append(new MeasuredView().render().setContent("Line 1"));
+            layer4.append(new MeasuredView().render().setContent("Line 2"));
+            layer4.append(new MeasuredView().render().setContent("Line 3"));
+            layer4.append(new MeasuredView().render().setContent("Line 4"));
 
-		onBeforeUpdate: function() {
-			this.layoutIfNeeded();
-		},
+            return this;
+        },
 
-		setContentView: function(view) {
-			this.$content.html("");
-			this.$content.append(view.render().$el);
-		}
-	});
+        setContentView: function(view) {
+            this.$content.html("");
+            this.$content.append(view.render().$el);
+        }
+    });
 
-	app.on("init", function() {
-		app.mainView = new MainView({
-			el: $("#main").get(0)
-		}).render();
-	});
+    app.on("init", function() {
+        app.mainView = new MainView({
+            el: $("#main").get(0)
+        }).render();
+    });
 
-	return MainView;
+    return MainView;
 
 });

@@ -45,7 +45,7 @@ define(['app',
             layer4.append(new MeasuredView().render().setContent("Line 3"));
             layer4.append(new MeasuredView().render().setContent("Line 4"));
             layer4.setUseChildrenWidth(true);
-            layer4.padding().setLeft(100);
+            layer4.padding().setLeft(100).setTop(200).setBottom(10).setRight(60);
 
             layer0.bounds().setY(100);
 

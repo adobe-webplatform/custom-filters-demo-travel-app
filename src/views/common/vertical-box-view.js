@@ -14,17 +14,18 @@ define(["views/common/layer-view"], function(LayerView) {
 
         layout: function() {
             var children = this.childrenViews(),
-                offset = 0,
                 maxWidth = 0,
+                padding = this.padding(),
+                offset = padding.top(),
                 useChildrenWidth = this.useChildrenWidth;
             _.each(children, function(view) {
                 view.layoutIfNeeded();
-                view.bounds().setY(offset);
+                view.bounds().setX(padding.left()).setY(offset);
                 offset += view.bounds().height();
                 if (useChildrenWidth)
                     maxWidth = Math.max(maxWidth, view.bounds().width());
             });
-            this.bounds().setHeight(offset);
+            this.bounds().setHeight(offset - padding.top());
             if (useChildrenWidth)
                 this.bounds().setWidth(maxWidth);
             this.setNeedsLayout(false);

@@ -1,0 +1,11 @@
+.js-layer-view {
+	position: absolute;
+}
+
+.red-box {
+	background: red;
+}
+
+.blue-box {
+	background: blue;
+}

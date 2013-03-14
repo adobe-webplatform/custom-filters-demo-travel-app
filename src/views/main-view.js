@@ -1,4 +1,4 @@
-define(['app'], function(app) {
+define(['app', 'views/common/layer-view'], function(app, LayerView) {
 
 	var MainView = Backbone.View.extend({
 
@@ -8,6 +8,16 @@ define(['app'], function(app) {
 			this.$el.html("<a href='#'>Main View</a>");
 			if (!this.$content)
 				this.$content = $("<div />").appendTo(this.$el);
+
+			var layer1 = new LayerView();
+			var layer2 = new LayerView();
+
+			this.$el.append(layer1.render().$el.addClass("blue-box"))
+					.append(layer2.render().$el.addClass("red-box"));
+
+			layer1.bounds().setWidth(100).setHeight(100);
+			layer2.bounds().setWidth(200).setHeight(100).setX(100);
+
 			return this;
 		},
 

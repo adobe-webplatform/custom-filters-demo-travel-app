@@ -38,11 +38,12 @@ define(['app',
 
             var layer4 = new VerticalBoxView();
             layer4.bounds().setX(100).setY(50);
-            this.append(layer4.render().addClass("blue-box"));
+            this.append(layer4.render().addClass("red-box"));
             layer4.append(new MeasuredView().render().setContent("Line 1"));
-            layer4.append(new MeasuredView().render().setContent("Line 2"));
+            layer4.append(new MeasuredView().render().setContent("Line 2 is super long"));
             layer4.append(new MeasuredView().render().setContent("Line 3"));
             layer4.append(new MeasuredView().render().setContent("Line 4"));
+            layer4.setUseChildrenWidth(true);
 
             return this;
         },

@@ -1,4 +1,8 @@
-define(["utils/rect", "utils/transform", "utils/request-animation-frame"], function(Rect, Transform, requestAnimationFrame) {
+define(["utils/rect",
+    "utils/transform",
+    "utils/outsets",
+    "utils/request-animation-frame"
+], function(Rect, Transform, Outsets, requestAnimationFrame) {
 
     var LayerView = Backbone.View.extend({
 
@@ -6,9 +10,15 @@ define(["utils/rect", "utils/transform", "utils/request-animation-frame"], funct
             LayerView.__super__.initialize.call(this);
             this._bounds = new Rect();
             this._transform = new Transform();
+            this._margin = new Outsets();
+            this._padding = new Outsets();
+
             this._bounds.on("change:position", this._onPositionChanged, this);
             this._bounds.on("change:size", this._onSizeChanged, this);
             this._transform.on("change", this._onTransformChanged, this);
+            this._padding.on("change", this._onPaddingChanged, this);
+            this._margin.on("change", this._onMarginChanged, this);
+
             this._invalidationFlags = null;
             this._needsLayout = false;
         },
@@ -144,6 +154,22 @@ define(["utils/rect", "utils/transform", "utils/request-animation-frame"], funct
             return this._bounds;
         },
 
+        setMargin: function(margin) {
+            this._margin.set(margin);
+        },
+
+        margin: function() {
+            return this._margin;
+        },
+
+        setPadding: function(padding) {
+            this._padding.set(padding);
+        },
+
+        padding: function() {
+            return this._padding;
+        },
+
         setTransform: function(transform) {
             this._transform.set(transform);
         },
@@ -210,6 +236,14 @@ define(["utils/rect", "utils/transform", "utils/request-animation-frame"], funct
             this.$el.css("transform", this._transform.toString());
         },
 
+        _validatePadding: function() {
+            this.$el.css("padding", this._padding.toCSSString("px"));
+        },
+
+        _validateMargin: function() {
+            this.$el.css("margin", this._margin.toCSSString("px"));
+        },
+
         _onPositionChanged: function() {
             this.invalidate("position");
         },
@@ -220,6 +254,15 @@ define(["utils/rect", "utils/transform", "utils/request-animation-frame"], funct
 
         _onTransformChanged: function() {
             this.invalidate("transform");
+        },
+
+        _onPaddingChanged: function() {
+            this.invalidate("padding");
+            this.setNeedsLayout(true);
+        },
+
+        _onMarginChanged: function() {
+            this.invalidate("margin");
         }
     });
 

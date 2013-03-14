@@ -1,12 +1,14 @@
-define(["utils/rect", "utils/request-animation-frame"], function(Rect, requestAnimationFrame) {
+define(["utils/rect", "utils/transform", "utils/request-animation-frame"], function(Rect, Transform, requestAnimationFrame) {
 
     var LayerView = Backbone.View.extend({
 
         initialize: function() {
             LayerView.__super__.initialize.call(this);
             this._bounds = new Rect();
+            this._transform = new Transform();
             this._bounds.on("change:position", this._onPositionChanged, this);
             this._bounds.on("change:size", this._onSizeChanged, this);
+            this._transform.on("change", this._onTransformChanged, this);
             this._invalidationFlags = null;
         },
 
@@ -18,8 +20,19 @@ define(["utils/rect", "utils/request-animation-frame"], function(Rect, requestAn
             return this._bounds;
         },
 
+        setTransform: function(transform) {
+            this._transform.set(transform);
+        },
+
+        transform: function() {
+            return this._transform;
+        },
+
         render: function() {
             this.$el.addClass("js-layer-view");
+            this._validatePosition();
+            this._validateSize();
+            this._validateTransform();
             return this;
         },
 
@@ -39,7 +52,7 @@ define(["utils/rect", "utils/request-animation-frame"], function(Rect, requestAn
             if (!this._invalidationFlags)
                 return;
             var invalidationFlags = this._invalidationFlags;
-            _invalidationFlags = null;
+            this._invalidationFlags = null;
             var self = this;
             _.each(invalidationFlags, function(enabled, type) {
                 if (!enabled)
@@ -69,12 +82,20 @@ define(["utils/rect", "utils/request-animation-frame"], function(Rect, requestAn
                 .css("height", this._bounds.height());
         },
 
+        _validateTransform: function() {
+            this.$el.css("transform", this._transform.toString());
+        },
+
         _onPositionChanged: function() {
             this.invalidate("position");
         },
 
         _onSizeChanged: function() {
             this.invalidate("size");
+        },
+
+        _onTransformChanged: function() {
+            this.invalidate("transform");
         }
     });
 

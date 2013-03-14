@@ -16,7 +16,13 @@ define(['app', 'views/common/layer-view'], function(app, LayerView) {
 					.append(layer2.render().$el.addClass("red-box"));
 
 			layer1.bounds().setWidth(100).setHeight(100);
+			layer1.transform().rotate(20);
 			layer2.bounds().setWidth(200).setHeight(100).setX(100);
+			layer2.transform().perspective(100).rotateX(20);
+
+			setInterval(function() {
+				layer1.transform().search("rotate").addAngle(1);
+			}, 10);
 
 			return this;
 		},

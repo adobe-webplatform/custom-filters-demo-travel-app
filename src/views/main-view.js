@@ -19,31 +19,36 @@ define(['app',
             if (!this.$content)
                 this.$content = $("<div />").appendTo(this.$el);
 
+            var layer0 = new VerticalBoxView();
+
             var layer1 = new LayerView();
             var layer2 = new LayerView();
 
-            this.append(layer1.render().addClass("blue-box"))
+            layer0.append(layer1.render().addClass("blue-box"))
                 .append(layer2.render().addClass("red-box"));
 
-            layer1.bounds().setX(100).setY(200).setWidth(100).setHeight(100);
+            layer1.bounds().setWidth(100).setHeight(100);
             layer1.transform().rotate(20);
 
-            layer2.bounds().setX(300).setY(300).setWidth(200).setHeight(100);
-            layer2.transform().perspective(100).rotateX(20);
+            layer2.bounds().setWidth(200).setHeight(100);
+            layer2.transform().perspective(100).rotateY(20);
 
             var layer3 = new MeasuredView();
-            layer3.bounds().setX(300).setY(300);
-            this.append(layer3.render().addClass("green-box"));
+            layer0.append(layer3.render().addClass("green-box"));
             layer3.setContent("Box of the right size");
 
             var layer4 = new VerticalBoxView();
-            layer4.bounds().setX(100).setY(50);
-            this.append(layer4.render().addClass("red-box"));
+            layer4.bounds().setX(100);
+            layer0.append(layer4.render().addClass("red-box"));
             layer4.append(new MeasuredView().render().setContent("Line 1"));
             layer4.append(new MeasuredView().render().setContent("Line 2 is super long"));
             layer4.append(new MeasuredView().render().setContent("Line 3"));
             layer4.append(new MeasuredView().render().setContent("Line 4"));
             layer4.setUseChildrenWidth(true);
+
+            layer0.bounds().setY(100);
+
+            this.append(layer0.render());
 
             return this;
         },

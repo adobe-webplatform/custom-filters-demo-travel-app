@@ -61,6 +61,7 @@ define(["utils/rect", "utils/transform", "utils/request-animation-frame"], funct
 
         _childAdded: function(view) {
             view.setNeedsLayout(true);
+            this.setNeedsLayout(true);
             return this;
         },
 

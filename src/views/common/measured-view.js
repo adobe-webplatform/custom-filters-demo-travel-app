@@ -18,6 +18,7 @@ define(["views/common/layer-view"], function(LayerView) {
 		},
 
 		layout: function() {
+			MeasuredView.__super__.layout.call(this);
 			this.bounds()
 				.setWidth(this.$contentView.outerWidth())
 				.setHeight(this.$contentView.outerHeight());

@@ -23,12 +23,14 @@ define(['app',
 			this.$el.append(layer1.render().$el.addClass("blue-box"))
 					.append(layer2.render().$el.addClass("red-box"));
 
-			layer1.bounds().setWidth(100).setHeight(100);
+			layer1.bounds().setX(100).setY(200).setWidth(100).setHeight(100);
 			layer1.transform().rotate(20);
-			layer2.bounds().setWidth(200).setHeight(100).setX(100);
+
+			layer2.bounds().setX(300).setY(300).setWidth(200).setHeight(100);
 			layer2.transform().perspective(100).rotateX(20);
 
 			var layer3 = new MeasuredView();
+			layer3.bounds().setX(300).setY(300);
 			this.$el.append(layer3.render().$el.addClass("green-box"));
 			layer3.content().text("Box of the right size");
 			layer3.updateSize();

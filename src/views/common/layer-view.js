@@ -46,17 +46,23 @@ define(["utils/rect", "utils/transform", "utils/request-animation-frame"], funct
             return this._childAdded(view);
         },
 
-        remove: function(view) {
+        detach: function(view) {
             if (!view) {
                 var parentView = this.parent();
                 if (parentView)
-                    parentView.remove(this);
+                    parentView.detach(this);
                 else
-                    this.$el.remove();
-                return;
+                    this.$el.detach();
+                return this;
             }
-            view.$el.remove();
+            view.$el.detach();
             return this._childRemoved(view);
+        },
+
+        remove: function(view) {
+            this.detach(view);
+            this.$el.remove();
+            return this;
         },
 
         _childAdded: function(view) {

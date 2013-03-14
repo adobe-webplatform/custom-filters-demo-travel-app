@@ -10,6 +10,58 @@ define(["utils/rect", "utils/transform", "utils/request-animation-frame"], funct
             this._bounds.on("change:size", this._onSizeChanged, this);
             this._transform.on("change", this._onTransformChanged, this);
             this._invalidationFlags = null;
+            this._needsLayout = false;
+        },
+
+        setElement: function(el) {
+            if (this.$el)
+                this.$el.data("layer-view", null);
+            LayerView.__super__.setElement.call(this, el);
+            if (this.$el)
+                this.$el.data("layer-view", this);
+        },
+
+        childrenViews: function() {
+            var children = [];
+            this.$el.children().each(function(i, child) {
+                var layerView = $(child).data("layer-view");
+                if (layerView)
+                    children.push(layerView);
+            });
+            return children;
+        },
+
+        parent: function() {
+            var parent = this.$el.parent();
+            for (; parent.length; parent = parent.parent()) {
+                var layerView = parent.data("layer-view");
+                if (layerView)
+                    return layerView;
+            }
+            return null;
+        },
+
+        layoutIfNeeded: function() {
+            if (!this._needsLayout)
+                return;
+            this.layout();
+        },
+
+        layout: function() {
+            _.each(this.childrenViews(), function(view) {
+                view.layoutIfNeeded();
+            });
+        },
+
+        setNeedsLayout: function(needsLayout) {
+            if (this._needsLayout == needsLayout)
+                return;
+            this._needsLayout = needsLayout;
+            if (needsLayout) {
+                var parentView = this.parent();
+                if (parentView)
+                    parentView.setNeedsLayout(needsLayout);
+            }
         },
 
         setBounds: function(bounds) {

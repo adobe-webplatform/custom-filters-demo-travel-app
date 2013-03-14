@@ -1,8 +1,16 @@
-define(['app', 'views/common/layer-view'], function(app, LayerView) {
+define(['app', 
+		'views/common/layer-view', 
+		'views/common/measured-view', 
+		'utils/request-animation-frame'], 
+	function(app, LayerView, MeasuredView, requestAnimationFrame) {
 
-	var MainView = Backbone.View.extend({
+	var MainView = LayerView.extend({
 
 		$content: null,
+
+		initialize: function() {
+			requestAnimationFrame.on("before", this.onBeforeUpdate, this);
+		},
 
 		render: function() {
 			this.$el.html("<a href='#'>Main View</a>");
@@ -20,7 +28,16 @@ define(['app', 'views/common/layer-view'], function(app, LayerView) {
 			layer2.bounds().setWidth(200).setHeight(100).setX(100);
 			layer2.transform().perspective(100).rotateX(20);
 
+			var layer3 = new MeasuredView();
+			this.$el.append(layer3.render().$el.addClass("green-box"));
+			layer3.content().text("Box of the right size");
+			layer3.updateSize();
+
 			return this;
+		},
+
+		onBeforeUpdate: function() {
+			this.layoutIfNeeded();
 		},
 
 		setContentView: function(view) {

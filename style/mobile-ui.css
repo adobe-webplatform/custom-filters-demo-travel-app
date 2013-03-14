@@ -2,10 +2,20 @@
 	position: absolute;
 }
 
+.js-measured-view-content {
+	position: absolute;
+	white-space: nowrap;
+}
+
 .red-box {
 	background: red;
 }
 
 .blue-box {
 	background: blue;
+}
+
+.green-box {
+	background: green;
+	color: white;
 }

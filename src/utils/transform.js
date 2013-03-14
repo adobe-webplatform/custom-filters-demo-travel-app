@@ -32,7 +32,7 @@ define(function() {
             toString: function() {
                 var self = this, args = [];
                 _.each(parameters, function(parameter, i) {
-                    args.push(self["_" + parameter] + units);
+                    args.push(self[keys[i]] + units);
                 });
                 return name + "(" + args.join(", ") + ")";
             },
@@ -92,9 +92,9 @@ define(function() {
         translate3d: generateFunction("translate3d", "x y z", "px"),
         scale: generateFunction("scale", "x y", ""),
         perspective: generateFunction("perspective", "depth", ""),
-        matrix: generateFunction("matrix", "a b c d e f", "px", matrixKeyGenerator),
-        matrix3d: generateFunction("matrix", 
-            "a11 a21 a31 a41 a21 a22 a23 a24 a31 a32 a33 a34 a41 a42 a43 a44", "px", matrixKeyGenerator)
+        matrix: generateFunction("matrix", "a b c d e f", "", matrixKeyGenerator),
+        matrix3d: generateFunction("matrix3d", 
+            "a11 a21 a31 a41 a21 a22 a23 a24 a31 a32 a33 a34 a41 a42 a43 a44", "", matrixKeyGenerator)
     };
 
     var Transform = function() {
@@ -150,6 +150,18 @@ define(function() {
             return this._data.join(" ");
         },
 
+        toMatrix: function() {
+            var matrix = Matrix.I(4);
+            _.each(this._data, function(fn) {
+                matrix = matrix.multiply(fn.toMatrix());
+            });
+            return matrix;
+        },
+
+        toMatrix3d: function() {
+            return Transform.matrix3d.fromMatrix(this.toMatrix());
+        },
+
         _onFunctionValueChange: function() {
             this.trigger("change");
         }
@@ -157,11 +169,11 @@ define(function() {
     
     _.extend(Transform, Transforms, {
         rads: function(degs) {
-            return rads * Math.PI / 180;
+            return degs * Math.PI / 180;
         },
 
         degs: function(rads) {
-            return degs * 180 / Math.PI;
+            return rads * 180 / Math.PI;
         }
     });
 
@@ -173,27 +185,54 @@ define(function() {
         };
     });
 
+    function rotationMatrix3d(rad, x, y, z) {
+        var halfRad = rad / 2,
+            radSin = Math.sin(halfRad),
+            sc = radSin * Math.cos(halfRad),
+            sq = radSin * radSin;
+        return Matrix.create([
+            [1 - 2 * (y * y + z * z) * sq, 
+                2 * (x * y * sq - z * sc),
+                    2 * (x * z * sq + y * sc), 0],
+            [2 * (x * y * sq + z * sc),
+                1 - 2 * (x * x + z * z) * sq,
+                    2 * (y * z * sq - x * sq), 0],
+            [2 * (x * z *sq - y * sc),
+                2 * (y * z * sq + x * sc),
+                    1 - 2 * (x * x + y * y) * sq, 0],
+            [0, 0, 0, 1]
+        ]);
+    }
+
+    function rotationMatrixAxis(rad, axis) {
+        return rotationMatrix3d(rad, axis[0], axis[1], axis[2]);
+    }
+
     _.extend(Transform.rotate.prototype, {
+        vector: [0, 0, 1],
         toMatrix: function() {
-            return Matrix.Rotation(Transform.rads(this.degs()));
+            return rotationMatrixAxis(Transform.rads(this.angle()), this.vector);
         }
     });
 
     _.extend(Transform.rotateX.prototype, {
+        vector: [1, 0, 0],
         toMatrix: function() {
-            return Matrix.RotationX(Transform.rads(this.degs()));
+            return rotationMatrixAxis(Transform.rads(this.angle()), this.vector);
         }
     });
 
     _.extend(Transform.rotateY.prototype, {
+        vector: [0, 1, 0],
         toMatrix: function() {
-            return Matrix.RotationY(Transform.rads(this.degs()));
+            return rotationMatrixAxis(Transform.rads(this.angle()), this.vector);
         }
     });
 
     _.extend(Transform.rotateZ.prototype, {
+        vector: [0, 0, 1],
         toMatrix: function() {
-            return Matrix.RotationZ(Transform.rads(this.degs()));
+            return rotationMatrixAxis(Transform.rads(this.angle()), this.vector);
         }
     });
 
@@ -294,6 +333,12 @@ define(function() {
         }
     });
 
+    Transform.matrix.fromMatrix = function(matrix) {
+        var fn = new Transform.matrix();
+        fn.fromMatrix(matrix);
+        return fn;
+    };
+
     _.extend(Transform.matrix3d.prototype, {
         toMatrix: function() {
             return Matrix.create([
@@ -319,6 +364,12 @@ define(function() {
             return this;
         }
     });
+
+    Transform.matrix3d.fromMatrix = function(matrix) {
+        var fn = new Transform.matrix3d();
+        fn.fromMatrix(matrix);
+        return fn;
+    };
 
 
     return Transform;

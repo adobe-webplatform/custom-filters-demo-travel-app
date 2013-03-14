@@ -20,10 +20,6 @@ define(['app', 'views/common/layer-view'], function(app, LayerView) {
 			layer2.bounds().setWidth(200).setHeight(100).setX(100);
 			layer2.transform().perspective(100).rotateX(20);
 
-			setInterval(function() {
-				layer1.transform().search("rotate").addAngle(1);
-			}, 10);
-
 			return this;
 		},
 

@@ -1,15 +1,15 @@
 define(
 [
-	'app',
-	'router',
-	'views/main-view'
+    'app',
+    'router',
+    'views/main-view'
 ], 
 
 function(app) {
 
-	$(function() {
-		app.trigger("init");
-		app.trigger("start");
-	});
+    $(function() {
+        app.trigger("init");
+        app.trigger("start");
+    });
 
 });

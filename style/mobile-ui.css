@@ -1,21 +1,21 @@
 .js-layer-view {
-	position: absolute;
+    position: absolute;
 }
 
 .js-measured-view-content {
-	position: absolute;
-	white-space: nowrap;
+    position: absolute;
+    white-space: nowrap;
 }
 
 .red-box {
-	background: red;
+    background: red;
 }
 
 .blue-box {
-	background: blue;
+    background: blue;
 }
 
 .green-box {
-	background: green;
-	color: white;
+    background: green;
+    color: white;
 }

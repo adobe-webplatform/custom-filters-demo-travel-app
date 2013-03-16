@@ -164,6 +164,17 @@ define(function() {
 
         _onFunctionValueChange: function() {
             this.trigger("change");
+        },
+
+        concat: function(other) {
+            var transform = new Transform();
+            _.each(this._data, function(fn) {
+                transform.append(fn);
+            });
+            _.each(other._data, function(fn) {
+                transform.append(fn);
+            });
+            return transform;
         }
     });
     

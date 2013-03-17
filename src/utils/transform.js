@@ -6,7 +6,7 @@ define(function() {
         });
     }
 
-    function generateFunction(name, parameters, units, keysGenerator) {
+    function generateFunction(name, parameters, units, is3DTransform, keysGenerator) {
         if (!_.isArray(parameters))
             parameters = parameters.split(" ");
         var keys = keysGenerator ? keysGenerator(parameters) : _.map(parameters, function(name) {
@@ -29,6 +29,7 @@ define(function() {
         });
         _.extend(fn.prototype, Backbone.Events, {
             type: fn,
+            is3DTransform: is3DTransform,
             toString: function() {
                 var self = this, args = [];
                 _.each(parameters, function(parameter, i) {
@@ -89,20 +90,21 @@ define(function() {
     }
 
     var Transforms = {
-        rotate: generateFunction("rotate", "angle", "deg"),
-        rotateX: generateFunction("rotateX", "angle", "deg"),
-        rotateY: generateFunction("rotateY", "angle", "deg"),
-        rotateZ: generateFunction("rotateZ", "angle", "deg"),
-        translate: generateFunction("translate", "x y", "px"),
-        translateX: generateFunction("translateX", "x", "px"),
-        translateY: generateFunction("translateY", "y", "px"),
-        translateZ: generateFunction("translateZ", "z", "px"),
-        translate3d: generateFunction("translate3d", "x y z", "px"),
-        scale: generateFunction("scale", "x y", ""),
-        perspective: generateFunction("perspective", "depth", ""),
-        matrix: generateFunction("matrix", "a b c d e f", "", matrixKeyGenerator),
+        rotate: generateFunction("rotate", "angle", "deg", false),
+        rotateX: generateFunction("rotateX", "angle", "deg", true),
+        rotateY: generateFunction("rotateY", "angle", "deg", true),
+        rotateZ: generateFunction("rotateZ", "angle", "deg", false),
+        translate: generateFunction("translate", "x y", "px", false),
+        translateX: generateFunction("translateX", "x", "px", false),
+        translateY: generateFunction("translateY", "y", "px", false),
+        translateZ: generateFunction("translateZ", "z", "px", true),
+        translate3d: generateFunction("translate3d", "x y z", "px", true),
+        scale: generateFunction("scale", "x y", "", false),
+        perspective: generateFunction("perspective", "depth", "", true),
+        matrix: generateFunction("matrix", "a b c d e f", "", false, matrixKeyGenerator),
         matrix3d: generateFunction("matrix3d", 
-            "a11 a21 a31 a41 a21 a22 a23 a24 a31 a32 a33 a34 a41 a42 a43 a44", "", matrixKeyGenerator)
+            "a11 a21 a31 a41 a21 a22 a23 a24 a31 a32 a33 a34 a41 a42 a43 a44", "", 
+            true, matrixKeyGenerator)
     };
 
     var Transform = function() {
@@ -186,6 +188,12 @@ define(function() {
             });
             other._onFunctionValueChange();
             this._onFunctionValueChange();
+        },
+
+        has3DTransforms: function() {
+            return _.some(this._data, function(fn, i) {
+                return fn.is3DTransform;
+            });
         },
 
         toString: function() {

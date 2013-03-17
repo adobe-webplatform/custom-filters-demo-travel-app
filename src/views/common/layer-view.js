@@ -104,13 +104,17 @@ define(["utils/rect",
             view._state = LayerView.VISIBLE;
             if (useAnimation) {
                 view.everHadLayout = false;
-                this._animationWait = null;
-                this._animationDuration = LayerView.AnimationDuration;
-                view.animation().start().get("opacity").removeAll()
-                    .chain(LayerView.AnimationDuration).opacity(LayerView.AnimationDuration, 0, 1);
-                view.animation().viewState().setOpacity(0);
+                this._animateAttach(view);
             }
             return this;
+        },
+
+        _animateAttach: function(view) {
+            this._animationWait = null;
+            this._animationDuration = LayerView.AnimationDuration;
+            view.animation().start().get("opacity").removeAll()
+                .chain(LayerView.AnimationDuration).opacity(LayerView.AnimationDuration, 0, 1);
+            view.animation().viewState().setOpacity(0);
         },
 
         _internalDetach: function(detach) {
@@ -124,18 +128,22 @@ define(["utils/rect",
             this.setNeedsLayout(true);
             view._state = LayerView.REMOVED;
             if (useAnimation) {
-                this._animationDuration = LayerView.AnimationDuration;
-                this._animationWait = LayerView.AnimationDuration * 2;
-                view.animation().start().get("opacity").removeAll()
-                    .chain(LayerView.AnimationDuration)
-                    .opacity(LayerView.AnimationDuration, 1, 0);
-                view.animation().once("stop", function() {
+                this._animateDetach(view, function() {
                     view._internalDetach(detach);
                 });
             } else {
                 view._internalDetach(detach);
             }
             return this;
+        },
+
+        _animateDetach: function(view, callback) {
+            this._animationDuration = LayerView.AnimationDuration;
+            this._animationWait = LayerView.AnimationDuration * 2;
+            view.animation().start().get("opacity").removeAll()
+                .chain(LayerView.AnimationDuration)
+                .opacity(LayerView.AnimationDuration, 1, 0);
+            view.animation().once("stop", callback);
         },
 
         shouldIgnoreDuringLayout: function() {
@@ -314,8 +322,8 @@ define(["utils/rect",
             var result = this._transform;
             if (this._animation)
                 result = this._animation.viewState().blendTransform(result);
-            if (result.isEmpty())
-                this.$el.css("transform", "");
+            if (result.has3DTransforms())
+                this.$el.css("transform", result.toString());
             else
                 this.$el.css("transform", result.toString() + " translateZ(0)");
         },

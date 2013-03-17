@@ -90,9 +90,9 @@ define(["utils/animation_controller"], function(AnimationController) {
             this.trigger("change:animation");
         },
 
-        chain: function() {
+        chain: function(duration) {
             var BasicAnimation = require("utils/basic_animation");
-            var animation = new BasicAnimation("start").setDuration(0);
+            var animation = new BasicAnimation("start").setDuration(duration !== undefined ? duration : 0);
             this.append(animation);
             return animation;
         }

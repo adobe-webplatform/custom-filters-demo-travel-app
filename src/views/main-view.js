@@ -51,16 +51,16 @@ define(['app',
             layer4.setUseChildrenWidth(true);
             layer4.padding().setLeft(100).setTop(200).setBottom(10).setRight(60);
 
-            layer4.animation().chain()
+            layer4.animation().chain(1000)
                 .transform(1000, Transform().rotate(100))
                 .wait(500)
                 .transform(1000, Transform().rotate(0))
                 .wait(500)
                 .transform(1000, Transform().rotate(30))
                 .wait(500)
-                .transform(1000, Transform().rotate(-30));
-                
-
+                .transform(1000, Transform().rotate(-30))
+                .wait(500)
+                .transform(1000, Transform().rotate(0));
 
             layer4.animation().start().once("stop", function() {
                 console.log("animation stopped");

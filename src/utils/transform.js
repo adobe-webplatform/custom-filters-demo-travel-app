@@ -106,6 +106,8 @@ define(function() {
     };
 
     var Transform = function() {
+        if (!(this instanceof Transform))
+            return new Transform();
         this._data = [];
     };
 

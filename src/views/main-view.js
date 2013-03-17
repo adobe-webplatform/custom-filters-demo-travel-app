@@ -109,6 +109,24 @@ define(['app',
             layer6.scrollTo(0, 100);
             layer0.append(layer6.render());
 
+
+            var layer7 = new ScrollView();
+            layer7.setContentView(new LayoutView().render().setLayout("horizontal"));
+            layer7.contentView()
+                .setUseChildrenWidth(true)
+                .append(new MeasuredView().render().setContent("Item 1"))
+                .append(new MeasuredView().render().setContent("Item 2"))
+                .append(new MeasuredView().render().setContent("Item 3"))
+                .append(new MeasuredView().render().setContent("Item 4"))
+                .append(new MeasuredView().render().setContent("Item 6"))
+                .append(new MeasuredView().render().setContent("Item 7"))
+                .append(new MeasuredView().render().setContent("Item 8"))
+                .append(new MeasuredView().render().setContent("Item 9"));
+            layer7.$el.addClass("green-box");
+            layer7.bounds().setSize(100, 100);
+            layer7.scrollTo(100, 0);
+            layer0.append(layer7.render());
+
             // setInterval(function() {
             //     if (!layer5)
             //         return;

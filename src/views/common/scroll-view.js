@@ -1,4 +1,4 @@
-define(["views/common/layer-view"], function(LayerView) {
+define(["views/common/layer-view", "utils/boilerplate"], function(LayerView, boilerplate) {
 
     var ScrollView = LayerView.extend({
 
@@ -10,7 +10,9 @@ define(["views/common/layer-view"], function(LayerView) {
         },
 
         render: function() {
-            this.$el.addClass("js-scroll-view");
+            this.$el
+                .addClass("js-scroll-view")
+                .on("mousewheel", this._onMouseWheel.bind(this));
             return ScrollView.__super__.render.call(this);
         },
 
@@ -40,6 +42,14 @@ define(["views/common/layer-view"], function(LayerView) {
                 return;
             this._scrollLeft = left;
             this._scrollTop = top;
+            this.invalidate("scroll");
+        },
+
+        scrollBy: function(left, top) {
+            if (!this._contentView || (!left && !top))
+                return;
+            this._scrollLeft += left;
+            this._scrollTop += top;
             this.invalidate("scroll");
         },
 
@@ -73,8 +83,23 @@ define(["views/common/layer-view"], function(LayerView) {
                 left: this._scrollLeft,
                 top: this._scrollTop
             });
-        }
+        },
 
+        _onMouseWheel: function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var ev = event.originalEvent,
+                left = 0, top = ev.wheelDelta;
+            if (ev.hasOwnProperty("wheelDeltaX")) {
+                left = ev.wheelDeltaX;
+                top = ev.wheelDeltaY;
+            }
+            if (boilerplate.lookupPrefix(ev, "directionInvertedFromDevice")) {
+                left *= -1;
+                top *= -1;
+            }
+            this.scrollBy(left, top);
+        }
     });
 
     return ScrollView;

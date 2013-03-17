@@ -65,10 +65,16 @@ define(["utils/animation", "require"], function(Animation, require) {
             return this.setNext(new BasicAnimation("wait " + duration).setDuration(duration)).next();
         },
 
-        transform: function(duration, transform) {
+        transform: function(duration, startTransform, endTransform) {
+            if (!endTransform) {
+                endTransform = startTransform;
+                startTransform = null;
+            }
             var TransformAnimation = require("utils/transform_animation");
             var transformAnimation = new TransformAnimation("transform");
-            transformAnimation.transform().take(transform);
+            transformAnimation.transform().take(endTransform);
+            if (startTransform)
+                transformAnimation.startTransform().take(startTransform);
             return this.setNext(transformAnimation.setDuration(duration)).next();
         }
     });

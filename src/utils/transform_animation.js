@@ -4,11 +4,18 @@ define(["utils/basic_animation",
     var TransformAnimation = function(name) {
         BasicAnimation.call(this, name);
         this._transform = new Transform();
+        this._startTransform = null;
     };
 
     _.extend(TransformAnimation.prototype, BasicAnimation.prototype, {
         transform: function() {
             return this._transform;
+        },
+
+        startTransform: function() {
+            if (!this._startTransform)
+                this._startTransform = new Transform();
+            return this._startTransform;
         },
 
         _internalStart: function(state, viewState, animationState) {
@@ -18,8 +25,12 @@ define(["utils/basic_animation",
         _internalCompute: function(state, viewState, animationState) {
             if (animationState.started)
                 state.requestFrame();
-            viewState.transform().take(
-                animationState.startTransform.blend(animationState.percent, this._transform));
+            var transform;
+            if (this._startTransform)
+                transform = animationState.startTransform.concat(this._startTransform.blend(animationState.percent, this._transform));
+            else
+                transform = animationState.startTransform.blend(animationState.percent, this._transform);
+            viewState.transform().take(transform);
         }
     });
 

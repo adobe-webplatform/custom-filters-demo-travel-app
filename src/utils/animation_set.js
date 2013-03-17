@@ -17,6 +17,12 @@ define(["utils/animation_controller",
             return this;
         },
 
+        inlineStart: function() {
+            this.start();
+            AnimationController.instance.runOnRequestAnimationFrame();
+            return this;
+        },
+
         stop: function() {
             if (AnimationController.instance.unregister(this))
                 this.trigger("stop");

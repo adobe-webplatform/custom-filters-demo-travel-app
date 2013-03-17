@@ -1,4 +1,5 @@
-define(["utils/time"], function(Time) {
+define(["utils/time",
+    "utils/request-animation-frame"], function(Time, requestAnimationFrame) {
 
     var frameRateInterval = 1000 / 60;
 
@@ -8,6 +9,7 @@ define(["utils/time"], function(Time) {
         this._nextInterval = -1;
         this._setStarted = false;
         this._stateValues = {};
+        this._pendingCommit = false;
     };
 
     _.extend(AnimationState.prototype, {
@@ -27,6 +29,8 @@ define(["utils/time"], function(Time) {
         },
 
         nextInterval: function() {
+            if (this._nextInterval == -1)
+                return -1;
             return Math.max(0, this._nextInterval - (Time.now() - this.time));
         },
 
@@ -123,6 +127,8 @@ define(["utils/time"], function(Time) {
         },
 
         _onAnimationPropertyChanged: function() {
+            if (this._pendingCommit)
+                return;
             // Do not execute the compute now as we might hape incomplete
             // data structures at this point.
             // Just make sure that compute is going to be triggered soon.
@@ -130,12 +136,23 @@ define(["utils/time"], function(Time) {
         },
 
         compute: function() {
+            this._pendingCommit = false;
             var state = this._state;
-            state.updateTime();
-            _.each(this._animations, function(animationSet) {
-                animationSet.compute(state);
-            });
+            do {
+                state.updateTime();
+                _.each(this._animations, function(animationSet) {
+                    animationSet.compute(state);
+                });
+            } while(state.nextInterval() == 0);
             this._setTimer(state.nextInterval());
+        },
+
+        runOnRequestAnimationFrame: function() {
+            if (this._pendingCommit)
+                return;
+            this._pendingCommit = true;
+            requestAnimationFrame.once("animation", this.compute, this).run();
+            this._setTimer(-1);
         }
     });
 

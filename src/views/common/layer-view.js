@@ -23,6 +23,7 @@ define(["utils/rect",
 
             this._invalidationFlags = null;
             this._needsLayout = false;
+            this._animationDuration = null;
         },
 
         animation: function() {
@@ -55,22 +56,22 @@ define(["utils/rect",
             return children;
         },
 
-        append: function(view) {
+        append: function(view, useAnimation) {
             this.$el.append(view.$el);
-            return this._childAdded(view);
+            return this._childAdded(view, useAnimation);
         },
 
-        before: function(view, otherView) {
+        before: function(view, otherView, useAnimation) {
             otherView.$el.before(view.$el);
-            return this._childAdded(view);
+            return this._childAdded(view, useAnimation);
         },
 
-        after: function(view, otherView) {
+        after: function(view, otherView, useAnimation) {
             otherView.$el.after(view.$el);
-            return this._childAdded(view);
+            return this._childAdded(view, useAnimation);
         },
 
-        detach: function(view) {
+        detach: function(view, useAnimation) {
             if (!view) {
                 var parentView = this.parent();
                 if (parentView)
@@ -80,22 +81,24 @@ define(["utils/rect",
                 return this;
             }
             view.$el.detach();
-            return this._childRemoved(view);
+            return this._childRemoved(view, useAnimation);
         },
 
-        remove: function(view) {
+        remove: function(view, useAnimation) {
             this.detach(view);
             this.$el.remove();
             return this;
         },
 
-        _childAdded: function(view) {
+        _childAdded: function(view, useAnimation) {
             view.setNeedsLayout(true);
             this.setNeedsLayout(true);
+            if (useAnimation)
+                this._animationDuration = LayerView.AnimationDuration;
             return this;
         },
 
-        _childRemoved: function(view) {
+        _childRemoved: function(view, useAnimation) {
             this.setNeedsLayout(true);
             return this;
         },
@@ -146,7 +149,7 @@ define(["utils/rect",
                 if (parentView) {
                     parentView.setNeedsLayout(needsLayout);
                 } else {
-                    requestAnimationFrame.once("before", this.onBeforeUpdate, this);
+                    requestAnimationFrame.once("layout", this.onBeforeUpdate, this).run();
                 }
             }
         },
@@ -182,6 +185,18 @@ define(["utils/rect",
 
         padding: function() {
             return this._padding;
+        },
+
+        outerWidth: function() {
+            return this.bounds().width() +
+                this.padding().horizontal() +
+                this.margin().horizontal();
+        },
+
+        outerHeight: function() {
+            return this.bounds().height() +
+                this.padding().vertical() +
+                this.margin().vertical();
         },
 
         setTransform: function(transform) {
@@ -286,6 +301,8 @@ define(["utils/rect",
             this.invalidate(propertyName);
         }
     });
+
+    LayerView.AnimationDuration = 500;
 
     return LayerView;
 

@@ -61,6 +61,14 @@ define(["utils/animation_controller"], function(AnimationController) {
             return this;
         },
 
+        removeAll: function() {
+            _.each(this._animations, function(animation) {
+                animation.off("change:animation", this._onAnimationPropertyChange, this);
+            });
+            this._animations = [];
+            return this;
+        },
+
         _internalRemove: function(index) {
             var animation = this._animations[index];
             this._animations.splice(index, 1);

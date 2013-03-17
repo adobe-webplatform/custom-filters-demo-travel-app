@@ -1,13 +1,13 @@
 define(['app', 
         'views/common/layer-view', 
         'views/common/measured-view',
-        'views/common/vertical-box-view',
+        'views/common/layout-view',
         'utils/transform',
         'utils/transform_animation'], 
     function(app, 
              LayerView,
              MeasuredView,
-             VerticalBoxView,
+             LayoutView,
              Transform,
              TransformAnimation) {
 
@@ -23,7 +23,8 @@ define(['app',
             if (!this.$content)
                 this.$content = $("<div />").appendTo(this.$el);
 
-            var layer0 = new VerticalBoxView();
+            var layer0 = new LayoutView();
+            layer0.setLayout("vertical");
 
             var layer1 = new LayerView();
             var layer2 = new LayerView();
@@ -32,16 +33,14 @@ define(['app',
                 .append(layer2.render().addClass("red-box"));
 
             layer1.bounds().setWidth(100).setHeight(100);
-            layer1.transform().rotate(20);
+            //layer1.transform().rotate(20);
 
             layer2.bounds().setWidth(200).setHeight(100);
-            layer2.transform().perspective(100).rotateY(20);
+            //layer2.transform().perspective(100).rotateY(20);
 
-            var layer3 = new MeasuredView();
-            layer0.append(layer3.render().addClass("green-box"));
-            layer3.setContent("Box of the right size");
+            var layer4 = new LayoutView();
+            layer4.setLayout("vertical");
 
-            var layer4 = new VerticalBoxView();
             layer4.bounds().setX(100);
             layer0.append(layer4.render().addClass("red-box"));
             layer4.append(new MeasuredView().render().setContent("Line 1"));
@@ -51,19 +50,22 @@ define(['app',
             layer4.setUseChildrenWidth(true);
             layer4.padding().setLeft(100).setTop(200).setBottom(10).setRight(60);
 
-            layer4.animation().chain(1000)
-                .transform(1000, Transform().rotate(100))
-                .wait(500)
-                .transform(1000, Transform().rotate(0))
-                .wait(500)
-                .transform(1000, Transform().rotate(30))
-                .wait(500)
-                .transform(1000, Transform().rotate(-30))
-                .wait(500)
-                .transform(1000, Transform().rotate(0));
+            // layer4.animation().chain()
+            //     .transform(100, Transform().rotate(100));
+                // .wait(500)
+                // .transform(100, Transform().rotate(0))
+                // .wait(500)
+                // .transform(100, Transform().rotate(30))
+                // .wait(500)
+                // .transform(100, Transform().rotate(-30))
+                // .wait(500)
+                // .transform(100, Transform().rotate(0));
 
+            layer4.animation().chain(1000);
             layer4.animation().start().once("stop", function() {
-                console.log("animation stopped");
+                var layer3 = new MeasuredView();
+                layer0.before(layer3.render().addClass("green-box"), layer1, true);
+                layer3.setContent("Box of the right size");
             });
 
             layer0.bounds().setY(100);

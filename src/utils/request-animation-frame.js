@@ -9,21 +9,29 @@ define(["utils/boilerplate"], function(boilerplate) {
 
     var requestedCallbacks = null;
 
-    var fn = _.extend(function(callback, order) {
+    var fn = _.extend(function(callback) {
         if (!requestedCallbacks) {
             requestedCallbacks = [];
             requestAnimationFrame(update);
         }
-        requestedCallbacks.push(callback);
-    }, Backbone.Events);
+        if (callback)
+            requestedCallbacks.push(callback);
+    }, Backbone.Events, {
+        run: function() {
+            fn(null);
+        }
+    });
 
     function update() {
-        fn.trigger("before");
-        var callbacks = requestedCallbacks;
-        requestedCallbacks = null;
-        _.each(callbacks, function(fn) {
-            fn();
-        });
+        fn.trigger("layout");
+        fn.trigger("animation");
+        while (requestedCallbacks && requestedCallbacks.length) {
+            var callbacks = requestedCallbacks;
+            requestedCallbacks = null;
+            _.each(callbacks, function(fn) {
+                fn();
+            });
+        }
         fn.trigger("after");
     }
 

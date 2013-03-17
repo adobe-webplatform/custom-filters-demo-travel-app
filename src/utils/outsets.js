@@ -14,6 +14,9 @@ define(function() {
         right: function() { return this._right; },
         bottom: function() { return this._bottom; },
 
+        horizontal: function() { return this._left + this._right; },
+        vertical: function() { return this._top + this._bottom; },
+
         setLeft: function(left) { this._left = left; this._changedHorizontal(); return this; },
         setRight: function(right) { this._right = right; this._changedHorizontal(); return this; },
 

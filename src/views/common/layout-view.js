@@ -1,6 +1,7 @@
 define(["views/common/layer-view",
-    "views/common/vertical-layout"
-    ], function(LayerView, VerticalLayout) {
+    "views/common/vertical-layout",
+    "views/common/horizontal-layout"
+    ], function(LayerView, VerticalLayout, HorizontalLayout) {
 
     var LayoutView = LayerView.extend({
 
@@ -10,6 +11,7 @@ define(["views/common/layer-view",
             this._layout = null;
             this._animationWait = null;
             this._animationDuration = null;
+            this._layoutPromise = null;
         },
 
         render: function() {
@@ -17,19 +19,47 @@ define(["views/common/layer-view",
             return LayoutView.__super__.render.call(this);
         },
 
-        setLayout: function(layout) {
+        _internalComputeLayout: function(layout) {
             if (layout == "vertical")
-                this._layout = VerticalLayout;
-            else
-                this._layout = layout;
+                return VerticalLayout;
+            if (layout == "horizontal")
+                return HorizontalLayout;
+            return layout;
+        },
+
+        setLayout: function(layout) {
+            layout = this._internalComputeLayout(layout);
+            if (this._layout === layout)
+                return;
+            this._layout = layout;
+            this._animationWait = null;
+            this._animationDuration = null;
+            this._layoutPromise = null;
             this.setNeedsLayout(true);
+        },
+
+        setLayoutWithAnimation: function(layout) {
+            layout = this._internalComputeLayout(layout);
+            if (this._layout === layout)
+                return $.Deferred().resolveWith(this).promise();
+            this._layout = layout;
+            this._animationWait = null;
+            this._animationDuration = LayoutView.AnimationDuration;
+            this.setNeedsLayout(true);
+            this._layoutPromise = $.Deferred();
+            return this._layoutPromise.promise();
         },
 
         layout: function() {
             if (this._layout) {
-                this._layout(this, this._animationWait, this._animationDuration);
+                this._layout(this, {
+                    wait: this._animationWait, 
+                    duration: this._animationDuration, 
+                    promise: this._layoutPromise
+                });
                 this._animationWait = null;
                 this._animationDuration = null;
+                this._layoutPromise = null;
             }
             this.setNeedsLayout(false);
         },

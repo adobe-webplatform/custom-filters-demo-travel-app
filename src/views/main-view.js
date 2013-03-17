@@ -34,7 +34,7 @@ define(['app',
 
             layer1.bounds().setWidth(100).setHeight(100);
             layer1.$el.click(function() {
-                layer1.removeWithAnimation();
+                layer0.setLayoutWithAnimation("vertical");
             });
 
             //layer1.transform().rotate(20);
@@ -42,7 +42,7 @@ define(['app',
             layer2.bounds().setWidth(200).setHeight(100);
             //layer2.transform().perspective(100).rotateY(20);
             layer2.$el.click(function() {
-                layer2.removeWithAnimation();
+                layer0.setLayoutWithAnimation("horizontal");
             });
 
             var layer4 = new LayoutView();

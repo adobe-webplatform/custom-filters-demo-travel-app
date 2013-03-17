@@ -34,7 +34,7 @@ define(['app',
 
             layer1.bounds().setWidth(100).setHeight(100);
             layer1.$el.click(function() {
-                layer1.remove(true);
+                layer1.removeWithAnimation();
             });
 
             //layer1.transform().rotate(20);
@@ -42,7 +42,7 @@ define(['app',
             layer2.bounds().setWidth(200).setHeight(100);
             //layer2.transform().perspective(100).rotateY(20);
             layer2.$el.click(function() {
-                layer2.remove(true);
+                layer2.removeWithAnimation();
             });
 
             var layer4 = new LayoutView();
@@ -73,11 +73,11 @@ define(['app',
             layer4.animation().chain(10);
             layer4.animation().start().once("stop", function() {
                 var layer3 = new MeasuredView();
-                layer0.before(layer3.render().addClass("green-box"), layer1, true);
+                layer0.beforeWithAnimation(layer3.render().addClass("green-box"), layer1);
                 layer3.setContent("Box of the right size");
 
                 layer5 = new MeasuredView();
-                layer0.before(layer5.render().addClass("green-box"), layer4, true);
+                layer0.beforeWithAnimation(layer5.render().addClass("green-box"), layer4);
                 layer5.setContent("Box of the right size<br /> - test");
             });
 
@@ -85,9 +85,9 @@ define(['app',
                 if (!layer5)
                     return;
                 if (layer5.parent())
-                    layer5.detach(true);
+                    layer5.detachWithAnimation();
                 else
-                    layer0.before(layer5, layer4, true);
+                    layer0.beforeWithAnimation(layer5, layer4);
             });
 
             // setInterval(function() {

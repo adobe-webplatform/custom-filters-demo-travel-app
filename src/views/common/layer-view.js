@@ -24,8 +24,6 @@ define(["utils/rect",
 
             this._invalidationFlags = null;
             this._needsLayout = false;
-            this._animationWait = null;
-            this._animationDuration = null;
             this._state = LayerView.VISIBLE;
         },
 
@@ -59,42 +57,69 @@ define(["utils/rect",
             return children;
         },
 
-        append: function(view, useAnimation) {
+        append: function(view) {
             this.$el.append(view.$el);
-            return this._childAdded(view, useAnimation);
+            return this._childAdded(view, /* useAnimation */ false);
         },
 
-        before: function(view, otherView, useAnimation) {
+        appendWithAnimation: function(view) {
+            this.$el.append(view.$el);
+            return this._childAdded(view, /* useAnimation */ true);
+        },
+
+        before: function(view, otherView) {
             otherView.$el.before(view.$el);
-            return this._childAdded(view, useAnimation);
+            return this._childAdded(view, /* useAnimation */ false);
         },
 
-        after: function(view, otherView, useAnimation) {
+        beforeWithAnimation: function(view, otherView) {
+            otherView.$el.before(view.$el);
+            return this._childAdded(view, /* useAnimation */ true);
+        },
+
+        after: function(view, otherView) {
             otherView.$el.after(view.$el);
-            return this._childAdded(view, useAnimation);
+            return this._childAdded(view, /* useAnimation */ false);
         },
 
-        detach: function(useAnimation) {
-            if (this._state == LayerView.REMOVED)
-                return;
-            var parentView = this.parent();
-            if (parentView)
-                parentView._childRemoved(this, "detach", useAnimation);
-            else
-                this.$el.detach();
-            return this;
+        afterWithAnimation: function(view, otherView) {
+            otherView.$el.after(view.$el);
+            return this._childAdded(view, /* useAnimation */ true);
         },
 
-        remove: function(useAnimation) {
-            if (this._state == LayerView.REMOVED) {
-                this.$el.remove();
-                return;
+        detachWithAnimation: function() {
+            return this._internalDetachWithAnimation("detach");
+        },
+
+        removeWithAnimation: function() {
+            return this._internalDetachWithAnimation("remove");
+        },
+
+        detach: function() {
+            return this._internalDetach("detach");
+        },
+
+        remove: function() {
+            return this._internalDetach("remove");
+        },
+
+        _internalDetachWithAnimation: function(detach) {
+            if (this._state != LayerView.REMOVED) {
+                var parentView = this.parent();
+                if (parentView)
+                    return parentView._childRemoved(this, detach, /*useAnimation*/ true);
+                this._internalDetachRemove(detach);
             }
+            return $.Deferred().resolveWith(this).promise();
+        },
+
+        _internalDetach: function(detach) {
+            if (this._state == LayerView.REMOVED)
+                return this;
             var parentView = this.parent();
             if (parentView)
-                parentView._childRemoved(this, "remove", useAnimation);
-            else
-                this.$el.remove();
+                return parentView._childRemoved(this, detach, /* useAnimation */ false);
+            this._internalDetachRemove(detach);
             return this;
         },
 
@@ -104,20 +129,17 @@ define(["utils/rect",
             view._state = LayerView.VISIBLE;
             if (useAnimation) {
                 view.everHadLayout = false;
-                this._animateAttach(view);
+                return this._animateAttach(view)
+                    .then(function() { return view; });
             }
             return this;
         },
 
         _animateAttach: function(view) {
-            this._animationWait = null;
-            this._animationDuration = LayerView.AnimationDuration;
-            view.animation().start().get("opacity").removeAll()
-                .chain(LayerView.AnimationDuration).opacity(LayerView.AnimationDuration, 0, 1);
-            view.animation().viewState().setOpacity(0);
+            return $.Deferred().resolveWith(view).promise();
         },
 
-        _internalDetach: function(detach) {
+        _internalDetachRemove: function(detach) {
             if (detach == "detach")
                 this.$el.detach();
             else
@@ -128,22 +150,18 @@ define(["utils/rect",
             this.setNeedsLayout(true);
             view._state = LayerView.REMOVED;
             if (useAnimation) {
-                this._animateDetach(view, function() {
-                    view._internalDetach(detach);
+                return this._animateDetach(view).then(function() {
+                    view._internalDetachRemove(detach);
+                    return view;
                 });
             } else {
-                view._internalDetach(detach);
+                view._internalDetachRemove(detach);
             }
-            return this;
+            return view;
         },
 
-        _animateDetach: function(view, callback) {
-            this._animationDuration = LayerView.AnimationDuration;
-            this._animationWait = LayerView.AnimationDuration * 2;
-            view.animation().start().get("opacity").removeAll()
-                .chain(LayerView.AnimationDuration)
-                .opacity(LayerView.AnimationDuration, 1, 0);
-            view.animation().once("stop", callback);
+        _animateDetach: function(view) {
+            return $.Deferred().resolveWith(view).promise();
         },
 
         shouldIgnoreDuringLayout: function() {
@@ -375,9 +393,7 @@ define(["utils/rect",
 
     _.extend(LayerView, {
         VISIBLE: "visible",
-        REMOVED: "removed",
-
-        AnimationDuration: 200
+        REMOVED: "removed"
     });
 
     return LayerView;

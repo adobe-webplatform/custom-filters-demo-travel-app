@@ -110,6 +110,15 @@ define(["utils/animation-controller"], function(AnimationController) {
             else
                 this.append(animation);
             return animation;
+        },
+
+        promise: function() {
+            var self = this,
+                deferred = $.Deferred();
+            this.once("stop", function() {
+                deferred.resolveWith(self);
+            });
+            return deferred.promise();
         }
     });
 

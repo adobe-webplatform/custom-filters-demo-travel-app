@@ -33,10 +33,17 @@ define(['app',
                 .append(layer2.render().addClass("red-box"));
 
             layer1.bounds().setWidth(100).setHeight(100);
+            layer1.$el.click(function() {
+                layer1.remove(true);
+            });
+
             //layer1.transform().rotate(20);
 
             layer2.bounds().setWidth(200).setHeight(100);
             //layer2.transform().perspective(100).rotateY(20);
+            layer2.$el.click(function() {
+                layer2.remove(true);
+            });
 
             var layer4 = new LayoutView();
             layer4.setLayout("vertical");
@@ -71,15 +78,25 @@ define(['app',
 
                 layer5 = new MeasuredView();
                 layer0.before(layer5.render().addClass("green-box"), layer4, true);
-                layer5.setContent("Box of the right size");
+                layer5.setContent("Box of the right size<br /> - test");
             });
 
             layer4.$el.click(function() {
+                if (!layer5)
+                    return;
                 if (layer5.parent())
                     layer5.detach(true);
                 else
                     layer0.before(layer5, layer4, true);
             });
+
+            // setInterval(function() {
+            //     if (!layer5)
+            //         return;
+            //     var layer6 = new MeasuredView();
+            //     layer0.before(layer6.render().addClass("green-box"), layer4, true);
+            //     layer6.setContent("Box of the right size<br /> - test");
+            // }, 1000);
 
             layer0.bounds().setY(100);
 

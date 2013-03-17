@@ -133,6 +133,10 @@ define(function() {
             return fn;
         },
 
+        isEmpty: function() {
+            return !this._data.length;
+        },
+
         append: function(fn) {
             fn.on("change", this._onFunctionValueChange, this);
             this._data.push(fn);

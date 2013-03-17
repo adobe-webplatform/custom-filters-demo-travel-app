@@ -314,7 +314,10 @@ define(["utils/rect",
             var result = this._transform;
             if (this._animation)
                 result = this._animation.viewState().blendTransform(result);
-            this.$el.css("transform", result.toString());
+            if (result.isEmpty())
+                this.$el.css("transform", "");
+            else
+                this.$el.css("transform", result.toString() + " translateZ(0)");
         },
 
         _validateOpacity: function() {

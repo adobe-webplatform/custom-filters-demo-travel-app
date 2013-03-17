@@ -52,7 +52,7 @@ define(["views/common/layer-view",
 
         layout: function() {
             if (this._layout) {
-                this._layout(this, {
+                this._layout.layout(this, {
                     wait: this._animationWait, 
                     duration: this._animationDuration, 
                     promise: this._layoutPromise

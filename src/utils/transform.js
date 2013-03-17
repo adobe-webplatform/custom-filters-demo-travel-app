@@ -44,6 +44,14 @@ define(function() {
                 });
                 return result;
             },
+            multiply: function(percent) {
+                var result = new fn();
+                var self = this;
+                _.each(parameters, function(parameter, i) {
+                    result[keys[i]] = self[keys[i]] * percent;
+                });
+                return result;
+            },
             clone: function() {
                 var result = new fn(), self = this;
                 _.each(parameters, function(parameter, i) {
@@ -112,6 +120,17 @@ define(function() {
             return null;
         },
 
+        get: function(type) {
+            if (_.isString(type))
+                type = Transforms[type];
+            var fn = this.search(type);
+            if (!fn) {
+                fn = type.create();
+                this.append(fn);
+            }
+            return fn;
+        },
+
         append: function(fn) {
             fn.on("change", this._onFunctionValueChange, this);
             this._data.push(fn);
@@ -141,9 +160,26 @@ define(function() {
             _.each(this._data, function(fn) {
                 fn.off("change", self._onFunctionValueChange, self);
             });
+            this._data = [];
             _.each(other._data, function(fn) {
                 self.append(fn.clone());
             });
+            this._onFunctionValueChange();
+        },
+
+        take: function(other) {
+            var self = this;
+            _.each(this._data, function(fn) {
+                fn.off("change", self._onFunctionValueChange, self);
+            });
+            this._data = other._data;
+            other._data = [];
+            _.each(this._data, function(fn) {
+                fn.off("change", self._onFunctionValueChange, other);
+                fn.on("change", self._onFunctionValueChange, this);
+            });
+            other._onFunctionValueChange();
+            this._onFunctionValueChange();
         },
 
         toString: function() {
@@ -164,6 +200,57 @@ define(function() {
 
         _onFunctionValueChange: function() {
             this.trigger("change");
+        },
+
+        clone: function() {
+            var transform = new Transform();
+            _.each(this._data, function(fn) {
+                transform.append(fn.clone());
+            });
+            return transform;
+        },
+
+        canBlendFunctionsWith: function(other) {
+            if (other._data.length != this._data.length)
+                return false;
+            return _.every(this._data, function(fn, i) {
+                return fn.type === other._data[i].type;
+            });
+        },
+
+        _fromZeroBlend: function(percent, other) {
+            var transform = new Transform();
+            _.each(other._data, function(fn, i) {
+                transform.append(fn.multiply(percent));
+            });
+            return transform;
+        },
+
+        _toZeroBlend: function(percent) {
+            var transform = new Transform();
+            _.each(this._data, function(fn, i) {
+                transform.append(fn.multiply(percent));
+            });
+            return transform;
+        },
+
+        blend: function(percent, other) {
+            if (!this._data.length)
+                return this._fromZeroBlend(percent, other);
+            if (!other._data.length)
+                return this._toZeroBlend(1 - percent);
+            var transform = new Transform();
+            if (this.canBlendFunctionsWith(other)) {
+                _.each(this._data, function(fn, i) {
+                    transform.append(fn.blend(percent, other._data[i]));
+                });
+            } else {
+                var matrix = new Transforms.matrix3d();
+                matrix.fromMatrix(this.toMatrix3d().multiply(percent)
+                    .add(other.toMatrix3d().multiply(1 - percent)));
+                transform.append(matrix);
+            }
+            return transform;
         },
 
         concat: function(other) {

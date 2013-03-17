@@ -1,10 +1,14 @@
 define(["utils/boilerplate"], function(boilerplate) {
 
-    var now = Date.now();
+    var now = function() { return Date.now(); };
 
     var performance = boilerplate.lookupPrefix(window, "performance");
-    if (performance)
-        now = boilerplate.lookupPrefix(performance, "now");
+    if (performance) {
+        var performanceNow = boilerplate.lookupPrefix(performance, "now");
+        now = function() {
+            return performanceNow.call(performance);
+        };
+    }
 
     return {
         now: now

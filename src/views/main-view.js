@@ -1,11 +1,13 @@
 define(['app', 
         'views/common/layer-view', 
         'views/common/measured-view',
-        'views/common/vertical-box-view'], 
+        'views/common/vertical-box-view',
+        'utils/transform_animation'], 
     function(app, 
              LayerView,
              MeasuredView,
-             VerticalBoxView) {
+             VerticalBoxView,
+             TransformAnimation) {
 
     var MainView = LayerView.extend({
 
@@ -46,6 +48,14 @@ define(['app',
             layer4.append(new MeasuredView().render().setContent("Line 4"));
             layer4.setUseChildrenWidth(true);
             layer4.padding().setLeft(100).setTop(200).setBottom(10).setRight(60);
+
+            var transformAnimation = new TransformAnimation("rotate");
+            transformAnimation.setDuration(2000).once("stop", function() {
+                console.log("one animation stop");
+            }).transform().rotate(90);
+            layer4.animation().append(transformAnimation).start().once("stop", function() {
+                console.log("animation stopped");
+            });
 
             layer0.bounds().setY(100);
 

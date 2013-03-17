@@ -1,22 +1,25 @@
-define(["utils/time", "utils/animation_view_state"], function(Time, AnimationViewState) {
+define(["utils/time"], function(Time) {
+
+    var frameRateInterval = 1000 / 60;
 
     var AnimationState = function() {
         this.time = -1;
         this.previousTime = -1;
         this._nextInterval = -1;
         this._setStarted = false;
+        this._stateValues = {};
     };
 
-    _.extend(AnimationState, {
+    _.extend(AnimationState.prototype, {
         updateTime: function() {
-            this.previousTime = time;
+            this.previousTime = this.time;
             this.time = Time.now();
             this.delta = (this.previousTime >= 0) ? this.time - this.previousTime : 0;
             this._nextInterval = -1;
         },
 
         prepareSet: function() {
-            this._setStarted = true;
+            this._setStarted = false;
         },
 
         isSetActive: function() {
@@ -24,7 +27,11 @@ define(["utils/time", "utils/animation_view_state"], function(Time, AnimationVie
         },
 
         nextInterval: function() {
-            return this._nextInterval;
+            return Time.now() - (this.time + this._nextInterval);
+        },
+
+        requestFrame: function() {
+            this.requestTimer(frameRateInterval);
         },
 
         requestTimer: function(interval) {
@@ -41,6 +48,18 @@ define(["utils/time", "utils/animation_view_state"], function(Time, AnimationVie
         requestFixedTimer: function(time) {
             this._setStarted = true;
             this.requestTimer(time, this.time);
+        },
+
+        set: function(id, value) {
+            this._stateValues[id] = value;
+        },
+
+        get: function(id, value) {
+            return this._stateValues[id];
+        },
+
+        remove: function(id) {
+            delete this._stateValues[id];
         }
     });
 
@@ -49,6 +68,7 @@ define(["utils/time", "utils/animation_view_state"], function(Time, AnimationVie
         this._state = new AnimationState();
         this._lastAnimationId = 0;
         this._nextTimerId = null;
+        this._nextTimerInterval = -1;
         this._timerCallbak = this._onTimerFired.bind(this);
     };
 
@@ -59,48 +79,59 @@ define(["utils/time", "utils/animation_view_state"], function(Time, AnimationVie
 
         register: function(animationSet) {
             if (this._animations.indexOf(animationSet) != -1)
-                return;
+                return false;
             this._animations.push(animationSet);
             animationSet.on("change:animation", this._onAnimationPropertyChanged, this);
+            this._onAnimationPropertyChanged();
+            return true;
         },
 
         unregister: function(animationSet) {
             var index = this._animations.indexOf(animationSet);
             if (index == -1)
-                return;
+                return false;
             animationSet.off("change:animation", this._onAnimationPropertyChanged, this);
             this._animations.splice(index, 1);
+            this._onAnimationPropertyChanged();
+            return true;
         },
 
         _setTimer: function(interval) {
+            if (this._nextTimerInterval != -1 && 
+                this._nextTimerInterval <= interval)
+                return;
             // Remove any old timer and update it to throw in that amount.
             if (this._nextTimerId) {
                 clearTimeout(this._nextTimerId);
                 this._nextTimerId = null;
+                this._nextTimerInterval = -1;
             }
             if (interval == -1)
                 return;
+            this._nextTimerInterval = interval;
             this._nextTimerId = setTimeout(this._timerCallbak, interval);
         },
 
         _onTimerFired: function() {
+            this._nextTimerInterval = -1;
+            this._nextTimerId = null;
             this.compute();
         },
 
         _onAnimationPropertyChanged: function() {
-            this.compute();
+            // Do not execute the compute now as we might hape incomplete
+            // data structures at this point.
+            // Just make sure that compute is going to be triggered soon.
+            this._setTimer(0);
         },
 
         compute: function() {
-            this._state.updateTime();
+            var state = this._state;
+            state.updateTime();
             _.each(this._animations, function(animationSet) {
                 animationSet.compute(state);
             });
             this._setTimer(state.nextInterval());
-        },
-
-        applyValues: function(animation, viewState) {
-            animation.applyValues(viewState, this._state);
         }
     });
 

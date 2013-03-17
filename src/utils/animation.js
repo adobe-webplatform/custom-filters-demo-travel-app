@@ -1,26 +1,15 @@
 define(["utils/animation_controller"], function(AnimationController) {
 
     var Animation = function(name) {
-        this.id = AnimationController.instance.allocateAnimationId();
+        this._id = AnimationController.instance.allocateAnimationId();
         this.name = name;
         this._animations = [];
     };
 
     _.extend(Animation.prototype, Backbone.Events, {
-        compute: function(state) {
-            var changed = false;
+        compute: function(state, viewSate) {
             _.each(this._animations, function(animation) {
-                if (animation.compute(state))
-                    changed = true;
-            });
-            if (changed)
-                this._onAnimationResultChange();
-        },
-
-        // Called during the validation event.
-        applyValues: function(viewState, state) {
-            _.each(this._animations, function(animation) {
-                animation.applyValues(viewState, state);
+                animation.compute(state, viewSate);
             });
         },
 
@@ -39,15 +28,15 @@ define(["utils/animation_controller"], function(AnimationController) {
 
         append: function(animation) {
             animation.on("change:animation", this._onAnimationPropertyChange, this);
-            this._animations.append(animation);
-            this._onAnimationValueChange();
+            this._animations.push(animation);
+            this._onAnimationPropertyChange();
             return this;
         },
 
         insert: function(animation, i) {
             animation.on("change:animation", this._onAnimationPropertyChange, this);
             this._animations.splice(i, 0, animation);
-            this._onAnimationValueChange();
+            this._onAnimationPropertyChange();
             return this;
         },
 
@@ -56,6 +45,7 @@ define(["utils/animation_controller"], function(AnimationController) {
             if (index == -1)
                 return;
             animation.off("change:animation", this._onAnimationPropertyChange, this);
+            this._onAnimationPropertyChange();
             return this;
         },
 

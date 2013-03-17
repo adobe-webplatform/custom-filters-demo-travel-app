@@ -2,9 +2,8 @@ define(["utils/rect",
     "utils/transform",
     "utils/outsets",
     "utils/animation_set",
-    "utils/animation_view_state",
     "utils/request-animation-frame"
-], function(Rect, Transform, Outsets, AnimationSet, AnimationViewState, requestAnimationFrame) {
+], function(Rect, Transform, Outsets, AnimationSet, requestAnimationFrame) {
 
     var LayerView = Backbone.View.extend({
 
@@ -15,7 +14,6 @@ define(["utils/rect",
             this._margin = new Outsets();
             this._padding = new Outsets();
             this._animation = null;
-            this._animationViewState = null;
 
             this._bounds.on("change:position", this._onPositionChanged, this);
             this._bounds.on("change:size", this._onSizeChanged, this);
@@ -30,9 +28,13 @@ define(["utils/rect",
         animation: function() {
             if (!this._animation) {
                 this._animation = new AnimationSet();
-                this._animation.on("change", this._onAnimationChanged, this);
+                this._animation.viewState().on("invalidate", this._onAnimationInvalidated, this);
             }
             return this._animation;
+        },
+
+        hasAnimation: function() {
+            return !!this._animation;
         },
 
         setElement: function(el) {
@@ -246,8 +248,8 @@ define(["utils/rect",
 
         _validateTransform: function() {
             var result = this._transform;
-            if (this._animationViewState)
-                result = this._animationViewState.blendTransform(result);
+            if (this._animation)
+                result = this._animation.viewState().blendTransform(result);
             this.$el.css("transform", result.toString());
         },
 
@@ -282,14 +284,6 @@ define(["utils/rect",
 
         _onAnimationInvalidated: function(propertyName) {
             this.invalidate(propertyName);
-        },
-
-        _onAnimationChanged: function() {
-            if (!this._animationViewState) {
-                this._animationViewState = new AnimationViewState();
-                this._animationViewState.on("invalidate", this._onAnimationInvalidated, this);
-            }
-            this._animation.apply(this._animationViewState);
         }
     });
 

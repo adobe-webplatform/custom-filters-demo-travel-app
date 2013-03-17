@@ -1,6 +1,6 @@
-define(["views/common/layer-view", "utils/boilerplate"], function(LayerView, boilerplate) {
+define(["views/common/touch-view", "utils/boilerplate"], function(TouchView, boilerplate) {
 
-    var ScrollView = LayerView.extend({
+    var ScrollView = TouchView.extend({
 
         initialize: function() {
             ScrollView.__super__.initialize.call(this);

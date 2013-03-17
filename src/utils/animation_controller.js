@@ -78,6 +78,8 @@ define(["utils/time",
         this._nextTimerId = null;
         this._nextTimerInterval = -1;
         this._timerCallbak = this._onTimerFired.bind(this);
+        this._inCompute = false;
+        this._hasRemovedSet = false;
     };
 
     _.extend(AnimationController.prototype, Backbone.Events, {
@@ -99,7 +101,11 @@ define(["utils/time",
             if (index == -1)
                 return false;
             animationSet.off("change:animation", this._onAnimationPropertyChanged, this);
-            this._animations.splice(index, 1);
+            if (this._inCompute) {
+                this._animations[index] = null;
+                this._hasRemovedSet = true;
+            } else
+                this._animations.splice(index, 1);
             this._onAnimationPropertyChanged();
             return true;
         },
@@ -135,16 +141,28 @@ define(["utils/time",
             this._setTimer(0);
         },
 
+        _cleanupSets: function() {
+            this._animations = _.filter(this._animations, function(animation) {
+                return !!animation;
+            });
+            this._hasRemovedSet = false;
+        },
+
         compute: function() {
             this._pendingCommit = false;
+            this._inCompute = true;
             var state = this._state;
             do {
                 state.updateTime();
                 _.each(this._animations, function(animationSet) {
-                    animationSet.compute(state);
+                    if (animationSet)
+                        animationSet.compute(state);
                 });
-            } while(state.nextInterval() == 0);
+            } while(!state.nextInterval());
+            if (this._hasRemovedSet)
+                this._cleanupSets();
             this._setTimer(state.nextInterval());
+            this._inCompute = false;
         },
 
         runOnRequestAnimationFrame: function() {

@@ -2,7 +2,8 @@ define(["utils/animation_controller",
         "utils/animation_view_state",
         "utils/animation",
         // Initialize all types of animations here.
-        "utils/transform_animation"
+        "utils/transform_animation",
+        "utils/opacity-animation"
         ], function(AnimationController, AnimationViewState, Animation) {
 
     var AnimationSet = function() {

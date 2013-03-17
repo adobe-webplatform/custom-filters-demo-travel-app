@@ -13,6 +13,7 @@ define(["utils/rect",
             this._transform = new Transform();
             this._margin = new Outsets();
             this._padding = new Outsets();
+            this._opacity = 1;
             this._animation = null;
 
             this._bounds.on("change:position", this._onPositionChanged, this);
@@ -93,8 +94,13 @@ define(["utils/rect",
         _childAdded: function(view, useAnimation) {
             view.setNeedsLayout(true);
             this.setNeedsLayout(true);
-            if (useAnimation)
+            if (useAnimation) {
+                view.everHadLayout = false;
                 this._animationDuration = LayerView.AnimationDuration;
+                view.animation().start().get("opacity").removeAll()
+                    .chain(LayerView.AnimationDuration).opacity(LayerView.AnimationDuration, 0, 1);
+                view.animation().viewState().setOpacity(0);
+            }
             return this;
         },
 
@@ -207,6 +213,16 @@ define(["utils/rect",
             return this._transform;
         },
 
+        opacity: function() {
+            return this._opacity;
+        },
+
+        setOpacity: function(opacity) {
+            this._opacity = opacity;
+            this._onOpacityChanged();
+            return this;
+        },
+
         render: function() {
             this.$el.addClass("js-layer-view");
             this._validatePosition();
@@ -268,6 +284,13 @@ define(["utils/rect",
             this.$el.css("transform", result.toString());
         },
 
+        _validateOpacity: function() {
+            var result = this._opacity;
+            if (this._animation)
+                result = this._animation.viewState().blendOpacity(result);
+            this.$el.css("opacity", result);
+        },
+
         _validatePadding: function() {
             this.$el.css("padding", this._padding.toCSSString("px"));
         },
@@ -288,6 +311,10 @@ define(["utils/rect",
             this.invalidate("transform");
         },
 
+        _onOpacityChanged: function() {
+            this.invalidate("opacity");
+        },
+
         _onPaddingChanged: function() {
             this.invalidate("padding");
             this.setNeedsLayout(true);
@@ -302,7 +329,7 @@ define(["utils/rect",
         }
     });
 
-    LayerView.AnimationDuration = 500;
+    LayerView.AnimationDuration = 200;
 
     return LayerView;
 

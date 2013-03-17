@@ -29,10 +29,11 @@ define(["utils/animation", "require"], function(Animation, require) {
                     animationState.percent = 1;
                     state.remove(this._id);
                     animationState.started = false;
-                    this.trigger("stop");
                 }
             }
             this._internalCompute(state, viewState, animationState);
+            if (!animationState.started)
+                this.trigger("stop");
         },
 
         _internalStart: function(state, viewState, animationState) {
@@ -76,6 +77,19 @@ define(["utils/animation", "require"], function(Animation, require) {
             if (startTransform)
                 transformAnimation.startTransform().take(startTransform);
             return this.setNext(transformAnimation.setDuration(duration)).next();
+        },
+
+        opacity: function(duration, startOpacity, endOpacity) {
+            if (endOpacity === undefined) {
+                endOpacity = startOpacity;
+                startOpacity = null;
+            }
+            var OpacityAnimation = require("utils/opacity-animation");
+            var opacityAnimation = new OpacityAnimation("opacity");
+            opacityAnimation.setOpacity(endOpacity);
+            if (startOpacity !== null)
+                opacityAnimation.setStartOpacity(startOpacity);
+            return this.setNext(opacityAnimation.setDuration(duration)).next();
         }
     });
 

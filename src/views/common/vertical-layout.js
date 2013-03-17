@@ -17,7 +17,7 @@ define(["utils/transform"], function(Transform){
                 viewBounds
                     .setX(padding.left())
                     .setY(offset);
-                if (animationDuration) {
+                if (animationDuration && view.everHadLayout) {
                     view.animation()
                         .inlineStart()
                         .get("layout")
@@ -30,6 +30,7 @@ define(["utils/transform"], function(Transform){
                             Transform());
                 }
             }
+            view.everHadLayout = true;
             offset += view.outerHeight();
             if (useChildrenWidth)
                 maxWidth = Math.max(maxWidth, viewBounds.width());

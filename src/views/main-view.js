@@ -49,10 +49,14 @@ define(['app',
             layer4.setUseChildrenWidth(true);
             layer4.padding().setLeft(100).setTop(200).setBottom(10).setRight(60);
 
-            var transformAnimation = new TransformAnimation("rotate");
-            transformAnimation.setDuration(2000).once("stop", function() {
-                console.log("one animation stop");
-            }).transform().rotate(90);
+            var transformAnimation = new TransformAnimation("rotate1");
+            transformAnimation.setDuration(1000).transform().rotate(100);
+
+            var transformAnimation2 = new TransformAnimation("rotate2");
+            transformAnimation2.setDuration(1000).transform().rotate(0);
+            
+            transformAnimation.setNext(transformAnimation2);
+
             layer4.animation().append(transformAnimation).start().once("stop", function() {
                 console.log("animation stopped");
             });

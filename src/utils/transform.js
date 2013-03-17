@@ -36,7 +36,7 @@ define(function() {
                 });
                 return name + "(" + args.join(", ") + ")";
             },
-            blend: function(other, percent) {
+            blend: function(percent, other) {
                 var result = new fn();
                 var self = this;
                 _.each(parameters, function(parameter, i) {

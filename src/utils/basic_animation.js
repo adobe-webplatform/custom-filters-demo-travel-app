@@ -10,6 +10,7 @@ define(["utils/animation"], function(Animation) {
     var BasicAnimation = function(name) {
         Animation.call(this, name);
         this._duration = -1;
+        this._next = null;
     };
 
     _.extend(BasicAnimation.prototype, Backbone.Events, {
@@ -47,6 +48,15 @@ define(["utils/animation"], function(Animation) {
 
         duration: function() {
             return this._duration;
+        },
+
+        setNext: function(nextAnimation) {
+            this._next = nextAnimation;
+            return this;
+        },
+
+        next: function() {
+            return this._next;
         }
     });
 

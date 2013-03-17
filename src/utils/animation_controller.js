@@ -27,11 +27,15 @@ define(["utils/time"], function(Time) {
         },
 
         nextInterval: function() {
-            return Time.now() - (this.time + this._nextInterval);
+            return Math.max(0, this._nextInterval - (Time.now() - this.time));
         },
 
         requestFrame: function() {
             this.requestTimer(frameRateInterval);
+        },
+
+        requestImmediateFrame: function() {
+            this.requestTimer(0);
         },
 
         requestTimer: function(interval) {

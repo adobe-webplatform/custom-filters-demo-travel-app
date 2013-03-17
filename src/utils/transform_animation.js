@@ -18,6 +18,7 @@ define(["utils/basic_animation",
         _internalCompute: function(state, viewState, animationState) {
             if (animationState.started)
                 state.requestFrame();
+            console.log("compute " + animationState.percent + " " + this.name);
             viewState.transform().take(
                 animationState.startTransform.blend(animationState.percent, this._transform));
         }

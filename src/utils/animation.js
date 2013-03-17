@@ -88,6 +88,13 @@ define(["utils/animation_controller"], function(AnimationController) {
 
         _onAnimationPropertyChange: function() {
             this.trigger("change:animation");
+        },
+
+        chain: function() {
+            var BasicAnimation = require("utils/basic_animation");
+            var animation = new BasicAnimation("start").setDuration(0);
+            this.append(animation);
+            return animation;
         }
     });
 

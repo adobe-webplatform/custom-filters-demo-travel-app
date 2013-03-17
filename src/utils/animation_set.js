@@ -1,6 +1,9 @@
 define(["utils/animation_controller",
         "utils/animation_view_state",
-        "utils/animation"], function(AnimationController, AnimationViewState, Animation) {
+        "utils/animation",
+        // Initialize all types of animations here.
+        "utils/transform_animation"
+        ], function(AnimationController, AnimationViewState, Animation) {
 
     var AnimationSet = function() {
         Animation.call(this, "animationSet");

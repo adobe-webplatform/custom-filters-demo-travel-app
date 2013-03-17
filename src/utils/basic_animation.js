@@ -1,4 +1,4 @@
-define(["utils/animation"], function(Animation) {
+define(["utils/animation", "require"], function(Animation, require) {
 
     var BasicAnimationState = function(time) {
         this.startTime = time;
@@ -23,8 +23,8 @@ define(["utils/animation"], function(Animation) {
                 this.trigger("start");
             }
             animationState.playDuration = state.time - animationState.startTime;
-            if (this._duration > 0) {
-                animationState.percent = animationState.playDuration / this._duration;
+            if (this._duration >= 0) {
+                animationState.percent = this._duration ? animationState.playDuration / this._duration : 1;
                 if (animationState.percent >= 1) {
                     animationState.percent = 1;
                     state.remove(this._id);
@@ -39,6 +39,8 @@ define(["utils/animation"], function(Animation) {
         },
 
         _internalCompute: function(state, viewState, animationState) {
+            if (animationState.started)
+                state.requestTimer(this._duration - animationState.playDuration);
         },
 
         setDuration: function(duration) {
@@ -57,6 +59,17 @@ define(["utils/animation"], function(Animation) {
 
         next: function() {
             return this._next;
+        },
+
+        wait: function(duration) {
+            return this.setNext(new BasicAnimation("wait " + duration).setDuration(duration)).next();
+        },
+
+        transform: function(duration, transform) {
+            var TransformAnimation = require("utils/transform_animation");
+            var transformAnimation = new TransformAnimation("transform");
+            transformAnimation.transform().take(transform);
+            return this.setNext(transformAnimation.setDuration(duration)).next();
         }
     });
 

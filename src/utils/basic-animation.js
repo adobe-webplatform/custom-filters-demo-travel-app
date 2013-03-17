@@ -71,7 +71,7 @@ define(["utils/animation", "require"], function(Animation, require) {
                 endTransform = startTransform;
                 startTransform = null;
             }
-            var TransformAnimation = require("utils/transform_animation");
+            var TransformAnimation = require("utils/transform-animation");
             var transformAnimation = new TransformAnimation("transform");
             transformAnimation.transform().take(endTransform);
             if (startTransform)

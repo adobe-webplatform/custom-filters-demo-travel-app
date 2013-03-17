@@ -1,7 +1,7 @@
 define(["utils/rect",
     "utils/transform",
     "utils/outsets",
-    "utils/animation_set",
+    "utils/animation-set",
     "utils/request-animation-frame"
 ], function(Rect, Transform, Outsets, AnimationSet, requestAnimationFrame) {
 

@@ -1,4 +1,4 @@
-define(["utils/basic_animation"], function(BasicAnimation) {
+define(["utils/basic-animation"], function(BasicAnimation) {
     
     var OpacityAnimation = function(name) {
         BasicAnimation.call(this, name);

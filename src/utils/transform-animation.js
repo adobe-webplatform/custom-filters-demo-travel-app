@@ -1,4 +1,4 @@
-define(["utils/basic_animation",
+define(["utils/basic-animation",
         "utils/transform"], function(BasicAnimation, Transform) {
     
     var TransformAnimation = function(name) {

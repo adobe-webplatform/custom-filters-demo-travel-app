@@ -26,6 +26,20 @@ define(function() {
         setWidth: function(width) { this._width = width; this._changedSize(); return this; },
         setHeight: function(height) { this._height = height; this._changedSize(); return this; },
 
+        setPosition: function(x, y) {
+            this._x = x;
+            this._y = y;
+            this._changedPosition();
+            return this;
+        },
+
+        setSize: function(width, height) {
+            this._width = width;
+            this._height = height;
+            this._changedSize();
+            return this;
+        },
+
         set: function(bounds) {
             var positionChanged = 
                 this._x != bounds.x() ||

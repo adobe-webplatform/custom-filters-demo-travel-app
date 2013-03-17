@@ -2,12 +2,14 @@ define(['app',
         'views/common/layer-view', 
         'views/common/measured-view',
         'views/common/layout-view',
+        'views/common/scroll-view',
         'utils/transform',
         'utils/transform-animation'], 
     function(app, 
              LayerView,
              MeasuredView,
              LayoutView,
+             ScrollView,
              Transform,
              TransformAnimation) {
 
@@ -55,7 +57,7 @@ define(['app',
             layer4.append(new MeasuredView().render().setContent("Line 3"));
             layer4.append(new MeasuredView().render().setContent("Line 4"));
             layer4.setUseChildrenWidth(true);
-            layer4.padding().setLeft(100).setTop(200).setBottom(10).setRight(60);
+            layer4.padding().setLeft(100).setTop(50).setBottom(10).setRight(60);
 
             // layer4.animation().chain()
             //     .transform(100, Transform().rotate(100));
@@ -89,6 +91,23 @@ define(['app',
                 else
                     layer0.beforeWithAnimation(layer5, layer4);
             });
+
+            var layer6 = new ScrollView();
+            layer6.setContentView(new LayoutView().render().setLayout("vertical"));
+            layer6.contentView()
+                .setUseChildrenWidth(true)
+                .append(new MeasuredView().render().setContent("Item 1"))
+                .append(new MeasuredView().render().setContent("Item 2"))
+                .append(new MeasuredView().render().setContent("Item 3"))
+                .append(new MeasuredView().render().setContent("Item 4"))
+                .append(new MeasuredView().render().setContent("Item 6"))
+                .append(new MeasuredView().render().setContent("Item 7"))
+                .append(new MeasuredView().render().setContent("Item 8"))
+                .append(new MeasuredView().render().setContent("Item 9"));
+            layer6.$el.addClass("green-box");
+            layer6.bounds().setSize(100, 100);
+            layer6.scrollTo(0, 100);
+            layer0.append(layer6.render());
 
             // setInterval(function() {
             //     if (!layer5)

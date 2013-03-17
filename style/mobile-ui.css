@@ -7,12 +7,18 @@
     white-space: nowrap;
 }
 
+.js-scroll-view {
+    overflow: hidden;
+}
+
 .red-box {
     background: red;
+    color: white;
 }
 
 .blue-box {
     background: blue;
+    color: white;
 }
 
 .green-box {

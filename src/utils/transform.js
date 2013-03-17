@@ -67,7 +67,7 @@ define(function() {
         _.each(parameters, function(parameter, i) {
             fn.prototype["set" + _.string.capitalize(parameter)] = function(value) {
                 if (value == this[keys[i]])
-                    return;
+                    return this;
                 this[keys[i]] = value;
                 this._onValueChanged();
                 return this;

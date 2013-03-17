@@ -27,15 +27,20 @@ define(["views/common/layer-view",
             return layout;
         },
 
+        getLayout: function() {
+            return this._layout;
+        },
+
         setLayout: function(layout) {
             layout = this._internalComputeLayout(layout);
             if (this._layout === layout)
-                return;
+                return this;
             this._layout = layout;
             this._animationWait = null;
             this._animationDuration = null;
             this._layoutPromise = null;
             this.setNeedsLayout(true);
+            return this;
         },
 
         setLayoutWithAnimation: function(layout) {
@@ -92,9 +97,10 @@ define(["views/common/layer-view",
 
         setUseChildrenWidth: function(value) {
             if (value == this.useChildrenWidth)
-                return;
+                return this;
             this.useChildrenWidth = value;
             this.setNeedsLayout(true);
+            return this;
         }
     });
 

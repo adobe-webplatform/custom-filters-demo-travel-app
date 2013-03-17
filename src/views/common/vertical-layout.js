@@ -1,6 +1,6 @@
 define(["utils/transform"], function(Transform){
 
-    var VerticalLayout = function(containerView, animationDuration) {
+    var VerticalLayout = function(containerView, animationWait, animationDuration) {
         var children = containerView.childrenViews(),
             maxWidth = 0,
             padding = containerView.padding(),
@@ -17,21 +17,22 @@ define(["utils/transform"], function(Transform){
                 viewBounds
                     .setX(padding.left())
                     .setY(offset);
-                if (animationDuration && view.everHadLayout) {
+                if ((animationWait || animationDuration) && view.everHadLayout) {
+                    var startTransform = Transform().translate(
+                        animationX - viewBounds.x(), 
+                        animationY - viewBounds.y());
+                    view.animation().viewState().transform().set(startTransform);
                     view.animation()
                         .inlineStart()
                         .get("layout")
                         .removeAll()
-                        .chain()
-                        .transform(animationDuration, 
-                            Transform().translate(
-                                animationX - viewBounds.x(), 
-                                animationY - viewBounds.y()), 
-                            Transform());
+                        .chain(animationWait)
+                        .transform(animationDuration, Transform());
                 }
             }
             view.everHadLayout = true;
-            offset += view.outerHeight();
+            if (!view.shouldIgnoreDuringLayout())
+                offset += view.outerHeight();
             if (useChildrenWidth)
                 maxWidth = Math.max(maxWidth, viewBounds.width());
         });

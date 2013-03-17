@@ -61,15 +61,24 @@ define(['app',
                 // .wait(500)
                 // .transform(100, Transform().rotate(0));
 
+            var layer5;
+
             layer4.animation().chain(10);
             layer4.animation().start().once("stop", function() {
                 var layer3 = new MeasuredView();
                 layer0.before(layer3.render().addClass("green-box"), layer1, true);
                 layer3.setContent("Box of the right size");
 
-                var layer5 = new MeasuredView();
+                layer5 = new MeasuredView();
                 layer0.before(layer5.render().addClass("green-box"), layer4, true);
                 layer5.setContent("Box of the right size");
+            });
+
+            layer4.$el.click(function() {
+                if (layer5.parent())
+                    layer5.detach(true);
+                else
+                    layer0.before(layer5, layer4, true);
             });
 
             layer0.bounds().setY(100);

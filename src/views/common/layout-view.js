@@ -25,7 +25,8 @@ define(["views/common/layer-view",
 
         layout: function() {
             if (this._layout) {
-                this._layout(this, this._animationDuration);
+                this._layout(this, this._animationWait, this._animationDuration);
+                this._animationWait = null;
                 this._animationDuration = null;
             }
             this.setNeedsLayout(false);

@@ -98,10 +98,17 @@ define(["utils/animation_controller"], function(AnimationController) {
             this.trigger("change:animation");
         },
 
+        last: function() {
+            return (this._animations.length) ? this._animations[this._animations.length - 1] : null;
+        },
+
         chain: function(duration) {
             var BasicAnimation = require("utils/basic_animation");
             var animation = new BasicAnimation("start").setDuration(duration !== undefined ? duration : 0);
-            this.append(animation);
+            if (this._animations.length)
+                this.last().setNext(animation);
+            else
+                this.append(animation);
             return animation;
         }
     });

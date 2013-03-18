@@ -91,7 +91,9 @@ define(["mobileui/views/touch"], function(Touch) {
         },
 
         needsNativeTouch: function(event) {
-            return (!this.captureTouchSurface && $(event.target).attr("data-native-touch") !== undefined);
+            return (!this.captureTouchSurface &&
+                ($(event.target).attr("data-native-touch") !== undefined ||
+                $(event.target).prop("nodeName") === "A"));
         },
 
         removeFocus: function() {

@@ -1,5 +1,5 @@
 define(["require", "app"], function(require, app) {
-    
+
     var Router = Backbone.Router.extend({
         routes: {
             "projects": "projects",
@@ -9,29 +9,29 @@ define(["require", "app"], function(require, app) {
 
         index: function(path) {
             require(["views/index-view"], function(IndexView) {
-                app.mainView.setContentView(new IndexView());
+                app.mainView.navigatorView().pushCard(new IndexView().render());
             });
         },
 
         projects: function() {
-            require(["views/projects-view", "models/projects", "data/projects"], 
+            require(["views/projects-view", "models/projects", "data/projects"],
             function(ProjectsView, Projects, DataProjects) {
                 var projects = new Projects();
                 projects.reset(DataProjects);
-                app.mainView.setContentView(new ProjectsView({
+                app.mainView.navigatorView().pushCard(new ProjectsView({
                     model: projects
-                }));
+                }).render());
             });
         },
 
         project: function(id) {
-            require(["views/project-view", "models/projects", "data/projects"], 
+            require(["views/project-view", "models/projects", "data/projects"],
             function(ProjectView, Projects, DataProjects) {
                 var projects = new Projects();
                 projects.reset(DataProjects);
-                app.mainView.setContentView(new ProjectView({
+                app.mainView.navigatorView().pushCard(new ProjectView({
                     model: projects.get(id)
-                }));
+                }).render());
             });
         }
     });

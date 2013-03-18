@@ -1,7 +1,7 @@
 define([
     "mobileui/views/touch",
     "mobileui/views/touch-manager"], function(Touch, TouchManager) {
-    
+
     var TouchViewMixin = {
         initializeTouchViewMixin: function() {
             this.touchEvents = {
@@ -62,13 +62,13 @@ define([
         },
 
         onTouchStart: function(event) {
-            if ($(event.target).attr("data-native-touch") !== undefined)
+            if (TouchManager.instance.needsNativeTouch(event))
                 return;
             this.onTouchStartInternal(event.originalEvent);
         },
 
         onMouseDown: function(event) {
-            if ($(event.target).attr("data-native-touch") !== undefined)
+            if (TouchManager.instance.needsNativeTouch(event))
                 return;
             event.preventDefault();
             event.stopImmediatePropagation();

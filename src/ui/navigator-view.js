@@ -8,11 +8,14 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
         initialize: function() {
             NavigatorView.__super__.initialize.call(this);
             this.setLayout("vertical");
-            this.setParams(new LayoutParams().matchParent());
+            this.matchParentSize();
             this._topBarView = new NavigatorTopBarView();
             this.append(this._topBarView.render());
             this._contentView = new NavigatorContentView();
             this.append(this._contentView.render());
+
+            this._historyCards = [];
+            this._activeCard = null;
         },
 
         render: function() {
@@ -22,6 +25,33 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
 
         contentView: function() {
             return this._contentView;
+        },
+
+        activeCard: function() {
+            return this._activeCard;
+        },
+
+        pushCard: function(card) {
+            if (this._activeCard) {
+                this._activeCard.detach();
+                this._historyCards.push(this._activeCard);
+                this._activeCard = null;
+            }
+            if (card) {
+                this._activeCard = card;
+                this._contentView.append(card);
+            }
+        },
+
+        popCard: function() {
+            if (this._activeCard) {
+                this._activeCard.remove();
+                this._activeCard = null;
+            }
+            if (this._historyCards.length) {
+                this._activeCard = this._historyCards.pop();
+                this._contentView.append(this._activeCard);
+            }
         }
     });
 

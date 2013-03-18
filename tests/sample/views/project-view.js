@@ -1,13 +1,14 @@
-define(["mobileui/views/content-view"], function(ContentView) {
+define(["mobileui/ui/html-card-view"], function(HtmlCardView) {
 
-    var ProjectView = ContentView.extend({
+    var ProjectView = HtmlCardView.extend({
 
         render: function() {
-            this.$el.html("project-view: " + this.model.get("title"));
+            this.$el.addClass("js-project-view");
+            this.contentView().setContent("project-view: " + this.model.get("title"));
             return ProjectView.__super__.render.call(this);
         }
 
     });
-    
+
     return ProjectView;
 });

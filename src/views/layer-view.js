@@ -70,6 +70,11 @@ define(["mobileui/utils/rect",
             return this;
         },
 
+        matchParentSize: function() {
+            this.setParams(new LayoutParams().matchParent());
+            return this;
+        },
+
         append: function(view) {
             this.$el.append(view.$el);
             return this._childAdded(view, /* useAnimation */ false);

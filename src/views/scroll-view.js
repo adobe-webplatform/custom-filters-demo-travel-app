@@ -1,15 +1,14 @@
-define(["mobileui/views/touch-view", 
+define(["mobileui/views/gesture-view",
         "mobileui/views/gesture-detector",
-        "mobileui/utils/boilerplate"], function(TouchView, GestureDetector, boilerplate) {
+        "mobileui/utils/boilerplate"], function(GestureView, GestureDetector, boilerplate) {
 
-    var ScrollView = TouchView.extend({
+    var ScrollView = GestureView.extend({
 
         initialize: function() {
             ScrollView.__super__.initialize.call(this);
             this.on("touchdragstart", this._onTouchDragStart, this);
             this.on("touchdragmove", this._onTouchDragMove, this);
             this.on("touchdragend", this._onTouchDragEnd, this);
-            this._gestureDetector = new GestureDetector(this);
             this._contentView = null;
             this._scrollLeft = 0;
             this._scrollTop = 0;

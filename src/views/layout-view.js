@@ -7,7 +7,6 @@ define(["mobileui/views/layer-view",
 
         initialize: function() {
             LayoutView.__super__.initialize.call(this);
-            this.useChildrenWidth = false;
             this._layout = null;
             this._animationWait = null;
             this._animationDuration = null;
@@ -57,16 +56,19 @@ define(["mobileui/views/layer-view",
 
         layout: function() {
             if (this._layout) {
+                this.layoutBounds();
                 this._layout.layout(this, {
-                    wait: this._animationWait, 
-                    duration: this._animationDuration, 
+                    wait: this._animationWait,
+                    duration: this._animationDuration,
                     promise: this._layoutPromise
                 });
                 this._animationWait = null;
                 this._animationDuration = null;
                 this._layoutPromise = null;
+                this.setNeedsLayout(false);
+            } else {
+                LayoutView.__super__.layout.call(this);
             }
-            this.setNeedsLayout(false);
         },
 
         _animateAttach: function(view) {
@@ -93,14 +95,6 @@ define(["mobileui/views/layer-view",
                 if (view.hasAnimation() && !view.animation().viewState().opacity())
                     view.animation().viewState().setOpacity(1);
             });
-        },
-
-        setUseChildrenWidth: function(value) {
-            if (value == this.useChildrenWidth)
-                return this;
-            this.useChildrenWidth = value;
-            this.setNeedsLayout(true);
-            return this;
         }
     });
 

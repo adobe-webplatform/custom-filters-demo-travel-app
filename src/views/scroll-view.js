@@ -23,6 +23,11 @@ define(["mobileui/views/touch-view",
             return ScrollView.__super__.render.call(this);
         },
 
+        layout: function() {
+            ScrollView.__super__.layout.call(this);
+            this.invalidate("scroll");
+        },
+
         setContentView: function(view) {
             if (this._contentView === view)
                 return;

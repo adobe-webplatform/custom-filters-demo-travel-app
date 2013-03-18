@@ -1,4 +1,6 @@
 define(['app',
+        'mobileui/ui/window-view',
+        'mobileui/ui/navigator-view',
         'mobileui/views/layer-view',
         'mobileui/views/measured-view',
         'mobileui/views/layout-view',
@@ -7,6 +9,8 @@ define(['app',
         'mobileui/utils/transform-animation',
         'mobileui/views/layout-params'],
     function(app,
+             WindowView,
+             NavigatorView,
              LayerView,
              MeasuredView,
              LayoutView,
@@ -16,20 +20,23 @@ define(['app',
              LayoutParams)
     {
 
-    var MainView = LayerView.extend({
-
-        $content: null,
+    var MainView = WindowView.extend({
 
         initialize: function() {
+            this._navigatorView = new NavigatorView();
+            this.append(this._navigatorView.render());
+            MainView.__super__.initialize.call(this);
         },
 
         render: function() {
-            this.$el.html("<a href='#'>Main View</a>");
-            if (!this.$content)
-                this.$content = $("<div />").appendTo(this.$el);
+            MainView.__super__.render.call(this);
 
-            var layer0 = new LayoutView();
+            var contentLayer = new ScrollView(),
+                layer0 = new LayoutView().setParams(new LayoutParams().matchChildren());
+            contentLayer.setContentView(layer0);
             layer0.setLayout("vertical");
+
+            this._navigatorView.contentView().append(contentLayer.render().setParams(new LayoutParams().matchParent()));
 
             var layer1 = new LayoutView();
             layer1.setLayout("vertical");
@@ -75,7 +82,7 @@ define(['app',
             layer4.append(new MeasuredView().render().setContent("Line 2 is super long"));
             layer4.append(new MeasuredView().render().setContent("Line 3"));
             layer4.append(new MeasuredView().render().setContent("Line 4"));
-            layer4.setUseChildrenWidth(true);
+            layer4.setParams(new LayoutParams().matchChildrenWidth());
             layer4.padding().setLeft(100).setTop(50).setBottom(10).setRight(60);
 
             // layer4.animation().chain()
@@ -114,7 +121,7 @@ define(['app',
             var layer6 = new ScrollView();
             layer6.setContentView(new LayoutView().render().setLayout("vertical"));
             layer6.contentView()
-                .setUseChildrenWidth(true)
+                .setParams(new LayoutParams().matchChildrenWidth())
                 .append(new MeasuredView().render().setContent("Item 1"))
                 .append(new MeasuredView().render().setContent("Item 2"))
                 .append(new MeasuredView().render().setContent("Item 3"))
@@ -132,7 +139,7 @@ define(['app',
             var layer7 = new ScrollView();
             layer7.setContentView(new LayoutView().render().setLayout("horizontal"));
             layer7.contentView()
-                .setUseChildrenWidth(true)
+                .setParams(new LayoutParams().matchChildrenWidth())
                 .append(new MeasuredView().render().setContent("Item 1"))
                 .append(new MeasuredView().render().setContent("Item 2"))
                 .append(new MeasuredView().render().setContent("Item 3"))
@@ -154,16 +161,12 @@ define(['app',
             //     layer6.setContent("Box of the right size<br /> - test");
             // }, 1000);
 
-            layer0.bounds().setY(100);
-
-            this.append(layer0.render());
 
             return this;
         },
 
         setContentView: function(view) {
-            this.$content.html("");
-            this.$content.append(view.render().$el);
+            
         }
     });
 

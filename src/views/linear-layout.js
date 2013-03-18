@@ -6,6 +6,11 @@ define(["mobileui/utils/transform",
             : (params.width() == LayoutParams.FILL_PARENT);
     }
 
+    function matchChildren(params, isVertical) {
+        return isVertical ? (params.width() == LayoutParams.MATCH_CHILDREN)
+            : (params.height() == LayoutParams.MATCH_CHILDREN);
+    }
+
     var LinearLayout = {
 
         Vertical: "vertical",
@@ -18,7 +23,8 @@ define(["mobileui/utils/transform",
                 isVertical = this.direction == LinearLayout.Vertical,
                 padding = containerView.padding(),
                 offset = 0,
-                computeChildrenSize = isVertical ? containerView.useChildrenWidth : containerView.useChildrenHeight,
+                containerParams = containerView.params(),
+                computeChildrenSize = containerParams ? matchChildren(containerParams, isVertical) : false,
                 maxChildrenSize = 0,
                 promiseList = [],
                 childrenWeight = 0,
@@ -82,12 +88,12 @@ define(["mobileui/utils/transform",
             });
 
             if (isVertical) {
-                if (!hasParentFillers)
+                if (!hasParentFillers && (!containerParams || containerParams.height() == LayoutParams.MATCH_CHILDREN))
                     containerView.bounds().setHeight(offset - padding.top());
                 if (computeChildrenSize)
                     containerView.bounds().setWidth(maxChildrenSize);
             } else {
-                if (!hasParentFillers)
+                if (!hasParentFillers && (!containerParams || containerParams.width() == LayoutParams.MATCH_CHILDREN))
                     containerView.bounds().setWidth(offset - padding.left());
                 if (computeChildrenSize)
                     containerView.bounds().setHeight(maxChildrenSize);

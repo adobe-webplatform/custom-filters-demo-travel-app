@@ -213,7 +213,21 @@ define(["mobileui/utils/rect",
             });
         },
 
+        layoutBounds: function() {
+            var params = this.params();
+            if (!params)
+                return;
+            var parentView = this.parent();
+            if (!parentView)
+                return;
+            if (params.width() == LayoutParams.MATCH_PARENT)
+                this.bounds().setWidth(parentView.bounds().width());
+            if (params.height() == LayoutParams.MATCH_PARENT)
+                this.bounds().setHeight(parentView.bounds().height());
+        },
+
         layout: function() {
+            this.layoutBounds();
             this.layoutChildren();
             this.setNeedsLayout(false);
         },

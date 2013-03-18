@@ -28,6 +28,7 @@ define(["mobileui/views/layer-view"], function(LayerView) {
             this.bounds()
                 .setWidth(this.$contentView.outerWidth())
                 .setHeight(this.$contentView.outerHeight());
+            this.layoutBounds();
             this.setNeedsLayout(false);
         }
     });

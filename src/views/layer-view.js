@@ -208,6 +208,7 @@ define(["mobileui/utils/rect",
         },
 
         layoutChildren: function() {
+            this.setLayoutOnChildren();
             _.each(this.childrenViews(), function(view) {
                 view.layoutIfNeeded();
             });
@@ -224,6 +225,14 @@ define(["mobileui/utils/rect",
                 this.bounds().setWidth(parentView.bounds().width());
             if (params.height() == LayoutParams.MATCH_PARENT)
                 this.bounds().setHeight(parentView.bounds().height());
+        },
+
+        setLayoutOnChildren: function() {
+            if (!this.checkInvalidationFlag("size"))
+                return;
+            _.each(this.childrenViews(), function(view) {
+                view.setNeedsLayout(true);
+            });
         },
 
         layout: function() {
@@ -320,6 +329,10 @@ define(["mobileui/utils/rect",
         invalidate: function(type) {
             this._requestAnimationFrame();
             this._invalidationFlags[type] = true;
+        },
+
+        checkInvalidationFlag: function(type) {
+            return this._invalidationFlags ? this._invalidationFlags[type] : false;
         },
 
         _requestAnimationFrame: function() {

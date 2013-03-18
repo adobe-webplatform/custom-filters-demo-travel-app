@@ -46,7 +46,7 @@ define(function() {
             return this.setHeight(LayoutParams.MATCH_PARENT);
         },
 
-        matchChidlrenHeight: function() {
+        matchChildrenHeight: function() {
             return this.setHeight(LayoutParams.MATCH_CHILDREN);
         },
 

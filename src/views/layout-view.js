@@ -57,6 +57,7 @@ define(["mobileui/views/layer-view",
         layout: function() {
             if (this._layout) {
                 this.layoutBounds();
+                this.setLayoutOnChildren();
                 this._layout.layout(this, {
                     wait: this._animationWait,
                     duration: this._animationDuration,

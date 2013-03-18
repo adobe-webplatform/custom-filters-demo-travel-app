@@ -121,7 +121,7 @@ define(['app',
             var layer6 = new ScrollView();
             layer6.setContentView(new LayoutView().render().setLayout("vertical"));
             layer6.contentView()
-                .setParams(new LayoutParams().matchChildrenWidth())
+                .setParams(new LayoutParams().matchChildrenHeight())
                 .append(new MeasuredView().render().setContent("Item 1"))
                 .append(new MeasuredView().render().setContent("Item 2"))
                 .append(new MeasuredView().render().setContent("Item 3"))

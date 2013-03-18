@@ -1,17 +1,20 @@
-define(['app', 
-        'mobileui/views/layer-view', 
+define(['app',
+        'mobileui/views/layer-view',
         'mobileui/views/measured-view',
         'mobileui/views/layout-view',
         'mobileui/views/scroll-view',
         'mobileui/utils/transform',
-        'mobileui/utils/transform-animation'], 
-    function(app, 
+        'mobileui/utils/transform-animation',
+        'mobileui/views/layout-params'],
+    function(app,
              LayerView,
              MeasuredView,
              LayoutView,
              ScrollView,
              Transform,
-             TransformAnimation) {
+             TransformAnimation,
+             LayoutParams)
+    {
 
     var MainView = LayerView.extend({
 
@@ -28,16 +31,32 @@ define(['app',
             var layer0 = new LayoutView();
             layer0.setLayout("vertical");
 
-            var layer1 = new LayerView();
+            var layer1 = new LayoutView();
+            layer1.setLayout("vertical");
+            layer1.bounds().setSize(100, 300);
+            layer1.$el.click(function() {
+                layer0.setLayoutWithAnimation("vertical");
+            });
+
+            var layer1_content1 = new LayerView();
+            layer1_content1.bounds().setSize(90, 50);
+            layer1_content1.render().$el.addClass("red-box").html("Inside of the first layer");
+            layer1.append(layer1_content1);
+
+            var layer1_content2 = new LayerView();
+            layer1_content2.setParams(new LayoutParams().fillParentHeight()).bounds().setWidth(90);
+            layer1_content2.render().$el.addClass("green-box").html("Inside of the second layer");
+            layer1.append(layer1_content2);
+
+            var layer1_content3 = new LayerView();
+            layer1_content3.bounds().setSize(90, 50);
+            layer1_content3.render().$el.addClass("red-box").html("Inside of the third layer");
+            layer1.append(layer1_content3);
+
             var layer2 = new LayerView();
 
             layer0.append(layer1.render().addClass("blue-box"))
                 .append(layer2.render().addClass("red-box"));
-
-            layer1.bounds().setWidth(100).setHeight(100);
-            layer1.$el.click(function() {
-                layer0.setLayoutWithAnimation("vertical");
-            });
 
             //layer1.transform().rotate(20);
 

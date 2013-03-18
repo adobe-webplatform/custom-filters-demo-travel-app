@@ -2,8 +2,9 @@ define(["mobileui/utils/rect",
         "mobileui/utils/transform",
         "mobileui/utils/outsets",
         "mobileui/utils/animation-set",
-        "mobileui/utils/request-animation-frame"
-], function(Rect, Transform, Outsets, AnimationSet, requestAnimationFrame) {
+        "mobileui/utils/request-animation-frame",
+        "mobileui/views/layout-params"
+], function(Rect, Transform, Outsets, AnimationSet, requestAnimationFrame, LayoutParams) {
 
     var LayerView = Backbone.View.extend({
 
@@ -15,6 +16,8 @@ define(["mobileui/utils/rect",
             this._padding = new Outsets();
             this._opacity = 1;
             this._animation = null;
+
+            this._params = null;
 
             this._bounds.on("change:position", this._onPositionChanged, this);
             this._bounds.on("change:size", this._onSizeChanged, this);
@@ -55,6 +58,16 @@ define(["mobileui/utils/rect",
                     children.push(layerView);
             });
             return children;
+        },
+
+        params: function() {
+            return this._params;
+        },
+
+        setParams: function(params) {
+            this._params = params;
+            this.setNeedsLayout(true);
+            return this;
         },
 
         append: function(view) {

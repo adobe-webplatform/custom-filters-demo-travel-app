@@ -1,8 +1,13 @@
-define(["mobileui/utils/transform"], function(Transform){
-    
+define(["mobileui/utils/transform",
+        "mobileui/views/layout-params"], function(Transform, LayoutParams) {
+
+    function fillsParent(params, isVertical) {
+        return isVertical ? (params.height() == LayoutParams.FILL_PARENT)
+            : (params.width() == LayoutParams.FILL_PARENT);
+    }
 
     var LinearLayout = {
-        
+
         Vertical: "vertical",
         Horizontal: "horizontal",
 
@@ -12,22 +17,51 @@ define(["mobileui/utils/transform"], function(Transform){
             var children = containerView.childrenViews(),
                 isVertical = this.direction == LinearLayout.Vertical,
                 padding = containerView.padding(),
-                offset = isVertical ? padding.top() : padding.left(),
+                offset = 0,
                 computeChildrenSize = isVertical ? containerView.useChildrenWidth : containerView.useChildrenHeight,
                 maxChildrenSize = 0,
-                promiseList = [];
-            
+                promiseList = [],
+                childrenWeight = 0,
+                hasParentFillers = false,
+                spacePerWeight = 0;
+
             _.each(children, function(view) {
+                var params = view.params();
+                if (params && fillsParent(params, isVertical)) {
+                    childrenWeight += params.weight();
+                    hasParentFillers = true;
+                    return;
+                }
                 view.layoutIfNeeded();
-                var viewBounds = view.bounds(),
+                if (!view.shouldIgnoreDuringLayout())
+                    offset += isVertical ? view.outerHeight() : view.outerWidth();
+            });
+
+            if (hasParentFillers) {
+                var totalSpace = (isVertical ? containerView.bounds().height() : containerView.bounds().width()),
+                    remainingSpace = totalSpace - offset;
+                spacePerWeight = (childrenWeight > 0) ? remainingSpace / childrenWeight : 0;
+            }
+            offset = isVertical ? padding.top() : padding.left();
+
+            _.each(children, function(view) {
+                var params = view.params(),
+                    viewBounds = view.bounds(),
                     newX = isVertical ? padding.left() : offset,
                     newY = isVertical ? offset : padding.top();
-
+                if (params && fillsParent(params, isVertical)) {
+                    var space = spacePerWeight * params.weight();
+                    if (isVertical)
+                        viewBounds.setHeight(space);
+                    else
+                        viewBounds.setWidth(space);
+                    view.layoutIfNeeded();
+                }
                 if (viewBounds.x() != newX ||
                     viewBounds.y() != newY) {
                     if ((options.wait || options.duration) && view.everHadLayout) {
                         var startTransform = Transform().translate(
-                            viewBounds.x() - newX, 
+                            viewBounds.x() - newX,
                             viewBounds.y() - newY);
                         view.animation().viewState().transform().set(startTransform);
                         view.animation()
@@ -48,11 +82,13 @@ define(["mobileui/utils/transform"], function(Transform){
             });
 
             if (isVertical) {
-                containerView.bounds().setHeight(offset - padding.top());
+                if (!hasParentFillers)
+                    containerView.bounds().setHeight(offset - padding.top());
                 if (computeChildrenSize)
                     containerView.bounds().setWidth(maxChildrenSize);
             } else {
-                containerView.bounds().setWidth(offset - padding.left());
+                if (!hasParentFillers)
+                    containerView.bounds().setWidth(offset - padding.left());
                 if (computeChildrenSize)
                     containerView.bounds().setHeight(maxChildrenSize);
             }

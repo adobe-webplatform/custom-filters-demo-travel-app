@@ -1,5 +1,5 @@
-define(["utils/basic-animation"], function(BasicAnimation) {
-    
+define(["mobileui/utils/basic-animation"], function(BasicAnimation) {
+
     var OpacityAnimation = function(name) {
         BasicAnimation.call(this, name);
         this._opacity = 0;
@@ -34,10 +34,10 @@ define(["utils/basic-animation"], function(BasicAnimation) {
                 state.requestFrame();
             var opacity;
             if (this._startOpacity !== null)
-                opacity = this._startOpacity * (1 - animationState.percent) + 
+                opacity = this._startOpacity * (1 - animationState.percent) +
                     animationState.percent * this._opacity;
             else
-                opacity = animationState.startOpacity * (1 - animationState.percent) + 
+                opacity = animationState.startOpacity * (1 - animationState.percent) +
                     animationState.percent * this._opacity;
             viewState.setOpacity(opacity);
         }

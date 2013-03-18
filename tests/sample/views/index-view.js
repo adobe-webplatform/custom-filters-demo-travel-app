@@ -1,4 +1,4 @@
-define(["views/common/content-view"], function(ContentView) {
+define(["mobileui/views/common/content-view"], function(ContentView) {
 
     var IndexView = ContentView.extend({
 

@@ -1,4 +1,4 @@
-define(["utils/boilerplate"], function(boilerplate) {
+define(["mobileui/utils/boilerplate"], function(boilerplate) {
 
     var now = function() { return Date.now(); };
 

@@ -1,5 +1,5 @@
-define(["utils/basic-animation",
-        "utils/transform"], function(BasicAnimation, Transform) {
+define(["mobileui/utils/basic-animation",
+        "mobileui/utils/transform"], function(BasicAnimation, Transform) {
     
     var TransformAnimation = function(name) {
         BasicAnimation.call(this, name);

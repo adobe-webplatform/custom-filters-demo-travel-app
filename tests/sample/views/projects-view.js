@@ -1,10 +1,10 @@
-define(["views/common/content-view"], function(ContentView) {
+define(["mobileui/views/common/content-view"], function(ContentView) {
 
     var ProjectsView = ContentView.extend({
 
         render: function() {
             this.$el.html("projects-view");
-            
+
             this.$el.append(
                 $("<ul />").append(this.model.map(function(model) {
                     return $("<li />").append(

@@ -1,9 +1,9 @@
-define(["utils/animation-controller",
-        "utils/animation-view-state",
-        "utils/animation",
+define(["mobileui/utils/animation-controller",
+        "mobileui/utils/animation-view-state",
+        "mobileui/utils/animation",
         // Initialize all types of animations here.
-        "utils/transform-animation",
-        "utils/opacity-animation"
+        "mobileui/utils/transform-animation",
+        "mobileui/utils/opacity-animation"
         ], function(AnimationController, AnimationViewState, Animation) {
 
     var AnimationSet = function() {

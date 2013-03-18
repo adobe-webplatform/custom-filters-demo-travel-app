@@ -1,8 +1,8 @@
-define(["utils/rect",
-    "utils/transform",
-    "utils/outsets",
-    "utils/animation-set",
-    "utils/request-animation-frame"
+define(["mobileui/utils/rect",
+        "mobileui/utils/transform",
+        "mobileui/utils/outsets",
+        "mobileui/utils/animation-set",
+        "mobileui/utils/request-animation-frame"
 ], function(Rect, Transform, Outsets, AnimationSet, requestAnimationFrame) {
 
     var LayerView = Backbone.View.extend({

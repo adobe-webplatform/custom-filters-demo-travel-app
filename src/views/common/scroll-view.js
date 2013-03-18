@@ -1,6 +1,6 @@
-define(["views/common/touch-view", 
-        "views/common/gesture-detector",
-        "utils/boilerplate"], function(TouchView, GestureDetector, boilerplate) {
+define(["mobileui/views/common/touch-view", 
+        "mobileui/views/common/gesture-detector",
+        "mobileui/utils/boilerplate"], function(TouchView, GestureDetector, boilerplate) {
 
     var ScrollView = TouchView.extend({
 

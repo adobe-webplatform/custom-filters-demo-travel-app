@@ -1,5 +1,5 @@
-define(["utils/time",
-    "utils/request-animation-frame"], function(Time, requestAnimationFrame) {
+define(["mobileui/utils/time",
+        "mobileui/utils/request-animation-frame"], function(Time, requestAnimationFrame) {
 
     var frameRateInterval = 1000 / 60;
 

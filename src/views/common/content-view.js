@@ -1,4 +1,4 @@
-define(["views/common/layer-view"], function(LayerView) {
+define(["mobileui/views/common/layer-view"], function(LayerView) {
 
     var ContentView = LayerView.extend({
         render: function() {

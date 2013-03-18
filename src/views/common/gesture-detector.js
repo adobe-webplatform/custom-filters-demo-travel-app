@@ -1,4 +1,4 @@
-define(["views/common/touch-manager"],
+define(["mobileui/views/common/touch-manager"],
     function(TouchManager) {
 
     function dist(x1, y1, x2, y2) {

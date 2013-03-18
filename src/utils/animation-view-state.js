@@ -1,4 +1,4 @@
-define(["utils/transform"], function(Transform) {
+define(["mobileui/utils/transform"], function(Transform) {
 
     var AnimationViewState = function() {
         this._transform = null;

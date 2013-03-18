@@ -1,4 +1,4 @@
-define(["utils/animation-controller"], function(AnimationController) {
+define(["mobileui/utils/animation-controller"], function(AnimationController) {
 
     var Animation = function(name) {
         this._id = AnimationController.instance.allocateAnimationId();
@@ -103,7 +103,7 @@ define(["utils/animation-controller"], function(AnimationController) {
         },
 
         chain: function(duration) {
-            var BasicAnimation = require("utils/basic-animation");
+            var BasicAnimation = require("mobileui/utils/basic-animation");
             var animation = new BasicAnimation("start").setDuration(duration !== undefined ? duration : 0);
             if (this._animations.length)
                 this.last().setNext(animation);

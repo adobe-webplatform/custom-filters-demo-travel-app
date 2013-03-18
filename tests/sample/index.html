@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Mobile UI Framework - Test Framework</title>
+        <link rel="stylesheet" type="text/css" href="../../style/mobile-ui.css">
+    </head>
+    <body>
+        <div id="main"></div>
+
+        <script type="text/javascript" src="../../third-party/dev/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="../../third-party/dev/underscore.js"></script>
+        <script type="text/javascript" src="../../third-party/dev/underscore.string.js"></script>
+        <script type="text/javascript" src="../../third-party/dev/sylvester.src.js"></script>
+        <script type="text/javascript" src="../../third-party/dev/backbone.js"></script>
+        <script type="text/javascript" src="../../third-party/dev/require.js"></script>
+        <script>
+        requirejs.config({
+            paths: {
+                "mobileui": "../../src/"
+            }
+        });
+        require(["main"]);
+        </script>
+    </body>
+</html>

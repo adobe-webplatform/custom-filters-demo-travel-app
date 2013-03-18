@@ -1,4 +1,4 @@
-define(["utils/animation", "require"], function(Animation, require) {
+define(["mobileui/utils/animation", "require"], function(Animation, require) {
 
     var BasicAnimationState = function(time) {
         this.startTime = time;
@@ -71,7 +71,7 @@ define(["utils/animation", "require"], function(Animation, require) {
                 endTransform = startTransform;
                 startTransform = null;
             }
-            var TransformAnimation = require("utils/transform-animation");
+            var TransformAnimation = require("mobileui/utils/transform-animation");
             var transformAnimation = new TransformAnimation("transform");
             transformAnimation.transform().take(endTransform);
             if (startTransform)
@@ -84,7 +84,7 @@ define(["utils/animation", "require"], function(Animation, require) {
                 endOpacity = startOpacity;
                 startOpacity = null;
             }
-            var OpacityAnimation = require("utils/opacity-animation");
+            var OpacityAnimation = require("mobileui/utils/opacity-animation");
             var opacityAnimation = new OpacityAnimation("opacity");
             opacityAnimation.setOpacity(endOpacity);
             if (startOpacity !== null)

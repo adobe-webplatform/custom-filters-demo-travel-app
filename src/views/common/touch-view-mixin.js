@@ -1,6 +1,6 @@
 define([
-    "views/common/touch",
-    "views/common/touch-manager"], function(Touch, TouchManager) {
+    "mobileui/views/common/touch",
+    "mobileui/views/common/touch-manager"], function(Touch, TouchManager) {
     
     var TouchViewMixin = {
         initializeTouchViewMixin: function() {

@@ -1,5 +1,5 @@
-define(["utils/request-animation-frame",
-        "utils/boilerplate"], 
+define(["mobileui/utils/request-animation-frame",
+        "mobileui/utils/boilerplate"], 
     function(requestAnimationFrame, boilerplate) {
 
     function Touch(identifier) {

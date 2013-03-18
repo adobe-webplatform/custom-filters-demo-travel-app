@@ -133,7 +133,7 @@ define(["mobileui/utils/time",
         },
 
         _onAnimationPropertyChanged: function() {
-            if (this._pendingCommit)
+            if (this._pendingCommit || this._inCompute)
                 return;
             // Do not execute the compute now as we might hape incomplete
             // data structures at this point.
@@ -154,10 +154,12 @@ define(["mobileui/utils/time",
             var state = this._state;
             do {
                 state.updateTime();
-                _.each(this._animations, function(animationSet) {
+                var animations = this._animations;
+                for (var i = 0; i < animations.length; ++i) {
+                    var animationSet = animations[i];
                     if (animationSet)
                         animationSet.compute(state);
-                });
+                }
             } while(!state.nextInterval());
             if (this._hasRemovedSet)
                 this._cleanupSets();

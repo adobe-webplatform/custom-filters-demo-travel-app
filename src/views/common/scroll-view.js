@@ -1,12 +1,19 @@
-define(["views/common/touch-view", "utils/boilerplate"], function(TouchView, boilerplate) {
+define(["views/common/touch-view", 
+        "views/common/gesture-detector",
+        "utils/boilerplate"], function(TouchView, GestureDetector, boilerplate) {
 
     var ScrollView = TouchView.extend({
 
         initialize: function() {
             ScrollView.__super__.initialize.call(this);
+            this.on("touchdragstart", this._onTouchDragStart, this);
+            this.on("touchdragmove", this._onTouchDragMove, this);
+            this.on("touchdragend", this._onTouchDragEnd, this);
+            this._gestureDetector = new GestureDetector(this);
             this._contentView = null;
             this._scrollLeft = 0;
             this._scrollTop = 0;
+            this._touchStartState = null;
         },
 
         render: function() {
@@ -99,6 +106,30 @@ define(["views/common/touch-view", "utils/boilerplate"], function(TouchView, boi
                 top *= -1;
             }
             this.scrollBy(left, top);
+        },
+
+        respondsToTouchGesture: function(touch) {
+            if (!this._contentView || touch.type != GestureDetector.GestureType.DRAG)
+                return false;
+            return true;
+        },
+
+        _onTouchDragStart: function() {
+            this._touchStartState = {
+                scrollLeft: this._scrollLeft,
+                scrollTop: this._scrollTop
+            };
+        },
+
+        _onTouchDragMove: function(transform) {
+            if (!this._touchStartState)
+                return;
+            this.scrollTo(this._touchStartState.scrollLeft - transform.dragX,
+                    this._touchStartState.scrollTop - transform.dragY);
+        },
+
+        _onTouchDragEnd: function(transform) {
+            this._touchStartState = null;
         }
     });
 

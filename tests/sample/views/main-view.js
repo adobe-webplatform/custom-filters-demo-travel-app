@@ -2,6 +2,7 @@ define(['app',
         'mobileui/ui/window-view',
         'mobileui/ui/navigator-view',
         'mobileui/views/layer-view',
+        'mobileui/views/touch-view',
         'mobileui/views/measured-view',
         'mobileui/views/layout-view',
         'mobileui/views/scroll-view',
@@ -12,6 +13,7 @@ define(['app',
              WindowView,
              NavigatorView,
              LayerView,
+             TouchView,
              MeasuredView,
              LayoutView,
              ScrollView,
@@ -41,26 +43,26 @@ define(['app',
             var layer1 = new LayoutView();
             layer1.setLayout("vertical");
             layer1.bounds().setSize(100, 300);
-            layer1.$el.click(function() {
-                layer0.setLayoutWithAnimation("vertical");
-            });
 
             var layer1_content1 = new LayerView();
             layer1_content1.bounds().setSize(90, 50);
             layer1_content1.render().$el.addClass("red-box").html("Inside of the first layer");
             layer1.append(layer1_content1);
 
-            var layer1_content2 = new LayerView();
+            var layer1_content2 = new TouchView();
             layer1_content2.setParams(new LayoutParams().fillParentHeight()).bounds().setWidth(90);
             layer1_content2.render().$el.addClass("green-box").html("Inside of the second layer");
             layer1.append(layer1_content2);
+            layer1_content2.on("touchend", function() {
+                layer0.setLayoutWithAnimation("vertical");
+            });
 
             var layer1_content3 = new LayerView();
             layer1_content3.bounds().setSize(90, 50);
             layer1_content3.render().$el.addClass("red-box").html("Inside of the third layer");
             layer1.append(layer1_content3);
 
-            var layer2 = new LayerView();
+            var layer2 = new TouchView();
 
             layer0.append(layer1.render().addClass("blue-box"))
                 .append(layer2.render().addClass("red-box"));
@@ -69,7 +71,7 @@ define(['app',
 
             layer2.bounds().setWidth(200).setHeight(100);
             //layer2.transform().perspective(100).rotateY(20);
-            layer2.$el.click(function() {
+            layer2.on("touchend", function() {
                 layer0.setLayoutWithAnimation("horizontal");
             });
 
@@ -78,11 +80,11 @@ define(['app',
 
             layer4.bounds().setX(100);
             layer0.append(layer4.render().addClass("red-box"));
+            layer4.setParams(new LayoutParams().matchChildren());
             layer4.append(new MeasuredView().render().setContent("Line 1"));
             layer4.append(new MeasuredView().render().setContent("Line 2 is super long"));
             layer4.append(new MeasuredView().render().setContent("Line 3"));
             layer4.append(new MeasuredView().render().setContent("Line 4"));
-            layer4.setParams(new LayoutParams().matchChildrenWidth());
             layer4.padding().setLeft(100).setTop(50).setBottom(10).setRight(60);
 
             // layer4.animation().chain()

@@ -1,6 +1,6 @@
 define([
-    "mobileui/views/common/layer-view",
-    "mobileui/views/common/touch-view-mixin"
+    "mobileui/views/layer-view",
+    "mobileui/views/touch-view-mixin"
 ],
 function(LayerView, TouchViewMixin) {
 

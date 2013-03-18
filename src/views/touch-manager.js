@@ -1,4 +1,4 @@
-define(["mobileui/views/common/touch"], function(Touch) {
+define(["mobileui/views/touch"], function(Touch) {
 
     function TouchManager() {
         this.touchEvents = {

@@ -1,6 +1,6 @@
-define(["mobileui/views/common/layer-view",
-        "mobileui/views/common/vertical-layout",
-        "mobileui/views/common/horizontal-layout"
+define(["mobileui/views/layer-view",
+        "mobileui/views/vertical-layout",
+        "mobileui/views/horizontal-layout"
     ], function(LayerView, VerticalLayout, HorizontalLayout) {
 
     var LayoutView = LayerView.extend({

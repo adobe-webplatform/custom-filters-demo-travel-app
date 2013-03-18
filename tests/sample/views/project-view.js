@@ -1,4 +1,4 @@
-define(["mobileui/views/common/content-view"], function(ContentView) {
+define(["mobileui/views/content-view"], function(ContentView) {
 
     var ProjectView = ContentView.extend({
 

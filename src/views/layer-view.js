@@ -4,8 +4,9 @@ define(["mobileui/utils/rect",
         "mobileui/utils/animation-set",
         "mobileui/utils/request-animation-frame",
         "mobileui/views/layout-params",
-        "mobileui/views/touch-view-mixin"
-], function(Rect, Transform, Outsets, AnimationSet, requestAnimationFrame, LayoutParams, TouchViewMixin) {
+        "mobileui/views/touch-view-mixin",
+        "mobileui/views/gesture-detector"
+], function(Rect, Transform, Outsets, AnimationSet, requestAnimationFrame, LayoutParams, TouchViewMixin, GestureDetector) {
 
     var LayerView = Backbone.View.extend(TouchViewMixin).extend({
 
@@ -30,6 +31,25 @@ define(["mobileui/utils/rect",
             this._invalidationFlags = null;
             this._needsLayout = false;
             this._state = LayerView.VISIBLE;
+            this._needsTouchEvents = false;
+        },
+
+        setNeedsTouchEvents: function(value) {
+            if (this._needsTouchEvents == value)
+                return this;
+            if (this.$el && this.$el.length) {
+                if (value)
+                    this.installTouchEvents();
+                else
+                    this.removeTouchEvents();
+            }
+            this._needsTouchEvents = value;
+            return this;
+        },
+
+        addGestureDetector: function() {
+            if (!this._gestureDetector)
+                this._gestureDetector = new GestureDetector(this);
         },
 
         animation: function() {
@@ -45,11 +65,16 @@ define(["mobileui/utils/rect",
         },
 
         setElement: function(el) {
-            if (this.$el)
+            if (this.$el) {
                 this.$el.data("layer-view", null);
+                this.removeTouchEvents();
+            }
             LayerView.__super__.setElement.call(this, el);
-            if (this.$el)
+            if (this.$el) {
                 this.$el.data("layer-view", this);
+                if (this._needsTouchEvents)
+                    this.installTouchEvents();
+            }
         },
 
         childrenViews: function() {
@@ -326,7 +351,6 @@ define(["mobileui/utils/rect",
         },
 
         render: function() {
-            this.renderTouchViewMixin();
             this.$el.addClass("js-layer-view");
             this._validatePosition();
             this._validateSize();

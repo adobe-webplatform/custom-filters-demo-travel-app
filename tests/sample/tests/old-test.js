@@ -1,7 +1,7 @@
 define(["mobileui/ui/navigator-card-view",
         'mobileui/ui/navigator-view',
         'mobileui/views/layer-view',
-        'mobileui/views/touch-view',
+        'mobileui/views/gesture-view',
         'mobileui/views/measured-view',
         'mobileui/views/layout-view',
         'mobileui/views/scroll-view',
@@ -10,7 +10,7 @@ define(["mobileui/ui/navigator-card-view",
         'mobileui/views/layout-params'], function(NavigatorCardView,
              NavigatorView,
              LayerView,
-             TouchView,
+             GestureView,
              MeasuredView,
              LayoutView,
              ScrollView,
@@ -42,11 +42,11 @@ define(["mobileui/ui/navigator-card-view",
             layer1_content1.render().$el.addClass("red-box").html("Inside of the first layer");
             layer1.append(layer1_content1);
 
-            var layer1_content2 = new TouchView();
+            var layer1_content2 = new GestureView();
             layer1_content2.setParams(new LayoutParams().fillParentHeight()).bounds().setWidth(90);
             layer1_content2.render().$el.addClass("green-box").html("Inside of the second layer");
             layer1.append(layer1_content2);
-            layer1_content2.on("touchend", function() {
+            layer1_content2.on("tap", function() {
                 layer0.setLayoutWithAnimation("vertical");
             });
 
@@ -55,7 +55,7 @@ define(["mobileui/ui/navigator-card-view",
             layer1_content3.render().$el.addClass("red-box").html("Inside of the third layer");
             layer1.append(layer1_content3);
 
-            var layer2 = new TouchView();
+            var layer2 = new GestureView();
 
             layer0.append(layer1.render().addClass("blue-box"))
                 .append(layer2.render().addClass("red-box"));
@@ -64,12 +64,12 @@ define(["mobileui/ui/navigator-card-view",
 
             layer2.bounds().setWidth(200).setHeight(100);
             //layer2.transform().perspective(100).rotateY(20);
-            layer2.on("touchend", function() {
+            layer2.on("tap", function() {
                 layer0.setLayoutWithAnimation("horizontal");
             });
 
             var layer4 = new LayoutView();
-            layer4.setLayout("vertical");
+            layer4.setLayout("vertical").addGestureDetector();
 
             layer4.bounds().setX(100);
             layer0.append(layer4.render().addClass("red-box"));
@@ -104,7 +104,7 @@ define(["mobileui/ui/navigator-card-view",
                 layer5.setContent("Box of the right size<br /> - test");
             });
 
-            layer4.$el.click(function() {
+            layer4.on("tap", function() {
                 if (!layer5)
                     return;
                 if (layer5.parent())

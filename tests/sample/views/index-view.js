@@ -35,15 +35,15 @@ define(["mobileui/ui/navigator-card-view",
 
     var IndexView = NavigatorCardView.extend({
 
-        initialize: function(test) {
+        initialize: function(options) {
             IndexView.__super__.initialize.call(this);
             this.model = new Backbone.Collection();
             this.model.add(_.map(TestsList, function(item) {
                 return new Backbone.Model(item);
             }));
-            if (test) {
+            if (options && options.path) {
                 var testModel = this.model.find(function(item) {
-                    return item.get("label") == test;
+                    return item.get("label") == options.path;
                 });
                 if (testModel)
                     this._onItemSelected(testModel);

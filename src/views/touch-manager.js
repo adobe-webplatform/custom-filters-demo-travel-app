@@ -90,9 +90,10 @@ define(["mobileui/views/touch"], function(Touch) {
         },
 
         needsNativeTouch: function(event) {
+            var target = $(event.target);
             return (!this.captureTouchSurface &&
-                ($(event.target).attr("data-native-touch") !== undefined ||
-                $(event.target).prop("nodeName") === "A"));
+                (target.attr("data-native-touch") !== undefined ||
+                target.prop("nodeName") === "A"));
         },
 
         removeFocus: function() {
@@ -124,16 +125,17 @@ define(["mobileui/views/touch"], function(Touch) {
         },
 
         handleTouchStart: function(touch) {
-            var internalTouch = this.findTouch(touches[i].identifier);
+            var internalTouch = this.findTouch(touch.identifier);
             if (internalTouch)
                 return internalTouch;
-            internalTouch = new Touch(touches[i].identifier);
+            internalTouch = new Touch(touch.identifier);
             internalTouch.view = null;
             internalTouch.state = Touch.START;
             internalTouch.startPosition = internalTouch.currentPosition = Touch.getPosition(touch);
             internalTouch.updatePreviewBox();
             this.setTouch(internalTouch);
             this.installTouchTrackingEvents();
+            return internalTouch;
         },
 
         onTouchMove: function(event) {

@@ -57,7 +57,7 @@ define(["mobileui/views/touch-manager"],
     _.extend(GestureDetector.prototype, Backbone.Events, {
 
         install: function(view) {
-            this.view = view;
+            this.view = view.setNeedsTouchEvents(true);
             view.on("touchstart", this.onGestureTouchStart.bind(this));
             view.on("touchmove", this.onGestureTouchMove.bind(this));
             view.on("touchend", this.onGestureTouchEnd.bind(this));
@@ -216,7 +216,7 @@ define(["mobileui/views/touch-manager"],
         onLongTapTimer: function() {
             this.clearGestureTimers();
             this.view.trigger("longtaptimer", this.longTapTouch);
-            if (!this.el.parent().length)
+            if (!this.view.$el.parent().length)
                 this.clearTransformCapture();
         },
 

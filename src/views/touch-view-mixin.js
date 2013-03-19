@@ -5,30 +5,32 @@ define([
     var TouchViewMixin = {
         initializeTouchViewMixin: function() {
             this.touchEvents = {
+                installed: false,
                 onTouchStart: this.onTouchStart.bind(this),
                 onMouseDown: this.onMouseDown.bind(this),
                 onClick: this.onClick.bind(this)
             };
             this.touchPointsSet = {};
             this.touchPoints = [];
-        },
-
-        renderTouchViewMixin: function() {
-            this.installTouchEvents();
+            return this;
         },
 
         installTouchEvents: function() {
-            this.$el
-                .bind("touchstart", this.touchEvents.onTouchStart)
-                .bind("mousedown", this.touchEvents.onMouseDown)
-                .bind("click", this.touchEvents.onClick);
+            if (this.touchEvents.installed)
+                return;
+            var el = this.$el.get(0);
+            el.addEventListener("touchstart", this.touchEvents.onTouchStart, false);
+            el.addEventListener("mousedown", this.touchEvents.onMouseDown, false);
+            el.addEventListener("click", this.touchEvents.onClick, false);
         },
 
         removeTouchEvents: function() {
-            this.$el
-                .unbind("touchstart", this.touchEvents.onTouchStart)
-                .unbind("mousedown", this.touchEvents.onMouseDown)
-                .unbind("click", this.touchEvents.onClick);
+            if (!this.touchEvents.installed)
+                return;
+            var el = this.$el.get(0);
+            el.removeEventListener("touchstart", this.touchEvents.onTouchStart, false);
+            el.removeEventListener("mousedown", this.touchEvents.onMouseDown, false);
+            el.removeEventListener("click", this.touchEvents.onClick, false);
         },
 
         removeTouch: function(touch) {
@@ -62,7 +64,7 @@ define([
         onTouchStart: function(event) {
             if (TouchManager.instance.needsNativeTouch(event))
                 return;
-            this.onTouchStartInternal(event.originalEvent);
+            this.onTouchStartInternal(event);
         },
 
         onMouseDown: function(event) {

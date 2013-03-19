@@ -14,7 +14,9 @@ define(["require", "app"], function(require, app) {
 
         test: function(path) {
             require(["views/index-view"], function(IndexView) {
-                app.mainView.navigatorView().pushCard(new IndexView(path).render());
+                var indexView = new IndexView({ path: path }).render();
+                if (!app.mainView.navigatorView().activeCard())
+                    app.mainView.navigatorView().pushCard(indexView);
             });
         }
     });

@@ -104,14 +104,6 @@ define(["mobileui/utils/transform",
                     options.promise.resolveWith(containerView);
                 });
             }
-        },
-
-        scroll: function(scrollView, options) {
-            var contentView = scrollView.contentView();
-            contentView
-                .transform()
-                .get("translate")
-                .setX(-options.left).setY(-options.top);
         }
     };
 

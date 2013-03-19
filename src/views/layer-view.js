@@ -379,6 +379,7 @@ define(["mobileui/utils/rect",
             this.$el
                 .css("width", this._bounds.width())
                 .css("height", this._bounds.height());
+            console.log(this.$el.get(0), this._bounds.width(), this._bounds.height());
         },
 
         _validateTransform: function() {

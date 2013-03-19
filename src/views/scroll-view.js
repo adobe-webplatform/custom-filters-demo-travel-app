@@ -48,7 +48,7 @@ define(["mobileui/views/gesture-view",
         scrollTo: function(left, top) {
             if (!this._contentView)
                 return;
-            if (this._scrollLeft == left && 
+            if (this._scrollLeft == left &&
                 this._scrollTop == top)
                 return;
             this._scrollLeft = left;
@@ -85,15 +85,26 @@ define(["mobileui/views/gesture-view",
                 return;
             this._scrollLeft = Math.max(0, Math.min(this._scrollLeft, this.maxScrollLeft()));
             this._scrollTop = Math.max(0, Math.min(this._scrollTop, this.maxScrollTop()));
-            var contentViewLayout = this._contentView.getLayout();
-            if (!contentViewLayout || !contentViewLayout.scroll) {
-                console.log("Scroll not supported with selected layout type.");
-                return;
-            }
-            contentViewLayout.scroll(this, {
+            var scrollOptions = {
                 left: this._scrollLeft,
                 top: this._scrollTop
-            });
+            };
+            if (this._contentView.getLayout) {
+                var contentViewLayout = this._contentView.getLayout();
+                if (contentViewLayout && !contentViewLayout.scroll) {
+                    contentViewLayout.scroll(this, scrollOptions);
+                    return;
+                }
+            }
+            this._internalScroll(this, scrollOptions);
+        },
+
+        _internalScroll: function(scrollView, options) {
+            var contentView = scrollView.contentView();
+            contentView
+                .transform()
+                .get("translate")
+                .setX(-options.left).setY(-options.top);
         },
 
         _onMouseWheel: function(event) {

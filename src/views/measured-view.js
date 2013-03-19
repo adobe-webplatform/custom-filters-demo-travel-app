@@ -1,4 +1,5 @@
-define(["mobileui/views/layer-view"], function(LayerView) {
+define(["mobileui/views/layer-view",
+        "mobileui/views/layout-params"], function(LayerView, LayoutParams) {
 
     var MeasuredView = LayerView.extend({
         render: function() {
@@ -24,11 +25,13 @@ define(["mobileui/views/layer-view"], function(LayerView) {
         },
 
         layout: function() {
-            this.layoutChildren();
-            this.bounds()
-                .setWidth(this.$contentView.outerWidth())
-                .setHeight(this.$contentView.outerHeight());
             this.layoutBounds();
+            this.layoutChildren();
+            var params = this.params();
+            if (!params || params.width() != LayoutParams.MATCH_PARENT)
+                this.bounds().setWidth(this.$contentView.outerWidth());
+            if (!params || params.height() != LayoutParams.MATCH_PARENT)
+                this.bounds().setHeight(this.$contentView.outerHeight());
             this.setNeedsLayout(false);
         }
     });

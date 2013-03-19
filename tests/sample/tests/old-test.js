@@ -1,5 +1,4 @@
-define(['app',
-        'mobileui/ui/window-view',
+define(["mobileui/ui/navigator-card-view",
         'mobileui/ui/navigator-view',
         'mobileui/views/layer-view',
         'mobileui/views/touch-view',
@@ -8,9 +7,7 @@ define(['app',
         'mobileui/views/scroll-view',
         'mobileui/utils/transform',
         'mobileui/utils/transform-animation',
-        'mobileui/views/layout-params'],
-    function(app,
-             WindowView,
+        'mobileui/views/layout-params'], function(NavigatorCardView,
              NavigatorView,
              LayerView,
              TouchView,
@@ -19,25 +16,22 @@ define(['app',
              ScrollView,
              Transform,
              TransformAnimation,
-             LayoutParams)
-    {
+             LayoutParams) {
 
-    var MainView = WindowView.extend({
+    var OldTestView = NavigatorCardView.extend({
 
         initialize: function() {
-            this._navigatorView = new NavigatorView();
-            this.append(this._navigatorView.render());
-            MainView.__super__.initialize.call(this);
+            OldTestView.__super__.initialize.call(this);
         },
 
         render: function() {
-            MainView.__super__.render.call(this);
+            OldTestView.__super__.render.call(this);
 
             var contentLayer = new ScrollView(),
                 layer0 = new LayoutView().setParams(new LayoutParams().matchChildren());
             contentLayer.setContentView(layer0);
             layer0.setLayout("vertical");
-            this._navigatorView.contentView().append(contentLayer.render().matchParentSize());
+            this.append(contentLayer.render().matchParentSize());
 
             var layer1 = new LayoutView();
             layer1.setLayout("vertical");
@@ -164,19 +158,13 @@ define(['app',
 
 
             return this;
-        },
-
-        setContentView: function(view) {
-            
         }
+
     });
 
-    app.on("init", function() {
-        app.mainView = new MainView({
-            el: $("#main").get(0)
-        }).render();
-    });
-
-    return MainView;
+    return {
+        label: "Old test",
+        view: OldTestView
+    };
 
 });

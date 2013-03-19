@@ -23,11 +23,33 @@ define(function() {
         setTop: function(top) { this._top = top; this._changedVertical(); return this; },
         setBottom: function(bottom) { this._bottom = bottom; this._changedVertical(); return this; },
 
+        setAll: function(value) {
+            var verticalChanged =
+                this._left != value ||
+                this._right != value;
+            var horizontalChanged =
+                this._top != value ||
+                this._bottom != value;
+            if (!verticalChanged && !horizontalChanged)
+                return;
+            this._left = value;
+            this._right = value;
+            this._top = value;
+            this._bottom = value;
+
+            if (verticalChanged)
+                this.trigger("change:vertical");
+            if (horizontalChanged)
+                this.trigger("change:horizontal");
+            this.trigger("change");
+            return this;
+        },
+
         set: function(other) {
-            var verticalChanged = 
+            var verticalChanged =
                 this._left != other.left() ||
                 this._right != other.right();
-            var horizontalChanged = 
+            var horizontalChanged =
                 this._top != other.top() ||
                 this._bottom != other.bottom();
             if (!verticalChanged && !horizontalChanged)
@@ -36,7 +58,7 @@ define(function() {
             this._right = bounds.right();
             this._top = bounds.top();
             this._bottom = bounds.bottom();
-            
+
             if (verticalChanged)
                 this.trigger("change:vertical");
             if (horizontalChanged)

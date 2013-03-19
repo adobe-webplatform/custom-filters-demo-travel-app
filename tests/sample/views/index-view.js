@@ -14,6 +14,7 @@ define(["mobileui/ui/navigator-card-view",
             this.on("tap", this._onTap, this);
             this.setParams(new LayoutParams().matchParentWidth());
             this.listenTo(this.model, "change:label", this._onLabelChanged);
+            this.padding().setAll(10);
         },
 
         render: function() {
@@ -64,8 +65,10 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onItemSelected: function(model) {
-            var ViewConstructor = model.get("view"),
-                view = new ViewConstructor().render();
+            var ViewConstructor = model.get("view");
+            if (!ViewConstructor)
+                return;
+            var view = new ViewConstructor().render();
             app.mainView.navigatorView().pushCard(view);
             app.router.navigate("test/" + model.get("label"));
         }

@@ -1,6 +1,8 @@
 define([
 
-    "tests/widgets"
+    "tests/widgets",
+
+    "tests/old-test"
 
     ], 
 function() {

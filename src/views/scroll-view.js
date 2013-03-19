@@ -91,7 +91,7 @@ define(["mobileui/views/gesture-view",
             };
             if (this._contentView.getLayout) {
                 var contentViewLayout = this._contentView.getLayout();
-                if (contentViewLayout && !contentViewLayout.scroll) {
+                if (contentViewLayout && contentViewLayout.scroll) {
                     contentViewLayout.scroll(this, scrollOptions);
                     return;
                 }

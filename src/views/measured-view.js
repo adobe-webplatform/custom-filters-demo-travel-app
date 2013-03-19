@@ -16,6 +16,12 @@ define(["mobileui/views/layer-view",
             return this;
         },
 
+        setTextContent: function(html) {
+            this.$contentView.text(html);
+            this.setNeedsLayout(true);
+            return this;
+        },
+
         content: function() {
             return this.$contentView;
         },

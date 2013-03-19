@@ -3,13 +3,15 @@ define(["mobileui/utils/rect",
         "mobileui/utils/outsets",
         "mobileui/utils/animation-set",
         "mobileui/utils/request-animation-frame",
-        "mobileui/views/layout-params"
-], function(Rect, Transform, Outsets, AnimationSet, requestAnimationFrame, LayoutParams) {
+        "mobileui/views/layout-params",
+        "mobileui/views/touch-view-mixin"
+], function(Rect, Transform, Outsets, AnimationSet, requestAnimationFrame, LayoutParams, TouchViewMixin) {
 
-    var LayerView = Backbone.View.extend({
+    var LayerView = Backbone.View.extend(TouchViewMixin).extend({
 
         initialize: function() {
             LayerView.__super__.initialize.call(this);
+            this.initializeTouchViewMixin();
             this._bounds = new Rect();
             this._transform = new Transform();
             this._margin = new Outsets();
@@ -324,6 +326,7 @@ define(["mobileui/utils/rect",
         },
 
         render: function() {
+            this.renderTouchViewMixin();
             this.$el.addClass("js-layer-view");
             this._validatePosition();
             this._validateSize();

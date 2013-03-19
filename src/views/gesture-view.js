@@ -1,9 +1,9 @@
-define(["mobileui/views/touch-view",
-        "mobileui/views/gesture-detector"], 
-function(TouchView, GestureDetector) {
+define(["mobileui/views/layer-view",
+        "mobileui/views/gesture-detector"],
+function(LayerView, GestureDetector) {
 
-    var GestureView = TouchView.extend({
-        
+    var GestureView = LayerView.extend({
+
         initialize: function() {
             GestureView.__super__.initialize.call(this);
             this._gestureDetector = new GestureDetector(this);

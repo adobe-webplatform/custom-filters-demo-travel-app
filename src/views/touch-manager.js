@@ -16,11 +16,8 @@ define(["mobileui/views/touch"], function(Touch) {
         this.touchEventsInstalled = false;
         this.mouseEventsInstalled = false;
         this.captureTouchSurface = null;
-
-        this.installTouchTrackingEvents();
-        this.installMouseTrackingEvents();
     }
-    
+
     _.extend(TouchManager.prototype, Backbone.Events, {
 
         findTouch: function(identifier) {
@@ -50,6 +47,8 @@ define(["mobileui/views/touch"], function(Touch) {
             var index = this.touchPoints.indexOf(touch);
             if (index != -1)
                 this.touchPoints.splice(index, 1);
+            if (!this.touchPoints.length)
+                this.removeTouchTrackingEvents();
         },
 
         installTouchTrackingEvents: function() {
@@ -122,6 +121,19 @@ define(["mobileui/views/touch"], function(Touch) {
             }
             if (this.captureTouchSurface)
                 this.captureTouchSurface.onTouchStartInternal(event);
+        },
+
+        handleTouchStart: function(touch) {
+            var internalTouch = this.findTouch(touches[i].identifier);
+            if (internalTouch)
+                return internalTouch;
+            internalTouch = new Touch(touches[i].identifier);
+            internalTouch.view = null;
+            internalTouch.state = Touch.START;
+            internalTouch.startPosition = internalTouch.currentPosition = Touch.getPosition(touch);
+            internalTouch.updatePreviewBox();
+            this.setTouch(internalTouch);
+            this.installTouchTrackingEvents();
         },
 
         onTouchMove: function(event) {
@@ -201,6 +213,20 @@ define(["mobileui/views/touch"], function(Touch) {
                 this.captureTouchSurface.onMouseDown(event);
         },
 
+        handleMouseDown: function() {
+            this.cancelTouch(Touch.MOUSE);
+            var internalTouch = new Touch(Touch.MOUSE);
+            internalTouch.type = Touch.MOUSE;
+            internalTouch.view = null;
+            this.mouseEvent = internalTouch;
+            this.setTouch(internalTouch);
+            internalTouch.startPosition = internalTouch.currentPosition = Touch.getPosition(event);
+            internalTouch.state = Touch.START;
+            internalTouch.updatePreviewBox();
+            this.installMouseTrackingEvents();
+            return internalTouch;
+        },
+
         onMouseMove: function(event) {
             var internalTouch = this.findTouch(Touch.MOUSE);
             if (!internalTouch) {
@@ -229,6 +255,7 @@ define(["mobileui/views/touch"], function(Touch) {
                 internalTouch.view.removeTouch(internalTouch);
                 internalTouch.view.trigger("touchend", internalTouch);
             }
+            this.removeMouseTrackingEvents();
         }
     });
 

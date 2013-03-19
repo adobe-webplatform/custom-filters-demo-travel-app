@@ -51,10 +51,8 @@ define([
             for (var i = 0; i < touches.length; ++i) {
                 var touch = touches[i];
                 var internalTouch = TouchManager.instance.findTouch(touch.identifier);
-                if (!internalTouch) {
-                    console.log("Current view could not attach to touch event.", touch, this);
-                    continue;
-                }
+                if (!internalTouch)
+                    internalTouch = TouchManager.instance.handleTouchStart(touches[i]);
                 internalTouch.view = this;
                 this.setTouch(internalTouch);
                 this.trigger("touchstart", internalTouch);
@@ -74,17 +72,15 @@ define([
             event.stopImmediatePropagation();
 
             var internalTouch = TouchManager.instance.findTouch(Touch.MOUSE);
-            if (!internalTouch) {
-                console.log("Current view could not attach to mouse event.", event, this);
-                return;
-            }
+            if (!internalTouch)
+                internalTouch = TouchManager.instance.handleMouseDown(event);
             internalTouch.view = this;
             this.setTouch(internalTouch);
             this.trigger("touchstart", internalTouch);
         },
 
         onClick: function(event) {
-            if ($(event.target).attr("data-native-touch") !== undefined)
+            if (TouchManager.instance.needsNativeTouch(event))
                 return;
             event.preventDefault();
             event.stopImmediatePropagation();

@@ -210,7 +210,8 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
         },
 
         respondsToTouchGesture: function(gesture) {
-            if (!this._contentView || gesture.type != GestureDetector.GestureType.DRAG)
+            if (!this._contentView || this._scrollDirection == ScrollView.NONE ||
+                gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
             return (this._scrollDirection != ScrollView.VERTICAL && gesture.scrollX) ||
                 (this._scrollDirection != ScrollView.HORIZONTAL && gesture.scrollY);
@@ -261,7 +262,8 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
     }, {
         BOTH: "both",
         VERTICAL: "vertical",
-        HORIZONTAL: "horizontal"
+        HORIZONTAL: "horizontal",
+        NONE: "none"
     });
 
     return ScrollView;

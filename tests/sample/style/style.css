@@ -1,3 +1,61 @@
 .js-item-view {
     border-bottom: 1px solid #ccc;
 }
+
+.js-city-item-view {
+    color: white;
+}
+
+.js-city-item-view-label {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    font-size: 2.0em;
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.js-city-item-view.js-mood-item-view {
+    background-color: #df8051;
+}
+
+.js-city-item-view.js-location-item-view {
+    background-color: #7cac94;
+}
+
+.js-city-item-view.js-search-item-view {
+    background-color: #4f5a6c;
+}
+
+
+.js-mood-item-view {
+    color: white;
+}
+
+.js-mood-item-view-label {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    font-size: 2.0em;
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.js-mood-item-view.js-do-item-view {
+    background-color: #95bdbd;
+}
+
+.js-mood-item-view.js-see-item-view {
+    background-color: #4b3c51;
+}
+
+.js-mood-item-view.js-buy-item-view {
+    background-color: #b44438;
+}
+
+.js-mood-item-view.js-eat-item-view {
+    background-color: #cabc4f;
+}
+

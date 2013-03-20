@@ -7,6 +7,7 @@ define(["mobileui/views/scroll-view",
             ListView.__super__.initialize.call(this);
             this._itemRendererFactory = null;
             this._viewItems = {};
+            this.setScrollDirection(ScrollView.VERTICAL);
             this.setContentView(
                 new LayoutView().setLayout("vertical")
                     .setParams(new LayoutParams()

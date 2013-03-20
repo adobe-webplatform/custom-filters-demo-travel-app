@@ -79,8 +79,12 @@ body {
     position: absolute;
     top: 50%;
     -webkit-transform: translateY(-50%);
-    font-size: 2.0em;
+    font-size: 1.5em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     left: 20px;
+    right: 20px;
 }
 
 .js-navigator-top-bar-view {

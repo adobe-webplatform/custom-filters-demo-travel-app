@@ -56,7 +56,7 @@ define(["mobileui/utils/transform",
                     newX = isVertical ? padding.left() : offset,
                     newY = isVertical ? offset : padding.top();
                 if (params && fillsParent(params, isVertical)) {
-                    var space = Math.round(spacePerWeight * params.weight());
+                    var space = Math.ceil(spacePerWeight * params.weight());
                     if (isVertical)
                         viewBounds.setHeight(space);
                     else

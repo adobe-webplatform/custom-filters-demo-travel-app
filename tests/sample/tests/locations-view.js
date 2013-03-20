@@ -61,7 +61,7 @@ define(["mobileui/ui/navigator-card-view",
             ItemView.__super__.render.call(this);
             this.$el.addClass("js-location-item-view")
                 .append(this.$labelEl)
-                .css("background-color", "hsl(220, 30%, " + (20 + this.model.get("index")) + "%)");
+                .css("background-color", "hsl(283, 15%, " + (28 + this.model.get("index") * 2) + "%)");
             this._onLabelChanged();
             return this;
         },

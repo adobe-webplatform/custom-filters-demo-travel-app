@@ -93,7 +93,7 @@ define(["mobileui/views/layer-view",
                 .wait(this._animationDuration);
             return view.animation().promise().then(function() {
                 // Reset the opacity to 1 after we remove the object.
-                if (view.hasAnimation() && !view.animation().opacity())
+                if (view.hasAnimation() && !view.opacity())
                     view.setOpacity(1);
             });
         }

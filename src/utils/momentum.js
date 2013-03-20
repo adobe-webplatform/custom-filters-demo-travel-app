@@ -4,8 +4,8 @@ define(["mobileui/utils/time"], function(Time) {
 
     var Momentum = function(duration) {
         this._duration = duration;
-        this._minAcceleration = 1 / 50;
-        this._friction = 0.001;
+        this._minAcceleration = 1 / 100;
+        this._friction = 0.00001;
         this.reset();
     };
 

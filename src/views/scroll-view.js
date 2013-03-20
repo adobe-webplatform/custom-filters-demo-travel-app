@@ -185,10 +185,12 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
             if (momentumLeft != this._scrollLeft ||
                 momentumTop != this._scrollTop) {
                 chain = chain.transform(this._scrollAnimationDuration / 5,
-                    new Transform().translate(-momentumLeft, -momentumTop));
+                                    new Transform().translate(-momentumLeft, -momentumTop))
+                             .setTimingFunction("easeOut");
             }
             chain.transform(this._scrollAnimationDuration,
-                            new Transform().translate(-this._scrollLeft, -this._scrollTop));
+                            new Transform().translate(-this._scrollLeft, -this._scrollTop))
+                 .setTimingFunction("easeOut");
         },
 
         _onMouseWheel: function(event) {

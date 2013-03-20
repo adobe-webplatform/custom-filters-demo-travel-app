@@ -1,4 +1,5 @@
-define(["mobileui/utils/animation", "require"], function(Animation, require) {
+define(["mobileui/utils/animation", "require",
+        "mobileui/utils/timing-functions"], function(Animation, require, TimingFunctions) {
 
     var BasicAnimationState = function(time) {
         this.startTime = time;
@@ -11,6 +12,7 @@ define(["mobileui/utils/animation", "require"], function(Animation, require) {
         Animation.call(this, name);
         this._duration = -1;
         this._next = null;
+        this._timingFunction = TimingFunctions.linear;
     };
 
     _.extend(BasicAnimation.prototype, Backbone.Events, {
@@ -26,14 +28,24 @@ define(["mobileui/utils/animation", "require"], function(Animation, require) {
             if (this._duration >= 0) {
                 animationState.percent = this._duration ? animationState.playDuration / this._duration : 1;
                 if (animationState.percent >= 1) {
+                    animationState.timingFunctionPercent = 1;
                     animationState.percent = 1;
                     state.remove(this._id);
                     animationState.started = false;
+                } else {
+                    animationState.timingFunctionPercent = this._timingFunction(animationState.percent, this._duration);
                 }
             }
             this._internalCompute(state, view, animationState);
             if (!animationState.started)
                 this.trigger("stop");
+        },
+
+        setTimingFunction: function(value) {
+            if (_.isString(value))
+                value = TimingFunctions[value];
+            this._timingFunction = value;
+            return this;
         },
 
         _internalStart: function(state, view, animationState) {

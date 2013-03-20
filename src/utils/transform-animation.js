@@ -27,9 +27,9 @@ define(["mobileui/utils/basic-animation",
                 state.requestFrame();
             var transform;
             if (this._startTransform)
-                transform = this._startTransform.blend(animationState.percent, this._transform);
+                transform = this._startTransform.blend(animationState.timingFunctionPercent, this._transform);
             else
-                transform = animationState.startTransform.blend(animationState.percent, this._transform);
+                transform = animationState.startTransform.blend(animationState.timingFunctionPercent, this._transform);
             view.transform().take(transform);
         }
     });

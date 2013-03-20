@@ -34,11 +34,11 @@ define(["mobileui/utils/basic-animation"], function(BasicAnimation) {
                 state.requestFrame();
             var opacity;
             if (this._startOpacity !== null)
-                opacity = this._startOpacity * (1 - animationState.percent) +
-                    animationState.percent * this._opacity;
+                opacity = this._startOpacity * (1 - animationState.timingFunctionPercent) +
+                    animationState.timingFunctionPercent * this._opacity;
             else
-                opacity = animationState.startOpacity * (1 - animationState.percent) +
-                    animationState.percent * this._opacity;
+                opacity = animationState.startOpacity * (1 - animationState.timingFunctionPercent) +
+                    animationState.timingFunctionPercent * this._opacity;
             view.setOpacity(opacity);
         }
     });

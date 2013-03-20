@@ -50,6 +50,8 @@ define(["mobileui/ui/navigator-card-view",
                     this._onItemSelected(testModel);
             }
             this.addTopBarButtons();
+            this.on("activated", this._onViewActivated, this);
+            this.on("deactivated", this._onViewDeactivated, this);
         },
 
         addTopBarButtons: function() {
@@ -73,11 +75,11 @@ define(["mobileui/ui/navigator-card-view",
                 .addClass("js-navigator-top-bar-grid-button-view"));
         },
 
-        activated: function() {
+        _onViewActivated: function() {
             this._backButton.hide();
         },
 
-        deactivated: function() {
+        _onViewDeactivated: function() {
             this._backButton.show();
         },
 

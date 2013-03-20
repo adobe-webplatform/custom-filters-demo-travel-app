@@ -6,6 +6,10 @@ body {
     position: absolute;
 }
 
+.js-layer-view-invisible {
+    visibility: hidden;
+}
+
 .js-measured-view-content {
     position: absolute;
     white-space: nowrap;

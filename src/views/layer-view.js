@@ -32,6 +32,7 @@ define(["mobileui/utils/rect",
             this._needsLayout = false;
             this._state = LayerView.VISIBLE;
             this._needsTouchEvents = false;
+            this._visible = true;
         },
 
         setNeedsTouchEvents: function(value) {
@@ -219,6 +220,22 @@ define(["mobileui/utils/rect",
         removeClass: function(className) {
             this.$el.removeClass(className);
             return this;
+        },
+
+        hide: function() {
+            this._visible = false;
+            this.invalidate("visibility");
+            return this;
+        },
+
+        show: function() {
+            this._visible = true;
+            this.invalidate("visibility");
+            return this;
+        },
+
+        visible: function() {
+            return this.visible;
         },
 
         parent: function() {
@@ -417,6 +434,10 @@ define(["mobileui/utils/rect",
         _validateOpacity: function() {
             var result = this._opacity;
             this.$el.css("opacity", result);
+        },
+
+        _validateVisibility: function() {
+            this.$el.toggleClass("js-layer-view-invisible", !this._visible);
         },
 
         _validatePadding: function() {

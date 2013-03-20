@@ -1,4 +1,4 @@
-define(["require", "app"], function(require, app) {
+define(["require", "app", "views/index-view"], function(require, app, IndexView) {
 
     var Router = Backbone.Router.extend({
         routes: {
@@ -6,18 +6,13 @@ define(["require", "app"], function(require, app) {
             "*path": "index"
         },
 
-        index: function(path) {
-            require(["views/index-view"], function(IndexView) {
-                app.mainView.navigatorView().pushCard(new IndexView().render());
-            });
+        index: function() {
+            app.mainView.navigatorView().pushCard(new IndexView().render());
         },
 
         test: function(path) {
-            require(["views/index-view"], function(IndexView) {
-                var indexView = new IndexView({ path: path }).render();
-                if (!app.mainView.navigatorView().activeCard())
-                    app.mainView.navigatorView().pushCard(indexView);
-            });
+            if (!app.mainView.pushViewCard(path))
+                app.mainView.navigatorView().pushCard(new IndexView().render());
         }
     });
 

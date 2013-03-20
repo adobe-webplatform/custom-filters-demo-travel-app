@@ -42,45 +42,16 @@ define(["mobileui/ui/navigator-card-view",
             this.model.add(_.map(TestsList, function(item) {
                 return new Backbone.Model(item);
             }));
-            if (options && options.path) {
-                var testModel = this.model.find(function(item) {
-                    return item.get("label") == options.path;
-                });
-                if (testModel)
-                    this._onItemSelected(testModel);
-            }
-            this.addTopBarButtons();
             this.on("activated", this._onViewActivated, this);
             this.on("deactivated", this._onViewDeactivated, this);
         },
 
-        addTopBarButtons: function() {
-            var topBar = app.mainView.navigatorView().topBarView();
-            this._backButton = new ButtonView().setLabel("Back")
-                .on("tap", this._onBackButtonTap, this);
-            this._backButton.margin().setLeft(10).setTop(5);
-            topBar.append(this._backButton.render().addClass("js-navigator-top-bar-button-view")
-                .addClass("js-navigator-top-bar-back-button-view"));
-
-            topBar.appendFiller();
-
-            this._listButton = new ButtonView().setLabel("List");
-            this._listButton.margin().setRight(10).setTop(5);
-            topBar.append(this._listButton.render().addClass("js-navigator-top-bar-button-view")
-                .addClass("js-navigator-top-bar-list-button-view"));
-
-            this._gridButton = new ButtonView().setLabel("Grid");
-            this._gridButton.margin().setRight(10).setTop(5);
-            topBar.append(this._gridButton.render().addClass("js-navigator-top-bar-button-view")
-                .addClass("js-navigator-top-bar-grid-button-view"));
-        },
-
         _onViewActivated: function() {
-            this._backButton.hide();
+            app.mainView.backButton().hide();
         },
 
         _onViewDeactivated: function() {
-            this._backButton.show();
+            app.mainView.backButton().show();
         },
 
         render: function() {
@@ -98,23 +69,11 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onItemSelected: function(model) {
-            var ViewConstructor = model.get("view");
-            if (!ViewConstructor)
-                return;
-            var view = new ViewConstructor().render();
-            view.on("activated", function() {
-                app.router.navigate("test/" + model.get("label"));
-            });
-            app.mainView.navigatorView().pushCard(view);
+            app.mainView.pushViewCard(model.get("label"));
         },
 
         updateRouterLocation: function() {
             app.router.navigate("/");
-        },
-
-        _onBackButtonTap: function() {
-            if (!app.mainView.navigatorView().popCard())
-                app.mainView.navigatorView().pushCard(this);
         }
 
     });

@@ -1,6 +1,10 @@
 define(["mobileui/views/gesture-view",
         "mobileui/views/gesture-detector",
-        "mobileui/utils/boilerplate"], function(GestureView, GestureDetector, boilerplate) {
+        "mobileui/utils/boilerplate",
+        "mobileui/utils/momentum",
+        "mobileui/utils/transform"],
+function(GestureView, GestureDetector, boilerplate, Momentum,
+            Transform) {
 
     var ScrollView = GestureView.extend({
 
@@ -15,6 +19,11 @@ define(["mobileui/views/gesture-view",
             this._touchStartState = null;
             this._canOverScroll = false;
             this._scrollDirection = ScrollView.BOTH;
+            this._scrollAnimationDuration = 300;
+            this._momentumLeft = new Momentum(this._scrollAnimationDuration);
+            this._momentumTop = new Momentum(this._scrollAnimationDuration);
+            this._maxMomentum = 100;
+            this._useAnimation = false;
         },
 
         render: function() {
@@ -24,8 +33,16 @@ define(["mobileui/views/gesture-view",
             return ScrollView.__super__.render.call(this);
         },
 
+        setScrollAnimationDuration: function(duration) {
+            this._scrollAnimationDuration = duration;
+            this._momentumLeft.setDuration(duration);
+            this._momentumTop.setDuration(duration);
+            return this;
+        },
+
         setScrollDirection: function(direction) {
             this._scrollDirection = direction;
+            this.invalidate("scroll");
             return this;
         },
 
@@ -87,33 +104,91 @@ define(["mobileui/views/gesture-view",
             return Math.max(0, this._contentView.outerHeight() - this.bounds().height());
         },
 
-        _validateScroll: function() {
-            if (!this._contentView)
-                return;
+        _checkScrollPosition: function() {
             if (!this._canOverScroll || this._scrollDirection == ScrollView.VERTICAL)
                 this._scrollLeft = Math.max(0, Math.min(this._scrollLeft, this.maxScrollLeft()));
             if (!this._canOverScroll || this._scrollDirection == ScrollView.HORIZONTAL)
                 this._scrollTop = Math.max(0, Math.min(this._scrollTop, this.maxScrollTop()));
-            var scrollOptions = {
-                left: this._scrollLeft,
-                top: this._scrollTop
-            };
+        },
+
+        _validateScroll: function() {
+            if (!this._contentView)
+                return;
+            if (this._useAnimation) {
+                this._useAnimation = false;
+                this._validateScrollWithAnimation();
+                return;
+            }
+            this._checkScrollPosition();
             if (this._contentView.getLayout) {
                 var contentViewLayout = this._contentView.getLayout();
                 if (contentViewLayout && contentViewLayout.scroll) {
+                    var scrollOptions = {
+                        left: this._scrollLeft,
+                        top: this._scrollTop
+                    };
                     contentViewLayout.scroll(this, scrollOptions);
                     return;
                 }
             }
-            this._internalScroll(this, scrollOptions);
+            this._internalScroll();
         },
 
-        _internalScroll: function(scrollView, options) {
-            var contentView = scrollView.contentView();
+        _internalScroll: function() {
+            var contentView = this.contentView();
             contentView
                 .transform()
                 .get("translate")
-                .setX(-options.left).setY(-options.top);
+                .setX(-this._scrollLeft).setY(-this._scrollTop);
+        },
+
+        _adjustMomentum: function(momentum, scroll, maxScroll) {
+            return ((momentum < 0 && scroll >= 0) ||
+                (momentum > maxScroll && scroll <= maxScroll)) ?
+                    scroll :
+                    Math.max(scroll - this._maxMomentum, Math.min(momentum, scroll + this._maxMomentum));
+        },
+
+        _validateScrollWithAnimation: function() {
+            var momentumLeft = this._scrollLeft,
+                momentumTop =  this._scrollTop;
+            if (this._scrollDirection == ScrollView.VERTICAL)
+                momentumLeft = Math.max(0, Math.min(momentumLeft, this.maxScrollLeft()));
+            if (this._scrollDirection == ScrollView.HORIZONTAL)
+                momentumTop = Math.max(0, Math.min(momentumTop, this.maxScrollTop()));
+            this._checkScrollPosition();
+            momentumLeft = this._adjustMomentum(momentumLeft, this._scrollLeft, this.maxScrollLeft());
+            momentumTop = this._adjustMomentum(momentumTop, this._scrollTop, this.maxScrollTop());
+            if (this._contentView.getLayout) {
+                var contentViewLayout = this._contentView.getLayout();
+                if (contentViewLayout && contentViewLayout.scrollWithAnimation) {
+                    var scrollOptions = {
+                        left: this._scrollLeft,
+                        top: this._scrollTop,
+                        momentumLeft: momentumLeft,
+                        momentumTop: momentumTop,
+                        duration: this._scrollAnimationDuration
+                    };
+                    contentViewLayout.scrollWithAnimation(this, scrollOptions);
+                }
+            }
+            this._internalScrollWithAnimation(momentumLeft, momentumTop);
+        },
+
+        _internalScrollWithAnimation: function(momentumLeft, momentumTop) {
+            var contentView = this.contentView();
+            var chain = contentView.animation()
+                .inlineStart()
+                .get("scroll")
+                    .removeAll()
+                    .chain();
+            if (momentumLeft != this._scrollLeft ||
+                momentumTop != this._scrollTop) {
+                chain = chain.transform(this._scrollAnimationDuration / 5,
+                    new Transform().translate(-momentumLeft, -momentumTop));
+            }
+            chain.transform(this._scrollAnimationDuration,
+                            new Transform().translate(-this._scrollLeft, -this._scrollTop));
         },
 
         _onMouseWheel: function(event) {
@@ -132,31 +207,54 @@ define(["mobileui/views/gesture-view",
             this.scrollBy(left, top);
         },
 
-        respondsToTouchGesture: function(touch) {
-            if (!this._contentView || touch.type != GestureDetector.GestureType.DRAG)
+        respondsToTouchGesture: function(gesture) {
+            if (!this._contentView || gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
-            return true;
+            return (this._scrollDirection != ScrollView.VERTICAL && gesture.scrollX) ||
+                (this._scrollDirection != ScrollView.HORIZONTAL && gesture.scrollY);
+        },
+
+        _stopScrollAnimation: function() {
+            this._useAnimation = false;
+            var contentView = this.contentView();
+            if (contentView.hasAnimation()) {
+                var transform = contentView.transform().get("translate");
+                this._scrolLeft = -transform.x();
+                this._scrollTop = -transform.y();
+                this.contentView().animation().stop().get("scroll").removeAll();
+            }
         },
 
         _onTouchDragStart: function() {
+            this._stopScrollAnimation();
             this._touchStartState = {
                 scrollLeft: this._scrollLeft,
                 scrollTop: this._scrollTop
             };
+            this._momentumLeft.reset();
+            this._momentumTop.reset();
             this._canOverScroll = true;
         },
 
         _onTouchDragMove: function(transform) {
             if (!this._touchStartState)
                 return;
-            this.scrollTo(this._touchStartState.scrollLeft - transform.dragX,
-                    this._touchStartState.scrollTop - transform.dragY);
+            var deltaX = this._touchStartState.scrollLeft - transform.dragX,
+                deltaY = this._touchStartState.scrollTop - transform.dragY;
+            this._momentumLeft.injectValue(deltaX);
+            this._momentumTop.injectValue(deltaY);
+            this.scrollTo(deltaX, deltaY);
         },
 
         _onTouchDragEnd: function(transform) {
+            this._useAnimation = true;
             this._canOverScroll = false;
-            this.invalidate("scroll");
             this._touchStartState = null;
+            this._scrollLeft += this._momentumLeft.computeDelta();
+            this._scrollTop += this._momentumTop.computeDelta();
+            this.invalidate("scroll");
+            this._momentumLeft.reset();
+            this._momentumTop.reset();
         }
     }, {
         BOTH: "both",

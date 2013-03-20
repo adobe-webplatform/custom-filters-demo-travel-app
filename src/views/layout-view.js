@@ -79,7 +79,7 @@ define(["mobileui/views/layer-view",
                 // Dummy wait until the layout animation is finished.
                 .chain(LayoutView.AnimationDuration)
                 .opacity(LayoutView.AnimationDuration, 0, 1);
-            view.animation().viewState().setOpacity(0);
+            view.setOpacity(0);
             return view.animation().promise();
         },
 
@@ -93,8 +93,8 @@ define(["mobileui/views/layer-view",
                 .wait(this._animationDuration);
             return view.animation().promise().then(function() {
                 // Reset the opacity to 1 after we remove the object.
-                if (view.hasAnimation() && !view.animation().viewState().opacity())
-                    view.animation().viewState().setOpacity(1);
+                if (view.hasAnimation() && !view.animation().opacity())
+                    view.setOpacity(1);
             });
         }
     });

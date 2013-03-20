@@ -69,7 +69,7 @@ define(["mobileui/utils/transform",
                         var startTransform = Transform().translate(
                             viewBounds.x() - newX,
                             viewBounds.y() - newY);
-                        view.animation().viewState().transform().set(startTransform);
+                        view.transform().set(startTransform);
                         view.animation()
                             .inlineStart()
                             .get("layout")

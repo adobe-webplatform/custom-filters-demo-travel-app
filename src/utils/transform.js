@@ -33,7 +33,7 @@ define(function() {
             toString: function() {
                 var self = this, args = [];
                 _.each(parameters, function(parameter, i) {
-                    args.push(self[keys[i]] + units);
+                    args.push(self[keys[i]].toFixed(6) + units);
                 });
                 return name + "(" + args.join(", ") + ")";
             },
@@ -102,8 +102,8 @@ define(function() {
         scale: generateFunction("scale", "x y", "", false),
         perspective: generateFunction("perspective", "depth", "", true),
         matrix: generateFunction("matrix", "a b c d e f", "", false, matrixKeyGenerator),
-        matrix3d: generateFunction("matrix3d", 
-            "a11 a21 a31 a41 a21 a22 a23 a24 a31 a32 a33 a34 a41 a42 a43 a44", "", 
+        matrix3d: generateFunction("matrix3d",
+            "a11 a21 a31 a41 a21 a22 a23 a24 a31 a32 a33 a34 a41 a42 a43 a44", "",
             true, matrixKeyGenerator)
     };
 
@@ -163,6 +163,15 @@ define(function() {
             return this;
         },
 
+        clear: function() {
+            _.each(this._data, function(fn) {
+                fn.off("change", self._onFunctionValueChange, self);
+            });
+            this._data = [];
+            this._onFunctionValueChange();
+            return this;
+        },
+
         set: function(other) {
             var self = this;
             _.each(this._data, function(fn) {
@@ -183,8 +192,8 @@ define(function() {
             this._data = other._data;
             other._data = [];
             _.each(this._data, function(fn) {
-                fn.off("change", self._onFunctionValueChange, other);
-                fn.on("change", self._onFunctionValueChange, this);
+                fn.off("change", other._onFunctionValueChange, other);
+                fn.on("change", self._onFunctionValueChange, self);
             });
             other._onFunctionValueChange();
             this._onFunctionValueChange();

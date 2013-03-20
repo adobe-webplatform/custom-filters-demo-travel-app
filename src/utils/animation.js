@@ -8,9 +8,9 @@ define(["mobileui/utils/animation-controller"], function(AnimationController) {
     };
 
     _.extend(Animation.prototype, Backbone.Events, {
-        compute: function(state, viewSate) {
+        compute: function(state, view) {
             _.each(this._animations, function(animation) {
-                animation.compute(state, viewSate);
+                animation.compute(state, view);
             });
             if (this._stoppedAnimations) {
                 var stoppedAnimations = this._stoppedAnimations;
@@ -33,6 +33,12 @@ define(["mobileui/utils/animation-controller"], function(AnimationController) {
                 this.append(result);
             }
             return result;
+        },
+
+        unset: function(name) {
+            var result = this.search(name);
+            if (result)
+                this.remove(result);
         },
 
         _injectAnimation: function(animation) {

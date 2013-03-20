@@ -53,10 +53,8 @@ define(["mobileui/utils/rect",
         },
 
         animation: function() {
-            if (!this._animation) {
-                this._animation = new AnimationSet();
-                this._animation.viewState().on("invalidate", this._onAnimationInvalidated, this);
-            }
+            if (!this._animation)
+                this._animation = new AnimationSet(this);
             return this._animation;
         },
 
@@ -410,18 +408,14 @@ define(["mobileui/utils/rect",
 
         _validateTransform: function() {
             var result = this._transform;
-            if (this._animation)
-                result = this._animation.viewState().blendTransform(result);
-            if (result.has3DTransforms())
-                this.$el.css("transform", result.toString());
-            else
+            if (this._animation && !result.has3DTransforms())
                 this.$el.css("transform", result.toString() + " translateZ(0)");
+            else
+                this.$el.css("transform", result.toString());
         },
 
         _validateOpacity: function() {
             var result = this._opacity;
-            if (this._animation)
-                result = this._animation.viewState().blendOpacity(result);
             this.$el.css("opacity", result);
         },
 
@@ -456,10 +450,6 @@ define(["mobileui/utils/rect",
 
         _onMarginChanged: function() {
             this.invalidate("margin");
-        },
-
-        _onAnimationInvalidated: function(propertyName) {
-            this.invalidate(propertyName);
         }
     });
 

@@ -26,6 +26,7 @@ define(["mobileui/ui/scroll-card-view",
 
         render: function() {
             OldTestView.__super__.render.call(this);
+            var self = this;
 
             var layer0 = new LayoutView().setParams(new LayoutParams().matchChildren());
             this.scrollView().setContentView(layer0);
@@ -45,6 +46,7 @@ define(["mobileui/ui/scroll-card-view",
             layer1_content2.render().$el.addClass("green-box").html("Inside of the second layer");
             layer1.append(layer1_content2);
             layer1_content2.on("tap", function() {
+                self.scrollView().setScrollDirection(ScrollView.VERTICAL);
                 layer0.setLayoutWithAnimation("vertical");
             });
 
@@ -63,6 +65,7 @@ define(["mobileui/ui/scroll-card-view",
             layer2.bounds().setWidth(200).setHeight(100);
             //layer2.transform().perspective(100).rotateY(20);
             layer2.on("tap", function() {
+                self.scrollView().setScrollDirection(ScrollView.HORIZONTAL);
                 layer0.setLayoutWithAnimation("horizontal");
             });
 

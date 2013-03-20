@@ -25,11 +25,11 @@ define(["mobileui/utils/basic-animation"], function(BasicAnimation) {
             return this;
         },
 
-        _internalStart: function(state, viewState, animationState) {
-            animationState.startOpacity = viewState.opacity();
+        _internalStart: function(state, view, animationState) {
+            animationState.startOpacity = view.opacity();
         },
 
-        _internalCompute: function(state, viewState, animationState) {
+        _internalCompute: function(state, view, animationState) {
             if (animationState.started)
                 state.requestFrame();
             var opacity;
@@ -39,7 +39,7 @@ define(["mobileui/utils/basic-animation"], function(BasicAnimation) {
             else
                 opacity = animationState.startOpacity * (1 - animationState.percent) +
                     animationState.percent * this._opacity;
-            viewState.setOpacity(opacity);
+            view.setOpacity(opacity);
         }
     });
 

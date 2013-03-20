@@ -8,7 +8,7 @@ define(["mobileui/utils/basic-animation",
     };
 
     _.extend(TransformAnimation.prototype, BasicAnimation.prototype, {
-        transform: function() {
+        getTransform: function() {
             return this._transform;
         },
 
@@ -18,19 +18,19 @@ define(["mobileui/utils/basic-animation",
             return this._startTransform;
         },
 
-        _internalStart: function(state, viewState, animationState) {
-            animationState.startTransform = viewState.transform().clone();
+        _internalStart: function(state, view, animationState) {
+            animationState.startTransform = view.transform().clone();
         },
 
-        _internalCompute: function(state, viewState, animationState) {
+        _internalCompute: function(state, view, animationState) {
             if (animationState.started)
                 state.requestFrame();
             var transform;
             if (this._startTransform)
-                transform = animationState.startTransform.concat(this._startTransform.blend(animationState.percent, this._transform));
+                transform = this._startTransform.blend(animationState.percent, this._transform);
             else
                 transform = animationState.startTransform.blend(animationState.percent, this._transform);
-            viewState.transform().take(transform);
+            view.transform().take(transform);
         }
     });
 

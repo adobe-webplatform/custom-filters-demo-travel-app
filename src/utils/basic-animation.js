@@ -14,12 +14,12 @@ define(["mobileui/utils/animation", "require"], function(Animation, require) {
     };
 
     _.extend(BasicAnimation.prototype, Backbone.Events, {
-        compute: function(state, viewState) {
+        compute: function(state, view) {
             var animationState = state.get(this._id);
             if (!animationState) {
                 animationState = new BasicAnimationState(state.time);
                 state.set(this._id, animationState);
-                this._internalStart(state, viewState, animationState);
+                this._internalStart(state, view, animationState);
                 this.trigger("start");
             }
             animationState.playDuration = state.time - animationState.startTime;
@@ -31,15 +31,15 @@ define(["mobileui/utils/animation", "require"], function(Animation, require) {
                     animationState.started = false;
                 }
             }
-            this._internalCompute(state, viewState, animationState);
+            this._internalCompute(state, view, animationState);
             if (!animationState.started)
                 this.trigger("stop");
         },
 
-        _internalStart: function(state, viewState, animationState) {
+        _internalStart: function(state, view, animationState) {
         },
 
-        _internalCompute: function(state, viewState, animationState) {
+        _internalCompute: function(state, view, animationState) {
             if (animationState.started)
                 state.requestTimer(this._duration - animationState.playDuration);
         },
@@ -66,6 +66,12 @@ define(["mobileui/utils/animation", "require"], function(Animation, require) {
             return this.setNext(new BasicAnimation("wait " + duration).setDuration(duration)).next();
         },
 
+        log: function(message) {
+            return this.setNext(new BasicAnimation("log " + message).setDuration(0).on("stop", function() {
+                console.log("animation: ", message);
+            })).next();
+        },
+
         transform: function(duration, startTransform, endTransform) {
             if (!endTransform) {
                 endTransform = startTransform;
@@ -73,7 +79,7 @@ define(["mobileui/utils/animation", "require"], function(Animation, require) {
             }
             var TransformAnimation = require("mobileui/utils/transform-animation");
             var transformAnimation = new TransformAnimation("transform");
-            transformAnimation.transform().take(endTransform);
+            transformAnimation.getTransform().take(endTransform);
             if (startTransform)
                 transformAnimation.startTransform().take(startTransform);
             return this.setNext(transformAnimation.setDuration(duration)).next();

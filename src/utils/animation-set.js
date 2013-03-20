@@ -1,14 +1,13 @@
 define(["mobileui/utils/animation-controller",
-        "mobileui/utils/animation-view-state",
         "mobileui/utils/animation",
         // Initialize all types of animations here.
         "mobileui/utils/transform-animation",
         "mobileui/utils/opacity-animation"
-        ], function(AnimationController, AnimationViewState, Animation) {
+        ], function(AnimationController, Animation) {
 
-    var AnimationSet = function() {
+    var AnimationSet = function(view) {
         Animation.call(this, "animationSet");
-        this._viewState = new AnimationViewState();
+        this._view = view;
     };
 
     _.extend(AnimationSet.prototype, Animation.prototype, {
@@ -32,13 +31,9 @@ define(["mobileui/utils/animation-controller",
 
         compute: function(state) {
             state.prepareSet();
-            Animation.prototype.compute.call(this, state, this._viewState);
+            Animation.prototype.compute.call(this, state, this._view);
             if (!state.isSetActive())
                 this.stop();
-        },
-
-        viewState: function() {
-            return this._viewState;
         }
     });
 

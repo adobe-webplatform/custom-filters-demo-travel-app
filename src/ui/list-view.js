@@ -68,6 +68,12 @@ define(["mobileui/views/scroll-view",
             return null;
         },
 
+        itemView: function(model) {
+            if (!this.model)
+                return null;
+            return this._viewItems[model.cid];
+        },
+
         _onModelRemove: function(model) {
             var view = this._viewItems[model.cid];
             if (!view)

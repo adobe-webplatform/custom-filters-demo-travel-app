@@ -78,7 +78,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onItemSelected: function(model) {
-            
+            app.mainView.pushViewCard("Locations View");
         }
 
     });

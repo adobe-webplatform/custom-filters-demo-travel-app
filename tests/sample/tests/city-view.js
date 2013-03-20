@@ -24,7 +24,7 @@ define(["mobileui/ui/navigator-card-view",
         initialize: function() {
             ItemView.__super__.initialize.call(this);
             this.on("tap", this._onTap, this);
-            this.setParams(new LayoutParams().fillParentWidth().matchParentHeight());
+            this.setHorizontalLayout();
             this.listenTo(this.model, "change:label", this._onLabelChanged);
             this.$labelEl = $("<div />").addClass("js-city-item-view-label");
         },
@@ -44,6 +44,14 @@ define(["mobileui/ui/navigator-card-view",
 
         _onTap: function() {
             this.trigger("selected", this.model);
+        },
+
+        setVerticalLayout: function() {
+            this.setParams(new LayoutParams().fillParentHeight().matchParentWidth());
+        },
+
+        setHorizontalLayout: function() {
+            this.setParams(new LayoutParams().fillParentWidth().matchParentHeight());
         }
     });
 
@@ -59,8 +67,9 @@ define(["mobileui/ui/navigator-card-view",
                 .setItemRendererFactory(this._onItemRendererFactory.bind(this))
                 .setCollection(this.model)
                 .setScrollDirection("none");
-            this._listView.contentView().setLayout("horizontal").matchParentSize();
+            this._listView.contentView().matchParentSize();
             this.append(this._listView.render());
+            this._useVerticalLayout = null;
         },
 
         render: function() {
@@ -74,7 +83,47 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onItemSelected: function(model) {
-            
+            app.mainView.pushViewCard("Mood View");
+        },
+
+        setUseVerticalLayout: function(useVerticalLayout) {
+            if (this._useVerticalLayout == useVerticalLayout)
+                return;
+            if (useVerticalLayout)
+                this.setVerticalLayout();
+            else
+                this.setHorizontalLayout();
+        },
+
+        layout: function() {
+            this.layoutBounds();
+            var shouldUseVerticalLayout = this.bounds().width() < 550;
+            this.setUseVerticalLayout(shouldUseVerticalLayout);
+            CityView.__super__.layout.call(this);
+        },
+
+        setVerticalLayout: function() {
+            this._useVerticalLayout = true;
+            var self = this;
+            this.model.each(function(model) {
+                var view = self._listView.itemView(model);
+                if (!view)
+                    return;
+                view.setVerticalLayout();
+            });
+            this._listView.contentView().setLayout("vertical");
+        },
+
+        setHorizontalLayout: function() {
+            this._useVerticalLayout = false;
+            var self = this;
+            this.model.each(function(model) {
+                var view = self._listView.itemView(model);
+                if (!view)
+                    return;
+                view.setHorizontalLayout();
+            });
+            this._listView.contentView().setLayout("horizontal");
         }
 
     });

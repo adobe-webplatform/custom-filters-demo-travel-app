@@ -1,3 +1,7 @@
+body {
+    font-family: verdana;
+}
+
 .js-item-view {
     border-bottom: 1px solid #ccc;
 }
@@ -57,5 +61,17 @@
 
 .js-mood-item-view.js-eat-item-view {
     background-color: #cabc4f;
+}
+
+.js-location-item-view {
+    color: white;
+}
+
+.js-location-item-view-label {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    font-size: 2.0em;
+    left: 20px;
 }
 

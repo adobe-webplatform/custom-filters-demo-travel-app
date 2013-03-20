@@ -13,6 +13,8 @@ define(["mobileui/views/gesture-view",
             this._scrollLeft = 0;
             this._scrollTop = 0;
             this._touchStartState = null;
+            this._canOverScroll = false;
+            this._scrollDirection = ScrollView.BOTH;
         },
 
         render: function() {
@@ -20,6 +22,11 @@ define(["mobileui/views/gesture-view",
                 .addClass("js-scroll-view")
                 .on("mousewheel", this._onMouseWheel.bind(this));
             return ScrollView.__super__.render.call(this);
+        },
+
+        setScrollDirection: function(direction) {
+            this._scrollDirection = direction;
+            return this;
         },
 
         layout: function() {
@@ -83,8 +90,10 @@ define(["mobileui/views/gesture-view",
         _validateScroll: function() {
             if (!this._contentView)
                 return;
-            this._scrollLeft = Math.max(0, Math.min(this._scrollLeft, this.maxScrollLeft()));
-            this._scrollTop = Math.max(0, Math.min(this._scrollTop, this.maxScrollTop()));
+            if (!this._canOverScroll || this._scrollDirection == ScrollView.VERTICAL)
+                this._scrollLeft = Math.max(0, Math.min(this._scrollLeft, this.maxScrollLeft()));
+            if (!this._canOverScroll || this._scrollDirection == ScrollView.HORIZONTAL)
+                this._scrollTop = Math.max(0, Math.min(this._scrollTop, this.maxScrollTop()));
             var scrollOptions = {
                 left: this._scrollLeft,
                 top: this._scrollTop
@@ -134,6 +143,7 @@ define(["mobileui/views/gesture-view",
                 scrollLeft: this._scrollLeft,
                 scrollTop: this._scrollTop
             };
+            this._canOverScroll = true;
         },
 
         _onTouchDragMove: function(transform) {
@@ -144,8 +154,14 @@ define(["mobileui/views/gesture-view",
         },
 
         _onTouchDragEnd: function(transform) {
+            this._canOverScroll = false;
+            this.invalidate("scroll");
             this._touchStartState = null;
         }
+    }, {
+        BOTH: "both",
+        VERTICAL: "vertical",
+        HORIZONTAL: "horizontal"
     });
 
     return ScrollView;

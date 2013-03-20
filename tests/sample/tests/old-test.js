@@ -1,4 +1,4 @@
-define(["mobileui/ui/navigator-card-view",
+define(["mobileui/ui/scroll-card-view",
         'mobileui/ui/navigator-view',
         'mobileui/views/layer-view',
         'mobileui/views/gesture-view',
@@ -7,7 +7,7 @@ define(["mobileui/ui/navigator-card-view",
         'mobileui/views/scroll-view',
         'mobileui/utils/transform',
         'mobileui/utils/transform-animation',
-        'mobileui/views/layout-params'], function(NavigatorCardView,
+        'mobileui/views/layout-params'], function(ScrollCardView,
              NavigatorView,
              LayerView,
              GestureView,
@@ -18,7 +18,7 @@ define(["mobileui/ui/navigator-card-view",
              TransformAnimation,
              LayoutParams) {
 
-    var OldTestView = NavigatorCardView.extend({
+    var OldTestView = ScrollCardView.extend({
 
         initialize: function() {
             OldTestView.__super__.initialize.call(this);
@@ -27,11 +27,9 @@ define(["mobileui/ui/navigator-card-view",
         render: function() {
             OldTestView.__super__.render.call(this);
 
-            var contentLayer = new ScrollView(),
-                layer0 = new LayoutView().setParams(new LayoutParams().matchChildren());
-            contentLayer.setContentView(layer0);
+            var layer0 = new LayoutView().setParams(new LayoutParams().matchChildren());
+            this.scrollView().setContentView(layer0);
             layer0.setLayout("vertical");
-            this.append(contentLayer.render().matchParentSize());
 
             var layer1 = new LayoutView();
             layer1.setLayout("vertical");
@@ -113,7 +111,7 @@ define(["mobileui/ui/navigator-card-view",
                     layer0.beforeWithAnimation(layer5, layer4);
             });
 
-            var layer6 = new ScrollView();
+            var layer6 = new ScrollView().setScrollDirection(ScrollView.VERTICAL);
             layer6.setContentView(new LayoutView().render().setLayout("vertical"));
             layer6.contentView()
                 .setParams(new LayoutParams().matchChildrenHeight())
@@ -131,7 +129,7 @@ define(["mobileui/ui/navigator-card-view",
             layer0.append(layer6.render());
 
 
-            var layer7 = new ScrollView();
+            var layer7 = new ScrollView().setScrollDirection(ScrollView.HORIZONTAL);
             layer7.setContentView(new LayoutView().render().setLayout("horizontal"));
             layer7.contentView()
                 .setParams(new LayoutParams().matchChildrenWidth())

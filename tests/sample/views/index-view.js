@@ -1,11 +1,12 @@
 define(["mobileui/ui/navigator-card-view",
         "mobileui/ui/list-view",
+        "mobileui/ui/button-view",
         "mobileui/views/layout-params",
         "mobileui/views/gesture-detector",
         "mobileui/views/measured-view",
         "tests/list",
         "app"],
-    function(NavigatorCardView, ListView, LayoutParams, GestureDetector, MeasuredView, TestsList, app) {
+    function(NavigatorCardView, ListView, ButtonView, LayoutParams, GestureDetector, MeasuredView, TestsList, app) {
 
     var ItemView = MeasuredView.extend({
         initialize: function() {
@@ -48,6 +49,36 @@ define(["mobileui/ui/navigator-card-view",
                 if (testModel)
                     this._onItemSelected(testModel);
             }
+            this.addTopBarButtons();
+        },
+
+        addTopBarButtons: function() {
+            var topBar = app.mainView.navigatorView().topBarView();
+            this._backButton = new ButtonView().setLabel("Back")
+                .on("tap", this._onBackButtonTap, this);
+            this._backButton.margin().setLeft(10).setTop(5);
+            topBar.append(this._backButton.render().addClass("js-navigator-top-bar-button-view")
+                .addClass("js-navigator-top-bar-back-button-view"));
+
+            topBar.appendFiller();
+
+            this._listButton = new ButtonView().setLabel("List");
+            this._listButton.margin().setRight(10).setTop(5);
+            topBar.append(this._listButton.render().addClass("js-navigator-top-bar-button-view")
+                .addClass("js-navigator-top-bar-list-button-view"));
+
+            this._gridButton = new ButtonView().setLabel("Grid");
+            this._gridButton.margin().setRight(10).setTop(5);
+            topBar.append(this._gridButton.render().addClass("js-navigator-top-bar-button-view")
+                .addClass("js-navigator-top-bar-grid-button-view"));
+        },
+
+        activated: function() {
+            this._backButton.hide();
+        },
+
+        deactivated: function() {
+            this._backButton.show();
         },
 
         render: function() {
@@ -69,8 +100,19 @@ define(["mobileui/ui/navigator-card-view",
             if (!ViewConstructor)
                 return;
             var view = new ViewConstructor().render();
+            view.on("activated", function() {
+                app.router.navigate("test/" + model.get("label"));
+            });
             app.mainView.navigatorView().pushCard(view);
-            app.router.navigate("test/" + model.get("label"));
+        },
+
+        updateRouterLocation: function() {
+            app.router.navigate("/");
+        },
+
+        _onBackButtonTap: function() {
+            if (!app.mainView.navigatorView().popCard())
+                app.mainView.navigatorView().pushCard(this);
         }
 
     });

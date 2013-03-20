@@ -23,6 +23,10 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             return NavigatorView.__super__.render.call(this);
         },
 
+        topBarView: function() {
+            return this._topBarView;
+        },
+
         contentView: function() {
             return this._contentView;
         },
@@ -33,25 +37,28 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
 
         pushCard: function(card) {
             if (this._activeCard) {
-                this._activeCard.detach();
+                this._activeCard._setNavigatorView(null).detach();
                 this._historyCards.push(this._activeCard);
                 this._activeCard = null;
             }
             if (card) {
                 this._activeCard = card;
                 this._contentView.append(card);
+                this._activeCard._setNavigatorView(this);
             }
         },
 
         popCard: function() {
             if (this._activeCard) {
-                this._activeCard.remove();
+                this._activeCard._setNavigatorView(null).remove();
                 this._activeCard = null;
             }
             if (this._historyCards.length) {
                 this._activeCard = this._historyCards.pop();
                 this._contentView.append(this._activeCard);
+                this._activeCard._setNavigatorView(this);
             }
+            return this._activeCard;
         }
     });
 

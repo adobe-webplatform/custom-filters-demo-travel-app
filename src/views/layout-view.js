@@ -1,7 +1,8 @@
 define(["mobileui/views/layer-view",
         "mobileui/views/vertical-layout",
-        "mobileui/views/horizontal-layout"
-    ], function(LayerView, VerticalLayout, HorizontalLayout) {
+        "mobileui/views/horizontal-layout",
+        "mobileui/views/layout-params"
+    ], function(LayerView, VerticalLayout, HorizontalLayout, LayoutParams) {
 
     var LayoutView = LayerView.extend({
 
@@ -24,6 +25,12 @@ define(["mobileui/views/layer-view",
             if (layout == "horizontal")
                 return HorizontalLayout;
             return layout;
+        },
+
+        appendFiller: function() {
+            var filler = new LayerView().setParams(new LayoutParams().fillParentWidth());
+            this.append(filler);
+            return this;
         },
 
         getLayout: function() {

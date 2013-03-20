@@ -2,6 +2,14 @@ body {
     font-family: verdana;
 }
 
+.js-button-view-label {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    width: 100%;
+    text-align: center;
+}
+
 .js-item-view {
     border-bottom: 1px solid #ccc;
 }
@@ -77,5 +85,15 @@ body {
 
 .js-navigator-top-bar-view {
     background-color: #372f4a;
+}
+
+.js-navigator-top-bar-button-view {
+    background-color: #5B4987;
+    color: white;
+    border-radius: 10px;
+}
+
+.js-navigator-top-bar-button-view.js-button-view-down {
+    background-color: #3F2E66;
 }
 

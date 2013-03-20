@@ -1,6 +1,7 @@
 define(["mobileui/views/layout-view",
-        "mobileui/views/layout-params"], 
-function(LayoutView, LayoutParams) {
+        "mobileui/views/layout-params",
+        "mobileui/ui/button-view"],
+function(LayoutView, LayoutParams, ButtonView) {
 
     var NavigatorTopBarView = LayoutView.extend({
         initialize: function() {

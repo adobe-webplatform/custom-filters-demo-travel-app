@@ -73,7 +73,7 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             this._activeCard = this._nextCard;
             this._nextCard = null;
             this._activeCard.trigger("card:commit");
-            this._activeCard.trigger("activate");
+            this._activeCard.trigger("activate", { goingBack: false });
             return this;
         },
 

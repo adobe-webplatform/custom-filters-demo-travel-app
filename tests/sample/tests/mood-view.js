@@ -1,9 +1,9 @@
-define(["mobileui/ui/navigator-card-view",
-        "mobileui/ui/list-view",
-        "mobileui/views/layout-params",
-        "mobileui/views/gesture-view",
+define(["views/touch-item-view",
+        "views/touch-list-view",
         "app"],
-    function(NavigatorCardView, ListView, LayoutParams, GestureView, app) {
+    function(TouchItemView,
+            TouchListView,
+            app) {
 
     var MoodLabels = [
         {
@@ -24,47 +24,31 @@ define(["mobileui/ui/navigator-card-view",
         }
     ];
 
-    var ItemView = GestureView.extend({
+    var ItemView = TouchItemView.extend({
         initialize: function() {
             ItemView.__super__.initialize.call(this);
-            this.on("tap", this._onTap, this);
-            this.setParams(new LayoutParams().fillParentHeight().matchParentWidth());
-            this.listenTo(this.model, "change:label", this._onLabelChanged);
-            this.$labelEl = $("<div />").addClass("js-mood-item-view-label");
+            this.$labelEl.addClass("js-mood-item-view-label");
         },
 
         render: function() {
             ItemView.__super__.render.call(this);
-            this.$el.addClass("js-mood-item-view")
-                .addClass(this.model.get("className"))
-                .append(this.$labelEl);
-            this._onLabelChanged();
+            this.$el.addClass("js-mood-item-view");
             return this;
         },
 
-        _onLabelChanged: function() {
-            this.$labelEl.text(this.model.get("label"));
-        },
-
-        _onTap: function() {
-            app.mainView.navigatorView().pushCard(app.mainView.lookupCard("Locations View"));
+        _onTapStart: function() {
+            app.mainView.navigatorView().prepareNextCard(app.mainView.lookupCard("Locations View"));
         }
     });
 
-    var MoodView = NavigatorCardView.extend({
+    var MoodView = TouchListView.extend({
 
         initialize: function(options) {
-            MoodView.__super__.initialize.call(this);
             this.model = new Backbone.Collection();
             this.model.add(_.map(MoodLabels, function(item) {
                 return new Backbone.Model(item);
             }));
-            this._listView = new ListView().matchParentSize()
-                .setItemRendererFactory(this._onItemRendererFactory.bind(this))
-                .setCollection(this.model)
-                .setScrollDirection("none");
-            this._listView.contentView().matchParentSize();
-            this.append(this._listView.render());
+            MoodView.__super__.initialize.call(this);
         },
 
         render: function() {
@@ -73,7 +57,8 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onItemRendererFactory: function(model) {
-            return new ItemView({model: model}).render();
+            return new ItemView({model: model}).render()
+                .on("selected", this._onItemSelected, this);
         }
 
     });

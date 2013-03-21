@@ -1,12 +1,13 @@
 define(["mobileui/utils/rect",
         "mobileui/utils/transform",
+        "mobileui/utils/filter",
         "mobileui/utils/outsets",
         "mobileui/utils/animation-set",
         "mobileui/utils/request-animation-frame",
         "mobileui/views/layout-params",
         "mobileui/views/touch-view-mixin",
         "mobileui/views/gesture-detector"
-], function(Rect, Transform, Outsets, AnimationSet, requestAnimationFrame, LayoutParams, TouchViewMixin, GestureDetector) {
+], function(Rect, Transform, Filter, Outsets, AnimationSet, requestAnimationFrame, LayoutParams, TouchViewMixin, GestureDetector) {
 
     var LayerView = Backbone.View.extend(TouchViewMixin).extend({
 
@@ -15,6 +16,7 @@ define(["mobileui/utils/rect",
             this.initializeTouchViewMixin();
             this._bounds = new Rect();
             this._transform = new Transform();
+            this._filter = new Filter();
             this._margin = new Outsets();
             this._padding = new Outsets();
             this._opacity = 1;
@@ -25,6 +27,7 @@ define(["mobileui/utils/rect",
             this._bounds.on("change:position", this._onPositionChanged, this);
             this._bounds.on("change:size", this._onSizeChanged, this);
             this._transform.on("change", this._onTransformChanged, this);
+            this._filter.on("change", this._onFilterChanged, this);
             this._padding.on("change", this._onPaddingChanged, this);
             this._margin.on("change", this._onMarginChanged, this);
 
@@ -366,6 +369,14 @@ define(["mobileui/utils/rect",
             return this._transform;
         },
 
+        setFilter: function(filter) {
+            this._filter.set(filter);
+        },
+
+        filter: function() {
+            return this._filter;
+        },
+
         opacity: function() {
             return this._opacity;
         },
@@ -442,6 +453,10 @@ define(["mobileui/utils/rect",
                 this.$el.css("transform", result.toString());
         },
 
+        _validateFilter: function() {
+            this.$el.css("-webkit-filter", this._filter.toString());
+        },
+
         _validateOpacity: function() {
             var result = this._opacity;
             this.$el.css("opacity", result);
@@ -469,6 +484,10 @@ define(["mobileui/utils/rect",
 
         _onTransformChanged: function() {
             this.invalidate("transform");
+        },
+
+        _onFilterChanged: function() {
+            this.invalidate("filter");
         },
 
         _onOpacityChanged: function() {

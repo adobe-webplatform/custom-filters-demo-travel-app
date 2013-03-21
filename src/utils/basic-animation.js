@@ -101,6 +101,19 @@ define(["mobileui/utils/animation", "require",
             return this.setNext(transformAnimation.setDuration(duration)).next();
         },
 
+        filter: function(duration, startFilter, endFilter) {
+            if (!endFilter) {
+                endFilter = startFilter;
+                startFilter = null;
+            }
+            var FilterAnimation = require("mobileui/utils/filter-animation");
+            var filterAnimation = new FilterAnimation("filter");
+            filterAnimation.getFilter().take(endFilter);
+            if (startFilter)
+                filterAnimation.startFilter().take(startFilter);
+            return this.setNext(filterAnimation.setDuration(duration)).next();
+        },
+
         opacity: function(duration, startOpacity, endOpacity) {
             if (endOpacity === undefined) {
                 endOpacity = startOpacity;

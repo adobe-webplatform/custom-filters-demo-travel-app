@@ -15,11 +15,11 @@ define(["mobileui/utils/time"], function(Time) {
             return this;
         },
 
-        reset: function() {
+        reset: function(startValue) {
             this._direction = 0;
             this._velocity = 0;
             this._acceleration = 0;
-            this._previousValue = 0;
+            this._previousValue = startValue !== undefined ? startValue : 0;
             this._previousTime = null;
         },
 
@@ -35,11 +35,13 @@ define(["mobileui/utils/time"], function(Time) {
         },
 
         injectValue: function(value) {
-            var direction = computeDirection(value);
+            var direction = (this._previousValue != value) ? computeDirection(this._previousValue - value) 
+                                : this._direction;
             if (direction != this._direction) {
                 this._velocity = 0;
                 this._acceleration = 0;
             }
+            this._direction = direction;
             var time = Time.now();
             if (this._previousTime !== null) {
                 var deltaTime = time - this._previousTime;
@@ -51,6 +53,10 @@ define(["mobileui/utils/time"], function(Time) {
             }
             this._previousValue = value;
             this._previousTime = time;
+        },
+
+        direction: function() {
+            return this._direction;
         }
     });
 

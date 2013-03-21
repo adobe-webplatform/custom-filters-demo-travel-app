@@ -2,7 +2,8 @@ define(["mobileui/utils/animation-controller",
         "mobileui/utils/animation",
         // Initialize all types of animations here.
         "mobileui/utils/transform-animation",
-        "mobileui/utils/opacity-animation"
+        "mobileui/utils/opacity-animation",
+        "mobileui/utils/filter-animation"
         ], function(AnimationController, Animation) {
 
     var AnimationSet = function(view) {

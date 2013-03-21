@@ -39,6 +39,7 @@ define(["views/touch-item-view",
         initialize: function() {
             ItemView.__super__.initialize.call(this);
             this.$labelEl.addClass("js-mood-item-view-label");
+            this._useFilter = true;
         },
 
         render: function() {

@@ -4,9 +4,10 @@ define(["mobileui/ui/navigator-card-view",
         "mobileui/views/layout-params",
         "mobileui/views/gesture-view",
         "mobileui/utils/transform",
+        "mobileui/utils/filter",
         "mobileui/utils/momentum",
         "app"],
-    function(NavigatorCardView, ListView, GestureDetector, LayoutParams, GestureView, Transform, Momentum, app) {
+    function(NavigatorCardView, ListView, GestureDetector, LayoutParams, GestureView, Transform, Filter, Momentum, app) {
 
 
     var ItemView = GestureView.extend({
@@ -24,6 +25,7 @@ define(["mobileui/ui/navigator-card-view",
             // Force a 3D layer.
             this.animation();
             this.transform().clear();
+            this._useFilter = false;
         },
 
         render: function() {
@@ -41,35 +43,57 @@ define(["mobileui/ui/navigator-card-view",
 
         _onDragStart: function() {
             this._onTapStart();
-            this._momentum.reset();
-            var translate = this.transform().get("translate");
-            this._dragStartValue = this._verticalLayout ? 
-                translate.x() : translate.y();
+            if (this._useFilter) {
+                var fold = this.filter().get("fold");
+                this._dragStartValue = fold.t();
+            } else {
+                var translate = this.transform().get("translate");
+                this._dragStartValue = this._verticalLayout ?
+                    translate.x() : translate.y();
+            }
+            this._momentum.reset(this._dragStartValue);
             this.animation().removeAll();
         },
 
+        _minShadow: 1.2,
+        _maxShadow: 2,
+
+        _computeShadow: function(t) {
+            return (1 - t) * (this._maxShadow - this._minShadow) + this._minShadow;
+        },
+
         _onDragMove: function(transform) {
-            var translate = this.transform().get("translate");
             var value;
-            if (this._verticalLayout) {
-                value = Math.min(0, this._dragStartValue + transform.dragX);
-                translate.setX(value);
+            if (!this._useFilter) {
+                var translate = this.transform().get("translate");
+                if (this._verticalLayout) {
+                    value = Math.min(0, this._dragStartValue + transform.dragX);
+                    translate.setX(value);
+                } else {
+                    value = Math.min(0, this._dragStartValue + transform.dragY);
+                    translate.setY(value);
+                }
             } else {
-                value = Math.min(0, this._dragStartValue + transform.dragY);
-                translate.setY(value);
+                value = Math.min(1, Math.max(0, this._dragStartValue - (transform.dragX * 2 / this.bounds().width())));
+                this.filter().get("fold").setT(value).setShadow(this._computeShadow(value));
             }
             this._momentum.injectValue(value);
         },
 
         _revert: function() {
             var self = this,
-                transform = new Transform();
-            this.animation().start().get("slide-transform")
-                .chain()
-                .transform(100, transform)
-                .callback(function() {
-                    app.mainView.navigatorView().revertNextCard();
-                });
+                chain = this.animation().start().get("slide-transform").chain();
+            if (!this._useFilter) {
+                var transform = new Transform();
+                chain = chain.transform(100, transform);
+            } else {
+                var filter = new Filter();
+                filter.get("fold").setT(0).setShadow(this._computeShadow(0));
+                chain = chain.filter(100, filter);
+            }
+            chain.callback(function() {
+                app.mainView.navigatorView().revertNextCard();
+            });
             this.animation().get("slide")
                 .chain()
                 .opacity(100, 1);
@@ -109,21 +133,27 @@ define(["mobileui/ui/navigator-card-view",
 
         resetAnimations: function() {
             this.setOpacity(1).transform().clear();
+            this.filter().clear();
             this.animation().removeAll();
         },
 
         _commit: function() {
             var self = this,
-                transform = new Transform();
-            if (this._verticalLayout)
-                transform.translate(-this.bounds().width(), 0);
-            else
-                transform.translate(0, -this.bounds().height());
+                chain = this.animation().start().get("slide-transform").chain();
             this.trigger("selected", this);
-            this.animation().start().get("slide-transform")
-                .chain()
-                .transform(300, transform)
-                .wait(100)
+            if (!this._useFilter) {
+                var transform = new Transform();
+                if (this._verticalLayout)
+                    transform.translate(-this.bounds().width(), 0);
+                else
+                    transform.translate(0, -this.bounds().height());
+                chain = chain.transform(300, transform);
+            } else {
+                var filter = new Filter();
+                filter.get("fold").setT(1).setShadow(this._computeShadow(1));
+                chain = chain.filter(300, filter);
+            }
+            chain.wait(100)
                 .callback(function() {
                     app.mainView.navigatorView().commitNextCard();
                 });
@@ -133,10 +163,17 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onDragEnd: function() {
-            var value = this._momentum.compute() * 3;
-            if ((this._verticalLayout && (value > - this.bounds().width())) ||
-                (!this._verticalLayout && (value > - this.bounds().height())))
-                return this._revert();
+            var value = this._momentum.compute(),
+                direction = this._momentum.direction();
+            if (this._useFilter) {
+                if (value < 0.3 || direction > 0)
+                    return this._revert();
+            } else {
+                value *= 3;
+                if ((this._verticalLayout && (value > - this.bounds().width() || direction < 0)) ||
+                    (!this._verticalLayout && (value > - this.bounds().height() || direction < 0)))
+                    return this._revert();
+            }
             this._commit();
         },
 

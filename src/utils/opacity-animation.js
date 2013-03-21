@@ -2,7 +2,7 @@ define(["mobileui/utils/basic-animation"], function(BasicAnimation) {
 
     var OpacityAnimation = function(name) {
         BasicAnimation.call(this, name);
-        this._opacity = 0;
+        this._arguments = 0;
         this._startOpacity = null;
     };
 

@@ -93,6 +93,7 @@ define(["views/touch-item-view",
             _.extend(this, options);
             ItemView.__super__.initialize.call(this);
             this.$labelEl.addClass("js-location-item-view-label");
+            this._useFilter = true;
         },
 
         setVerticalLayout: function() {

@@ -24,12 +24,12 @@ define(['mobileui/ui/navigator-view',
 
             topBar.appendFiller();
 
-            this._listButton = new ButtonView().setLabel("List");
+            this._listButton = new ButtonView().setLabel("List").hide();
             this._listButton.margin().setRight(10).setTop(5);
             topBar.append(this._listButton.render().addClass("js-navigator-top-bar-button-view")
                 .addClass("js-navigator-top-bar-list-button-view"));
 
-            this._gridButton = new ButtonView().setLabel("Grid");
+            this._gridButton = new ButtonView().setLabel("Grid").hide();
             this._gridButton.margin().setRight(10).setTop(5);
             topBar.append(this._gridButton.render().addClass("js-navigator-top-bar-button-view")
                 .addClass("js-navigator-top-bar-grid-button-view"));
@@ -37,6 +37,14 @@ define(['mobileui/ui/navigator-view',
 
         backButton: function() {
             return this._backButton;
+        },
+
+        listButton: function() {
+            return this._listButton;
+        },
+
+        gridButton: function() {
+            return this._gridButton;
         },
 
         _onBackButtonTap: function() {

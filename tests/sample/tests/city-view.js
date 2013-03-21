@@ -45,6 +45,11 @@ define(["views/touch-item-view",
                 return new Backbone.Model(item);
             }));
             CityView.__super__.initialize.call(this);
+            this.on("activate", this._onViewActivated, this);
+        },
+
+        _onViewActivated: function() {
+            app.router.navigate("test/" + encodeURIComponent("City View"), { trigger: false });
         },
 
         render: function() {

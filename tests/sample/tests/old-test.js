@@ -7,7 +7,8 @@ define(["mobileui/ui/scroll-card-view",
         'mobileui/views/scroll-view',
         'mobileui/utils/transform',
         'mobileui/utils/transform-animation',
-        'mobileui/views/layout-params'], function(ScrollCardView,
+        'mobileui/views/layout-params',
+        'app'], function(ScrollCardView,
              NavigatorView,
              LayerView,
              GestureView,
@@ -16,12 +17,18 @@ define(["mobileui/ui/scroll-card-view",
              ScrollView,
              Transform,
              TransformAnimation,
-             LayoutParams) {
+             LayoutParams,
+             app) {
 
     var OldTestView = ScrollCardView.extend({
 
         initialize: function() {
             OldTestView.__super__.initialize.call(this);
+            this.on("activate", this._onViewActivated, this);
+        },
+
+        _onViewActivated: function() {
+            app.router.navigate("test/" + encodeURIComponent("Old test"), { trigger: false });
         },
 
         render: function() {

@@ -26,7 +26,7 @@ define(['app',
             return this._navigatorView;
         },
 
-        lookupCard: function(label) {
+        lookupCard: function(label, pathOptions) {
             var viewItem = _.find(TestsList, function(item) {
                 return item.label == label;
             });
@@ -35,10 +35,9 @@ define(['app',
             var ViewConstructor = viewItem.view;
             if (!ViewConstructor)
                 return null;
-            var view = new ViewConstructor().render();
-            view.on("activate", function() {
-                app.router.navigate("test/" + encodeURIComponent(label), { trigger: false });
-            });
+            var view = new ViewConstructor({
+                path: pathOptions
+            }).render();
             return view;
         }
     });

@@ -46,6 +46,45 @@ define(["views/touch-item-view",
         },
         {
             label: "Avenel Cooperative Housing Project"
+        },
+        {
+            label: "The Abbey (club)"
+        },
+        {
+            label: "Alameda Corridor"
+        },
+        {
+            label: "Alex Theatre"
+        },
+        {
+            label: "Ambassador Hotel (Los Angeles)"
+        },
+        {
+            label: "Amoeba Music"
+        },
+        {
+            label: "Andaz West Hollywood"
+        },
+        {
+            label: "Anderton Court Shops"
+        },
+        {
+            label: "Angels Flight"
+        },
+        {
+            label: "Angelus Temple"
+        },
+        {
+            label: "Los Angeles Aqueduct"
+        },
+        {
+            label: "ArcLight Hollywood"
+        },
+        {
+            label: "Avalon Hollywood"
+        },
+        {
+            label: "Avenel Cooperative Housing Project"
         }
     ];
 
@@ -80,6 +119,11 @@ define(["views/touch-item-view",
             this.hue = 283;
             this.saturation = 15;
             _.extend(this, options);
+            if (options && options.path) {
+                var data = options.path.split(":");
+                this.hue = parseInt(data[0]);
+                this.saturation = parseInt(data[1]);
+            }
             this.model = new Backbone.Collection();
             this.model.add(_.map(LocationLabels, function(item, i) {
                 return new Backbone.Model(item).set("index", i);
@@ -89,6 +133,19 @@ define(["views/touch-item-view",
             this.listView().contentView().setParams(new LayoutParams()
                     .matchParentWidth().matchChildrenHeight());
             this.setVerticalLayout();
+            this.on("activate", this._onViewActivated, this);
+            this.on("deactivate", this._onViewDeactivated, this);
+        },
+
+        _onViewActivated: function() {
+            app.router.navigate("test/" + encodeURIComponent("Locations View") + "/" + this.hue + ":" + this.saturation, { trigger: false });
+            app.mainView.navigatorView().listButton().show();
+            app.mainView.navigatorView().gridButton().show();
+        },
+
+        _onViewDeactivated: function() {
+            app.mainView.navigatorView().listButton().hide();
+            app.mainView.navigatorView().gridButton().hide();
         },
 
         render: function() {

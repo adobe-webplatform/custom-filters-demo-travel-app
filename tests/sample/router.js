@@ -2,6 +2,7 @@ define(["require", "app", "views/index-view"], function(require, app, IndexView)
 
     var Router = Backbone.Router.extend({
         routes: {
+            "test/*path/*options": "test",
             "test/*path": "test",
             "*path": "index"
         },
@@ -10,8 +11,8 @@ define(["require", "app", "views/index-view"], function(require, app, IndexView)
             app.mainView.navigatorView().pushCard(new IndexView().render());
         },
 
-        test: function(path) {
-            var view = app.mainView.lookupCard(decodeURIComponent(path));
+        test: function(path, pathOptions) {
+            var view = app.mainView.lookupCard(decodeURIComponent(path), decodeURIComponent(pathOptions));
             app.mainView.navigatorView().pushCard(view ? view : new IndexView().render());
         }
     });

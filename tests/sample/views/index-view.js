@@ -42,8 +42,8 @@ define(["mobileui/ui/navigator-card-view",
             this.model.add(_.map(TestsList, function(item) {
                 return new Backbone.Model(item);
             }));
-            this.on("activated", this._onViewActivated, this);
-            this.on("deactivated", this._onViewDeactivated, this);
+            this.on("activate", this._onViewActivated, this);
+            this.on("deactivate", this._onViewDeactivated, this);
         },
 
         _onViewActivated: function() {

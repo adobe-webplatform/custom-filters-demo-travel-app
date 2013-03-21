@@ -53,7 +53,7 @@ define(["mobileui/ui/navigator-card-view",
                 value = Math.min(0, this._dragStartValue + transform.dragX);
                 translate.setX(value);
             } else {
-                value = Math.max(0, this._dragStartValue + transform.dragY);
+                value = Math.min(0, this._dragStartValue + transform.dragY);
                 translate.setY(value);
             }
             this._momentum.injectValue(value);
@@ -79,7 +79,7 @@ define(["mobileui/ui/navigator-card-view",
             if (this._verticalLayout)
                 transform.translate(-this.bounds().width(), 0);
             else
-                transform.translate(0, this.bounds().height());
+                transform.translate(0, -this.bounds().height());
             this.animation().start().get("slide-transform")
                 .chain(50 * index)
                 .transform(200, transform);
@@ -94,7 +94,7 @@ define(["mobileui/ui/navigator-card-view",
             if (this._verticalLayout)
                 translate.setX(-this.bounds().width());
             else
-                translate.setY(this.bounds().height());
+                translate.setY(-this.bounds().height());
             this.setOpacity(0);
             this.animation().start().get("slide-transform")
                 .chain(50 * index)
@@ -116,7 +116,7 @@ define(["mobileui/ui/navigator-card-view",
             if (this._verticalLayout)
                 transform.translate(-this.bounds().width(), 0);
             else
-                transform.translate(0, this.bounds().height());
+                transform.translate(0, -this.bounds().height());
             this.trigger("selected", this);
             this.animation().start().get("slide-transform")
                 .chain()
@@ -133,7 +133,7 @@ define(["mobileui/ui/navigator-card-view",
         _onDragEnd: function() {
             var value = this._momentum.compute() * 3;
             if ((this._verticalLayout && (value > - this.bounds().width())) ||
-                (!this._verticalLayout && (value < this.bounds().height())))
+                (!this._verticalLayout && (value > - this.bounds().height())))
                 return this._revert();
             this._commit();
         },

@@ -1,11 +1,13 @@
-define(["mobileui/ui/navigator-card-view",
-        "mobileui/ui/list-view",
+define(["views/touch-item-view",
+        "views/touch-list-view",
         "mobileui/views/layout-params",
-        "mobileui/views/gesture-view",
         "app"],
-    function(NavigatorCardView, ListView, LayoutParams, GestureView, app) {
+    function(TouchItemView,
+            TouchListView,
+            LayoutParams,
+            app) {
 
-    var MoodLabels = [
+    var LocationLabels = [
         {
             label: "The Abbey (club)"
         },
@@ -47,46 +49,42 @@ define(["mobileui/ui/navigator-card-view",
         }
     ];
 
-    var ItemView = GestureView.extend({
+    var ItemView = TouchItemView.extend({
         initialize: function() {
             ItemView.__super__.initialize.call(this);
-            this.on("tap", this._onTap, this);
+            this.$labelEl.addClass("js-location-item-view-label");
+        },
+
+        setVerticalLayout: function() {
+            this._verticalLayout = true;
             this.setParams(new LayoutParams().matchParentWidth());
             this.bounds().setHeight(100);
-            this.listenTo(this.model, "change:label", this._onLabelChanged);
-            this.$labelEl = $("<div />").addClass("js-location-item-view-label");
         },
 
         render: function() {
             ItemView.__super__.render.call(this);
             this.$el.addClass("js-location-item-view")
-                .append(this.$labelEl)
                 .css("background-color", "hsl(283, 15%, " + (28 + this.model.get("index") * 2) + "%)");
-            this._onLabelChanged();
             return this;
         },
 
-        _onLabelChanged: function() {
-            this.$labelEl.text(this.model.get("label"));
-        },
-
-        _onTap: function() {
-            this.trigger("selected", this.model);
+        _onTapStart: function() {
+            app.mainView.navigatorView().prepareNextCard(app.mainView.lookupCard("Location View"));
         }
     });
 
-    var LocationsView = NavigatorCardView.extend({
+    var LocationsView = TouchListView.extend({
 
         initialize: function(options) {
-            LocationsView.__super__.initialize.call(this);
             this.model = new Backbone.Collection();
-            this.model.add(_.map(MoodLabels, function(item, i) {
+            this.model.add(_.map(LocationLabels, function(item, i) {
                 return new Backbone.Model(item).set("index", i);
             }));
-            this._listView = new ListView().matchParentSize()
-                .setItemRendererFactory(this._onItemRendererFactory.bind(this))
-                .setCollection(this.model);
-            this.append(this._listView.render());
+            LocationsView.__super__.initialize.call(this);
+            this.listView().setScrollDirection("vertical");
+            this.listView().contentView().setParams(new LayoutParams()
+                    .matchParentWidth().matchChildrenHeight());
+            this.setVerticalLayout();
         },
 
         render: function() {
@@ -97,10 +95,6 @@ define(["mobileui/ui/navigator-card-view",
         _onItemRendererFactory: function(model) {
             return new ItemView({model: model}).render()
                 .on("selected", this._onItemSelected, this);
-        },
-
-        _onItemSelected: function(model) {
-            
         }
 
     });

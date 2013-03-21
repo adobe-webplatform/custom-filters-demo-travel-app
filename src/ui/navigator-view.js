@@ -53,7 +53,7 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
 
         revertNextCard: function() {
             if (!this._nextCard)
-                return;
+                return this;
             this._nextCard.trigger("card:revert");
             this._nextCard._setNavigatorView(null);
             this._nextCard.remove();
@@ -63,7 +63,7 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
 
         commitNextCard: function() {
             if (!this._nextCard)
-                return;
+                return this;
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");
                 this._activeCard._setNavigatorView(null).detach();

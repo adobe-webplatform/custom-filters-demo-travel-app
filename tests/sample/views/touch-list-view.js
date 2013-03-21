@@ -19,6 +19,10 @@ define(["mobileui/ui/navigator-card-view",
             this._useVerticalLayout = null;
         },
 
+        listView: function() {
+            return this._listView;
+        },
+
         render: function() {
             this.$el.addClass("js-touch-list-view");
             return TouchListView.__super__.render.call(this);

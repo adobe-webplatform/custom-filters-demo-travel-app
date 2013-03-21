@@ -26,7 +26,7 @@ define(["mobileui/ui/navigator-card-view",
     var ItemView = GestureView.extend({
         initialize: function() {
             ItemView.__super__.initialize.call(this);
-            this.on("tapend", this._onTapEnd, this)
+            this.on("tap", this._onTap, this)
                 .on("tapstart", this._onTapStart, this)
                 .on("touchdragstart", this._onDragStart, this)
                 .on("touchdragmove", this._onDragMove, this)
@@ -91,9 +91,7 @@ define(["mobileui/ui/navigator-card-view",
                 .opacity(100, 1);
         },
 
-        _onDragEnd: function() {
-            if (this._momentum.compute() < (this._verticalLayout ? this.bounds().width() : this.bounds().height()) / 3)
-                return this._revert();
+        _commit: function() {
             var self = this,
                 transform = new Transform();
             if (this._verticalLayout)
@@ -104,18 +102,23 @@ define(["mobileui/ui/navigator-card-view",
                 .chain()
                 .transform(200, transform)
                 .callback(function() {
-                    self.transform().clear();
-                    self._onTap();
+                    self.setOpacity(1).transform().clear();
+                    self.animation().removeAll();
+                    app.mainView.navigatorView().commitNextCard();
                 });
             this.animation().get("slide")
                 .chain()
                 .opacity(200, 0);
         },
 
+        _onDragEnd: function() {
+            if (this._momentum.compute() < (this._verticalLayout ? this.bounds().width() : this.bounds().height()) / 3)
+                return this._revert();
+            this._commit();
+        },
+
         _onTap: function() {
-            this.animation().get("slide").removeAll();
-            this.setOpacity(1);
-            app.mainView.navigatorView().commitNextCard();
+            this._commit();
         },
 
         respondsToTouchGesture: function(gesture) {

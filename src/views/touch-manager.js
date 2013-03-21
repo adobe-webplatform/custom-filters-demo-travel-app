@@ -1,4 +1,5 @@
-define(["mobileui/views/touch"], function(Touch) {
+define(["mobileui/views/touch",
+        "mobileui/utils/request-animation-frame"], function(Touch, requestAnimationFrame) {
 
     function TouchManager() {
         this.touchEvents = {
@@ -19,6 +20,10 @@ define(["mobileui/views/touch"], function(Touch) {
     }
 
     _.extend(TouchManager.prototype, Backbone.Events, {
+
+        inlineUpdate: function() {
+            requestAnimationFrame.runInlinesIfNeeded();
+        },
 
         findTouch: function(identifier) {
             return this.touchPointsSet[identifier];
@@ -122,6 +127,7 @@ define(["mobileui/views/touch"], function(Touch) {
             }
             if (this.captureTouchSurface)
                 this.captureTouchSurface.onTouchStartInternal(event);
+            this.inlineUpdate();
         },
 
         handleTouchStart: function(touch) {
@@ -154,6 +160,7 @@ define(["mobileui/views/touch"], function(Touch) {
                 if (internalTouch.view)
                     internalTouch.view.trigger("touchmove", internalTouch);
             }
+            this.inlineUpdate();
         },
 
         onTouchEnd: function(event) {
@@ -175,6 +182,7 @@ define(["mobileui/views/touch"], function(Touch) {
                     internalTouch.view.trigger("touchend", internalTouch);
                 }
             }
+            this.inlineUpdate();
         },
 
         onTouchCancel: function(event) {
@@ -196,6 +204,7 @@ define(["mobileui/views/touch"], function(Touch) {
                     internalTouch.view.trigger("touchcanceled", internalTouch);
                 }
             }
+            this.inlineUpdate();
         },
 
         onMouseDown: function(event) {
@@ -213,6 +222,7 @@ define(["mobileui/views/touch"], function(Touch) {
             internalTouch.updatePreviewBox();
             if (this.captureTouchSurface)
                 this.captureTouchSurface.onMouseDown(event);
+            this.inlineUpdate();
         },
 
         handleMouseDown: function() {
@@ -240,6 +250,7 @@ define(["mobileui/views/touch"], function(Touch) {
             internalTouch.update(Touch.getPosition(event));
             if (internalTouch.view)
                 internalTouch.view.trigger("touchmove", internalTouch);
+            this.inlineUpdate();
         },
 
         onMouseUp: function(event) {
@@ -258,6 +269,7 @@ define(["mobileui/views/touch"], function(Touch) {
                 internalTouch.view.trigger("touchend", internalTouch);
             }
             this.removeMouseTrackingEvents();
+            this.inlineUpdate();
         }
     });
 

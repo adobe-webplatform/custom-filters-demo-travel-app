@@ -8,6 +8,7 @@ define(["mobileui/utils/boilerplate"], function(boilerplate) {
     }
 
     var requestedCallbacks = null;
+    var hadDOMUpdates = false;
 
     var fn = _.extend(function(callback) {
         if (!requestedCallbacks) {
@@ -19,6 +20,13 @@ define(["mobileui/utils/boilerplate"], function(boilerplate) {
     }, Backbone.Events, {
         run: function() {
             fn(null);
+        },
+        setHadDOMUpdates: function() {
+            hadDOMUpdates = true;
+        },
+        runInlinesIfNeeded: function() {
+            if (hadDOMUpdates)
+                update();
         }
     });
 
@@ -32,6 +40,7 @@ define(["mobileui/utils/boilerplate"], function(boilerplate) {
                 fn();
             });
         }
+        hadDOMUpdates = false;
         fn.trigger("after");
     }
 

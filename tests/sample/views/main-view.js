@@ -36,7 +36,7 @@ define(['app',
             if (!ViewConstructor)
                 return null;
             var view = new ViewConstructor().render();
-            view.on("activated", function() {
+            view.on("activate", function() {
                 app.router.navigate("test/" + label);
             });
             return view;

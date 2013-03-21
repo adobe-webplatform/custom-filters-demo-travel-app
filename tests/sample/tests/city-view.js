@@ -53,7 +53,6 @@ define(["mobileui/ui/navigator-card-view",
 
         _onTapStart: function() {
             app.mainView.navigatorView().prepareNextCard(app.mainView.lookupCard("Mood View"));
-            // this.animation().start().get("slide").chain().opacity(200, 0.5);
         },
 
         _onDragStart: function() {
@@ -91,7 +90,7 @@ define(["mobileui/ui/navigator-card-view",
                 .opacity(100, 1);
         },
 
-        animateViewSwitch: function() {
+        animateViewSwitch: function(index) {
             var self = this,
                 transform = new Transform();
             if (this._verticalLayout)
@@ -99,11 +98,28 @@ define(["mobileui/ui/navigator-card-view",
             else
                 transform.translate(0, this.bounds().height());
             this.animation().start().get("slide-transform")
-                .chain(100)
-                .transform(300, transform);
+                .chain(50 * index)
+                .transform(200, transform);
             this.animation().get("slide")
-                .chain(100)
-                .opacity(300, 0);
+                .chain(50 * index)
+                .opacity(200, 0);
+        },
+
+        startAnimations: function(index) {
+            var self = this,
+                translate = this.transform().get("translate");
+            if (this._verticalLayout)
+                translate.setX(-this.bounds().width());
+            else
+                translate.setY(this.bounds().height());
+            this.setOpacity(0);
+            this.animation().start().get("slide-transform")
+                .chain(50 * index)
+                .transform(300, new Transform().translate(0, 0));
+            this.animation().get("slide")
+                .chain(50 * index)
+                .opacity(300, 1);
+            return this.animation().promise();
         },
 
         resetAnimations: function() {
@@ -175,6 +191,7 @@ define(["mobileui/ui/navigator-card-view",
                 .setScrollDirection("none");
             this._listView.contentView().matchParentSize();
             this.append(this._listView.render());
+            this.on("activate", this._onActivate, this);
             this.on("deactivate", this._onDeactivate, this);
             this._useVerticalLayout = null;
         },
@@ -191,12 +208,24 @@ define(["mobileui/ui/navigator-card-view",
 
         _onItemSelected: function(selectedView) {
             var self = this;
-            this.model.each(function(model) {
+            this.model.each(function(model, index) {
                 var view = self._listView.itemView(model);
                 if (!view || view == selectedView)
                     return;
-                view.animateViewSwitch();
+                view.animateViewSwitch(index);
             });
+        },
+
+        _onActivate: function(options) {
+            if (!options.goingBack)
+                return;
+            var self = this, promises = [];
+            this.model.each(function(model, index) {
+                var view = self._listView.itemView(model);
+                if (view)
+                    promises.push(view.startAnimations(index));
+            });
+            options.promise = $.when.apply(null, promises);
         },
 
         _onDeactivate: function() {

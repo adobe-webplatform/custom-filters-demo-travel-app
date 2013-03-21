@@ -65,6 +65,7 @@ define([
             if (TouchManager.instance.needsNativeTouch(event))
                 return;
             this.onTouchStartInternal(event);
+            this.inlineUpdate();
         },
 
         onMouseDown: function(event) {
@@ -79,6 +80,7 @@ define([
             internalTouch.view = this;
             this.setTouch(internalTouch);
             this.trigger("touchstart", internalTouch);
+            this.inlineUpdate();
         },
 
         onClick: function(event) {
@@ -86,6 +88,7 @@ define([
                 return;
             event.preventDefault();
             event.stopImmediatePropagation();
+            this.inlineUpdate();
         }
     };
 

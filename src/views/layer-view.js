@@ -35,6 +35,10 @@ define(["mobileui/utils/rect",
             this._visible = true;
         },
 
+        inlineUpdate: function() {
+            requestAnimationFrame.runInlinesIfNeeded();
+        },
+
         setNeedsTouchEvents: function(value) {
             if (this._needsTouchEvents == value)
                 return this;
@@ -102,31 +106,37 @@ define(["mobileui/utils/rect",
         },
 
         append: function(view) {
+            requestAnimationFrame.setHadDOMUpdates();
             this.$el.append(view.$el);
             return this._childAdded(view, /* useAnimation */ false);
         },
 
         appendWithAnimation: function(view) {
+            requestAnimationFrame.setHadDOMUpdates();
             this.$el.append(view.$el);
             return this._childAdded(view, /* useAnimation */ true);
         },
 
         before: function(view, otherView) {
+            requestAnimationFrame.setHadDOMUpdates();
             otherView.$el.before(view.$el);
             return this._childAdded(view, /* useAnimation */ false);
         },
 
         beforeWithAnimation: function(view, otherView) {
+            requestAnimationFrame.setHadDOMUpdates();
             otherView.$el.before(view.$el);
             return this._childAdded(view, /* useAnimation */ true);
         },
 
         after: function(view, otherView) {
+            requestAnimationFrame.setHadDOMUpdates();
             otherView.$el.after(view.$el);
             return this._childAdded(view, /* useAnimation */ false);
         },
 
         afterWithAnimation: function(view, otherView) {
+            requestAnimationFrame.setHadDOMUpdates();
             otherView.$el.after(view.$el);
             return this._childAdded(view, /* useAnimation */ true);
         },
@@ -184,6 +194,7 @@ define(["mobileui/utils/rect",
         },
 
         _internalDetachRemove: function(detach) {
+            requestAnimationFrame.setHadDOMUpdates();
             if (detach == "detach")
                 this.$el.detach();
             else

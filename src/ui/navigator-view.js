@@ -78,31 +78,55 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
         },
 
         pushCard: function(card) {
+            var previousActiveCard = this._activeCard;
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");
-                this._activeCard._setNavigatorView(null).detach();
                 this._historyCards.push(this._activeCard);
                 this._activeCard = null;
             }
+            var options = {
+                goingBack: false,
+                promise: null
+            };
             if (card) {
                 this._activeCard = card;
-                this._contentView.append(card);
                 this._activeCard._setNavigatorView(this);
-                this._activeCard.trigger("activate");
+                this._activeCard.trigger("activate", options);
+                this._contentView.append(card);
+            }
+            if (previousActiveCard) {
+                if (!options.promise)
+                    previousActiveCard._setNavigatorView(null).detach();
+                else
+                    options.promise.then(function() {
+                        previousActiveCard._setNavigatorView(null).detach();
+                    });
             }
         },
 
         popCard: function() {
+            var previousActiveCard = this._activeCard;
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");
-                this._activeCard._setNavigatorView(null).remove();
                 this._activeCard = null;
             }
+            var options = {
+                goingBack: true,
+                promise: null
+            };
             if (this._historyCards.length) {
                 this._activeCard = this._historyCards.pop();
                 this._contentView.append(this._activeCard);
                 this._activeCard._setNavigatorView(this);
-                this._activeCard.trigger("activate");
+                this._activeCard.trigger("activate", options);
+            }
+            if (previousActiveCard) {
+                if (!options.promise)
+                    previousActiveCard._setNavigatorView(null).remove();
+                else
+                    options.promise.then(function() {
+                        previousActiveCard._setNavigatorView(null).remove();
+                    });
             }
             return this._activeCard;
         }

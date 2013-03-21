@@ -13,7 +13,6 @@ define(["mobileui/ui/navigator-card-view",
         initialize: function() {
             ItemView.__super__.initialize.call(this);
             this.on("tap", this._onTap, this)
-                .on("tapstart", this._onTapStart, this)
                 .on("touchdragstart", this._onDragStart, this)
                 .on("touchdragmove", this._onDragMove, this)
                 .on("touchdragend", this._onDragEnd, this);
@@ -37,8 +36,8 @@ define(["mobileui/ui/navigator-card-view",
             this.$labelEl.text(this.model.get("label"));
         },
 
-
         _onDragStart: function() {
+            this._onTapStart();
             this._momentum.reset();
             var translate = this.transform().get("translate");
             this._dragStartValue = this._verticalLayout ? 

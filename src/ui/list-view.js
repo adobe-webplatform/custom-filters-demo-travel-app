@@ -68,6 +68,18 @@ define(["mobileui/views/scroll-view",
             return null;
         },
 
+        indexOfView: function(lookupView) {
+            var index = 0;
+            for (var key in this._viewItems) {
+                if (_.has(this._viewItems, key)) {
+                    if (lookupView === this._viewItems[key])
+                        return index;
+                    ++index;
+                }
+            }
+            return -1;
+        },
+
         itemView: function(model) {
             if (!this.model)
                 return null;

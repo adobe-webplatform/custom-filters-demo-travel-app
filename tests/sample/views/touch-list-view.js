@@ -31,7 +31,6 @@ define(["mobileui/ui/navigator-card-view",
         _onItemSelected: function(selectedView) {
             var self = this;
             var selectedViewIndex = this._listView.indexOfView(selectedView);
-            console.log(selectedViewIndex);
             this.model.each(function(model, index) {
                 var view = self._listView.itemView(model);
                 if (!view || view == selectedView)

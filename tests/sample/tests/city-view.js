@@ -23,6 +23,7 @@ define(["views/touch-item-view",
     var ItemView = TouchItemView.extend({
         initialize: function() {
             ItemView.__super__.initialize.call(this);
+            this.$labelEl.addClass("js-city-item-view-label");
         },
 
         render: function() {

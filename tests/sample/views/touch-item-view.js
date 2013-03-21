@@ -19,14 +19,14 @@ define(["mobileui/ui/navigator-card-view",
                 .on("touchdragend", this._onDragEnd, this);
             this.setHorizontalLayout();
             this.listenTo(this.model, "change:label", this._onLabelChanged);
-            this.$labelEl = $("<div />").addClass("js-city-item-view-label");
+            this.$labelEl = $("<div />").addClass("js-touch-item-view-label");
             this._dragStartValue = 0;
             this._momentum = new Momentum().setDuration(100);
         },
 
         render: function() {
             ItemView.__super__.render.call(this);
-            this.$el.addClass("js-city-item-view")
+            this.$el.addClass("js-touch-item-view")
                 .addClass(this.model.get("className"))
                 .append(this.$labelEl);
             this._onLabelChanged();

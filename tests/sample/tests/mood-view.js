@@ -1,26 +1,37 @@
 define(["views/touch-item-view",
         "views/touch-list-view",
+        "tests/locations-view",
         "app"],
     function(TouchItemView,
             TouchListView,
+            LocationsView,
             app) {
 
     var MoodLabels = [
         {
             label: "Do",
-            className: "js-do-item-view"
+            className: "js-do-item-view",
+            hue: 180,
+            saturation: 23
         },
         {
             label: "See",
-            className: "js-see-item-view"
+            className: "js-see-item-view",
+            hue: 283,
+            saturation: 15
         },
         {
             label: "Buy",
-            className: "js-buy-item-view"
+            className: "js-buy-item-view",
+            hue: 6,
+            saturation: 53
+
         },
         {
             label: "Eat",
-            className: "js-eat-item-view"
+            className: "js-eat-item-view",
+            hue: 53,
+            saturation: 54
         }
     ];
 
@@ -37,7 +48,10 @@ define(["views/touch-item-view",
         },
 
         _onTapStart: function() {
-            app.mainView.navigatorView().prepareNextCard(app.mainView.lookupCard("Locations View"));
+            app.mainView.navigatorView().prepareNextCard(new LocationsView.view({
+                hue: this.model.get("hue"),
+                saturation: this.model.get("saturation")
+            }).render());
         }
     });
 

@@ -8,7 +8,7 @@ function(LayerView, LayoutParams) {
             NavigatorCardView.__super__.initialize.call(this);
             this.matchParentSize();
             this._navigatorView = null;
-            this.on("activated", this.updateRouterLocation, this);
+            this.on("activate", this.updateRouterLocation, this);
         },
 
         render: function() {

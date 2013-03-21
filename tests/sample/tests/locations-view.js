@@ -65,7 +65,7 @@ define(["views/touch-item-view",
         render: function() {
             ItemView.__super__.render.call(this);
             this.$el.addClass("js-location-item-view")
-                .css("background-color", "hsl(" + this.hue + ", " + this.saturation + "%, " + (28 + this.model.get("index") * 2) + "%)");
+                .css("background-color", "hsl(" + this.hue + ", " + this.saturation + "%, " + Math.min(100, 28 + this.model.get("index") * 2) + "%)");
             return this;
         },
 

@@ -17,6 +17,9 @@ define(["mobileui/ui/navigator-card-view",
             this.on("activate", this._onActivate, this);
             this.on("deactivate", this._onDeactivate, this);
             this._useVerticalLayout = null;
+            // Force a 3D layer.
+            this.animation();
+            this.transform().clear();
         },
 
         listView: function() {

@@ -21,6 +21,9 @@ define(["mobileui/ui/navigator-card-view",
             this.$labelEl = $("<div />").addClass("js-touch-item-view-label");
             this._dragStartValue = 0;
             this._momentum = new Momentum().setDuration(100);
+            // Force a 3D layer.
+            this.animation();
+            this.transform().clear();
         },
 
         render: function() {
@@ -138,6 +141,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onTap: function() {
+            this._onTapStart();
             this._commit();
         },
 

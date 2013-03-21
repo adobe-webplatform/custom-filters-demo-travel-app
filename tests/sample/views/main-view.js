@@ -37,7 +37,7 @@ define(['app',
                 return null;
             var view = new ViewConstructor().render();
             view.on("activate", function() {
-                app.router.navigate("test/" + label);
+                app.router.navigate("test/" + encodeURIComponent(label), { trigger: false });
             });
             return view;
         }

@@ -74,7 +74,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         updateRouterLocation: function() {
-            app.router.navigate("/");
+            app.router.navigate("/", { trigger: false });
         }
 
     });

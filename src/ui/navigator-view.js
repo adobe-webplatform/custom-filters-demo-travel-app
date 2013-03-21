@@ -78,6 +78,7 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
         },
 
         pushCard: function(card) {
+            this.revertNextCard();
             var previousActiveCard = this._activeCard;
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");
@@ -105,6 +106,7 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
         },
 
         popCard: function() {
+            this.revertNextCard();
             var previousActiveCard = this._activeCard;
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");

@@ -225,7 +225,7 @@ define(["mobileui/views/touch",
             this.inlineUpdate();
         },
 
-        handleMouseDown: function() {
+        handleMouseDown: function(event) {
             this.cancelTouch(Touch.MOUSE);
             var internalTouch = new Touch(Touch.MOUSE);
             internalTouch.type = Touch.MOUSE;

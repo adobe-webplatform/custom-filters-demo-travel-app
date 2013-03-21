@@ -69,7 +69,8 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onItemSelected: function(model) {
-            app.mainView.pushViewCard(model.get("label"));
+            app.mainView.navigatorView().pushCard(
+                app.mainView.lookupCard(model.get("label")));
         },
 
         updateRouterLocation: function() {

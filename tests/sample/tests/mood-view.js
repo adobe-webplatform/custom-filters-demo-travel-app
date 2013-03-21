@@ -47,7 +47,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onTap: function() {
-            this.trigger("selected", this.model);
+            app.mainView.navigatorView().pushCard(app.mainView.lookupCard("Locations View"));
         }
     });
 
@@ -73,12 +73,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onItemRendererFactory: function(model) {
-            return new ItemView({model: model}).render()
-                .on("selected", this._onItemSelected, this);
-        },
-
-        _onItemSelected: function(model) {
-            app.mainView.pushViewCard("Locations View");
+            return new ItemView({model: model}).render();
         }
 
     });

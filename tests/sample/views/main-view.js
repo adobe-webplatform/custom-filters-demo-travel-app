@@ -26,21 +26,20 @@ define(['app',
             return this._navigatorView;
         },
 
-        pushViewCard: function(label) {
+        lookupCard: function(label) {
             var viewItem = _.find(TestsList, function(item) {
                 return item.label == label;
             });
             if (!viewItem)
-                return false;
+                return null;
             var ViewConstructor = viewItem.view;
             if (!ViewConstructor)
-                return false;
+                return null;
             var view = new ViewConstructor().render();
             view.on("activated", function() {
                 app.router.navigate("test/" + label);
             });
-            app.mainView.navigatorView().pushCard(view);
-            return true;
+            return view;
         }
     });
 

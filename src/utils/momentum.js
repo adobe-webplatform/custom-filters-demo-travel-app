@@ -12,6 +12,7 @@ define(["mobileui/utils/time"], function(Time) {
     _.extend(Momentum.prototype, Backbone.Events, {
         setDuration: function(duration) {
             this._duration = duration;
+            return this;
         },
 
         reset: function() {
@@ -27,6 +28,10 @@ define(["mobileui/utils/time"], function(Time) {
                 return this._velocity * this._duration + 
                     this._acceleration * this._friction * this._duration * this._duration;
             return 0;
+        },
+
+        compute: function() {
+            return this._previousValue + this.computeDelta();
         },
 
         injectValue: function(value) {

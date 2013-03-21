@@ -1,9 +1,12 @@
 define(["mobileui/ui/navigator-card-view",
         "mobileui/ui/list-view",
+        "mobileui/views/gesture-detector",
         "mobileui/views/layout-params",
         "mobileui/views/gesture-view",
+        "mobileui/utils/transform",
+        "mobileui/utils/momentum",
         "app"],
-    function(NavigatorCardView, ListView, LayoutParams, GestureView, app) {
+    function(NavigatorCardView, ListView, GestureDetector, LayoutParams, GestureView, Transform, Momentum, app) {
 
     var CityLabels = [
         {
@@ -23,10 +26,16 @@ define(["mobileui/ui/navigator-card-view",
     var ItemView = GestureView.extend({
         initialize: function() {
             ItemView.__super__.initialize.call(this);
-            this.on("tap", this._onTap, this);
+            this.on("tapend", this._onTapEnd, this)
+                .on("tapstart", this._onTapStart, this)
+                .on("touchdragstart", this._onDragStart, this)
+                .on("touchdragmove", this._onDragMove, this)
+                .on("touchdragend", this._onDragEnd, this);
             this.setHorizontalLayout();
             this.listenTo(this.model, "change:label", this._onLabelChanged);
             this.$labelEl = $("<div />").addClass("js-city-item-view-label");
+            this._dragStartValue = 0;
+            this._momentum = new Momentum().setDuration(100);
         },
 
         render: function() {
@@ -42,15 +51,87 @@ define(["mobileui/ui/navigator-card-view",
             this.$labelEl.text(this.model.get("label"));
         },
 
+        _onTapStart: function() {
+            app.mainView.navigatorView().prepareNextCard(app.mainView.lookupCard("Mood View"));
+            // this.animation().start().get("slide").chain().opacity(200, 0.5);
+        },
+
+        _onDragStart: function() {
+            this._momentum.reset();
+            var translate = this.transform().get("translate");
+            this._dragStartValue = this._verticalLayout ? 
+                translate.x() : translate.y();
+            this.animation().removeAll();
+        },
+
+        _onDragMove: function(transform) {
+            var translate = this.transform().get("translate");
+            var value;
+            if (this._verticalLayout) {
+                value = Math.max(0, this._dragStartValue + transform.dragX);
+                translate.setX(value);
+            } else {
+                value = Math.max(0, this._dragStartValue + transform.dragY);
+                translate.setY(value);
+            }
+            this._momentum.injectValue(value);
+        },
+
+        _revert: function() {
+            var self = this,
+                transform = new Transform();
+            this.animation().start().get("slide-transform")
+                .chain()
+                .transform(100, transform)
+                .callback(function() {
+                    app.mainView.navigatorView().revertNextCard();
+                });
+            this.animation().get("slide")
+                .chain()
+                .opacity(100, 1);
+        },
+
+        _onDragEnd: function() {
+            if (this._momentum.compute() < (this._verticalLayout ? this.bounds().width() : this.bounds().height()) / 3)
+                return this._revert();
+            var self = this,
+                transform = new Transform();
+            if (this._verticalLayout)
+                transform.translate(this.bounds().width(), 0);
+            else
+                transform.translate(0, this.bounds().height());
+            this.animation().start().get("slide-transform")
+                .chain()
+                .transform(200, transform)
+                .callback(function() {
+                    self.transform().clear();
+                    self._onTap();
+                });
+            this.animation().get("slide")
+                .chain()
+                .opacity(200, 0);
+        },
+
         _onTap: function() {
-            this.trigger("selected", this.model);
+            this.animation().get("slide").removeAll();
+            this.setOpacity(1);
+            app.mainView.navigatorView().commitNextCard();
+        },
+
+        respondsToTouchGesture: function(gesture) {
+            if (gesture.type != GestureDetector.GestureType.DRAG)
+                return false;
+            return (this._verticalLayout && gesture.scrollX) ||
+                (!this._verticalLayout && gesture.scrollY);
         },
 
         setVerticalLayout: function() {
+            this._verticalLayout = true;
             this.setParams(new LayoutParams().fillParentHeight().matchParentWidth());
         },
 
         setHorizontalLayout: function() {
+            this._verticalLayout = false;
             this.setParams(new LayoutParams().fillParentWidth().matchParentHeight());
         }
     });
@@ -78,12 +159,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onItemRendererFactory: function(model) {
-            return new ItemView({model: model}).render()
-                .on("selected", this._onItemSelected, this);
-        },
-
-        _onItemSelected: function(model) {
-            app.mainView.pushViewCard("Mood View");
+            return new ItemView({model: model}).render();
         },
 
         setUseVerticalLayout: function(useVerticalLayout) {

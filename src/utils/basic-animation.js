@@ -84,6 +84,10 @@ define(["mobileui/utils/animation", "require",
             })).next();
         },
 
+        callback: function(callback) {
+            return this.setNext(new BasicAnimation("callback").setDuration(0).on("stop", callback)).next();
+        },
+
         transform: function(duration, startTransform, endTransform) {
             if (!endTransform) {
                 endTransform = startTransform;

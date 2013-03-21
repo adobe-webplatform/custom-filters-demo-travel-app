@@ -11,8 +11,9 @@ define(["require", "app", "views/index-view"], function(require, app, IndexView)
         },
 
         test: function(path) {
-            if (!app.mainView.pushViewCard(path))
-                app.mainView.navigatorView().pushCard(new IndexView().render());
+            var view = app.mainView.lookupCard(path);
+            if (!view)
+                this.index();
         }
     });
 

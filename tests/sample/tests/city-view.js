@@ -68,7 +68,7 @@ define(["mobileui/ui/navigator-card-view",
             var translate = this.transform().get("translate");
             var value;
             if (this._verticalLayout) {
-                value = Math.max(0, this._dragStartValue + transform.dragX);
+                value = Math.min(0, this._dragStartValue + transform.dragX);
                 translate.setX(value);
             } else {
                 value = Math.max(0, this._dragStartValue + transform.dragY);
@@ -91,28 +91,50 @@ define(["mobileui/ui/navigator-card-view",
                 .opacity(100, 1);
         },
 
+        animateViewSwitch: function() {
+            var self = this,
+                transform = new Transform();
+            if (this._verticalLayout)
+                transform.translate(-this.bounds().width(), 0);
+            else
+                transform.translate(0, this.bounds().height());
+            this.animation().start().get("slide-transform")
+                .chain(100)
+                .transform(300, transform);
+            this.animation().get("slide")
+                .chain(100)
+                .opacity(300, 0);
+        },
+
+        resetAnimations: function() {
+            this.setOpacity(1).transform().clear();
+            this.animation().removeAll();
+        },
+
         _commit: function() {
             var self = this,
                 transform = new Transform();
             if (this._verticalLayout)
-                transform.translate(this.bounds().width(), 0);
+                transform.translate(-this.bounds().width(), 0);
             else
                 transform.translate(0, this.bounds().height());
+            this.trigger("selected", this);
             this.animation().start().get("slide-transform")
                 .chain()
-                .transform(200, transform)
+                .transform(300, transform)
+                .wait(100)
                 .callback(function() {
-                    self.setOpacity(1).transform().clear();
-                    self.animation().removeAll();
                     app.mainView.navigatorView().commitNextCard();
                 });
             this.animation().get("slide")
                 .chain()
-                .opacity(200, 0);
+                .opacity(300, 0);
         },
 
         _onDragEnd: function() {
-            if (this._momentum.compute() < (this._verticalLayout ? this.bounds().width() : this.bounds().height()) / 3)
+            var value = this._momentum.compute() * 3;
+            if ((this._verticalLayout && (value > - this.bounds().width())) ||
+                (!this._verticalLayout && (value < this.bounds().height())))
                 return this._revert();
             this._commit();
         },
@@ -153,6 +175,7 @@ define(["mobileui/ui/navigator-card-view",
                 .setScrollDirection("none");
             this._listView.contentView().matchParentSize();
             this.append(this._listView.render());
+            this.on("deactivate", this._onDeactivate, this);
             this._useVerticalLayout = null;
         },
 
@@ -162,7 +185,27 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onItemRendererFactory: function(model) {
-            return new ItemView({model: model}).render();
+            return new ItemView({model: model}).render()
+                .on("selected", this._onItemSelected, this);
+        },
+
+        _onItemSelected: function(selectedView) {
+            var self = this;
+            this.model.each(function(model) {
+                var view = self._listView.itemView(model);
+                if (!view || view == selectedView)
+                    return;
+                view.animateViewSwitch();
+            });
+        },
+
+        _onDeactivate: function() {
+            var self = this;
+            this.model.each(function(model) {
+                var view = self._listView.itemView(model);
+                if (view)
+                    view.resetAnimations();
+            });
         },
 
         setUseVerticalLayout: function(useVerticalLayout) {

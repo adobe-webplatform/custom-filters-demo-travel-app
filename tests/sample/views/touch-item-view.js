@@ -74,7 +74,7 @@ define(["mobileui/ui/navigator-card-view",
                     translate.setY(value);
                 }
             } else {
-                value = Math.min(1, Math.max(0, this._dragStartValue - (transform.dragX * 2 / this.bounds().width())));
+                value = Math.min(1.1, Math.max(0, this._dragStartValue - (transform.dragX * 2 / this.bounds().width())));
                 this.filter().get("fold").setT(value).setShadow(this._computeShadow(value));
             }
             this._momentum.injectValue(value);
@@ -150,7 +150,7 @@ define(["mobileui/ui/navigator-card-view",
                 chain = chain.transform(300, transform);
             } else {
                 var filter = new Filter();
-                filter.get("fold").setT(1).setShadow(this._computeShadow(1));
+                filter.get("fold").setT(2).setShadow(this._computeShadow(1));
                 chain = chain.filter(300, filter);
             }
             chain.wait(100)

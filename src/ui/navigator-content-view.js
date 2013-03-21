@@ -1,5 +1,5 @@
 define(["mobileui/views/layer-view",
-        "mobileui/views/layout-params"], 
+        "mobileui/views/layout-params"],
 function(LayerView, LayoutParams) {
 
     var NavigatorContentView = LayerView.extend({

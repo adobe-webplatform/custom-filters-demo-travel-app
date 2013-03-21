@@ -7,15 +7,17 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
     var NavigatorView = LayoutView.extend({
         initialize: function() {
             NavigatorView.__super__.initialize.call(this);
-            this.setLayout("vertical");
-            this.matchParentSize();
+            this.matchParentSize().setLayout("vertical");
+
             this._topBarView = new NavigatorTopBarView();
             this.append(this._topBarView.render());
+
             this._contentView = new NavigatorContentView();
             this.append(this._contentView.render());
 
             this._historyCards = [];
             this._activeCard = null;
+            this._nextCard = null;
         },
 
         render: function() {
@@ -35,8 +37,49 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             return this._activeCard;
         },
 
+        prepareNextCard: function(card) {
+            // Animation started, add a new card in the back.
+            if (this._nextCard)
+                this.revertNextCard();
+            this._nextCard = card;
+            if (this._activeCard)
+                this.contentView().before(this._nextCard, this._activeCard);
+            else
+                this.contentView().append(this._nextCard);
+            this._nextCard._setNavigatorView(this);
+            this._nextCard.trigger("card:next");
+            return this;
+        },
+
+        revertNextCard: function() {
+            if (!this._nextCard)
+                return;
+            this._nextCard.trigger("card:revert");
+            this._nextCard._setNavigatorView(null);
+            this._nextCard.remove();
+            this._nextCard = null;
+            return this;
+        },
+
+        commitNextCard: function() {
+            if (!this._nextCard)
+                return;
+            if (this._activeCard) {
+                this._activeCard.trigger("deactivate");
+                this._activeCard._setNavigatorView(null).detach();
+                this._historyCards.push(this._activeCard);
+                this._activeCard = null;
+            }
+            this._activeCard = this._nextCard;
+            this._nextCard = null;
+            this._activeCard.trigger("card:commit");
+            this._activeCard.trigger("activate");
+            return this;
+        },
+
         pushCard: function(card) {
             if (this._activeCard) {
+                this._activeCard.trigger("deactivate");
                 this._activeCard._setNavigatorView(null).detach();
                 this._historyCards.push(this._activeCard);
                 this._activeCard = null;
@@ -45,11 +88,13 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 this._activeCard = card;
                 this._contentView.append(card);
                 this._activeCard._setNavigatorView(this);
+                this._activeCard.trigger("activate");
             }
         },
 
         popCard: function() {
             if (this._activeCard) {
+                this._activeCard.trigger("deactivate");
                 this._activeCard._setNavigatorView(null).remove();
                 this._activeCard = null;
             }
@@ -57,6 +102,7 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 this._activeCard = this._historyCards.pop();
                 this._contentView.append(this._activeCard);
                 this._activeCard._setNavigatorView(this);
+                this._activeCard.trigger("activate");
             }
             return this._activeCard;
         }

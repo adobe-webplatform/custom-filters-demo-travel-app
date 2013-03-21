@@ -47,11 +47,11 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onViewActivated: function() {
-            app.mainView.backButton().hide();
+            app.mainView.navigatorView().backButton().hide();
         },
 
         _onViewDeactivated: function() {
-            app.mainView.backButton().show();
+            app.mainView.navigatorView().backButton().show();
         },
 
         render: function() {

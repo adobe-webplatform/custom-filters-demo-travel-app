@@ -8,6 +8,7 @@ function(LayerView, LayoutParams) {
             NavigatorCardView.__super__.initialize.call(this);
             this.matchParentSize();
             this._navigatorView = null;
+            this.on("activated", this.updateRouterLocation, this);
         },
 
         render: function() {
@@ -19,11 +20,7 @@ function(LayerView, LayoutParams) {
         _setNavigatorView: function(navigatorView) {
             this._navigatorView = navigatorView;
             this.trigger("change:navigatorView");
-            if (this._navigatorView) {
-                this.updateRouterLocation();
-                this.trigger("activated");
-            } else
-                this.trigger("deactivated");
+            this.trigger(this._navigatorView ? "attached" : "detached");
             return this;
         },
 

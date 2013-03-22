@@ -106,7 +106,7 @@ define(function() {
                 "8 50 border-box, ",
                 "t ", "?", ",",
                 "shadow ", "?", ",",
-                "transform perspective(1000), spins 0, phase 0, mapDepth 184, mapCurve 0.15, minSpacing 0.24, useColoredBack 1, backColor 0.5 0.5 0.5 1, direction 0)"
+                "transform translate(-25%, 0) perspective(2000) translate(25%, 0), spins 0, phase 0, mapDepth 100, mapCurve 0, minSpacing 0, useColoredBack 1, backColor 0.5 0.5 0.5 1)"
             ]))
     };
 

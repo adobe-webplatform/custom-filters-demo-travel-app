@@ -21,7 +21,7 @@ define(["mobileui/ui/navigator-card-view",
             this.listenTo(this.model, "change:label", this._onLabelChanged);
             this.$labelEl = $("<div />").addClass("js-touch-item-view-label");
             this._dragStartValue = 0;
-            this._momentum = new Momentum().setDuration(100);
+            this._momentum = new Momentum().setDuration(300).setFriction(0.000005);
             // Force a 3D layer.
             this.animation();
             this.transform().clear();
@@ -45,7 +45,7 @@ define(["mobileui/ui/navigator-card-view",
             this._onTapStart();
             if (this._useFilter) {
                 var fold = this.filter().get("fold");
-                this._dragStartValue = fold.t();
+                this._dragStartValue = -fold.t() * this.bounds().width();
             } else {
                 var translate = this.transform().get("translate");
                 this._dragStartValue = this._verticalLayout ?
@@ -74,8 +74,9 @@ define(["mobileui/ui/navigator-card-view",
                     translate.setY(value);
                 }
             } else {
-                value = Math.min(1.1, Math.max(0, this._dragStartValue - (transform.dragX * 2 / this.bounds().width())));
-                this.filter().get("fold").setT(value).setShadow(this._computeShadow(value));
+                value = Math.min(0, this._dragStartValue + transform.dragX);
+                var t = Math.min(0.999, Math.max(0, - value / this.bounds().width()));
+                this.filter().get("fold").setT(t).setShadow(this._computeShadow(t));
             }
             this._momentum.injectValue(value);
         },
@@ -85,18 +86,18 @@ define(["mobileui/ui/navigator-card-view",
                 chain = this.animation().start().get("slide-transform").chain();
             if (!this._useFilter) {
                 var transform = new Transform();
-                chain = chain.transform(100, transform);
+                chain = chain.transform(1000, transform);
             } else {
                 var filter = new Filter();
                 filter.get("fold").setT(0).setShadow(this._computeShadow(0));
-                chain = chain.filter(100, filter);
+                chain = chain.filter(1000, filter);
             }
             chain.callback(function() {
                 app.mainView.navigatorView().revertNextCard();
             });
             this.animation().get("slide")
                 .chain()
-                .opacity(100, 1);
+                .opacity(1000, 1);
         },
 
         animateViewSwitch: function(index) {
@@ -165,15 +166,10 @@ define(["mobileui/ui/navigator-card-view",
         _onDragEnd: function() {
             var value = this._momentum.compute(),
                 direction = this._momentum.direction();
-            if (this._useFilter) {
-                if (value < 0.3 || direction > 0)
-                    return this._revert();
-            } else {
-                value *= 3;
-                if ((this._verticalLayout && (value > - this.bounds().width() || direction < 0)) ||
-                    (!this._verticalLayout && (value > - this.bounds().height() || direction < 0)))
-                    return this._revert();
-            }
+            value *= 4;
+            if ((this._verticalLayout && ((value > - this.bounds().width()) || (direction < 0))) ||
+                (!this._verticalLayout && ((value > - this.bounds().height()) || (direction < 0))))
+                return this._revert();
             this._commit();
         },
 

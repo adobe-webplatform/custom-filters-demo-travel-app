@@ -5,7 +5,7 @@ define(["mobileui/utils/time"], function(Time) {
     var Momentum = function(duration) {
         this._duration = duration;
         this._friction = 0.005;
-        this.reset();
+        this.reset(0);
     };
 
     _.extend(Momentum.prototype, Backbone.Events, {
@@ -14,11 +14,15 @@ define(["mobileui/utils/time"], function(Time) {
             return this;
         },
 
+        setFriction: function(friction) {
+            this._friction = friction;
+            return this;
+        },
+
         reset: function(startValue) {
-            this._startValue = startValue;
             this._currentValue = startValue;
-            this._startTime = Time.now();
             this._direction = 0;
+            this._internalResetGesture();
         },
 
         computeDelta: function() {
@@ -31,15 +35,23 @@ define(["mobileui/utils/time"], function(Time) {
         },
 
         compute: function() {
-            return this._currentValue + this.computeDelta();
+            var delta = this.computeDelta();
+            return this._currentValue + delta;
+        },
+
+        _internalResetGesture: function() {
+            this._startValue = this._currentValue;
+            this._startTime = Time.now();
         },
 
         injectValue: function(value) {
-            var direction = computeDirection(this._currentValue - this._startValue);
+            if (this._currentValue == value)
+                return;
+            var direction = computeDirection(this._currentValue - value);
             if (this._direction != direction) {
+                if (this._direction)
+                    this._internalResetGesture();
                 this._direction = direction;
-                this._startTime = Time.now();
-                this._startValue = this._currentValue;
             }
             this._currentValue = value;
         },

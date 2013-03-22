@@ -1,4 +1,7 @@
 max-shaders-demo
 ================
 
-Max Shaders Demo
+Usage
+-----
+
+Open `tests/sample/index.html` in your browser.

@@ -151,7 +151,7 @@ define(["mobileui/ui/navigator-card-view",
             } else {
                 var filter = new Filter();
                 filter.get("fold").setT(2).setShadow(this._computeShadow(1));
-                chain = chain.filter(300, filter);
+                chain = chain.wait(0).filter(300, filter);
             }
             chain.wait(100)
                 .callback(function() {

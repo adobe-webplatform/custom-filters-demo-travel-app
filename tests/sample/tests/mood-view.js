@@ -49,6 +49,8 @@ define(["views/touch-item-view",
         },
 
         _onTapStart: function() {
+            if (app.mainView.navigatorView().nextCard())
+                return;
             app.mainView.navigatorView().prepareNextCard(new LocationsView.view({
                 hue: this.model.get("hue"),
                 saturation: this.model.get("saturation")

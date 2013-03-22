@@ -49,42 +49,6 @@ define(["views/touch-item-view",
         },
         {
             label: "The Abbey (club)"
-        },
-        {
-            label: "Alameda Corridor"
-        },
-        {
-            label: "Alex Theatre"
-        },
-        {
-            label: "Ambassador Hotel (Los Angeles)"
-        },
-        {
-            label: "Amoeba Music"
-        },
-        {
-            label: "Andaz West Hollywood"
-        },
-        {
-            label: "Anderton Court Shops"
-        },
-        {
-            label: "Angels Flight"
-        },
-        {
-            label: "Angelus Temple"
-        },
-        {
-            label: "Los Angeles Aqueduct"
-        },
-        {
-            label: "ArcLight Hollywood"
-        },
-        {
-            label: "Avalon Hollywood"
-        },
-        {
-            label: "Avenel Cooperative Housing Project"
         }
     ];
 
@@ -110,6 +74,8 @@ define(["views/touch-item-view",
         },
 
         _onTapStart: function() {
+            if (app.mainView.navigatorView().nextCard())
+                return;
             app.mainView.navigatorView().prepareNextCard(app.mainView.lookupCard("Location View"));
         }
     });

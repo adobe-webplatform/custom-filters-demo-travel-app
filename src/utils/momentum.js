@@ -4,8 +4,7 @@ define(["mobileui/utils/time"], function(Time) {
 
     var Momentum = function(duration) {
         this._duration = duration;
-        this._minAcceleration = 1 / 100;
-        this._friction = 0.00001;
+        this._friction = 0.005;
         this.reset();
     };
 
@@ -16,43 +15,33 @@ define(["mobileui/utils/time"], function(Time) {
         },
 
         reset: function(startValue) {
+            this._startValue = startValue;
+            this._currentValue = startValue;
+            this._startTime = Time.now();
             this._direction = 0;
-            this._velocity = 0;
-            this._acceleration = 0;
-            this._previousValue = startValue !== undefined ? startValue : 0;
-            this._previousTime = null;
         },
 
         computeDelta: function() {
-            if (Math.abs(this._acceleration) > this._minAcceleration)
-                return this._velocity * this._duration + 
-                    this._acceleration * this._friction * this._duration * this._duration;
-            return 0;
+            var time = Time.now(),
+                duration = time - this._startTime;
+            if (!duration)
+                return 0;
+            var velocity = (this._currentValue - this._startValue) / duration;
+            return Math.max(0, velocity * velocity * this._duration - this._friction * this._duration * this._duration) * computeDirection(velocity);
         },
 
         compute: function() {
-            return this._previousValue + this.computeDelta();
+            return this._currentValue + this.computeDelta();
         },
 
         injectValue: function(value) {
-            var direction = (this._previousValue != value) ? computeDirection(this._previousValue - value) 
-                                : this._direction;
-            if (direction != this._direction) {
-                this._velocity = 0;
-                this._acceleration = 0;
+            var direction = computeDirection(this._currentValue - this._startValue);
+            if (this._direction != direction) {
+                this._direction = direction;
+                this._startTime = Time.now();
+                this._startValue = this._currentValue;
             }
-            this._direction = direction;
-            var time = Time.now();
-            if (this._previousTime !== null) {
-                var deltaTime = time - this._previousTime;
-                if (deltaTime) {
-                    var velocity = (value - this._previousValue) / deltaTime;
-                    this._acceleration = (velocity - this._velocity) / deltaTime;
-                    this._velocity = velocity;
-                }
-            }
-            this._previousValue = value;
-            this._previousTime = time;
+            this._currentValue = value;
         },
 
         direction: function() {

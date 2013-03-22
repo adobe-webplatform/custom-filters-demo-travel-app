@@ -37,6 +37,10 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             return this._activeCard;
         },
 
+        nextCard: function() {
+            return this._nextCard;
+        },
+
         prepareNextCard: function(card) {
             // Animation started, add a new card in the back.
             if (this._nextCard)

@@ -143,8 +143,8 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
         },
 
         _adjustMomentum: function(momentum, scroll, maxScroll) {
-            return ((momentum < 0 && scroll >= 0) ||
-                (momentum > maxScroll && scroll <= maxScroll)) ?
+            return ((momentum > 0 && scroll <= 0) ||
+                (momentum < maxScroll && scroll >= maxScroll)) ?
                     scroll :
                     Math.max(scroll - this._maxMomentum, Math.min(momentum, scroll + this._maxMomentum));
         },
@@ -184,7 +184,7 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
                     .chain();
             if (momentumLeft != this._scrollLeft ||
                 momentumTop != this._scrollTop) {
-                chain = chain.transform(this._scrollAnimationDuration / 5,
+                chain = chain.transform(this._scrollAnimationDuration / 2,
                                     new Transform().translate(-momentumLeft, -momentumTop))
                              .setTimingFunction("easeOut");
             }
@@ -234,8 +234,8 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
                 scrollLeft: this._scrollLeft,
                 scrollTop: this._scrollTop
             };
-            this._momentumLeft.reset();
-            this._momentumTop.reset();
+            this._momentumLeft.reset(this._scrollLeft);
+            this._momentumTop.reset(this._scrollTop);
             this._canOverScroll = true;
         },
 
@@ -250,14 +250,16 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
         },
 
         _onTouchDragEnd: function(transform) {
+            var deltaX = this._touchStartState.scrollLeft - transform.dragX,
+                deltaY = this._touchStartState.scrollTop - transform.dragY;
+            this._momentumLeft.injectValue(deltaX);
+            this._momentumTop.injectValue(deltaY);
+            this._scrollLeft = this._momentumLeft.compute();
+            this._scrollTop = this._momentumTop.compute();
             this._useAnimation = true;
             this._canOverScroll = false;
             this._touchStartState = null;
-            this._scrollLeft += this._momentumLeft.computeDelta();
-            this._scrollTop += this._momentumTop.computeDelta();
             this.invalidate("scroll");
-            this._momentumLeft.reset();
-            this._momentumTop.reset();
         }
     }, {
         BOTH: "both",

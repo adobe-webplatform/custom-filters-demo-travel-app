@@ -33,6 +33,8 @@ define(["views/touch-item-view",
         },
 
         _onTapStart: function() {
+            if (app.mainView.navigatorView().nextCard())
+                return;
             app.mainView.navigatorView().prepareNextCard(app.mainView.lookupCard("Mood View"));
         }
     });

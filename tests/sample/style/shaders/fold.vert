@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Adobe Systems Incorporated. All rights reserved.
+ * Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,6 @@ uniform vec2 u_textureSize;
 // Uniforms passed-in from CSS
 
 uniform mat4 transform;
-
-uniform float direction;
 
 uniform float mapDepth;
 uniform float mapCurve;

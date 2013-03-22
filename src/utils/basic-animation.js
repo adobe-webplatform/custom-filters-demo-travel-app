@@ -124,7 +124,7 @@ define(["mobileui/utils/animation", "require",
             }
             var FilterAnimation = require("mobileui/utils/filter-animation");
             var filterAnimation = new FilterAnimation("filter");
-            filterAnimation.getFilter().take(h);
+            filterAnimation.getFilter().take(endFilter);
             if (startFilter)
                 filterAnimation.startFilter().take(startFilter);
             return this.setNext(filterAnimation.setDuration(duration)).next();

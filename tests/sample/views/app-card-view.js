@@ -31,6 +31,7 @@ define(["mobileui/ui/navigator-card-view",
             if (gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
             return (gesture.scrollX && gesture.distanceX < 0 &&
+                app.mainView.navigatorView().activeCard() === this &&
                 app.mainView.navigatorView().canGoBack());
         },
 

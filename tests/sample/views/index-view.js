@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-define(["mobileui/ui/navigator-card-view",
+define(["views/app-card-view",
         "mobileui/ui/list-view",
         "mobileui/ui/button-view",
         "mobileui/views/layout-params",
         "mobileui/views/gesture-detector",
         "mobileui/views/measured-view",
-        "tests/list",
+        "cards/list",
         "app"],
-    function(NavigatorCardView, ListView, ButtonView, LayoutParams, GestureDetector, MeasuredView, TestsList, app) {
+    function(AppCardView, ListView, ButtonView, LayoutParams, GestureDetector,
+        MeasuredView, CardsList, app) {
 
     var ItemView = MeasuredView.extend({
         initialize: function() {
@@ -50,12 +51,12 @@ define(["mobileui/ui/navigator-card-view",
         }
     });
 
-    var IndexView = NavigatorCardView.extend({
+    var IndexView = AppCardView.extend({
 
         initialize: function(options) {
             IndexView.__super__.initialize.call(this);
             this.model = new Backbone.Collection();
-            this.model.add(_.map(TestsList, function(item) {
+            this.model.add(_.map(CardsList, function(item) {
                 return new Backbone.Model(item);
             }));
             this.on("activate", this._onViewActivated, this);
@@ -86,11 +87,11 @@ define(["mobileui/ui/navigator-card-view",
 
         _onItemSelected: function(model) {
             app.mainView.navigatorView().pushCard(
-                app.mainView.lookupCard(model.get("label")));
+                app.router.lookupCard(model.get("label")));
         },
 
-        updateRouterLocation: function() {
-            app.router.navigate("/", { trigger: false });
+        url: function() {
+            return "/";
         }
 
     });

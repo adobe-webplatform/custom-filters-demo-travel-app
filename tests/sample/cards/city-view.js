@@ -16,94 +16,79 @@
 
 define(["views/touch-item-view",
         "views/touch-list-view",
-        "tests/locations-view",
         "app"],
     function(TouchItemView,
             TouchListView,
-            LocationsView,
             app) {
 
-    var MoodLabels = [
+    var CityLabels = [
         {
-            label: "Do",
-            className: "js-do-item-view",
-            hue: 180,
-            saturation: 23
+            label: "Mood",
+            className: "js-mood-item-view"
         },
         {
-            label: "See",
-            className: "js-see-item-view",
-            hue: 283,
-            saturation: 15
+            label: "Location",
+            className: "js-location-item-view"
         },
         {
-            label: "Buy",
-            className: "js-buy-item-view",
-            hue: 6,
-            saturation: 53
-
-        },
-        {
-            label: "Eat",
-            className: "js-eat-item-view",
-            hue: 53,
-            saturation: 54
+            label: "Search",
+            className: "js-search-item-view"
         }
     ];
 
     var ItemView = TouchItemView.extend({
         initialize: function() {
             ItemView.__super__.initialize.call(this);
-            this.$labelEl.addClass("js-mood-item-view-label");
-            this._useFilter = true;
+            this.$labelEl.addClass("js-city-item-view-label");
         },
 
         render: function() {
             ItemView.__super__.render.call(this);
-            this.$el.addClass("js-mood-item-view");
+            this.$el.addClass("js-city-item-view");
             return this;
         },
 
         _onTapStart: function() {
             if (app.mainView.navigatorView().nextCard())
                 return;
-            app.mainView.navigatorView().prepareNextCard(new LocationsView.view({
-                hue: this.model.get("hue"),
-                saturation: this.model.get("saturation")
-            }).render());
+            app.mainView.navigatorView().prepareNextCard(app.router.lookupCard("Mood View"));
         }
     });
 
-    var MoodView = TouchListView.extend({
+    var CityView = TouchListView.extend({
 
         initialize: function(options) {
             this.model = new Backbone.Collection();
-            this.model.add(_.map(MoodLabels, function(item) {
+            this.model.add(_.map(CityLabels, function(item) {
                 return new Backbone.Model(item);
             }));
-            MoodView.__super__.initialize.call(this);
-            this.on("activate", this._onViewActivated, this);
+            CityView.__super__.initialize.call(this);
         },
 
-        _onViewActivated: function() {
-            app.router.navigate("test/" + encodeURIComponent("Mood View"), { trigger: false });
+        url: function() {
+            return "card/" + encodeURIComponent("City View");
         },
 
         render: function() {
-            this.$el.addClass("js-mood-view");
-            return MoodView.__super__.render.call(this);
+            this.$el.addClass("js-city-view");
+            return CityView.__super__.render.call(this);
         },
 
         _onItemRendererFactory: function(model) {
             return new ItemView({model: model}).render()
                 .on("selected", this._onItemSelected, this);
+        },
+
+        _internalShouldUseVerticalLayout: function() {
+            this.layoutBounds();
+            return this.bounds().width() < 550;
         }
 
     });
 
     return {
-        label: "Mood View",
-        view: MoodView
+        label: "City View",
+        view: CityView
     };
 
 });

@@ -21,75 +21,84 @@ define(["views/touch-item-view",
             TouchListView,
             app) {
 
-    var CityLabels = [
+    var MoodLabels = [
         {
-            label: "Mood",
-            className: "js-mood-item-view"
+            label: "Do",
+            className: "js-do-item-view",
+            hue: 180,
+            saturation: 23
         },
         {
-            label: "Location",
-            className: "js-location-item-view"
+            label: "See",
+            className: "js-see-item-view",
+            hue: 283,
+            saturation: 15
         },
         {
-            label: "Search",
-            className: "js-search-item-view"
+            label: "Buy",
+            className: "js-buy-item-view",
+            hue: 6,
+            saturation: 53
+
+        },
+        {
+            label: "Eat",
+            className: "js-eat-item-view",
+            hue: 53,
+            saturation: 54
         }
     ];
 
     var ItemView = TouchItemView.extend({
         initialize: function() {
             ItemView.__super__.initialize.call(this);
-            this.$labelEl.addClass("js-city-item-view-label");
+            this.$labelEl.addClass("js-mood-item-view-label");
+            this._useFilter = true;
         },
 
         render: function() {
             ItemView.__super__.render.call(this);
-            this.$el.addClass("js-city-item-view");
+            this.$el.addClass("js-mood-item-view");
             return this;
         },
 
         _onTapStart: function() {
             if (app.mainView.navigatorView().nextCard())
                 return;
-            app.mainView.navigatorView().prepareNextCard(app.mainView.lookupCard("Mood View"));
+            app.mainView.navigatorView().prepareNextCard(app.router.lookupCard("Locations View",
+                this.model.get("hue") + ":" + this.model.get("saturation")));
         }
     });
 
-    var CityView = TouchListView.extend({
+    var MoodView = TouchListView.extend({
 
         initialize: function(options) {
             this.model = new Backbone.Collection();
-            this.model.add(_.map(CityLabels, function(item) {
+            this.model.add(_.map(MoodLabels, function(item) {
                 return new Backbone.Model(item);
             }));
-            CityView.__super__.initialize.call(this);
-            this.on("activate", this._onViewActivated, this);
+            MoodView.__super__.initialize.call(this);
         },
 
-        _onViewActivated: function() {
-            app.router.navigate("test/" + encodeURIComponent("City View"), { trigger: false });
+        url: function() {
+            return "card/" + encodeURIComponent("Mood View");
         },
 
         render: function() {
-            this.$el.addClass("js-city-view");
-            return CityView.__super__.render.call(this);
+            this.$el.addClass("js-mood-view");
+            return MoodView.__super__.render.call(this);
         },
 
         _onItemRendererFactory: function(model) {
             return new ItemView({model: model}).render()
                 .on("selected", this._onItemSelected, this);
-        },
-
-        _internalShouldUseVerticalLayout: function() {
-            this.layoutBounds();
-            return this.bounds().width() < 550;
         }
 
     });
 
     return {
-        label: "City View",
-        view: CityView
+        label: "Mood View",
+        view: MoodView
     };
 
 });

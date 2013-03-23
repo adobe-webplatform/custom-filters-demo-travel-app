@@ -16,12 +16,10 @@
 
 define(['app',
         'mobileui/ui/window-view',
-        'views/app-navigator-view',
-        'tests/list'],
+        'views/app-navigator-view'],
     function(app,
              WindowView,
-             AppNavigatorView,
-             TestsList)
+             AppNavigatorView)
     {
 
     var MainView = WindowView.extend({
@@ -40,21 +38,6 @@ define(['app',
 
         navigatorView: function() {
             return this._navigatorView;
-        },
-
-        lookupCard: function(label, pathOptions) {
-            var viewItem = _.find(TestsList, function(item) {
-                return item.label == label;
-            });
-            if (!viewItem)
-                return null;
-            var ViewConstructor = viewItem.view;
-            if (!ViewConstructor)
-                return null;
-            var view = new ViewConstructor({
-                path: pathOptions
-            }).render();
-            return view;
         }
     });
 

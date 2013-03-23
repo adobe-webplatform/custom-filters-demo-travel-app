@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-define(["require", "app", "views/index-view"], function(require, app, IndexView) {
+define(["require", "app", "views/index-view", "cards/list"],
+    function(require, app, IndexView, CardsList) {
 
     var Router = Backbone.Router.extend({
         routes: {
-            "test/*path/*options": "test",
-            "test/*path": "test",
+            "card/*path/*options": "test",
+            "card/*path": "test",
             "*path": "index"
         },
 
@@ -28,8 +29,23 @@ define(["require", "app", "views/index-view"], function(require, app, IndexView)
         },
 
         test: function(path, pathOptions) {
-            var view = app.mainView.lookupCard(decodeURIComponent(path), decodeURIComponent(pathOptions));
+            var view = this.lookupCard(decodeURIComponent(path), decodeURIComponent(pathOptions));
             app.mainView.navigatorView().pushCard(view ? view : new IndexView().render());
+        },
+
+        lookupCard: function(label, pathOptions) {
+            var viewItem = _.find(CardsList, function(item) {
+                return item.label == label;
+            });
+            if (!viewItem)
+                return null;
+            var ViewConstructor = viewItem.view;
+            if (!ViewConstructor)
+                return null;
+            var view = new ViewConstructor({
+                path: pathOptions
+            }).render();
+            return view;
         }
     });
 

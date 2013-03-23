@@ -92,7 +92,7 @@ define(["views/touch-item-view",
         _onTapStart: function() {
             if (app.mainView.navigatorView().nextCard())
                 return;
-            app.mainView.navigatorView().prepareNextCard(app.mainView.lookupCard("Location View"));
+            app.mainView.navigatorView().prepareNextCard(app.router.lookupCard("Location View"));
         }
     });
 
@@ -101,11 +101,10 @@ define(["views/touch-item-view",
         initialize: function(options) {
             this.hue = 283;
             this.saturation = 15;
-            _.extend(this, options);
             if (options && options.path) {
                 var data = options.path.split(":");
-                this.hue = parseInt(data[0]);
-                this.saturation = parseInt(data[1]);
+                this.hue = parseInt(data[0], 10);
+                this.saturation = parseInt(data[1], 10);
             }
             this.model = new Backbone.Collection();
             this.model.add(_.map(LocationLabels, function(item, i) {
@@ -120,8 +119,11 @@ define(["views/touch-item-view",
             this.on("deactivate", this._onViewDeactivated, this);
         },
 
+        url: function() {
+            return "card/" + encodeURIComponent("Locations View") + "/" + this.hue + ":" + this.saturation;
+        },
+
         _onViewActivated: function() {
-            app.router.navigate("test/" + encodeURIComponent("Locations View") + "/" + this.hue + ":" + this.saturation, { trigger: false });
             app.mainView.navigatorView().listButton().show();
             app.mainView.navigatorView().gridButton().show();
         },

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-define(["mobileui/ui/navigator-card-view",
+define(["views/app-card-view",
         "mobileui/ui/list-view",
         "mobileui/views/layout-params",
         "app"],
-    function(NavigatorCardView, ListView, LayoutParams, app) {
+    function(AppCardView, ListView, LayoutParams, app) {
 
-    var TouchListView = NavigatorCardView.extend({
+    var TouchListView = AppCardView.extend({
 
         initialize: function(options) {
             TouchListView.__super__.initialize.call(this);

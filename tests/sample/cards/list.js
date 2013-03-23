@@ -15,7 +15,10 @@
  */
 
 define([
-    "tests/old-test"
+    "cards/city-view",
+    "cards/mood-view",
+    "cards/locations-view",
+    "cards/location-view"
     ],
 function() {
     return _.toArray(arguments);

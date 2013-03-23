@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-define(["mobileui/ui/navigator-card-view", "app"], function(NavigatorCardView, app) {
+define(["views/app-card-view", "app"], function(AppCardView, app) {
 
-    var LocationView = NavigatorCardView.extend({
+    var LocationView = AppCardView.extend({
         initialize: function(options) {
             LocationView.__super__.initialize.call(this);
-            this.on("activate", this._onViewActivated, this);
         },
 
         render: function() {
@@ -27,8 +26,8 @@ define(["mobileui/ui/navigator-card-view", "app"], function(NavigatorCardView, a
             return LocationView.__super__.render.call(this);
         },
 
-        _onViewActivated: function() {
-            app.router.navigate("test/" + encodeURIComponent("Location View"), { trigger: false });
+        url: function() {
+            return "card/" + encodeURIComponent("Location View");
         }
     });
 

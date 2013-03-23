@@ -122,10 +122,10 @@ define(["mobileui/utils/request-animation-frame",
             point.y = touch.pageY;
             var localPoint = Touch.convertPointFromPageToNode.call(window, view.$el.get(0), point);
             var parentPoint = Touch.convertPointFromPageToNode.call(window, view.$el.get(0).parentNode, point);
-            touch.localX = localPoint.x;
-            touch.localY = localPoint.y;
-            touch.parentX = parentPoint.x;
-            touch.parentY = parentPoint.y;
+            touch.localX = localPoint ? localPoint.x : touch.pageX;
+            touch.localY = localPoint ? localPoint.y : touch.pageY;
+            touch.parentX = parentPoint ? parentPoint.x : touch.localX;
+            touch.parentY = parentPoint ? parentPoint.y : touch.localY;
         }
         return touch;
     };

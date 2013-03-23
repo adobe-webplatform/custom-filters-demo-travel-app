@@ -52,7 +52,7 @@ define(["mobileui/ui/navigator-card-view",
 
         _commit: function() {
             var self = this;
-            this.trigger("selected", this);
+            app.mainView.navigatorView().precommitNextCard();
             var transform = new Transform().translate(this.bounds().width(), 0);
             this.animation().start().get("slide-transform")
                 .chain()

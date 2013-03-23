@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-define(["require", "app", "views/index-view", "cards/list"],
-    function(require, app, IndexView, CardsList) {
+define(["require", "app", "views/index-view", "cards/list", "tests/list"],
+    function(require, app, IndexView, CardsList, TestsList) {
 
     var Router = Backbone.Router.extend({
         routes: {
@@ -37,8 +37,13 @@ define(["require", "app", "views/index-view", "cards/list"],
             var viewItem = _.find(CardsList, function(item) {
                 return item.label == label;
             });
-            if (!viewItem)
-                return null;
+            if (!viewItem) {
+                viewItem = _.find(TestsList, function(item) {
+                    return item.label == label;
+                });
+                if (!viewItem)
+                    return null;
+            }
             var ViewConstructor = viewItem.view;
             if (!ViewConstructor)
                 return null;

@@ -16,19 +16,18 @@
 
 define(["views/app-card-view",
         "mobileui/ui/list-view",
-        "mobileui/ui/button-view",
         "mobileui/views/layout-params",
-        "mobileui/views/gesture-detector",
         "mobileui/views/measured-view",
         "cards/list",
+        "tests/list",
         "app"],
-    function(AppCardView, ListView, ButtonView, LayoutParams, GestureDetector,
-        MeasuredView, CardsList, app) {
+    function(AppCardView, ListView, LayoutParams,
+        MeasuredView, CardsList, TestsList, app) {
 
     var ItemView = MeasuredView.extend({
         initialize: function() {
             ItemView.__super__.initialize.call(this);
-            this._gestureDetector = new GestureDetector(this);
+            this.addGestureDetector();
             this.on("tap", this._onTap, this);
             this.setParams(new LayoutParams().matchParentWidth());
             this.listenTo(this.model, "change:label", this._onLabelChanged);
@@ -57,6 +56,9 @@ define(["views/app-card-view",
             IndexView.__super__.initialize.call(this);
             this.model = new Backbone.Collection();
             this.model.add(_.map(CardsList, function(item) {
+                return new Backbone.Model(item);
+            }));
+            this.model.add(_.map(TestsList, function(item) {
                 return new Backbone.Model(item);
             }));
             this.on("activate", this._onViewActivated, this);

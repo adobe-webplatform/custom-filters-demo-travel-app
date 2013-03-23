@@ -28,7 +28,7 @@ define(["mobileui/views/gesture-detector",
     var ItemView = GestureView.extend({
         initialize: function() {
             ItemView.__super__.initialize.call(this);
-            this.on("tap", this._onTap, this)
+            this.once("tap", this._onTap, this)
                 .on("touchdragstart", this._onDragStart, this)
                 .on("touchdragmove", this._onDragMove, this)
                 .on("touchdragend", this._onDragEnd, this);
@@ -162,6 +162,7 @@ define(["mobileui/views/gesture-detector",
         _commit: function() {
             var self = this,
                 chain = this.animation().start().get("slide-transform").chain();
+            this.off("tap", this._onTap, this);
             this.trigger("selected", this);
             if (!this._useFilter) {
                 var transform = new Transform();
@@ -178,6 +179,8 @@ define(["mobileui/views/gesture-detector",
             chain.wait(100)
                 .callback(function() {
                     app.mainView.navigatorView().commitNextCard();
+                    // We are safely hidden, revert the tap listener to the previous state.
+                    self.once("tap", self._onTap, self);
                 });
             this.animation().get("slide")
                 .chain()

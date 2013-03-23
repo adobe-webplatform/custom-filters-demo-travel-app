@@ -19,16 +19,22 @@ define(["require", "app", "views/index-view", "cards/list", "tests/list"],
 
     var Router = Backbone.Router.extend({
         routes: {
-            "card/*path/*options": "test",
-            "card/*path": "test",
-            "*path": "index"
+            "card/*path/*options": "card",
+            "card/*path": "card",
+            "index": "index",
+            "*path": "defaultHandler"
+        },
+
+        defaultHandler: function() {
+            var view = this.lookupCard(decodeURIComponent("Splash View"));
+            app.mainView.navigatorView().resetCard(view ? view : new IndexView().render());
         },
 
         index: function() {
             app.mainView.navigatorView().pushCard(new IndexView().render());
         },
 
-        test: function(path, pathOptions) {
+        card: function(path, pathOptions) {
             var view = this.lookupCard(decodeURIComponent(path), decodeURIComponent(pathOptions));
             app.mainView.navigatorView().resetCard(view ? view : new IndexView().render());
         },
@@ -57,7 +63,7 @@ define(["require", "app", "views/index-view", "cards/list", "tests/list"],
     var router = app.router = new Router();
 
     app.on("start", function() {
-        Backbone.history.start();
+        Backbone.history.start({});
     });
 
     return router;

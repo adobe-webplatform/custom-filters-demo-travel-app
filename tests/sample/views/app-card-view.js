@@ -14,6 +14,12 @@ define(["mobileui/ui/navigator-card-view",
                 .on("touchdragend", this._onDragEnd, this);
             this._momentum = new Momentum().setDuration(300).setFriction(0.000005);
             this._dragStartValue = 0;
+            this.on("activate", this._updateBackButton, this);
+            this.on("deactivate", this._onViewDeactivated, this);
+        },
+
+        _updateBackButton: function() {
+            app.mainView.navigatorView().updateBackButton();
         },
 
         render: function() {

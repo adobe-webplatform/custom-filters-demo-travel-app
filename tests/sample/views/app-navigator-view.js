@@ -55,6 +55,13 @@ define(['mobileui/ui/navigator-view',
             return this._backButton;
         },
 
+        updateBackButton: function() {
+            if (this.canGoBack())
+                this._backButton.show();
+            else
+                this._backButton.hide();
+        },
+
         listButton: function() {
             return this._listButton;
         },

@@ -61,16 +61,6 @@ define(["views/app-card-view",
             this.model.add(_.map(TestsList, function(item) {
                 return new Backbone.Model(item);
             }));
-            this.on("activate", this._onViewActivated, this);
-            this.on("deactivate", this._onViewDeactivated, this);
-        },
-
-        _onViewActivated: function() {
-            app.mainView.navigatorView().backButton().hide();
-        },
-
-        _onViewDeactivated: function() {
-            app.mainView.navigatorView().backButton().show();
         },
 
         render: function() {

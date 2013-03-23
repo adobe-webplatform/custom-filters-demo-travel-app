@@ -36,10 +36,12 @@ define(["mobileui/views/touch-manager"],
         return angle1 - angle2;
     }
 
-    function GestureType(type, scrollX, scrollY) {
+    function GestureType(type, scrollX, scrollY, distanceX, distanceY) {
         this.type = type;
         this.scrollX = scrollX;
         this.scrollY = scrollY;
+        this.distanceX = distanceX;
+        this.distanceY = distanceY;
     }
 
     GestureType.DRAG = "drag";
@@ -188,19 +190,22 @@ define(["mobileui/views/touch-manager"],
                 return;
             }
             if (!this.didStartDragging && this.touchesStarted == 1) {
-                var distanceX = Math.abs(touch.startPosition.pageX - touch.currentPosition.pageX);
-                var distanceY = Math.abs(touch.startPosition.pageY - touch.currentPosition.pageY);
-                if (distanceX > distanceY)
-                    distanceY = 0;
+                var distanceX = touch.startPosition.pageX - touch.currentPosition.pageX,
+                    absDistanceX = Math.abs(distanceX);
+                var distanceY = touch.startPosition.pageY - touch.currentPosition.pageY,
+                    absDistanceY = Math.abs(distanceY);
+                if (absDistanceX > absDistanceY)
+                    absDistanceY = 0;
                 else
-                    distanceX = 0;
-                var scrollX = distanceX > this.minDragLength;
-                var scrollY = distanceY > this.minDragLength;
+                    absDistanceX = 0;
+                var scrollX = absDistanceX > this.minDragLength;
+                var scrollY = absDistanceY > this.minDragLength;
                 if (scrollX || scrollY) {
                     this.canTap = false;
                     this.view.trigger("tapend", touch);
                     this.clearGestureTimers();
-                    this.dragSurface = this.findParentTouchSurface(new GestureType(GestureType.DRAG, scrollX, scrollY));
+                    this.dragSurface = this.findParentTouchSurface(new GestureType(GestureType.DRAG,
+                        scrollX, scrollY, distanceX, distanceY));
                     if (this.dragSurface) {
                         touch.attachToSurface(this.dragSurface);
                         touch.dragStartTime = touch.currentPosition.time - touch.startPosition.time;

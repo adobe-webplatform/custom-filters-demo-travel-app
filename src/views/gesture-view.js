@@ -22,7 +22,7 @@ function(LayerView, GestureDetector) {
 
         initialize: function() {
             GestureView.__super__.initialize.call(this);
-            this._gestureDetector = new GestureDetector(this);
+            this.addGestureDetector();
         },
 
         render: function() {

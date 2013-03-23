@@ -57,6 +57,15 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             return this._nextCard;
         },
 
+        canGoBack: function() {
+            return this._historyCards.length > 0;
+        },
+
+        prepareHistoryCard: function() {
+            var card = _.last(this._historyCards);
+            return this.prepareNextCard(card);
+        },
+
         prepareNextCard: function(card) {
             // Animation started, add a new card in the back.
             if (this._nextCard)
@@ -71,12 +80,19 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             return this;
         },
 
+        _isLastHistoryCard :function(card) {
+            return _.last(this._historyCards) == this._nextCard;
+        },
+
         revertNextCard: function() {
             if (!this._nextCard)
                 return this;
             this._nextCard.trigger("card:revert");
             this._nextCard._setNavigatorView(null);
-            this._nextCard.remove();
+            if (this._isLastHistoryCard(this._nextCard))
+                this._nextCard.detach();
+            else
+                this._nextCard.remove();
             this._nextCard = null;
             return this;
         },
@@ -84,12 +100,19 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
         commitNextCard: function() {
             if (!this._nextCard)
                 return this;
+            // Figure out if we are going forward or backwards.
+            var isLastHistoryCard = this._isLastHistoryCard(this._nextCard);
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");
-                this._activeCard._setNavigatorView(null).detach();
-                this._historyCards.push(this._activeCard);
+                this._activeCard._setNavigatorView(null);
+                if (!isLastHistoryCard)
+                    this._historyCards.push(this._activeCard.detach());
+                else
+                    this._activeCard.remove();
                 this._activeCard = null;
             }
+            if (isLastHistoryCard)
+                this._historyCards.pop();
             this._activeCard = this._nextCard;
             this._nextCard = null;
             this._activeCard.trigger("card:commit");

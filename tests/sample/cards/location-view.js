@@ -22,7 +22,7 @@ define(["views/app-card-view", "app"], function(AppCardView, app) {
         },
 
         render: function() {
-            this.$el.append("Location view");
+            this.$el.addClass("js-location-view").append("Location view");
             return LocationView.__super__.render.call(this);
         },
 

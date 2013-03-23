@@ -107,18 +107,18 @@ define(["mobileui/views/gesture-detector",
                 chain = this.animation().start().get("slide-transform").chain();
             if (!this._useFilter) {
                 var transform = new Transform();
-                chain = chain.transform(1000, transform);
+                chain = chain.transform(100, transform);
             } else {
                 var filter = new Filter();
                 filter.get("fold").setT(0).setShadow(this._computeShadow(0));
-                chain = chain.filter(1000, filter);
+                chain = chain.filter(100, filter);
             }
             chain.callback(function() {
                 app.mainView.navigatorView().revertNextCard();
             });
             this.animation().get("slide")
                 .chain()
-                .opacity(1000, 1);
+                .opacity(100, 1);
         },
 
         animateViewSwitch: function(index) {
@@ -202,7 +202,7 @@ define(["mobileui/views/gesture-detector",
         respondsToTouchGesture: function(gesture) {
             if (gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
-            return (this._verticalLayout && gesture.scrollX) ||
+            return (this._verticalLayout && gesture.scrollX && gesture.distanceX > 0) ||
                 (!this._verticalLayout && gesture.scrollY);
         },
 

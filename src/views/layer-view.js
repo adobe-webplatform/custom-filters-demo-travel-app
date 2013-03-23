@@ -470,7 +470,7 @@ define(["mobileui/utils/rect",
         },
 
         _validateFilter: function() {
-            this.$el.css("-webkit-filter", this._filter.toString());
+            this.$el.css(Filter.propertyName, this._filter.toString());
         },
 
         _validateOpacity: function() {

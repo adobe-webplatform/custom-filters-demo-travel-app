@@ -38,11 +38,11 @@ define(["mobileui/ui/navigator-card-view",
             this.listenTo(this.model, "change:label", this._onLabelChanged);
             this.$labelEl = $("<div />").addClass("js-touch-item-view-label");
             this._dragStartValue = 0;
+            this._useFilter = false;
             this._momentum = new Momentum().setDuration(300).setFriction(0.000005);
             // Force a 3D layer.
             this.animation();
             this.transform().clear();
-            this._useFilter = false;
         },
 
         render: function() {
@@ -56,6 +56,12 @@ define(["mobileui/ui/navigator-card-view",
 
         _onLabelChanged: function() {
             this.$labelEl.text(this.model.get("label"));
+        },
+
+        useFoldingFilters: function() {
+            if (Filter.supportsCustomFilters)
+                this._useFilter = true;
+            return this;
         },
 
         _onDragStart: function() {

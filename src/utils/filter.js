@@ -304,8 +304,22 @@ define(function() {
             injectCSSFilterShorthand(name, type);
             return type;
         },
-        createCustomFilterGenerator: customFilterGenerator
+        createCustomFilterGenerator: customFilterGenerator,
+
+        // FIXME: Using the PrefixFree.prefixProperty as a workaround for the the 
+        // "filter" property issue in PrefixFree & WebKit.
+        // https://github.com/LeaVerou/prefixfree/issues/76
+        propertyName: PrefixFree.prefixProperty("filter"),
+        camelCasePropertyName: PrefixFree.prefixProperty("filter", true)
     });
+
+    function detectFilterSupport(filter, checker) {
+        var style = document.createElement("div").style;
+        style[Filter.camelCasePropertyName] = filter;
+        var value = style[Filter.camelCasePropertyName];
+        return value ? checker.test(value) : false;
+    }
+    Filter.supportsCustomFilters = detectFilterSupport("custom(url(empty))", /^custom\(/);
 
     _.each(Filters, function(type, name) {
         injectCSSFilterShorthand(name, type);

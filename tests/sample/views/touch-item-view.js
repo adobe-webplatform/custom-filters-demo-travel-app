@@ -38,9 +38,7 @@ define(["mobileui/views/gesture-detector",
             this._dragStartValue = 0;
             this._useFilter = false;
             this._momentum = new Momentum().setDuration(300).setFriction(0.000005);
-            // Force a 3D layer.
-            this.animation();
-            this.transform().clear();
+            this.forceLayer();
         },
 
         render: function() {
@@ -66,6 +64,7 @@ define(["mobileui/views/gesture-detector",
             this._onTapStart();
             var nextCard = app.mainView.navigatorView().nextCard();
             nextCard.filter().get("grayscale").setIntensity(100);
+            nextCard.setOpacity(0.5);
             if (this._useFilter) {
                 var fold = this.filter().get("fold");
                 this._dragStartValue = -fold.t() * this.bounds().width();
@@ -95,16 +94,19 @@ define(["mobileui/views/gesture-detector",
                     value = Math.min(0, this._dragStartValue + transform.dragX);
                     translate.setX(value);
                     grayscale.setIntensity(100 + value / this.bounds().width() * 100);
+                    nextCard.setOpacity(-value / this.bounds().width() / 2 + 0.5);
                 } else {
                     value = Math.min(0, this._dragStartValue + transform.dragY);
                     translate.setY(value);
                     grayscale.setIntensity(100 + value / this.bounds().height() * 100);
+                    nextCard.setOpacity(-value / this.bounds().height() / 2 + 0.5);
                 }
             } else {
                 value = Math.min(0, this._dragStartValue + transform.dragX);
                 var t = Math.min(0.999, Math.max(0, - value / this.bounds().width()));
                 this.filter().get("fold").setT(t).setShadow(this._computeShadow(t));
                 grayscale.setIntensity(100 - t * 100);
+                nextCard.setOpacity(t / 2 + 0.5);
             }
             this._momentum.injectValue(value);
         },
@@ -166,8 +168,7 @@ define(["mobileui/views/gesture-detector",
                 filter.get("fold").setT(2).setShadow(this._computeShadow(1));
                 chain = chain.wait(0).filter(300, filter);
             }
-            chain.wait(100)
-                .callback(function() {
+            chain.callback(function() {
                     nextCard.filter().clear();
                     app.mainView.navigatorView().commitNextCard();
                     // We are safely hidden, revert the tap listener to the previous state.
@@ -179,6 +180,9 @@ define(["mobileui/views/gesture-detector",
             nextCard.animation().start().get("slide-filter")
                 .chain()
                 .filter(300, new Filter().grayscale(0));
+            nextCard.animation().get("slide-opacity")
+                .chain()
+                .opacity(300, 1);
         },
 
         _revert: function() {
@@ -203,6 +207,9 @@ define(["mobileui/views/gesture-detector",
             nextCard.animation().start().get("slide-filter")
                 .chain()
                 .filter(300, new Filter().grayscale(100));
+            nextCard.animation().get("slide-opacity")
+                .chain()
+                .opacity(300, 0.5);
         },
 
         _onDragEnd: function() {

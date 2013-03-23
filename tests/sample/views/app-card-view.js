@@ -17,6 +17,7 @@ define(["mobileui/ui/navigator-card-view",
             this._dragStartValue = 0;
             this.on("card:precommit", this._updateBackButton, this);
             this.on("activate", this._updateBackButton, this);
+            this.forceLayer();
         },
 
         _updateBackButton: function() {

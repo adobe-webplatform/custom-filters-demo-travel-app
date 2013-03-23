@@ -86,6 +86,12 @@ define(["mobileui/utils/rect",
             return !!this._animation;
         },
 
+        forceLayer: function() {
+            // Force a 3D layer by activating the animation.
+            this.animation();
+            this.transform().clear();
+        },
+
         setElement: function(el) {
             if (this.$el) {
                 this.$el.data("layer-view", null);

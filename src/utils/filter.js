@@ -115,7 +115,9 @@ define(function() {
     }
 
     var Filters = {
-        blur: generateFunction("blur", "radius", "px")
+        blur: generateFunction("blur", "radius", "px"),
+        brightness: generateFunction("brightness", "intensity", "%"),
+        grayscale: generateFunction("grayscale", "intensity", "%")
     };
 
     var Filter = function() {

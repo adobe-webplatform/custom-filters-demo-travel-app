@@ -16,7 +16,7 @@
 
 define(['mobileui/ui/navigator-view',
         'mobileui/ui/button-view',
-        'views/index-view'], function(NavigatorView, ButtonView, IndexView) {
+        'app'], function(NavigatorView, ButtonView, app) {
 
     var AppNavigatorView = NavigatorView.extend({
 
@@ -38,6 +38,12 @@ define(['mobileui/ui/navigator-view',
             topBar.append(this._backButton.render().addClass("js-navigator-top-bar-button-view")
                 .addClass("js-navigator-top-bar-back-button-view"));
 
+            this._homeButton = new ButtonView().setLabel("Home")
+                .on("tap", this._onBackButtonTap, this);
+            this._homeButton.margin().setLeft(10).setTop(5);
+            topBar.append(this._homeButton.render().addClass("js-navigator-top-bar-button-view")
+                .addClass("js-navigator-top-bar-home-button-view"));
+
             topBar.appendFiller();
 
             this._listButton = new ButtonView().setLabel("List").hide();
@@ -55,11 +61,18 @@ define(['mobileui/ui/navigator-view',
             return this._backButton;
         },
 
+        homeButton: function() {
+            return this._homeButton;
+        },
+
         updateBackButton: function() {
-            if (this.canGoBack())
+            if (this.canGoBack()) {
                 this._backButton.show();
-            else
+                this._homeButton.hide();
+            } else {
                 this._backButton.hide();
+                this._homeButton.show();
+            }
         },
 
         listButton: function() {
@@ -72,7 +85,7 @@ define(['mobileui/ui/navigator-view',
 
         _onBackButtonTap: function() {
             if (!this.popCard())
-                this.pushCard(new IndexView().render());
+                this.pushCard(app.router.lookupCard(app.defaultCard));
         }
 
     });

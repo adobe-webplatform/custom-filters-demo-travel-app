@@ -265,7 +265,7 @@ define(["mobileui/utils/rect",
         },
 
         visible: function() {
-            return this.visible;
+            return this._visible;
         },
 
         parent: function() {

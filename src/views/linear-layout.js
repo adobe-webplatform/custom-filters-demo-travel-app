@@ -48,6 +48,8 @@ define(["mobileui/utils/transform",
                 spacePerWeight = 0;
 
             _.each(children, function(view) {
+                if (!view.visible())
+                    return;
                 var params = view.params();
                 if (params && fillsParent(params, isVertical)) {
                     childrenWeight += params.weight();
@@ -67,6 +69,8 @@ define(["mobileui/utils/transform",
             offset = isVertical ? padding.top() : padding.left();
 
             _.each(children, function(view) {
+                if (!view.visible())
+                    return;
                 var params = view.params(),
                     viewBounds = view.bounds(),
                     newX = isVertical ? padding.left() : offset,

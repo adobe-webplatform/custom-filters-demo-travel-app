@@ -26,7 +26,7 @@ define(["require", "app", "views/index-view", "cards/list", "tests/list"],
         },
 
         defaultHandler: function() {
-            var view = this.lookupCard(decodeURIComponent("Splash View"));
+            var view = this.lookupCard(app.defaultCard);
             app.mainView.navigatorView().resetCard(view ? view : new IndexView().render());
         },
 

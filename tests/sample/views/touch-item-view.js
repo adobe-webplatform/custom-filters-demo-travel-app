@@ -64,6 +64,8 @@ define(["mobileui/views/gesture-detector",
 
         _onDragStart: function() {
             this._onTapStart();
+            var nextCard = app.mainView.navigatorView().nextCard();
+            nextCard.filter().get("grayscale").setIntensity(100);
             if (this._useFilter) {
                 var fold = this.filter().get("fold");
                 this._dragStartValue = -fold.t() * this.bounds().width();
@@ -84,41 +86,27 @@ define(["mobileui/views/gesture-detector",
         },
 
         _onDragMove: function(transform) {
-            var value;
+            var nextCard = app.mainView.navigatorView().nextCard(),
+                grayscale = nextCard.filter().get("grayscale"),
+                value;
             if (!this._useFilter) {
                 var translate = this.transform().get("translate");
                 if (this._verticalLayout) {
                     value = Math.min(0, this._dragStartValue + transform.dragX);
                     translate.setX(value);
+                    grayscale.setIntensity(100 + value / this.bounds().width() * 100);
                 } else {
                     value = Math.min(0, this._dragStartValue + transform.dragY);
                     translate.setY(value);
+                    grayscale.setIntensity(100 + value / this.bounds().height() * 100);
                 }
             } else {
                 value = Math.min(0, this._dragStartValue + transform.dragX);
                 var t = Math.min(0.999, Math.max(0, - value / this.bounds().width()));
                 this.filter().get("fold").setT(t).setShadow(this._computeShadow(t));
+                grayscale.setIntensity(100 - t * 100);
             }
             this._momentum.injectValue(value);
-        },
-
-        _revert: function() {
-            var self = this,
-                chain = this.animation().start().get("slide-transform").chain();
-            if (!this._useFilter) {
-                var transform = new Transform();
-                chain = chain.transform(100, transform);
-            } else {
-                var filter = new Filter();
-                filter.get("fold").setT(0).setShadow(this._computeShadow(0));
-                chain = chain.filter(100, filter);
-            }
-            chain.callback(function() {
-                app.mainView.navigatorView().revertNextCard();
-            });
-            this.animation().get("slide")
-                .chain()
-                .opacity(100, 1);
         },
 
         animateViewSwitch: function(index) {
@@ -161,6 +149,7 @@ define(["mobileui/views/gesture-detector",
 
         _commit: function() {
             var self = this,
+                nextCard = app.mainView.navigatorView().nextCard(),
                 chain = this.animation().start().get("slide-transform").chain();
             this.off("tap", this._onTap, this);
             app.mainView.navigatorView().precommitNextCard();
@@ -179,6 +168,7 @@ define(["mobileui/views/gesture-detector",
             }
             chain.wait(100)
                 .callback(function() {
+                    nextCard.filter().clear();
                     app.mainView.navigatorView().commitNextCard();
                     // We are safely hidden, revert the tap listener to the previous state.
                     self.once("tap", self._onTap, self);
@@ -186,6 +176,33 @@ define(["mobileui/views/gesture-detector",
             this.animation().get("slide")
                 .chain()
                 .opacity(300, 0);
+            nextCard.animation().start().get("slide-filter")
+                .chain()
+                .filter(300, new Filter().grayscale(0));
+        },
+
+        _revert: function() {
+            var self = this,
+                nextCard = app.mainView.navigatorView().nextCard(),
+                chain = this.animation().start().get("slide-transform").chain();
+            if (!this._useFilter) {
+                var transform = new Transform();
+                chain = chain.transform(100, transform);
+            } else {
+                var filter = new Filter();
+                filter.get("fold").setT(0).setShadow(this._computeShadow(0));
+                chain = chain.filter(100, filter);
+            }
+            chain.callback(function() {
+                nextCard.filter().clear();
+                app.mainView.navigatorView().revertNextCard();
+            });
+            this.animation().get("slide")
+                .chain()
+                .opacity(100, 1);
+            nextCard.animation().start().get("slide-filter")
+                .chain()
+                .filter(300, new Filter().grayscale(100));
         },
 
         _onDragEnd: function() {

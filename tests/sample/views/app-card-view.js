@@ -38,7 +38,7 @@ define(["mobileui/ui/navigator-card-view",
 
         _onDragStart: function() {
             var nextCard = app.mainView.navigatorView().prepareHistoryCard().nextCard();
-            nextCard.filter().get("grayscale").setIntensity(0);
+            nextCard.filter().get("grayscale").setIntensity(100);
             var translate = this.transform().get("translate");
             this._dragStartValue = translate.x();
             this._momentum.reset(this._dragStartValue);

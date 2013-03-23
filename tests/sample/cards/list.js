@@ -15,6 +15,7 @@
  */
 
 define([
+    "cards/splash-view",
     "cards/city-view",
     "cards/mood-view",
     "cards/locations-view",

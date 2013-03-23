@@ -30,6 +30,21 @@ body {
     border-bottom: 1px solid #ccc;
 }
 
+.js-splash-item-view {
+    color: white;
+    background-color: #cfd051;
+}
+
+.js-splash-item-view-label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.0em;
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+}
+
 .js-city-item-view {
     color: white;
 }
@@ -55,7 +70,6 @@ body {
 .js-city-item-view.js-search-item-view {
     background-color: #4f5a6c;
 }
-
 
 .js-mood-item-view {
     color: white;

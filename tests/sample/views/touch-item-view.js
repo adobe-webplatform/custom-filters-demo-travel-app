@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-define(["mobileui/ui/navigator-card-view",
-        "mobileui/ui/list-view",
-        "mobileui/views/gesture-detector",
+define(["mobileui/views/gesture-detector",
         "mobileui/views/layout-params",
         "mobileui/views/gesture-view",
         "mobileui/utils/transform",
@@ -24,7 +22,7 @@ define(["mobileui/ui/navigator-card-view",
         "mobileui/utils/momentum",
         "utils/fold",
         "app"],
-    function(NavigatorCardView, ListView, GestureDetector, LayoutParams, GestureView, Transform, Filter, Momentum, Fold, app) {
+    function(GestureDetector, LayoutParams, GestureView, Transform, Filter, Momentum, Fold, app) {
 
 
     var ItemView = GestureView.extend({

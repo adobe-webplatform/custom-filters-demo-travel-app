@@ -163,6 +163,7 @@ define(["mobileui/views/gesture-detector",
             var self = this,
                 chain = this.animation().start().get("slide-transform").chain();
             this.off("tap", this._onTap, this);
+            app.mainView.navigatorView().precommitNextCard();
             this.trigger("selected", this);
             if (!this._useFilter) {
                 var transform = new Transform();

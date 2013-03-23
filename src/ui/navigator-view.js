@@ -17,7 +17,7 @@
 define(["mobileui/views/layout-view",
         "mobileui/views/layout-params",
         "mobileui/ui/navigator-top-bar-view",
-        "mobileui/ui/navigator-content-view"], 
+        "mobileui/ui/navigator-content-view"],
 function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
 
     var NavigatorView = LayoutView.extend({
@@ -34,6 +34,7 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             this._historyCards = [];
             this._activeCard = null;
             this._nextCard = null;
+            this._precommitCard = null;
             this._wasLastHistoryCard = false;
         },
 
@@ -71,6 +72,7 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             // Animation started, add a new card in the back.
             if (this._nextCard)
                 this.revertNextCard();
+            this._wasLastHistoryCard = false;
             this._nextCard = card;
             if (this._activeCard)
                 this.contentView().before(this._nextCard, this._activeCard);
@@ -86,6 +88,8 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
         },
 
         revertNextCard: function() {
+            if (this._precommitCard)
+                return this.commitNextCard();
             if (!this._nextCard)
                 return this;
             this._nextCard.trigger("card:revert");
@@ -96,6 +100,7 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             else
                 this._nextCard.remove();
             this._nextCard = null;
+            this._wasLastHistoryCard = false;
             return this;
         },
 
@@ -106,24 +111,25 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             this._wasLastHistoryCard = this._isLastHistoryCard(this._nextCard);
             if (this._wasLastHistoryCard)
                 this._historyCards.pop();
+            else
+                this._historyCards.push(this._activeCard);
+            this._precommitCard = this._activeCard;
+            this._activeCard = this._nextCard;
+            this._nextCard = null;
             return this;
         },
 
         commitNextCard: function() {
-            if (!this._nextCard)
-                return this;
             // Figure out if we are going forward or backwards.
-            if (this._activeCard) {
-                this._activeCard.trigger("deactivate");
-                this._activeCard._setNavigatorView(null);
-                if (!this._wasLastHistoryCard)
-                    this._historyCards.push(this._activeCard.detach());
+            if (this._precommitCard) {
+                this._precommitCard.trigger("deactivate");
+                this._precommitCard._setNavigatorView(null);
+                if (this._wasLastHistoryCard)
+                    this._precommitCard.remove();
                 else
-                    this._activeCard.remove();
-                this._activeCard = null;
+                    this._precommitCard.detach();
+                this._precommitCard = null;
             }
-            this._activeCard = this._nextCard;
-            this._nextCard = null;
             this._activeCard.trigger("card:commit");
             this._activeCard.trigger("activate", { goingBack: false });
             return this;

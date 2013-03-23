@@ -116,6 +116,7 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             this._precommitCard = this._activeCard;
             this._activeCard = this._nextCard;
             this._nextCard = null;
+            this._activeCard.trigger("card:precommit");
             return this;
         },
 

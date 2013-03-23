@@ -22,8 +22,9 @@ define(["mobileui/ui/navigator-card-view",
         "mobileui/utils/transform",
         "mobileui/utils/filter",
         "mobileui/utils/momentum",
+        "utils/fold",
         "app"],
-    function(NavigatorCardView, ListView, GestureDetector, LayoutParams, GestureView, Transform, Filter, Momentum, app) {
+    function(NavigatorCardView, ListView, GestureDetector, LayoutParams, GestureView, Transform, Filter, Momentum, Fold, app) {
 
 
     var ItemView = GestureView.extend({

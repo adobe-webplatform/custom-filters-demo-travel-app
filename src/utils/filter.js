@@ -115,15 +115,7 @@ define(function() {
     }
 
     var Filters = {
-        blur: generateFunction("blur", "radius", "px"),
-        fold: generateFunction("fold", "t shadow", customFilterGenerator(
-            ["custom(url(style/shaders/fold.vert) ",
-             "mix(url(style/shaders/fold.frag) multiply source-atop), ", 
-                "8 50 border-box, ",
-                "t ", "?", ",",
-                "shadow ", "?", ",",
-                "transform translate(-25%, 0) perspective(2000) translate(25%, 0), spins 0, phase 0, mapDepth 100, mapCurve 0, minSpacing 0, useColoredBack 1, backColor 0.5 0.5 0.5 1)"
-            ]))
+        blur: generateFunction("blur", "radius", "px")
     };
 
     var Filter = function() {
@@ -297,15 +289,26 @@ define(function() {
             return filter;
         }
     });
-    
-    _.extend(Filter, Filters);
 
-    _.each(Filters, function(type, name) {
+    function injectCSSFilterShorthand(name, type) {
         Filter.prototype[name] = function() {
             var fn = type.create.apply(null, Array.prototype.slice.call(arguments));
             this.append(fn);
             return this;
         };
+    }
+
+    _.extend(Filter, Filters, {
+        registerCustomFilter: function(name, parameters, cssGenerator) {
+            var type = Filters[name] = generateFunction(name, parameters, cssGenerator);
+            injectCSSFilterShorthand(name, type);
+            return type;
+        },
+        createCustomFilterGenerator: customFilterGenerator
+    });
+
+    _.each(Filters, function(type, name) {
+        injectCSSFilterShorthand(name, type);
     });
 
     return Filter;

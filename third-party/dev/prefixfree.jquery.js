@@ -8,7 +8,6 @@ for(var i=0; i<self.properties.length; i++) {
 	var property = self.properties[i],
 		camelCased = StyleFix.camelCase(property),
 		PrefixCamelCased = self.prefixProperty(property, true);
-	console.log(property, camelCased, PrefixCamelCased);
 	$.cssProps[camelCased] = PrefixCamelCased;
 }
 

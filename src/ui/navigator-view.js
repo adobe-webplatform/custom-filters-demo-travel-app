@@ -97,6 +97,33 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             return this;
         },
 
+        resetCard: function(card) {
+            this.revertNextCard();
+            var previousActiveCard = this._activeCard;
+            if (this._activeCard) {
+                this._activeCard.trigger("deactivate");
+                this._activeCard = null;
+            }
+            var options = {
+                goingBack: false,
+                promise: null
+            };
+            if (card) {
+                this._activeCard = card;
+                this._activeCard._setNavigatorView(this);
+                this._activeCard.trigger("activate", options);
+                this._contentView.append(card);
+            }
+            if (previousActiveCard) {
+                if (!options.promise)
+                    previousActiveCard._setNavigatorView(null).remove();
+                else
+                    options.promise.then(function() {
+                        previousActiveCard._setNavigatorView(null).remove();
+                    });
+            }
+        },
+
         pushCard: function(card) {
             this.revertNextCard();
             var previousActiveCard = this._activeCard;
@@ -132,24 +159,25 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 this._activeCard.trigger("deactivate");
                 this._activeCard = null;
             }
-            var options = {
-                goingBack: true,
-                promise: null
-            };
             if (this._historyCards.length) {
+                var options = {
+                    goingBack: true,
+                    promise: null
+                };
                 this._activeCard = this._historyCards.pop();
                 this._contentView.append(this._activeCard);
                 this._activeCard._setNavigatorView(this);
                 this._activeCard.trigger("activate", options);
-            }
-            if (previousActiveCard) {
-                if (!options.promise)
-                    previousActiveCard._setNavigatorView(null).remove();
-                else
-                    options.promise.then(function() {
+                if (previousActiveCard) {
+                    if (!options.promise)
                         previousActiveCard._setNavigatorView(null).remove();
-                    });
-            }
+                    else
+                        options.promise.then(function() {
+                            previousActiveCard._setNavigatorView(null).remove();
+                        });
+                }
+            } else if (previousActiveCard)
+                previousActiveCard._setNavigatorView(null).remove();
             return this._activeCard;
         }
     });

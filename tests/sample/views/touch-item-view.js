@@ -212,7 +212,8 @@ define(["mobileui/views/gesture-detector",
                 .opacity(300, 0.5);
         },
 
-        _onDragEnd: function() {
+        _onDragEnd: function(transform) {
+            this._onDragMove(transform);
             var value = this._momentum.compute(),
                 direction = this._momentum.direction();
             value *= 4;

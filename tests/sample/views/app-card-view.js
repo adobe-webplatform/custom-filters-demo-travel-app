@@ -54,7 +54,8 @@ define(["mobileui/ui/navigator-card-view",
             this._momentum.injectValue(value);
         },
 
-        _onDragEnd: function() {
+        _onDragEnd: function(transform) {
+            this._onDragMove(transform);
             var value = this._momentum.compute() * 4,
                 direction = this._momentum.direction();
             if ((value < this.bounds().width()) || (direction > 0))

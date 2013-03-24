@@ -9,6 +9,7 @@ define(["mobileui/utils/boilerplate"], function(boilerplate) {
 
     _.extend(Cache.prototype, Backbone.Events, {
         _onCacheUpdateReady: function() {
+            console.log("Cache: ", this._cache.status);
             if (this._cache.status != this._cache.UPDATEREADY) {
                 console.log("No cache update.");
                 return;
@@ -19,13 +20,13 @@ define(["mobileui/utils/boilerplate"], function(boilerplate) {
 
         swapCache: function() {
             console.log("Swapping cache.");
-            this.cache.swapCache();
+            this._cache.swapCache();
             console.log("Reloading app.");
             window.location.reload();
         },
 
         checkForUpdates: function() {
-            if (!this.cache)
+            if (!this._cache)
                 return;
             try {
                 this._cache.update();

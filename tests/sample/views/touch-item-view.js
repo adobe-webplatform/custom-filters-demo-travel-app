@@ -26,7 +26,8 @@ define(["mobileui/views/gesture-detector",
     function(GestureDetector, LayerView, LayoutParams, GestureView, Transform, Filter, Momentum, Fold, app) {
 
     var useShadow = false;
-    var commitDuration = 300;
+    var commitDuration = 300,
+        revertDuration = 100;
 
     var ItemView = GestureView.extend({
         initialize: function() {
@@ -73,6 +74,7 @@ define(["mobileui/views/gesture-detector",
         },
 
         _onDragStart: function() {
+            app.mainView.navigatorView().revertNextCard();
             this._onTapStart();
             var nextCard = app.mainView.navigatorView().nextCard();
             nextCard.filter().get("grayscale").setIntensity(100);
@@ -222,19 +224,19 @@ define(["mobileui/views/gesture-detector",
                 chain = this.animation().start().get("slide-transform").chain();
             if (!this._useFilter) {
                 var transform = new Transform();
-                chain = chain.transform(commitDuration, transform);
+                chain = chain.transform(revertDuration, transform);
             } else {
                 if (useShadow) {
                     var filterShadow = new Filter();
                     filterShadow.get("dropShadow").setRadius(10).setColor(0);
-                    chain = chain.filter(commitDuration, filterShadow);
+                    chain = chain.filter(revertDuration, filterShadow);
                 } else {
-                    chain = chain.wait(commitDuration);
+                    chain = chain.wait(revertDuration);
                 }
                 var filter = new Filter();
                 filter.get("fold").setT(0).setShadow(this._computeShadow(0)).setWidth(this.bounds().width());
                 this._filterView.animation().start().get("slide-filter").
-                    chain().filter(commitDuration, filter);
+                    chain().filter(revertDuration, filter);
             }
             chain.callback(function() {
                 nextCard.filter().clear();
@@ -247,13 +249,13 @@ define(["mobileui/views/gesture-detector",
             });
             this.animation().get("slide")
                 .chain()
-                .opacity(commitDuration, 1);
+                .opacity(revertDuration, 1);
             nextCard.animation().start().get("slide-filter")
                 .chain()
-                .filter(commitDuration, new Filter().grayscale(100));
+                .filter(revertDuration, new Filter().grayscale(100));
             nextCard.animation().get("slide-opacity")
                 .chain()
-                .opacity(commitDuration, 0.5);
+                .opacity(revertDuration, 0.5);
         },
 
         _onDragEnd: function(transform) {

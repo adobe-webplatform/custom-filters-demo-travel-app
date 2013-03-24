@@ -327,6 +327,8 @@ define(function() {
 
     function detectFilterSupport(filter, checker) {
         var style = document.createElement("div").style;
+        if (!(Filter.camelCasePropertyName in style))
+            return false;
         style[Filter.camelCasePropertyName] = filter;
         var value = style[Filter.camelCasePropertyName];
         return value ? checker.test(value) : false;

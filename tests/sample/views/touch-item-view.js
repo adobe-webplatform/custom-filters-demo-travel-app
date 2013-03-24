@@ -26,6 +26,7 @@ define(["mobileui/views/gesture-detector",
     function(GestureDetector, LayerView, LayoutParams, GestureView, Transform, Filter, Momentum, Fold, app) {
 
     var useShadow = false;
+    var commitDuration = 300;
 
     var ItemView = GestureView.extend({
         initialize: function() {
@@ -46,7 +47,7 @@ define(["mobileui/views/gesture-detector",
             this.$labelEl = $("<div />").addClass("js-touch-item-view-label").appendTo(this._filterView.$el);
             this._dragStartValue = 0;
             this._useFilter = false;
-            this._momentum = new Momentum().setDuration(300).setFriction(0.000005);
+            this._momentum = new Momentum().setDuration(commitDuration).setFriction(0.000005);
             this.forceLayer();
         },
 
@@ -137,10 +138,10 @@ define(["mobileui/views/gesture-detector",
                 transform.translate(0, -this.bounds().height());
             this.animation().start().get("slide-transform")
                 .chain(50 * index)
-                .transform(200, transform);
+                .transform(commitDuration, transform);
             this.animation().get("slide")
                 .chain(50 * index)
-                .opacity(200, 0);
+                .opacity(commitDuration, 0);
         },
 
         startAnimations: function(index) {
@@ -153,10 +154,10 @@ define(["mobileui/views/gesture-detector",
             this.setOpacity(0);
             this.animation().start().get("slide-transform")
                 .chain(50 * index)
-                .transform(300, new Transform().translate(0, 0));
+                .transform(commitDuration, new Transform().translate(0, 0));
             this.animation().get("slide")
                 .chain(50 * index)
-                .opacity(300, 1);
+                .opacity(commitDuration, 1);
             return this.animation().promise();
         },
 
@@ -179,19 +180,19 @@ define(["mobileui/views/gesture-detector",
                     transform.translate(-this.bounds().width(), 0);
                 else
                     transform.translate(0, -this.bounds().height());
-                chain = chain.transform(300, transform);
+                chain = chain.transform(commitDuration, transform);
             } else {
                 if (useShadow) {
                     var filterShadow = new Filter();
                     filterShadow.get("dropShadow").setRadius(10).setColor(0);
-                    chain = chain.filter(300, filterShadow);
+                    chain = chain.filter(commitDuration, filterShadow);
                 } else {
-                    chain = chain.wait(300);
+                    chain = chain.wait(commitDuration);
                 }
                 var filter = new Filter();
-                filter.get("fold").setT(2).setShadow(this._computeShadow(1)).setWidth(this.bounds().width());
+                filter.get("fold").setT(1).setShadow(this._computeShadow(1)).setWidth(this.bounds().width());
                 this._filterView.animation().start().get("slide-filter").
-                    chain().filter(300, filter);
+                    chain().filter(commitDuration, filter);
             }
             chain.callback(function() {
                     nextCard.filter().clear();
@@ -206,13 +207,13 @@ define(["mobileui/views/gesture-detector",
                 });
             this.animation().get("slide")
                 .chain()
-                .opacity(300, 0);
+                .opacity(commitDuration, 0);
             nextCard.animation().start().get("slide-filter")
                 .chain()
-                .filter(300, new Filter().grayscale(0));
+                .filter(commitDuration, new Filter().grayscale(0));
             nextCard.animation().get("slide-opacity")
                 .chain()
-                .opacity(300, 1);
+                .opacity(commitDuration, 1);
         },
 
         _revert: function() {
@@ -221,19 +222,19 @@ define(["mobileui/views/gesture-detector",
                 chain = this.animation().start().get("slide-transform").chain();
             if (!this._useFilter) {
                 var transform = new Transform();
-                chain = chain.transform(100, transform);
+                chain = chain.transform(commitDuration, transform);
             } else {
                 if (useShadow) {
                     var filterShadow = new Filter();
                     filterShadow.get("dropShadow").setRadius(10).setColor(0);
-                    chain = chain.filter(100, filterShadow);
+                    chain = chain.filter(commitDuration, filterShadow);
                 } else {
-                    chain = chain.wait(100);
+                    chain = chain.wait(commitDuration);
                 }
                 var filter = new Filter();
                 filter.get("fold").setT(0).setShadow(this._computeShadow(0)).setWidth(this.bounds().width());
                 this._filterView.animation().start().get("slide-filter").
-                    chain().filter(100, filter);
+                    chain().filter(commitDuration, filter);
             }
             chain.callback(function() {
                 nextCard.filter().clear();
@@ -246,13 +247,13 @@ define(["mobileui/views/gesture-detector",
             });
             this.animation().get("slide")
                 .chain()
-                .opacity(100, 1);
+                .opacity(commitDuration, 1);
             nextCard.animation().start().get("slide-filter")
                 .chain()
-                .filter(300, new Filter().grayscale(100));
+                .filter(commitDuration, new Filter().grayscale(100));
             nextCard.animation().get("slide-opacity")
                 .chain()
-                .opacity(300, 0.5);
+                .opacity(commitDuration, 0.5);
         },
 
         _onDragEnd: function(transform) {
@@ -267,6 +268,15 @@ define(["mobileui/views/gesture-detector",
 
         _onTap: function() {
             this._onTapStart();
+            if (this._useFilter) {
+                this._filterView.filter().get("fold")
+                    .setT(0)
+                    .setShadow(this._computeShadow(0))
+                    .setWidth(this.bounds().width());
+                this.addClass("js-touch-item-view-filter");
+                if (useShadow)
+                    this.filter().get("dropShadow").setRadius(10).setColor(0);
+            }
             this._commit();
         },
 

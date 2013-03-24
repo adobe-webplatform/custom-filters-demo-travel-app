@@ -109,6 +109,7 @@ body {
 .js-location-item-view-label {
     position: absolute;
     top: 50%;
+    text-align: center;
     transform: translateY(-50%);
     font-size: 1.5em;
     text-overflow: ellipsis;

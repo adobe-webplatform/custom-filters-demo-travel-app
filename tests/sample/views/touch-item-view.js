@@ -67,6 +67,7 @@ define(["mobileui/views/gesture-detector",
             nextCard.setOpacity(0.5);
             if (this._useFilter) {
                 var fold = this.filter().get("fold");
+                this.filter().get("dropShadow").setRadius(10).setColor(0);
                 this._dragStartValue = -fold.t() * this.bounds().width();
             } else {
                 var translate = this.transform().get("translate");
@@ -107,6 +108,7 @@ define(["mobileui/views/gesture-detector",
                 value = Math.min(0, this._dragStartValue + transform.dragX);
                 var t = Math.min(0.999, Math.max(0, - value / this.bounds().width()));
                 this.filter().get("fold").setT(t).setShadow(this._computeShadow(t)).setWidth(this.bounds().width());
+                this.filter().get("dropShadow").setRadius(10).setColor(t);
                 grayscale.setIntensity(100 - t * 100);
                 nextCard.setOpacity(t / 2 + 0.5);
             }
@@ -168,6 +170,7 @@ define(["mobileui/views/gesture-detector",
             } else {
                 var filter = new Filter();
                 filter.get("fold").setT(2).setShadow(this._computeShadow(1)).setWidth(this.bounds().width());
+                filter.get("dropShadow").setRadius(10).setColor(0);
                 chain = chain.wait(0).filter(300, filter);
             }
             chain.callback(function() {
@@ -199,6 +202,7 @@ define(["mobileui/views/gesture-detector",
             } else {
                 var filter = new Filter();
                 filter.get("fold").setT(0).setShadow(this._computeShadow(0)).setWidth(this.bounds().width());
+                filter.get("dropShadow").setRadius(10).setColor(0);
                 chain = chain.filter(100, filter);
             }
             chain.callback(function() {

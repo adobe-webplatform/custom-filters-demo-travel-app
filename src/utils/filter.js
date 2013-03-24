@@ -66,7 +66,12 @@ define(function() {
                 var result = new fn();
                 var self = this;
                 _.each(parameters, function(parameter, i) {
-                    result[keys[i]] = self[keys[i]] * (1 - percent) + other[keys[i]] * percent;
+                    var currentValue = self[keys[i]];
+                    if (_.isString(currentValue)) {
+                        result[keys[i]] = currentValue;
+                        return;
+                    }
+                    result[keys[i]] = currentValue * (1 - percent) + other[keys[i]] * percent;
                 });
                 return result;
             },
@@ -118,7 +123,11 @@ define(function() {
         blur: generateFunction("blur", "radius", "px"),
         brightness: generateFunction("brightness", "intensity", "%"),
         grayscale: generateFunction("grayscale", "intensity", "%"),
-        opacity: generateFunction("opacity", "intensity", "%")
+        opacity: generateFunction("opacity", "intensity", "%"),
+        dropShadow: generateFunction("drop-shadow", "x y radius color", function(fn) {
+            return "drop-shadow(" + fn._x.toFixed(6) + "px " + fn._y.toFixed(6) + "px " + fn._radius.toFixed(6) + "px rgba(0, 0, 0, " + 
+                fn._color + "))";
+        })
     };
 
     var Filter = function() {

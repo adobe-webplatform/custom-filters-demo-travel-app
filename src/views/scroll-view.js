@@ -48,7 +48,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             this._horizontalView.forceLayer()
                 .addClass("js-scroll-view-indicator")
                 .addClass("js-scroll-view-horizontal-indicator");
-            this._horizontalView.bounds().setSize(1, 10);
+            this._horizontalView.bounds().setSize(1, 4);
             this._horizontalView.transform().translate().scale(0, 1);
             this.append(this._horizontalView.render());
 
@@ -56,7 +56,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             this._verticalView.forceLayer()
                 .addClass("js-scroll-view-indicator")
                 .addClass("js-scroll-view-vertical-indicator");
-            this._verticalView.bounds().setSize(10, 1);
+            this._verticalView.bounds().setSize(4, 1);
             this._verticalView.transform().translate().scale(1, 0);
             this.append(this._verticalView.render());
         },

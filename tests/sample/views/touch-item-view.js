@@ -25,6 +25,7 @@ define(["mobileui/views/gesture-detector",
         "app"],
     function(GestureDetector, LayerView, LayoutParams, GestureView, Transform, Filter, Momentum, Fold, app) {
 
+    var useShadow = false;
 
     var ItemView = GestureView.extend({
         initialize: function() {
@@ -77,7 +78,8 @@ define(["mobileui/views/gesture-detector",
             nextCard.setOpacity(0.5);
             if (this._useFilter) {
                 var fold = this._filterView.filter().get("fold");
-                this.filter().get("dropShadow").setRadius(10).setColor(0);
+                if (useShadow)
+                    this.filter().get("dropShadow").setRadius(10).setColor(0);
                 this._dragStartValue = -fold.t() * this.bounds().width();
             } else {
                 var translate = this.transform().get("translate");
@@ -118,7 +120,8 @@ define(["mobileui/views/gesture-detector",
                 value = Math.min(0, this._dragStartValue + transform.dragX);
                 var t = Math.min(0.999, Math.max(0, - value / this.bounds().width()));
                 this._filterView.filter().get("fold").setT(t).setShadow(this._computeShadow(t)).setWidth(this.bounds().width());
-                this.filter().get("dropShadow").setRadius(10).setColor(t);
+                if (useShadow)
+                    this.filter().get("dropShadow").setRadius(10).setColor(t);
                 grayscale.setIntensity(100 - t * 100);
                 nextCard.setOpacity(t / 2 + 0.5);
             }
@@ -178,9 +181,13 @@ define(["mobileui/views/gesture-detector",
                     transform.translate(0, -this.bounds().height());
                 chain = chain.transform(300, transform);
             } else {
-                var filterShadow = new Filter();
-                filterShadow.get("dropShadow").setRadius(10).setColor(0);
-                chain = chain.wait(0).filter(300, filterShadow);
+                if (useShadow) {
+                    var filterShadow = new Filter();
+                    filterShadow.get("dropShadow").setRadius(10).setColor(0);
+                    chain = chain.filter(300, filterShadow);
+                } else {
+                    chain = chain.wait(300);
+                }
                 var filter = new Filter();
                 filter.get("fold").setT(2).setShadow(this._computeShadow(1)).setWidth(this.bounds().width());
                 this._filterView.animation().start().get("slide-filter").
@@ -216,9 +223,13 @@ define(["mobileui/views/gesture-detector",
                 var transform = new Transform();
                 chain = chain.transform(100, transform);
             } else {
-                var filterShadow = new Filter();
-                filterShadow.get("dropShadow").setRadius(10).setColor(0);
-                chain = chain.filter(100, filterShadow);
+                if (useShadow) {
+                    var filterShadow = new Filter();
+                    filterShadow.get("dropShadow").setRadius(10).setColor(0);
+                    chain = chain.filter(100, filterShadow);
+                } else {
+                    chain = chain.wait(100);
+                }
                 var filter = new Filter();
                 filter.get("fold").setT(0).setShadow(this._computeShadow(0)).setWidth(this.bounds().width());
                 this._filterView.animation().start().get("slide-filter").

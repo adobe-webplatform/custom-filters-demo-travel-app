@@ -49,6 +49,7 @@ define(["mobileui/ui/scroll-card-view",
 
         render: function() {
             OldTestView.__super__.render.call(this);
+            this.$el.addClass("js-old-test-view");
             var self = this;
 
             var layer0 = new LayoutView().setParams(new LayoutParams().matchChildren());

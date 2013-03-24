@@ -143,6 +143,12 @@ define(["mobileui/utils/rect",
             return this._childAdded(view, /* useAnimation */ true);
         },
 
+        prepend: function(view) {
+            requestAnimationFrame.setHadDOMUpdates();
+            this.$el.prepend(view.$el);
+            return this._childAdded(view, /* useAnimation */ false);
+        },
+
         before: function(view, otherView) {
             requestAnimationFrame.setHadDOMUpdates();
             otherView.$el.before(view.$el);
@@ -260,13 +266,25 @@ define(["mobileui/utils/rect",
         },
 
         hide: function() {
+            if (!this._visible)
+                return this;
             this._visible = false;
             this.invalidate("visibility");
             return this;
         },
 
         show: function() {
+            if (this._visible)
+                return this;
             this._visible = true;
+            this.invalidate("visibility");
+            return this;
+        },
+
+        setVisible: function(visible) {
+            if (this._visible == visible)
+                return this;
+            this._visible = visible;
             this.invalidate("visibility");
             return this;
         },

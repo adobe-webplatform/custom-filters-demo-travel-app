@@ -35,6 +35,18 @@ body {
     overflow: hidden;
 }
 
+.js-scroll-view-indicator {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.js-scroll-view-vertical-indicator {
+    transform-origin: 100% 0%;
+}
+
+.js-scroll-view-horizontal-indicator {
+    transform-origin: 0% 100%;
+}
+
 .red-box {
     background: red;
     color: white;

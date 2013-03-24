@@ -15,12 +15,15 @@
  */
 
 define(["mobileui/views/gesture-view",
+        "mobileui/views/layer-view",
         "mobileui/views/gesture-detector",
         "mobileui/utils/boilerplate",
         "mobileui/utils/momentum",
         "mobileui/utils/transform"],
-function(GestureView, GestureDetector, boilerplate, Momentum,
+function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             Transform) {
+
+    var minScrollIndicatorSize = 10;
 
     var ScrollView = GestureView.extend({
 
@@ -40,6 +43,22 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
             this._momentumTop = new Momentum(this._scrollAnimationDuration);
             this._maxMomentum = 100;
             this._useAnimation = false;
+
+            this._horizontalView = new LayerView();
+            this._horizontalView.forceLayer()
+                .addClass("js-scroll-view-indicator")
+                .addClass("js-scroll-view-horizontal-indicator");
+            this._horizontalView.bounds().setSize(1, 10);
+            this._horizontalView.transform().translate().scale(0, 1);
+            this.append(this._horizontalView.render());
+
+            this._verticalView = new LayerView();
+            this._verticalView.forceLayer()
+                .addClass("js-scroll-view-indicator")
+                .addClass("js-scroll-view-vertical-indicator");
+            this._verticalView.bounds().setSize(10, 1);
+            this._verticalView.transform().translate().scale(1, 0);
+            this.append(this._verticalView.render());
         },
 
         render: function() {
@@ -62,8 +81,24 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
             return this;
         },
 
+        _verticalScrollHeight: function() {
+            return Math.max(minScrollIndicatorSize, this.bounds().height() / this.scrollHeight() * this.bounds().height());
+        },
+
+        _horizontalScrollWidth: function() {
+            return Math.max(minScrollIndicatorSize, this.bounds().width() / this.scrollWidth() * this.bounds().width());
+        },
+
         layout: function() {
             ScrollView.__super__.layout.call(this);
+            this._verticalView.setVisible(this.hasVerticalScroll())
+                .bounds().setX(this.bounds().width() - this._verticalView.bounds().width());
+            this._horizontalView.setVisible(this.hasHorizontalScroll())
+                .bounds().setY(this.bounds().height() - this._horizontalView.bounds().height());
+
+            this._verticalView.transform().get("scale").setY(this._verticalScrollHeight());
+            this._horizontalView.transform().get("scale").setX(this._horizontalScrollWidth());
+
             this.invalidate("scroll");
         },
 
@@ -76,7 +111,7 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
             }
             if (view) {
                 this._contentView = view;
-                this.append(view);
+                this.prepend(view);
             }
             return this;
         },
@@ -120,6 +155,14 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
             return Math.max(0, this._contentView.outerHeight() - this.bounds().height());
         },
 
+        hasHorizontalScroll: function() {
+            return this.scrollWidth() > this.bounds().width();
+        },
+
+        hasVerticalScroll: function() {
+            return this.scrollHeight() > this.bounds().height();
+        },
+
         _checkScrollPosition: function() {
             if (!this._canOverScroll || this._scrollDirection == ScrollView.VERTICAL)
                 this._scrollLeft = Math.max(0, Math.min(this._scrollLeft, this.maxScrollLeft()));
@@ -150,12 +193,22 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
             this._internalScroll();
         },
 
+        _computeVerticalBarPosition: function(scrollTop) {
+            return scrollTop / this.scrollHeight() * (this.bounds().height() - this._verticalView.bounds().height());
+        },
+
+        _computeHorizontalBarPosition: function(scrollLeft) {
+            return scrollLeft / this.scrollWidth() * (this.bounds().width() - this._horizontalView.bounds().width());
+        },
+
         _internalScroll: function() {
             var contentView = this.contentView();
             contentView
                 .transform()
                 .get("translate")
                 .setX(-this._scrollLeft).setY(-this._scrollTop);
+            this._verticalView.transform().get("translate").setY(this._computeVerticalBarPosition(this._scrollTop));
+            this._horizontalView.transform().get("translate").setX(this._computeHorizontalBarPosition(this._scrollLeft));
         },
 
         _adjustMomentum: function(momentum, scroll, maxScroll) {
@@ -193,20 +246,41 @@ function(GestureView, GestureDetector, boilerplate, Momentum,
 
         _internalScrollWithAnimation: function(momentumLeft, momentumTop) {
             var contentView = this.contentView();
-            var chain = contentView.animation()
-                .inlineStart()
-                .get("scroll")
-                    .removeAll()
-                    .chain();
+            var chain = contentView.animation().inlineStart().get("scroll").removeAll().chain();
+            var chainVertical = this._verticalView.animation().inlineStart().get("scroll").removeAll().chain();
+            var chainHorizontal = this._horizontalView.animation().inlineStart().get("scroll").removeAll().chain();
+            var verticalTransform, horizontalTransform;
+
             if (momentumLeft != this._scrollLeft ||
                 momentumTop != this._scrollTop) {
                 chain = chain.transform(this._scrollAnimationDuration / 2,
                                     new Transform().translate(-momentumLeft, -momentumTop))
                              .setTimingFunction("easeOut");
+
+                verticalTransform = this._verticalView.transform().clone();
+                verticalTransform.get("translate").setY(this._computeVerticalBarPosition(momentumTop));
+
+                chainVertical = chainVertical.transform(this._scrollAnimationDuration / 2, verticalTransform)
+                                .setTimingFunction("easeOut");
+
+                horizontalTransform = this._horizontalView.transform().clone();
+                horizontalTransform.get("translate").setX(this._computeHorizontalBarPosition(momentumLeft));
+                chainHorizontal = chainHorizontal.transform(this._scrollAnimationDuration / 2, horizontalTransform)
+                                .setTimingFunction("easeOut");
             }
             chain.transform(this._scrollAnimationDuration,
                             new Transform().translate(-this._scrollLeft, -this._scrollTop))
                  .setTimingFunction("easeOut");
+
+            verticalTransform = this._verticalView.transform().clone();
+            verticalTransform.get("translate").setY(this._computeVerticalBarPosition(this._scrollTop));
+            chainVertical.transform(this._scrollAnimationDuration, verticalTransform)
+                                .setTimingFunction("easeOut");
+
+            horizontalTransform = this._horizontalView.transform().clone();
+            horizontalTransform.get("translate").setX(this._computeHorizontalBarPosition(this._scrollLeft));
+            chainHorizontal.transform(this._scrollAnimationDuration, horizontalTransform)
+                                .setTimingFunction("easeOut");
         },
 
         _onMouseWheel: function(event) {

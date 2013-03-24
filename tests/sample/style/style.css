@@ -19,6 +19,10 @@ body {
     background-color: black;
 }
 
+.js-index-view, .js-old-test-view {
+    background-color: white;
+}
+
 .js-button-view-label {
     position: absolute;
     top: 50%;

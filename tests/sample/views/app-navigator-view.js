@@ -16,7 +16,8 @@
 
 define(['mobileui/ui/navigator-view',
         'mobileui/ui/button-view',
-        'app'], function(NavigatorView, ButtonView, app) {
+        'utils/cache',
+        'app'], function(NavigatorView, ButtonView, cache, app) {
 
     var AppNavigatorView = NavigatorView.extend({
 
@@ -49,6 +50,12 @@ define(['mobileui/ui/navigator-view',
             this._refreshButton.margin().setLeft(10).setTop(5);
             topBar.append(this._refreshButton.render().addClass("js-navigator-top-bar-button-view")
                 .addClass("js-navigator-top-bar-refresh-button-view"));
+
+            this._updateButton = new ButtonView().setLabel("Update")
+                .on("tap", this._onUpdateButtonTap, this);
+            this._updateButton.margin().setLeft(10).setTop(5);
+            topBar.append(this._updateButton.render().addClass("js-navigator-top-bar-button-view")
+                .addClass("js-navigator-top-bar-update-button-view"));
 
             topBar.appendFiller();
 
@@ -103,6 +110,10 @@ define(['mobileui/ui/navigator-view',
 
         _onRefreshButtonTap: function() {
             window.location.reload();
+        },
+
+        _onUpdateButtonTap: function() {
+            cache.checkForUpdates();
         }
 
     });

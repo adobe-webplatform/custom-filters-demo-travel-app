@@ -16,10 +16,12 @@
 
 define(['app',
         'mobileui/ui/window-view',
-        'views/app-navigator-view'],
+        'views/app-navigator-view',
+        'utils/cache'],
     function(app,
              WindowView,
-             AppNavigatorView)
+             AppNavigatorView,
+             cache)
     {
 
     var MainView = WindowView.extend({
@@ -28,6 +30,7 @@ define(['app',
             MainView.__super__.initialize.call(this);
             this._navigatorView = new AppNavigatorView();
             this.append(this._navigatorView.render());
+            this.listenTo(cache, 'updateready', this._onUpdateReady);
         },
 
         render: function() {
@@ -38,6 +41,11 @@ define(['app',
 
         navigatorView: function() {
             return this._navigatorView;
+        },
+
+        _onUpdateReady: function() {
+            if (confirm("New application version is available. Would you like to load the new version now?"))
+                cache.swapCache();
         }
     });
 

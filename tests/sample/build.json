@@ -1,0 +1,21 @@
+({
+    baseUrl: ".",
+    paths: {
+        "mobileui": "../../src/"
+    },
+    name: "main",
+    out: "dist/main.min.js",
+
+    shim: {
+        'backbone': {
+            deps: ['underscore', 'jquery'],
+            exports: 'Backbone'
+        },
+        'underscore': {
+            exports: '_'
+        },
+        'jquery': {
+            exports: ['$', 'jQuery']
+        }
+    }
+})

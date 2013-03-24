@@ -29,13 +29,17 @@ limitations under the License.
     <body>
         <div id="main"></div>
 
-        <script type="text/javascript" src="../../third-party/dev/jquery-1.9.1.js"></script>
-        <script type="text/javascript" src="../../third-party/dev/prefixfree.js"></script>
+        <script type="text/javascript" src="../../third-party/prod/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="../../third-party/prod/prefixfree.min.js"></script>
         <script type="text/javascript" src="../../third-party/dev/prefixfree.jquery.js"></script>
-        <script type="text/javascript" src="../../third-party/dev/underscore.js"></script>
-        <script type="text/javascript" src="../../third-party/dev/underscore.string.js"></script>
-        <script type="text/javascript" src="../../third-party/dev/sylvester.src.js"></script>
-        <script type="text/javascript" src="../../third-party/dev/backbone.js"></script>
-        <script type="text/javascript" src="../../third-party/dev/require.js" data-main="start"></script>
+        <script type="text/javascript" src="../../third-party/prod/underscore-min.js"></script>
+        <script type="text/javascript" src="../../third-party/prod/underscore.string.min.js"></script>
+        <script type="text/javascript" src="../../third-party/prod/sylvester.js"></script>
+        <script type="text/javascript" src="../../third-party/prod/backbone-min.js"></script>
+        <script type="text/javascript" src="../../third-party/prod/require.js"></script>
+        <script type="text/javascript" src="dist/main.min.js"></script>
+        <script>
+            require(["main"]);
+        </script>
     </body>
 </html>

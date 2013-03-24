@@ -37,14 +37,6 @@ limitations under the License.
         <script type="text/javascript" src="../../third-party/dev/sylvester.src.js"></script>
         <script type="text/javascript" src="../../third-party/dev/backbone.js"></script>
         <script type="text/javascript" src="../../third-party/dev/require.js"></script>
-        <script>
-        requirejs.config({
-            paths: {
-                "mobileui": "../../src/"
-            },
-            urlArgs: "bust=" +  (new Date()).getTime()
-        });
-        require(["main"]);
-        </script>
+        <script type="text/javascript" src="config.js"></script>
     </body>
 </html>

@@ -19,10 +19,11 @@ module.exports = function(grunt) {
           "../../third-party/prod/sylvester.js",
           "../../third-party/prod/backbone-min.js",
           "../../third-party/prod/require.js",
-          "dist/main.min"
+          "dist/main.min.js"
         ],
         dest: 'dist/all.min.js',
         options: {
+          separator: ';\n\n',
           banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
         }
       }

@@ -21,6 +21,7 @@ precision mediump float;
 attribute vec4 a_position;
 attribute vec2 a_texCoord;
 attribute vec2 a_meshCoord;
+attribute vec3 a_triangleCoord;
 
 // Built-in uniforms.
 
@@ -32,12 +33,8 @@ uniform vec2 u_textureSize;
 uniform mat4 transform;
 
 uniform float mapDepth;
-uniform float mapCurve;
 uniform float minSpacing;
-
 uniform float t;
-uniform float spins;
-uniform float phase;
 uniform float shadow;
 
 // Varyings
@@ -53,15 +50,19 @@ const float PI = 3.1415629;
 void main()
 {
     vec4 pos = a_position;
-    pos.z = (-cos(a_meshCoord.x * PI * 8.0) * mapDepth * t - mapDepth * t / 2.0) * a_meshCoord.x;
+    float coord = a_triangleCoord.x + 
+                  ((a_triangleCoord.z == 2.0) ? 1.0 : 0.0) +
+                  ((a_triangleCoord.z == 3.0) ? 1.0 : 0.0) +
+                  ((a_triangleCoord.z == 5.0) ? 1.0 : 0.0);
+    if (coord > 0.0)
+        pos.z = -cos(coord * PI) * mapDepth * t + mapDepth * t;
 
-    float scaleX = mix(t - mapCurve, 1.0, sin(a_meshCoord.y * PI * spins + phase));
-    scaleX = mix(1.0, minSpacing, t * scaleX);
+    {
+        float scaleX = mix(1.0, minSpacing, t * t);
+        pos.x = (pos.x + 0.5) * scaleX - 0.5;
+    }
 
-    pos.x = (pos.x + 0.5) * scaleX - 0.5;
-    pos.y *= max(0.95, (1.0 - a_meshCoord.x * t));
-
-    v_lighting = min(1.0, cos(a_meshCoord.x * PI * 8.0 + PI) + shadow);
-
+    v_lighting = (1.0 - mod(a_triangleCoord.x, 2.0)) * (1.0 - shadow) + shadow;
+  
     gl_Position = u_projectionMatrix * transform * pos;
 }

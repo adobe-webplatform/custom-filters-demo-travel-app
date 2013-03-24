@@ -16,11 +16,6 @@
 
 precision mediump float;
 
-// Uniforms passed in from CSS
-
-uniform vec4 backColor;
-uniform float useColoredBack;
-
 // Varyings
 
 varying float v_lighting;
@@ -29,9 +24,6 @@ varying float v_lighting;
 
 void main()
 {
-    if (!gl_FrontFacing && useColoredBack >= 0.5)
-        css_MixColor = v_lighting * backColor;
-    else
-        css_MixColor = vec4(v_lighting);
+    css_MixColor = vec4(v_lighting);
     css_MixColor.a = 1.0;
 }

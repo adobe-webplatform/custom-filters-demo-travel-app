@@ -73,12 +73,14 @@ define(["mobileui/views/gesture-detector",
                 this._dragStartValue = this._verticalLayout ?
                     translate.x() : translate.y();
             }
+            if (this._useFilter)
+                this.addClass("js-touch-item-view-filter");
             this._momentum.reset(this._dragStartValue);
             this.animation().removeAll();
         },
 
-        _minShadow: 1.2,
-        _maxShadow: 2,
+        _minShadow: 0.7,
+        _maxShadow: 1,
 
         _computeShadow: function(t) {
             return (1 - t) * (this._maxShadow - this._minShadow) + this._minShadow;
@@ -104,7 +106,7 @@ define(["mobileui/views/gesture-detector",
             } else {
                 value = Math.min(0, this._dragStartValue + transform.dragX);
                 var t = Math.min(0.999, Math.max(0, - value / this.bounds().width()));
-                this.filter().get("fold").setT(t).setShadow(this._computeShadow(t));
+                this.filter().get("fold").setT(t).setShadow(this._computeShadow(t)).setWidth(this.bounds().width());
                 grayscale.setIntensity(100 - t * 100);
                 nextCard.setOpacity(t / 2 + 0.5);
             }
@@ -165,7 +167,7 @@ define(["mobileui/views/gesture-detector",
                 chain = chain.transform(300, transform);
             } else {
                 var filter = new Filter();
-                filter.get("fold").setT(2).setShadow(this._computeShadow(1));
+                filter.get("fold").setT(2).setShadow(this._computeShadow(1)).setWidth(this.bounds().width());
                 chain = chain.wait(0).filter(300, filter);
             }
             chain.callback(function() {
@@ -173,6 +175,8 @@ define(["mobileui/views/gesture-detector",
                     app.mainView.navigatorView().commitNextCard();
                     // We are safely hidden, revert the tap listener to the previous state.
                     self.once("tap", self._onTap, self);
+                    if (self._useFilter)
+                        self.removeClass("js-touch-item-view-filter");
                 });
             this.animation().get("slide")
                 .chain()
@@ -194,12 +198,14 @@ define(["mobileui/views/gesture-detector",
                 chain = chain.transform(100, transform);
             } else {
                 var filter = new Filter();
-                filter.get("fold").setT(0).setShadow(this._computeShadow(0));
+                filter.get("fold").setT(0).setShadow(this._computeShadow(0)).setWidth(this.bounds().width());
                 chain = chain.filter(100, filter);
             }
             chain.callback(function() {
                 nextCard.filter().clear();
                 app.mainView.navigatorView().revertNextCard();
+                if (self._useFilter)
+                    self.removeClass("js-touch-item-view-filter");
             });
             this.animation().get("slide")
                 .chain()
@@ -214,9 +220,8 @@ define(["mobileui/views/gesture-detector",
 
         _onDragEnd: function(transform) {
             this._onDragMove(transform);
-            var value = this._momentum.compute(),
+            var value = this._momentum.compute() * 4,
                 direction = this._momentum.direction();
-            value *= 4;
             if ((this._verticalLayout && ((value > - this.bounds().width()) || (direction < 0))) ||
                 (!this._verticalLayout && ((value > - this.bounds().height()) || (direction < 0))))
                 return this._revert();

@@ -135,3 +135,16 @@ body {
 .js-location-view {
     background-color: white;
 }
+
+.js-touch-item-view-filter {
+    z-index: 1;
+}
+
+.js-touch-item-view-filter:before {
+    position: absolute;
+    top: -40px;
+    bottom: -40px;
+    left: 0px;
+    right: 0px;
+    content: "";
+}

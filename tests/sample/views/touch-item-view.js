@@ -178,8 +178,10 @@ define(["mobileui/views/gesture-detector",
                     app.mainView.navigatorView().commitNextCard();
                     // We are safely hidden, revert the tap listener to the previous state.
                     self.once("tap", self._onTap, self);
-                    if (self._useFilter)
+                    if (self._useFilter) {
+                        self.filter().clear();
                         self.removeClass("js-touch-item-view-filter");
+                    }
                 });
             this.animation().get("slide")
                 .chain()
@@ -208,8 +210,10 @@ define(["mobileui/views/gesture-detector",
             chain.callback(function() {
                 nextCard.filter().clear();
                 app.mainView.navigatorView().revertNextCard();
-                if (self._useFilter)
+                if (self._useFilter) {
+                    self.filter().clear();
                     self.removeClass("js-touch-item-view-filter");
+                }
             });
             this.animation().get("slide")
                 .chain()

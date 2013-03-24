@@ -49,6 +49,8 @@ define(["views/touch-item-view",
 
     var SplashView = TouchListView.extend({
 
+        isDefaultScreen: true,
+
         initialize: function(options) {
             this.model = new Backbone.Collection();
             this.model.add(_.map(SplashLabels, function(item) {

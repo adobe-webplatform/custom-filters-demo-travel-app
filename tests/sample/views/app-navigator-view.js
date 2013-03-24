@@ -44,6 +44,12 @@ define(['mobileui/ui/navigator-view',
             topBar.append(this._homeButton.render().addClass("js-navigator-top-bar-button-view")
                 .addClass("js-navigator-top-bar-home-button-view"));
 
+            this._refreshButton = new ButtonView().setLabel("Refresh")
+                .on("tap", this._onRefreshButtonTap, this);
+            this._refreshButton.margin().setLeft(10).setTop(5);
+            topBar.append(this._refreshButton.render().addClass("js-navigator-top-bar-button-view")
+                .addClass("js-navigator-top-bar-refresh-button-view"));
+
             topBar.appendFiller();
 
             this._listButton = new ButtonView().setLabel("List").hide();
@@ -69,9 +75,16 @@ define(['mobileui/ui/navigator-view',
             if (this.canGoBack()) {
                 this._backButton.show();
                 this._homeButton.hide();
+                this._refreshButton.hide();
             } else {
                 this._backButton.hide();
-                this._homeButton.show();
+                if (this.activeCard().isDefaultScreen) {
+                    this._homeButton.hide();
+                    this._refreshButton.show();
+                } else {
+                    this._homeButton.show();
+                    this._refreshButton.hide();
+                }
             }
         },
 
@@ -86,6 +99,10 @@ define(['mobileui/ui/navigator-view',
         _onBackButtonTap: function() {
             if (!this.popCard())
                 this.pushCard(app.router.lookupCard(app.defaultCard));
+        },
+
+        _onRefreshButtonTap: function() {
+            window.location.reload();
         }
 
     });

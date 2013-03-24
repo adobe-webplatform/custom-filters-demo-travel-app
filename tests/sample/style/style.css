@@ -141,7 +141,7 @@ body {
     z-index: 1;
 }
 
-.js-touch-item-view-filter:before {
+.js-touch-item-view-filter > .js-touch-item-view:before {
     position: absolute;
     top: -40px;
     bottom: -40px;

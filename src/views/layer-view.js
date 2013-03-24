@@ -90,6 +90,7 @@ define(["mobileui/utils/rect",
             // Force a 3D layer by activating the animation.
             this.animation();
             this.transform().clear();
+            return this;
         },
 
         setElement: function(el) {

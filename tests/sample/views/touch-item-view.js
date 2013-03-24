@@ -15,6 +15,7 @@
  */
 
 define(["mobileui/views/gesture-detector",
+        "mobileui/views/layer-view",
         "mobileui/views/layout-params",
         "mobileui/views/gesture-view",
         "mobileui/utils/transform",
@@ -22,7 +23,7 @@ define(["mobileui/views/gesture-detector",
         "mobileui/utils/momentum",
         "utils/fold",
         "app"],
-    function(GestureDetector, LayoutParams, GestureView, Transform, Filter, Momentum, Fold, app) {
+    function(GestureDetector, LayerView, LayoutParams, GestureView, Transform, Filter, Momentum, Fold, app) {
 
 
     var ItemView = GestureView.extend({
@@ -34,18 +35,27 @@ define(["mobileui/views/gesture-detector",
                 .on("touchdragend", this._onDragEnd, this);
             this.setHorizontalLayout();
             this.listenTo(this.model, "change:label", this._onLabelChanged);
-            this.$labelEl = $("<div />").addClass("js-touch-item-view-label");
+            this._filterView = new LayerView();
+            this.append(this._filterView
+                    .matchParentSize()
+                    .forceLayer()
+                    .render()
+                    .addClass("js-touch-item-view")
+                    .addClass(this.model.get("className")));
+            this.$labelEl = $("<div />").addClass("js-touch-item-view-label").appendTo(this._filterView.$el);
             this._dragStartValue = 0;
             this._useFilter = false;
             this._momentum = new Momentum().setDuration(300).setFriction(0.000005);
             this.forceLayer();
         },
 
+        filterView: function() {
+            return this._filterView;
+        },
+
         render: function() {
             ItemView.__super__.render.call(this);
-            this.$el.addClass("js-touch-item-view")
-                .addClass(this.model.get("className"))
-                .append(this.$labelEl);
+            this.$el.addClass("js-touch-item-parent-view");
             this._onLabelChanged();
             return this;
         },
@@ -66,7 +76,7 @@ define(["mobileui/views/gesture-detector",
             nextCard.filter().get("grayscale").setIntensity(100);
             nextCard.setOpacity(0.5);
             if (this._useFilter) {
-                var fold = this.filter().get("fold");
+                var fold = this._filterView.filter().get("fold");
                 this.filter().get("dropShadow").setRadius(10).setColor(0);
                 this._dragStartValue = -fold.t() * this.bounds().width();
             } else {
@@ -107,7 +117,7 @@ define(["mobileui/views/gesture-detector",
             } else {
                 value = Math.min(0, this._dragStartValue + transform.dragX);
                 var t = Math.min(0.999, Math.max(0, - value / this.bounds().width()));
-                this.filter().get("fold").setT(t).setShadow(this._computeShadow(t)).setWidth(this.bounds().width());
+                this._filterView.filter().get("fold").setT(t).setShadow(this._computeShadow(t)).setWidth(this.bounds().width());
                 this.filter().get("dropShadow").setRadius(10).setColor(t);
                 grayscale.setIntensity(100 - t * 100);
                 nextCard.setOpacity(t / 2 + 0.5);
@@ -168,10 +178,13 @@ define(["mobileui/views/gesture-detector",
                     transform.translate(0, -this.bounds().height());
                 chain = chain.transform(300, transform);
             } else {
+                var filterShadow = new Filter();
+                filterShadow.get("dropShadow").setRadius(10).setColor(0);
+                chain = chain.wait(0).filter(300, filterShadow);
                 var filter = new Filter();
                 filter.get("fold").setT(2).setShadow(this._computeShadow(1)).setWidth(this.bounds().width());
-                filter.get("dropShadow").setRadius(10).setColor(0);
-                chain = chain.wait(0).filter(300, filter);
+                this._filterView.animation().start().get("slide-filter").
+                    chain().filter(300, filter);
             }
             chain.callback(function() {
                     nextCard.filter().clear();
@@ -180,6 +193,7 @@ define(["mobileui/views/gesture-detector",
                     self.once("tap", self._onTap, self);
                     if (self._useFilter) {
                         self.filter().clear();
+                        self._filterView.filter().clear();
                         self.removeClass("js-touch-item-view-filter");
                     }
                 });
@@ -202,16 +216,20 @@ define(["mobileui/views/gesture-detector",
                 var transform = new Transform();
                 chain = chain.transform(100, transform);
             } else {
+                var filterShadow = new Filter();
+                filterShadow.get("dropShadow").setRadius(10).setColor(0);
+                chain = chain.filter(100, filterShadow);
                 var filter = new Filter();
                 filter.get("fold").setT(0).setShadow(this._computeShadow(0)).setWidth(this.bounds().width());
-                filter.get("dropShadow").setRadius(10).setColor(0);
-                chain = chain.filter(100, filter);
+                this._filterView.animation().start().get("slide-filter").
+                    chain().filter(100, filter);
             }
             chain.callback(function() {
                 nextCard.filter().clear();
                 app.mainView.navigatorView().revertNextCard();
                 if (self._useFilter) {
                     self.filter().clear();
+                    self._filterView.filter().clear();
                     self.removeClass("js-touch-item-view-filter");
                 }
             });

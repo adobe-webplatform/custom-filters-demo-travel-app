@@ -36,7 +36,7 @@ define(["views/touch-item-view",
 
         render: function() {
             ItemView.__super__.render.call(this);
-            this.$el.addClass("js-splash-item-view");
+            this.filterView().$el.addClass("js-splash-item-view");
             return this;
         },
 

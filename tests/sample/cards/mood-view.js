@@ -58,7 +58,7 @@ define(["views/touch-item-view",
 
         render: function() {
             ItemView.__super__.render.call(this);
-            this.$el.addClass("js-mood-item-view");
+            this.filterView().$el.addClass("js-mood-item-view");
             return this;
         },
 

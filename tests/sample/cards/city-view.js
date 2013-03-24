@@ -44,7 +44,7 @@ define(["views/touch-item-view",
 
         render: function() {
             ItemView.__super__.render.call(this);
-            this.$el.addClass("js-city-item-view");
+            this.filterView().$el.addClass("js-city-item-view");
             return this;
         },
 

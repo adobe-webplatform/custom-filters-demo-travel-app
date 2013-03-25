@@ -1,6 +1,6 @@
 requirejs.config({
     paths: {
-        "mobileui": "../../src/"
+        "mobileui": "../../src"
     },
     urlArgs: "bust=" +  (new Date()).getTime()
 });

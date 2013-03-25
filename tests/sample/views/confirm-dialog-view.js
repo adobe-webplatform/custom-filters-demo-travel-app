@@ -28,7 +28,8 @@ define(['views/dialog-view',
             this._message = "Yes/No?";
 
             this._layoutView = new LayoutView();
-            this._layoutView.setLayout("vertical").matchParentSize();
+            this._layoutView.setLayout("vertical")
+                .setParams(new LayoutParams().matchParentWidth().matchChildrenHeight());
 
             this._labelView = new MeasuredView();
             this._labelView.margin().setAll(10);

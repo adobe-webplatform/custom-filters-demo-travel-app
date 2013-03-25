@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-define(['mobileui/views/layer-view', 'app'],
-    function(LayerView, app) {
+define(['mobileui/views/layout-view', 'mobileui/views/layout-params', 'app'],
+    function(LayoutView, LayoutParams, app) {
 
-    var DialogView = LayerView.extend({
+    var DialogView = LayoutView.extend({
 
         initialize: function() {
             DialogView.__super__.initialize.call(this);
+            this.setParams(new LayoutParams().matchParentWidth().matchChildrenHeight());
+            this.setLayout("vertical");
         },
 
         render: function() {

@@ -17,10 +17,12 @@
 define(['app',
         'mobileui/ui/window-view',
         'views/app-navigator-view',
+        'views/confirm-dialog-view',
         'utils/cache'],
     function(app,
              WindowView,
              AppNavigatorView,
+             ConfirmDialogView,
              cache)
     {
 
@@ -31,6 +33,7 @@ define(['app',
             this._navigatorView = new AppNavigatorView();
             this.append(this._navigatorView.render());
             this.listenTo(cache, 'updateready', this._onUpdateReady);
+            this._updateConfirmView = null;
         },
 
         render: function() {
@@ -44,8 +47,27 @@ define(['app',
         },
 
         _onUpdateReady: function() {
-            if (confirm("New application version is available. Would you like to load the new version now?"))
+            if (this._updateConfirmView)
+                return;
+            this._updateConfirmView = new ConfirmDialogView()
+                .setMessage("New application version is available. Would you like to load the new version now?")
+                .render()
+                .once("hide", this._onUpdateConfirmViewHidden, this)
+                .once("accept", this._onUpdateConfirmViewAccepted, this)
+                .show();
+        },
+
+        _onUpdateConfirmViewHidden: function() {
+            this._updateConfirmView.remove();
+            this._updateConfirmView = null;
+        },
+
+        _onUpdateConfirmViewAccepted: function() {
+            try {
                 cache.swapCache();
+            } catch(e) {
+                // FIXME: We get an INVALID_STATE_ERR if we get here with no cache update.
+            }
         }
     });
 

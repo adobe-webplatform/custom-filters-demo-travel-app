@@ -45,7 +45,8 @@ define(["mobileui/utils/transform",
                 promiseList = [],
                 childrenWeight = 0,
                 hasParentFillers = false,
-                spacePerWeight = 0;
+                spacePerWeight = 0,
+                previousMargin = null;
 
             _.each(children, function(view) {
                 if (!view.visible())
@@ -57,8 +58,17 @@ define(["mobileui/utils/transform",
                     return;
                 }
                 view.layoutIfNeeded();
-                if (!view.shouldIgnoreDuringLayout())
-                    offset += isVertical ? view.outerHeight() : view.outerWidth();
+                if (view.shouldIgnoreDuringLayout())
+                    return;
+                var viewMargin = view.margin();
+                offset += isVertical ? (view.outerHeight() + viewMargin.bottom()) : (view.outerWidth() + viewMargin.right());
+
+                // Collapse top margin for the current view with the bottom margin of the previous view.
+                var collapedMargin = isVertical ? viewMargin.top() - (previousMargin ? previousMargin.bottom() : 0) :
+                        viewMargin.left() -  (previousMargin ? previousMargin.right() : 0);
+                offset += Math.max(0, collapedMargin);
+
+                previousMargin = viewMargin;
             });
 
             if (hasParentFillers) {
@@ -67,14 +77,27 @@ define(["mobileui/utils/transform",
                 spacePerWeight = (childrenWeight > 0) ? remainingSpace / childrenWeight : 0;
             }
             offset = isVertical ? padding.top() : padding.left();
+            previousMargin = null;
 
             _.each(children, function(view) {
                 if (!view.visible())
                     return;
                 var params = view.params(),
                     viewBounds = view.bounds(),
-                    newX = isVertical ? padding.left() : offset,
-                    newY = isVertical ? offset : padding.top();
+                    viewMargin = view.margin();
+
+                if (!view.shouldIgnoreDuringLayout()) {
+                    // Collapse top margin for the current view with the bottom margin of the previous view.
+                    var collapedMargin = isVertical ? viewMargin.top() - (previousMargin ? previousMargin.bottom() : 0) :
+                        viewMargin.left() -  (previousMargin ? previousMargin.right() : 0);
+                    offset += Math.max(0, collapedMargin);
+                }
+
+                // We already compute the margins in JS, so balance the margins,
+                // by removing them from the positions here.
+                var newX = isVertical ? padding.left() : offset - viewMargin.left(),
+                    newY = isVertical ? offset - viewMargin.top() : padding.top();
+
                 if (params && fillsParent(params, isVertical)) {
                     var space = Math.ceil(spacePerWeight * params.weight());
                     if (isVertical)
@@ -101,10 +124,12 @@ define(["mobileui/utils/transform",
                     viewBounds.setX(newX).setY(newY);
                 }
                 view.everHadLayout = true;
-                if (!view.shouldIgnoreDuringLayout())
-                    offset += isVertical ? view.outerHeight() : view.outerWidth();
+                if (!view.shouldIgnoreDuringLayout()) {
+                    offset += isVertical ? (view.outerHeight() + viewMargin.bottom()) : (view.outerWidth() + viewMargin.right());
+                    previousMargin = viewMargin;
+                }
                 if (computeChildrenSize)
-                    maxChildrenSize = Math.max(maxChildrenSize, isVertical ? viewBounds.width() : viewBounds.height());
+                    maxChildrenSize = Math.max(maxChildrenSize, isVertical ? viewBounds.outerWidth() : viewBounds.outerHeight());
             });
 
             if (isVertical) {

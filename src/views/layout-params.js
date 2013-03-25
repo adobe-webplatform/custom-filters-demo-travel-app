@@ -91,6 +91,16 @@ define(function() {
         setWeight: function(weight) {
             this._weight = weight;
             return this;
+        },
+
+        hasParentDerivedWidth: function() {
+            return this._width == LayoutParams.MATCH_PARENT ||
+                this._width == LayoutParams.FILL_PARENT;
+        },
+
+        hasParentDerivedHeight: function() {
+            return this._height == LayoutParams.MATCH_PARENT ||
+                this._height == LayoutParams.FILL_PARENT;
         }
 
     });

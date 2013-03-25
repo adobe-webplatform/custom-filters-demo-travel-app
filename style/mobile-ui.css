@@ -32,7 +32,6 @@ body {
 
 .js-measured-view-content {
     position: absolute;
-    white-space: nowrap;
 }
 
 .js-scroll-view {

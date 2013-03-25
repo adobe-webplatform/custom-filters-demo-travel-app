@@ -337,9 +337,9 @@ define(["mobileui/utils/rect",
             if (!parentView)
                 return;
             if (params.width() == LayoutParams.MATCH_PARENT)
-                this.bounds().setWidth(parentView.bounds().width());
+                this.bounds().setWidth(parentView.bounds().width() - this.margin().horizontal());
             if (params.height() == LayoutParams.MATCH_PARENT)
-                this.bounds().setHeight(parentView.bounds().height());
+                this.bounds().setHeight(parentView.bounds().height() - this.margin().vertical());
         },
 
         setLayoutOnChildren: function() {
@@ -405,14 +405,12 @@ define(["mobileui/utils/rect",
 
         outerWidth: function() {
             return this.bounds().width() +
-                this.padding().horizontal() +
-                this.margin().horizontal();
+                this.padding().horizontal();
         },
 
         outerHeight: function() {
             return this.bounds().height() +
-                this.padding().vertical() +
-                this.margin().vertical();
+                this.padding().vertical();
         },
 
         setTransform: function(transform) {

@@ -49,11 +49,18 @@ define(["mobileui/views/layer-view",
         layout: function() {
             this.layoutBounds();
             this.layoutChildren();
-            var params = this.params();
-            if (!params || params.width() != LayoutParams.MATCH_PARENT)
+            var params = this.params(),
+                hasParentDerivedWidth = params && params.hasParentDerivedWidth(),
+                hasParentDerivedHeight = params && params.hasParentDerivedHeight();
+            if (this.checkInvalidationFlag("size")) {
+                this.$contentView.css("width", hasParentDerivedWidth ? this.bounds().width() : "");
+                this.$contentView.css("height", hasParentDerivedHeight ? this.bounds().height() : "");
+            }
+            if (!hasParentDerivedWidth)
                 this.bounds().setWidth(this.$contentView.outerWidth());
-            if (!params || params.height() != LayoutParams.MATCH_PARENT)
+            if (!hasParentDerivedHeight)
                 this.bounds().setHeight(this.$contentView.outerHeight());
+
             this.setNeedsLayout(false);
         }
     });

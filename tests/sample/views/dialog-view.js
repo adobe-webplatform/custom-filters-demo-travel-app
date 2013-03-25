@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-define(['mobileui/views/layout-view', 'mobileui/views/layout-params', 'app'],
-    function(LayoutView, LayoutParams, app) {
+define(['mobileui/views/layout-view',
+        'mobileui/views/layout-params',
+        'mobileui/utils/transform',
+        'app'],
+    function(LayoutView, LayoutParams, Transform, app) {
 
     var DialogView = LayoutView.extend({
 
@@ -31,17 +34,42 @@ define(['mobileui/views/layout-view', 'mobileui/views/layout-params', 'app'],
             return this;
         },
 
+        layout: function() {
+            DialogView.__super__.layout.call(this);
+            this.bounds().setY(this.parent().bounds().height() - this.bounds().height());
+        },
+
+        _validateShowAnimation: function() {
+            this.transform().get("translate").setY(this.bounds().height());
+            this.animation().start().get("show-transition").removeAll()
+                .chain()
+                .transform(200, new Transform().translate());
+        },
+
+        _validateHideAnimation: function() {
+            this.transform().get("translate");
+            this.animation().start().get("show-transition").removeAll()
+                .chain()
+                .transform(200, new Transform().translate(0, this.bounds().height()))
+                .callback(this._onHideAnimationEnd, this);
+        },
+
+        _onHideAnimationEnd: function() {
+            this._attachedView = null;
+            this.detach();
+            this.trigger("hide");
+        },
+
         show: function() {
             app.mainView.append(this);
             this._attachedView = app.mainView.navigatorView();
             this.trigger("show");
+            this.invalidate("showAnimation");
             return this;
         },
 
         hide: function() {
-            this.detach();
-            this._attachedView = null;
-            this.trigger("hide");
+            this.invalidate("hideAnimation");
             return this;
         }
 

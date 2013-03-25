@@ -26,7 +26,6 @@ define(["mobileui/utils/boilerplate"], function(boilerplate) {
         },
 
         checkForUpdates: function() {
-            this.trigger("updateready");
             if (!this._cache)
                 return;
             try {

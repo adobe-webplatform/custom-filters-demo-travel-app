@@ -26,6 +26,10 @@ body {
     visibility: hidden;
 }
 
+.js-layer-view-disabled {
+    pointer-events: none;
+}
+
 .js-measured-view-content {
     position: absolute;
     white-space: nowrap;

@@ -55,6 +55,7 @@ define(['mobileui/views/layout-view',
         },
 
         _onHideAnimationEnd: function() {
+            this._attachedView.setDisabled(false);
             this._attachedView = null;
             this.detach();
             this.trigger("hide");
@@ -63,6 +64,7 @@ define(['mobileui/views/layout-view',
         show: function() {
             app.mainView.append(this);
             this._attachedView = app.mainView.navigatorView();
+            this._attachedView.setDisabled(true);
             this.trigger("show");
             this.invalidate("showAnimation");
             return this;

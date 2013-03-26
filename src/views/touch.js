@@ -30,7 +30,7 @@ define(["mobileui/utils/request-animation-frame",
         this.animationFrameRequested = false;
     }
 
-    Touch.preview = true;
+    Touch.preview = false;
 
     Touch.togglePreview = function() {
         Touch.preview = !Touch.preview;

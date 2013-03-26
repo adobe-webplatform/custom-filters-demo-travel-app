@@ -28,11 +28,11 @@ define(["views/touch-item-view",
         },
         {
             label: "Location",
-            className: "js-location-item-view"
+            className: "js-city-location-item-view"
         },
         {
             label: "Search",
-            className: "js-search-item-view"
+            className: "js-city-search-item-view"
         }
     ];
 
@@ -81,7 +81,7 @@ define(["views/touch-item-view",
 
         _internalShouldUseVerticalLayout: function() {
             this.layoutBounds();
-            return this.bounds().width() < 550;
+            return this.bounds().width() < 600;
         }
 
     });

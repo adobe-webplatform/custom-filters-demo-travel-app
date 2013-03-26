@@ -36,7 +36,6 @@ define(["mobileui/views/gesture-detector",
                 .on("touchdragstart", this._onDragStart, this)
                 .on("touchdragmove", this._onDragMove, this)
                 .on("touchdragend", this._onDragEnd, this);
-            this.setHorizontalLayout();
             this.listenTo(this.model, "change:label", this._onLabelChanged);
             this._filterView = new LayerView();
             this.append(this._filterView
@@ -50,6 +49,7 @@ define(["mobileui/views/gesture-detector",
             this._useFilter = false;
             this._momentum = new Momentum().setDuration(commitDuration).setFriction(0.000005);
             this.forceLayer();
+            this.setHorizontalLayout();
         },
 
         filterView: function() {
@@ -290,11 +290,13 @@ define(["mobileui/views/gesture-detector",
         },
 
         setVerticalLayout: function() {
+            this._filterView.$el.toggleClass("js-vertical-item-view", true);
             this._verticalLayout = true;
             this.setParams(new LayoutParams().fillParentHeight().matchParentWidth());
         },
 
         setHorizontalLayout: function() {
+            this._filterView.$el.toggleClass("js-vertical-item-view", false);
             this._verticalLayout = false;
             this.setParams(new LayoutParams().fillParentWidth().matchParentHeight());
         }

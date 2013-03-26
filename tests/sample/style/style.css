@@ -22,13 +22,6 @@
 }
 
 @font-face {
-    font-family: "source-l";
-    src: url("font/SourceSansPro-Light.otf");
-    font-weight: 300;
-    font-style: normal;
-}
-
-@font-face {
     font-family: "source-sb";
     src: url("font/SourceSansPro-Semibold.otf");
     font-weight: 600;
@@ -36,10 +29,9 @@
 }
 
 body {
-    font-family: verdana;
     background-color: black;
     overflow: hidden;
-    font-family: "source";
+    font-family: "source", verdana;
 }
 
 .js-index-view, .js-old-test-view {

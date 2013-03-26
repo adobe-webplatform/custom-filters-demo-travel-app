@@ -15,9 +15,10 @@
  */
 
 define(['mobileui/ui/navigator-view',
+        'mobileui/views/measured-view',
         'mobileui/ui/button-view',
         'views/settings-dialog-view',
-        'app'], function(NavigatorView, ButtonView, SettingsDialogView, app) {
+        'app'], function(NavigatorView, MeasuredView, ButtonView, SettingsDialogView, app) {
 
     var AppNavigatorView = NavigatorView.extend({
 
@@ -33,6 +34,14 @@ define(['mobileui/ui/navigator-view',
 
         addTopBarButtons: function() {
             var topBar = this.topBarView();
+
+            this._titleLabel = new MeasuredView()
+                .setTextContent("MobileUI")
+                .matchParentSize()
+                .setIsPositioned(true);
+            this._titleLabel.margin().setTop(12);
+            topBar.append(this._titleLabel.render().addClass("js-navigator-top-bar-title-view"));
+
             this._backButton = new ButtonView().setLabel("Back")
                 .on("tap", this._onBackButtonTap, this);
             this._backButton.margin().setLeft(10).setTop(5);
@@ -58,16 +67,6 @@ define(['mobileui/ui/navigator-view',
             this._settingsButton.margin().setRight(10).setTop(5);
             topBar.append(this._settingsButton.render().addClass("js-navigator-top-bar-button-view")
                 .addClass("js-navigator-top-bar-settings-button-view"));
-
-            this._listButton = new ButtonView().setLabel("List").hide();
-            this._listButton.margin().setRight(10).setTop(5);
-            // topBar.append(this._listButton.render().addClass("js-navigator-top-bar-button-view")
-            //     .addClass("js-navigator-top-bar-list-button-view"));
-
-            this._gridButton = new ButtonView().setLabel("Grid").hide();
-            this._gridButton.margin().setRight(10).setTop(5);
-            // topBar.append(this._gridButton.render().addClass("js-navigator-top-bar-button-view")
-            //     .addClass("js-navigator-top-bar-grid-button-view"));
         },
 
         backButton: function() {

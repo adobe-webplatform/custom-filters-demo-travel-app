@@ -128,8 +128,15 @@ define(["mobileui/utils/rect",
             return this;
         },
 
+        ensureParams: function() {
+            if (!this._params)
+                this._params = new LayoutParams();
+            this.setNeedsLayout(true);
+            return this._params;
+        },
+
         matchParentSize: function() {
-            this.setParams(new LayoutParams().matchParent());
+            this.ensureParams().matchParent();
             return this;
         },
 
@@ -254,7 +261,18 @@ define(["mobileui/utils/rect",
         },
 
         shouldIgnoreDuringLayout: function() {
-            return this._state == LayerView.REMOVED;
+            return this._state == LayerView.REMOVED || this.isPositioned();
+        },
+
+        isPositioned: function() {
+            var params = this.params();
+            return params ? params.isPositioned() : false;
+        },
+
+        setIsPositioned: function(positioned) {
+            if (positioned != this.isPositioned())
+                this.ensureParams().setIsPositioned(positioned);
+            return this;
         },
 
         addClass: function(className) {

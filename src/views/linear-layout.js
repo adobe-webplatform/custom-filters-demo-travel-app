@@ -51,6 +51,10 @@ define(["mobileui/utils/transform",
             _.each(children, function(view) {
                 if (!view.visible())
                     return;
+                if (view.shouldIgnoreDuringLayout()) {
+                    view.layoutIfNeeded();
+                    return;
+                }
                 var params = view.params();
                 if (params && fillsParent(params, isVertical)) {
                     childrenWeight += params.weight();
@@ -58,8 +62,6 @@ define(["mobileui/utils/transform",
                     return;
                 }
                 view.layoutIfNeeded();
-                if (view.shouldIgnoreDuringLayout())
-                    return;
                 var viewMargin = view.margin();
                 offset += isVertical ? (view.outerHeight() + viewMargin.bottom()) : (view.outerWidth() + viewMargin.right());
 
@@ -85,49 +87,46 @@ define(["mobileui/utils/transform",
                 var params = view.params(),
                     viewBounds = view.bounds(),
                     viewMargin = view.margin();
-
                 if (!view.shouldIgnoreDuringLayout()) {
                     // Collapse top margin for the current view with the bottom margin of the previous view.
                     var collapedMargin = isVertical ? viewMargin.top() - (previousMargin ? previousMargin.bottom() : 0) :
                         viewMargin.left() -  (previousMargin ? previousMargin.right() : 0);
                     offset += Math.max(0, collapedMargin);
-                }
 
-                // We already compute the margins in JS, so balance the margins,
-                // by removing them from the positions here.
-                var newX = isVertical ? padding.left() : offset - viewMargin.left(),
-                    newY = isVertical ? offset - viewMargin.top() : padding.top();
+                    // We already compute the margins in JS, so balance the margins,
+                    // by removing them from the positions here.
+                    var newX = isVertical ? padding.left() : offset - viewMargin.left(),
+                        newY = isVertical ? offset - viewMargin.top() : padding.top();
 
-                if (params && fillsParent(params, isVertical)) {
-                    var space = Math.ceil(spacePerWeight * params.weight());
-                    if (isVertical)
-                        viewBounds.setHeight(space);
-                    else
-                        viewBounds.setWidth(space);
-                    view.layoutIfNeeded();
-                }
-                if (viewBounds.x() != newX ||
-                    viewBounds.y() != newY) {
-                    if ((options.wait || options.duration) && view.everHadLayout) {
-                        var startTransform = Transform().translate(
-                            viewBounds.x() - newX,
-                            viewBounds.y() - newY);
-                        view.transform().set(startTransform);
-                        view.animation()
-                            .inlineStart()
-                            .get("layout")
-                            .removeAll()
-                            .chain(options.wait)
-                            .transform(options.duration, Transform());
-                        promiseList.push(view.animation().promise());
+                    if (params && fillsParent(params, isVertical)) {
+                        var space = Math.ceil(spacePerWeight * params.weight());
+                        if (isVertical)
+                            viewBounds.setHeight(space);
+                        else
+                            viewBounds.setWidth(space);
+                        view.layoutIfNeeded();
                     }
-                    viewBounds.setX(newX).setY(newY);
-                }
-                view.everHadLayout = true;
-                if (!view.shouldIgnoreDuringLayout()) {
+                    if (viewBounds.x() != newX ||
+                        viewBounds.y() != newY) {
+                        if ((options.wait || options.duration) && view.everHadLayout) {
+                            var startTransform = Transform().translate(
+                                viewBounds.x() - newX,
+                                viewBounds.y() - newY);
+                            view.transform().set(startTransform);
+                            view.animation()
+                                .inlineStart()
+                                .get("layout")
+                                .removeAll()
+                                .chain(options.wait)
+                                .transform(options.duration, Transform());
+                            promiseList.push(view.animation().promise());
+                        }
+                        viewBounds.setX(newX).setY(newY);
+                    }
                     offset += isVertical ? (view.outerHeight() + viewMargin.bottom()) : (view.outerWidth() + viewMargin.right());
                     previousMargin = viewMargin;
                 }
+                view.everHadLayout = true;
                 if (computeChildrenSize)
                     maxChildrenSize = Math.max(maxChildrenSize, isVertical ? viewBounds.outerWidth() : viewBounds.outerHeight());
             });

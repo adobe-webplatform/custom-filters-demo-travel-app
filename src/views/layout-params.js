@@ -20,9 +20,19 @@ define(function() {
         this._width = null;
         this._height = null;
         this._weight = 1;
+        this._isPostioned = false;
     };
 
     _.extend(LayoutParams.prototype, {
+
+        setIsPositioned: function(positioned) {
+            this._isPostioned = positioned;
+            return this;
+        },
+
+        isPositioned: function() {
+            return this._isPostioned;
+        },
 
         width: function() {
             return this._width;

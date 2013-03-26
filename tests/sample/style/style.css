@@ -146,6 +146,12 @@ body {
     background-color: #3F2E66;
 }
 
+.js-navigator-top-bar-title-view {
+    color: white;
+    font-size: 1.2em;
+    text-align: center;
+}
+
 .js-location-view {
     background-color: white;
 }

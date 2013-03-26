@@ -14,10 +14,32 @@
  * limitations under the License.
  */
 
+@font-face {
+    font-family: "source";
+    src: url("font/SourceSansPro-Regular.otf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "source-l";
+    src: url("font/SourceSansPro-Light.otf");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "source-sb";
+    src: url("font/SourceSansPro-Semibold.otf");
+    font-weight: 600;
+    font-style: normal;
+}
+
 body {
     font-family: verdana;
     background-color: black;
     overflow: hidden;
+    font-family: "source";
 }
 
 .js-index-view, .js-old-test-view {
@@ -148,8 +170,9 @@ body {
 
 .js-navigator-top-bar-title-view {
     color: white;
-    font-size: 1.2em;
+    font-size: 1.3em;
     text-align: center;
+    font-family: "source-sb";
 }
 
 .js-location-view {

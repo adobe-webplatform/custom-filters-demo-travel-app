@@ -91,7 +91,6 @@ define(["mobileui/ui/navigator-card-view",
             this.animation().start().get("slide-transform").chain()
                 .transform(100, transform)
                 .callback(function() {
-                    nextCard.filter().clear();
                     app.mainView.navigatorView().revertNextCard();
                 });
             this.animation().get("slide")
@@ -99,7 +98,10 @@ define(["mobileui/ui/navigator-card-view",
                 .opacity(100, 1);
             nextCard.animation().start().get("slide-filter")
                 .chain()
-                .filter(300, new Filter().grayscale(100));
+                .filter(100, new Filter().grayscale(100))
+                .callback(function() {
+                    nextCard.filter().clear();
+                });
         },
 
         url: function() {

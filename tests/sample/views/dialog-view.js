@@ -90,6 +90,11 @@ define(['mobileui/views/layout-view',
                     .chain()
                     .transform(200, this._makeTransform(35, 0, 0.05))
                     .transform(200, this._makeTransform(35, 35, 0.15));
+            } else {
+                this._attachedView.animation().start().get("dialog-transform")
+                    .removeAll()
+                    .chain()
+                    .transform(200, this._makeTransform(35, 35, 0.15));
             }
         },
 

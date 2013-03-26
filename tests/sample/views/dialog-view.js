@@ -15,17 +15,37 @@
  */
 
 define(['mobileui/views/layout-view',
+        'mobileui/views/layer-view',
         'mobileui/views/layout-params',
         'mobileui/utils/transform',
         'app'],
-    function(LayoutView, LayoutParams, Transform, app) {
+    function(LayoutView, LayerView, LayoutParams, Transform, app) {
 
     var DialogView = LayoutView.extend({
 
         initialize: function() {
             DialogView.__super__.initialize.call(this);
-            this.setParams(new LayoutParams().matchParentWidth().matchChildrenHeight());
-            this.setLayout("vertical");
+            this.setParams(new LayoutParams().matchParentWidth().matchParentHeight());
+
+            this._backgroundView = new LayerView()
+                .addGestureDetector()
+                .matchParentSize()
+                .addClass("js-dialog-background-view")
+                .setOpacity(0)
+                .on("tap", this._onBackgroundTap, this)
+                .render();
+            this.append(this._backgroundView);
+
+            this._contentView = new LayoutView()
+                .setParams(new LayoutParams().matchParentWidth().matchChildrenHeight())
+                .setLayout("vertical")
+                .addClass("js-dialog-content-view")
+                .render();
+            this.append(this._contentView);
+        },
+
+        contentView: function() {
+            return this._contentView;
         },
 
         render: function() {
@@ -36,7 +56,7 @@ define(['mobileui/views/layout-view',
 
         layout: function() {
             DialogView.__super__.layout.call(this);
-            this.bounds().setY(this.parent().bounds().height() - this.bounds().height());
+            this._contentView.bounds().setY(this.bounds().height() - this._contentView.bounds().height());
         },
 
         _makeTransform: function(r1, r2, y) {
@@ -52,8 +72,11 @@ define(['mobileui/views/layout-view',
         },
 
         _validateShowAnimation: function() {
-            this.transform().get("translate").setY(this.bounds().height());
-            this.animation().start().get("show-transition").removeAll()
+            this._backgroundView.animation().start().get("dialog-opacity")
+                .chain()
+                .opacity(300, 0.3);
+            this._contentView.transform().get("translate").setY(this.bounds().height());
+            this._contentView.animation().start().get("show-transition").removeAll()
                 .chain()
                 .transform(300, new Transform().translate());
             this._attachedView.transform().set(this._makeTransform(0, 0, 0));
@@ -65,8 +88,8 @@ define(['mobileui/views/layout-view',
         },
 
         _validateHideAnimation: function() {
-            this.transform().get("translate");
-            this.animation().start().get("show-transition").removeAll()
+            this._contentView.transform().get("translate");
+            this._contentView.animation().start().get("show-transition").removeAll()
                 .chain()
                 .transform(400, new Transform().translate(0, this.bounds().height()));
             this._attachedView.animation().start().get("dialog-transform")
@@ -75,6 +98,9 @@ define(['mobileui/views/layout-view',
                 .transform(200, this._makeTransform(35, 10, 0.05))
                 .transform(200, this._makeTransform(0, 0, 0))
                 .callback(this._onHideAnimationEnd, this);
+            this._backgroundView.animation().start().get("dialog-opacity")
+                .chain()
+                .opacity(300, 0);
         },
 
         _onHideAnimationEnd: function() {
@@ -97,6 +123,10 @@ define(['mobileui/views/layout-view',
         hide: function() {
             this.invalidate("hideAnimation");
             return this;
+        },
+
+        _onBackgroundTap: function() {
+            this.hide();
         }
 
     });

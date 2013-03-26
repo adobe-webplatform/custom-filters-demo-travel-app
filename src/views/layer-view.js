@@ -75,6 +75,7 @@ define(["mobileui/utils/rect",
         addGestureDetector: function() {
             if (!this._gestureDetector)
                 this._gestureDetector = new GestureDetector(this);
+            return this;
         },
 
         animation: function() {

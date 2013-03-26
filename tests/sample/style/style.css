@@ -24,6 +24,14 @@ body {
     background-color: white;
 }
 
+.js-dialog-background-view {
+    background: black;
+}
+
+.js-dialog-content-view {
+    background-color: white;
+}
+
 .js-button-view-label {
     position: absolute;
     top: 50%;
@@ -153,8 +161,4 @@ body {
     left: 0px;
     right: 0px;
     content: "";
-}
-
-.js-dialog-view {
-    background-color: white;
 }

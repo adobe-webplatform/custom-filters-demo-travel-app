@@ -115,22 +115,10 @@ define(["views/touch-item-view",
             this.listView().contentView().setParams(new LayoutParams()
                     .matchParentWidth().matchChildrenHeight());
             this.setVerticalLayout();
-            this.on("activate", this._onViewActivated, this);
-            this.on("deactivate", this._onViewDeactivated, this);
         },
 
         url: function() {
             return "card/" + encodeURIComponent("Locations View") + "/" + this.hue + ":" + this.saturation;
-        },
-
-        _onViewActivated: function() {
-            app.mainView.navigatorView().listButton().show();
-            app.mainView.navigatorView().gridButton().show();
-        },
-
-        _onViewDeactivated: function() {
-            app.mainView.navigatorView().listButton().hide();
-            app.mainView.navigatorView().gridButton().hide();
         },
 
         render: function() {

@@ -21,6 +21,8 @@ define(['mobileui/views/layout-view',
         'app'],
     function(LayoutView, LayerView, LayoutParams, Transform, app) {
 
+    var activeDialogView = null;
+
     var DialogView = LayoutView.extend({
 
         initialize: function() {
@@ -42,6 +44,8 @@ define(['mobileui/views/layout-view',
                 .addClass("js-dialog-content-view")
                 .render();
             this.append(this._contentView);
+            this._canShow = true;
+            this._canHide = true;
         },
 
         contentView: function() {
@@ -79,39 +83,52 @@ define(['mobileui/views/layout-view',
             this._contentView.animation().start().get("show-transition").removeAll()
                 .chain()
                 .transform(300, new Transform().translate());
-            this._attachedView.transform().set(this._makeTransform(0, 0, 0));
-            this._attachedView.animation().start().get("dialog-transform")
-                .removeAll()
-                .chain()
-                .transform(200, this._makeTransform(35, 0, 0.05))
-                .transform(200, this._makeTransform(35, 35, 0.15));
+            if (this._canShow) {
+                this._attachedView.transform().set(this._makeTransform(0, 0, 0));
+                this._attachedView.animation().start().get("dialog-transform")
+                    .removeAll()
+                    .chain()
+                    .transform(200, this._makeTransform(35, 0, 0.05))
+                    .transform(200, this._makeTransform(35, 35, 0.15));
+            }
         },
 
         _validateHideAnimation: function() {
             this._contentView.transform().get("translate");
             this._contentView.animation().start().get("show-transition").removeAll()
                 .chain()
-                .transform(400, new Transform().translate(0, this.bounds().height()));
-            this._attachedView.animation().start().get("dialog-transform")
-                .removeAll()
-                .chain()
-                .transform(200, this._makeTransform(35, 10, 0.05))
-                .transform(200, this._makeTransform(0, 0, 0))
+                .transform(400, new Transform().translate(0, this.bounds().height()))
                 .callback(this._onHideAnimationEnd, this);
+            if (this._canHide) {
+                this._attachedView.animation().start().get("dialog-transform")
+                    .removeAll()
+                    .chain()
+                    .transform(200, this._makeTransform(35, 10, 0.05))
+                    .transform(200, this._makeTransform(0, 0, 0));
+            }
             this._backgroundView.animation().start().get("dialog-opacity")
                 .chain()
                 .opacity(300, 0);
         },
 
         _onHideAnimationEnd: function() {
-            this._attachedView.transform().clear();
-            this._attachedView.setDisabled(false);
+            if (activeDialogView === this)
+                activeDialogView = null;
+            if (this._canHide) {
+                this._attachedView.transform().clear();
+                this._attachedView.setDisabled(false);
+            }
             this._attachedView = null;
             this.detach();
             this.trigger("hide");
         },
 
         show: function() {
+            if (activeDialogView) {
+                activeDialogView._canHide = false;
+                this._canShow = false;
+            }
+            activeDialogView = this;
             app.mainView.append(this);
             this._attachedView = app.mainView.navigatorView();
             this._attachedView.setDisabled(true);

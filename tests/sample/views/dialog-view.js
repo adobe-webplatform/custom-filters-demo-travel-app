@@ -39,22 +39,46 @@ define(['mobileui/views/layout-view',
             this.bounds().setY(this.parent().bounds().height() - this.bounds().height());
         },
 
+        _makeTransform: function(r1, r2, y) {
+            var height = this._attachedView.bounds().height();
+            return new Transform()
+                    .perspective(1000)
+                    .translate(0, y * height)
+                    .translate(0, -height / 2)
+                    .rotateX(-r1)
+                    .translate(0, height)
+                    .rotateX(r2)
+                    .translate(0, -height / 2);
+        },
+
         _validateShowAnimation: function() {
             this.transform().get("translate").setY(this.bounds().height());
             this.animation().start().get("show-transition").removeAll()
                 .chain()
-                .transform(200, new Transform().translate());
+                .transform(300, new Transform().translate());
+            this._attachedView.transform().set(this._makeTransform(0, 0, 0));
+            this._attachedView.animation().start().get("dialog-transform")
+                .removeAll()
+                .chain()
+                .transform(200, this._makeTransform(35, 0, 0.05))
+                .transform(200, this._makeTransform(35, 35, 0.15));
         },
 
         _validateHideAnimation: function() {
             this.transform().get("translate");
             this.animation().start().get("show-transition").removeAll()
                 .chain()
-                .transform(200, new Transform().translate(0, this.bounds().height()))
+                .transform(400, new Transform().translate(0, this.bounds().height()));
+            this._attachedView.animation().start().get("dialog-transform")
+                .removeAll()
+                .chain()
+                .transform(200, this._makeTransform(35, 10, 0.05))
+                .transform(200, this._makeTransform(0, 0, 0))
                 .callback(this._onHideAnimationEnd, this);
         },
 
         _onHideAnimationEnd: function() {
+            this._attachedView.transform().clear();
             this._attachedView.setDisabled(false);
             this._attachedView = null;
             this.detach();

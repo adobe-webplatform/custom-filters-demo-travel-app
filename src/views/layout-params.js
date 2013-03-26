@@ -20,9 +20,19 @@ define(function() {
         this._width = null;
         this._height = null;
         this._weight = 1;
+        this._isPostioned = false;
     };
 
     _.extend(LayoutParams.prototype, {
+
+        setIsPositioned: function(positioned) {
+            this._isPostioned = positioned;
+            return this;
+        },
+
+        isPositioned: function() {
+            return this._isPostioned;
+        },
 
         width: function() {
             return this._width;
@@ -91,6 +101,16 @@ define(function() {
         setWeight: function(weight) {
             this._weight = weight;
             return this;
+        },
+
+        hasParentDerivedWidth: function() {
+            return this._width == LayoutParams.MATCH_PARENT ||
+                this._width == LayoutParams.FILL_PARENT;
+        },
+
+        hasParentDerivedHeight: function() {
+            return this._height == LayoutParams.MATCH_PARENT ||
+                this._height == LayoutParams.FILL_PARENT;
         }
 
     });

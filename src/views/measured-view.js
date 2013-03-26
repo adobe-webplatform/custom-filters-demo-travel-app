@@ -18,6 +18,12 @@ define(["mobileui/views/layer-view",
         "mobileui/views/layout-params"], function(LayerView, LayoutParams) {
 
     var MeasuredView = LayerView.extend({
+        initialize: function() {
+            MeasuredView.__super__.initialize.call(this);
+            this._html = null;
+            this._text = null;
+        },
+
         render: function() {
             this.$el.addClass("js-measured-view");
             this.$contentView = this.createContentElement()
@@ -26,14 +32,30 @@ define(["mobileui/views/layer-view",
             return MeasuredView.__super__.render.call(this);
         },
 
+        _validateHtml: function() {
+            if (this._html) {
+                this.$contentView.html(this._html);
+                this._html = null;
+            }
+        },
+
+        _validateText: function() {
+            if (this._text) {
+                this.$contentView.text(this._text);
+                this._text = null;
+            }
+        },
+
         setContent: function(html) {
-            this.$contentView.html(html);
+            this._text = null;
+            this._html = html;
             this.setNeedsLayout(true);
             return this;
         },
 
-        setTextContent: function(html) {
-            this.$contentView.text(html);
+        setTextContent: function(text) {
+            this._html = null;
+            this._text = text;
             this.setNeedsLayout(true);
             return this;
         },
@@ -49,11 +71,20 @@ define(["mobileui/views/layer-view",
         layout: function() {
             this.layoutBounds();
             this.layoutChildren();
-            var params = this.params();
-            if (!params || params.width() != LayoutParams.MATCH_PARENT)
+            this._validateHtml();
+            this._validateText();
+            var params = this.params(),
+                hasParentDerivedWidth = params && params.hasParentDerivedWidth(),
+                hasParentDerivedHeight = params && params.hasParentDerivedHeight();
+            if (this.checkInvalidationFlag("size")) {
+                this.$contentView.css("width", hasParentDerivedWidth ? this.bounds().width() : "");
+                this.$contentView.css("height", hasParentDerivedHeight ? this.bounds().height() : "");
+            }
+            if (!hasParentDerivedWidth)
                 this.bounds().setWidth(this.$contentView.outerWidth());
-            if (!params || params.height() != LayoutParams.MATCH_PARENT)
+            if (!hasParentDerivedHeight)
                 this.bounds().setHeight(this.$contentView.outerHeight());
+
             this.setNeedsLayout(false);
         }
     });

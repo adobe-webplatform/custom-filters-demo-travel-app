@@ -52,6 +52,7 @@ define(["mobileui/utils/rect",
             this._state = LayerView.VISIBLE;
             this._needsTouchEvents = false;
             this._visible = true;
+            this._disabled = false;
         },
 
         inlineUpdate: function() {
@@ -74,6 +75,7 @@ define(["mobileui/utils/rect",
         addGestureDetector: function() {
             if (!this._gestureDetector)
                 this._gestureDetector = new GestureDetector(this);
+            return this;
         },
 
         animation: function() {
@@ -126,8 +128,15 @@ define(["mobileui/utils/rect",
             return this;
         },
 
+        ensureParams: function() {
+            if (!this._params)
+                this._params = new LayoutParams();
+            this.setNeedsLayout(true);
+            return this._params;
+        },
+
         matchParentSize: function() {
-            this.setParams(new LayoutParams().matchParent());
+            this.ensureParams().matchParent();
             return this;
         },
 
@@ -252,7 +261,18 @@ define(["mobileui/utils/rect",
         },
 
         shouldIgnoreDuringLayout: function() {
-            return this._state == LayerView.REMOVED;
+            return this._state == LayerView.REMOVED || this.isPositioned();
+        },
+
+        isPositioned: function() {
+            var params = this.params();
+            return params ? params.isPositioned() : false;
+        },
+
+        setIsPositioned: function(positioned) {
+            if (positioned != this.isPositioned())
+                this.ensureParams().setIsPositioned(positioned);
+            return this;
         },
 
         addClass: function(className) {
@@ -293,6 +313,18 @@ define(["mobileui/utils/rect",
             return this._visible;
         },
 
+        setDisabled: function(disabled) {
+            if (this._disabled == disabled)
+                return;
+            this._disabled = disabled;
+            this.invalidate("disabled");
+            return this;
+        },
+
+        disabled: function() {
+            return this._disabled;
+        },
+
         parent: function() {
             var parent = this.$el.parent();
             for (; parent.length; parent = parent.parent()) {
@@ -324,9 +356,9 @@ define(["mobileui/utils/rect",
             if (!parentView)
                 return;
             if (params.width() == LayoutParams.MATCH_PARENT)
-                this.bounds().setWidth(parentView.bounds().width());
+                this.bounds().setWidth(parentView.bounds().width() - this.margin().horizontal());
             if (params.height() == LayoutParams.MATCH_PARENT)
-                this.bounds().setHeight(parentView.bounds().height());
+                this.bounds().setHeight(parentView.bounds().height() - this.margin().vertical());
         },
 
         setLayoutOnChildren: function() {
@@ -392,14 +424,12 @@ define(["mobileui/utils/rect",
 
         outerWidth: function() {
             return this.bounds().width() +
-                this.padding().horizontal() +
-                this.margin().horizontal();
+                this.padding().horizontal();
         },
 
         outerHeight: function() {
             return this.bounds().height() +
-                this.padding().vertical() +
-                this.margin().vertical();
+                this.padding().vertical();
         },
 
         setTransform: function(transform) {
@@ -505,6 +535,10 @@ define(["mobileui/utils/rect",
 
         _validateVisibility: function() {
             this.$el.toggleClass("js-layer-view-invisible", !this._visible);
+        },
+
+        _validateDisabled: function() {
+            this.$el.toggleClass("js-layer-view-disabled", this._disabled);
         },
 
         _validatePadding: function() {

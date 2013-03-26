@@ -24,7 +24,7 @@ define(["views/touch-item-view",
     var CityLabels = [
         {
             label: "Mood",
-            className: "js-mood-item-view"
+            className: "js-city-mood-item-view"
         },
         {
             label: "Location",

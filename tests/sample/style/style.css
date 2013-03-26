@@ -77,17 +77,30 @@ body {
     color: white;
 }
 
+.js-city-item-view-label:before {
+    position: relative;
+    display: inline-block;
+    right: 1.2em;
+    top: -1.5em;
+    width: 0;
+    height: 0;
+    font-style: italic;
+    font-size: 0.6em;
+    content: "by";
+    text-transform: lowercase;
+}
+
 .js-city-item-view-label {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 2.0em;
+    font-size: 2.2em;
     width: 100%;
     text-align: center;
     text-transform: uppercase;
 }
 
-.js-city-item-view.js-mood-item-view {
+.js-city-item-view.js-city-mood-item-view {
     background-color: #df8051;
 }
 
@@ -107,7 +120,7 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 2.0em;
+    font-size: 3.0em;
     width: 100%;
     text-align: center;
     text-transform: uppercase;

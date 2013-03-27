@@ -132,36 +132,11 @@ define(["mobileui/views/gesture-detector",
             this._momentum.injectValue(value);
         },
 
-        animateViewSwitch: function(index) {
-            var self = this,
-                transform = new Transform();
-            if (this._verticalLayout)
-                transform.translate(-this.bounds().width(), 0);
-            else
-                transform.translate(0, -this.bounds().height());
-            this.animation().start().get("slide-transform")
-                .chain(50 * index)
-                .transform(commitDuration, transform);
-            this.animation().get("slide")
-                .chain(50 * index)
+        animateViewDeactived: function() {
+            this.animation().start()
+                .get("slide-opacity")
+                .chain()
                 .opacity(commitDuration, 0);
-        },
-
-        startAnimations: function(index) {
-            var self = this,
-                translate = this.transform().get("translate");
-            if (this._verticalLayout)
-                translate.setX(-this.bounds().width());
-            else
-                translate.setY(-this.bounds().height());
-            this.setOpacity(0);
-            this.animation().start().get("slide-transform")
-                .chain(50 * index)
-                .transform(commitDuration, new Transform().translate(0, 0));
-            this.animation().get("slide")
-                .chain(50 * index)
-                .opacity(commitDuration, 1);
-            return this.animation().promise();
         },
 
         resetAnimations: function() {
@@ -209,9 +184,11 @@ define(["mobileui/views/gesture-detector",
                     }
                     app.endTransition(self);
                 });
-            this.animation().get("slide")
-                .chain()
-                .opacity(commitDuration, 0);
+            if (!this._useFilter) {
+                this.animation().get("slide")
+                    .chain()
+                    .opacity(commitDuration, 0);
+            }
             nextCard.animation().start().get("slide-filter")
                 .chain()
                 .filter(commitDuration, new Filter().grayscale(0));

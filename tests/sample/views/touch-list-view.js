@@ -30,7 +30,6 @@ define(["views/app-card-view",
                 .setScrollDirection("none");
             this._listView.contentView().matchParentSize();
             this.append(this._listView.render());
-            this.on("activate", this._onActivate, this);
             this.on("deactivate", this._onDeactivate, this);
             this._useVerticalLayout = null;
             // Force a 3D layer.
@@ -59,20 +58,8 @@ define(["views/app-card-view",
                 var view = self._listView.itemView(model);
                 if (!view || view == selectedView)
                     return;
-                view.animateViewSwitch(Math.abs(selectedViewIndex - index));
+                view.animateViewDeactived(Math.abs(selectedViewIndex - index));
             });
-        },
-
-        _onActivate: function(options) {
-            if (!options.goingBack)
-                return;
-            var self = this, promises = [];
-            this.model.each(function(model, index) {
-                var view = self._listView.itemView(model);
-                if (view)
-                    promises.push(view.startAnimations(index));
-            });
-            options.promise = $.when.apply(null, promises);
         },
 
         _onDeactivate: function() {

@@ -19,6 +19,7 @@ define(["mobileui/ui/navigator-card-view",
             this.on("card:precommit", this._updateBackButton, this);
             this.on("activate", this._updateBackButton, this);
             this.forceLayer();
+            this.on("activate", this._onAppCardViewActivate, this);
         },
 
         _updateBackButton: function() {
@@ -41,13 +42,19 @@ define(["mobileui/ui/navigator-card-view",
         _backgroundViewOpacity: 0.7,
         _backgroundViewScale: 0.95,
 
-        _onDragStart: function() {
-            app.startTransition(this);
-            var nextCard = app.mainView.navigatorView().prepareHistoryCard().nextCard();
-            if (!this._grayscaleOverlay)
+        _ensureGrayscaleOverlay: function() {
+            if (!this._grayscaleOverlay) {
                 this._grayscaleOverlay = new LayerView()
                     .matchParentSize().setOpacity(this._backgroundViewOpacity).render()
                     .addClass("js-app-card-grayscale-overlay");
+            }
+            return this._grayscaleOverlay;
+        },
+
+        _onDragStart: function() {
+            app.startTransition(this);
+            var nextCard = app.mainView.navigatorView().prepareHistoryCard().nextCard();
+            this._ensureGrayscaleOverlay();
             nextCard.parent().after(this._grayscaleOverlay, nextCard);
             nextCard.transform().get("scale")
                 .setX(this._backgroundViewScale)
@@ -149,6 +156,50 @@ define(["mobileui/ui/navigator-card-view",
                 return;
             this._grayscaleOverlay.remove();
             this._grayscaleOverlay = null;
+        },
+
+        _onAppCardViewActivate: function(options) {
+            if (!options.goingBack || !app.canStartTransition())
+                return;
+            var prevCard = options.previousCard;
+            if (!prevCard || !prevCard._animateBackButton)
+                return;
+            prevCard._animateBackButton(this, options);
+        },
+
+        _animateBackButton: function(nextCard, options) {
+            var self = this;
+            app.startTransition();
+            this._ensureGrayscaleOverlay();
+            nextCard.parent().after(this._grayscaleOverlay, nextCard);
+            var transform = new Transform().translate(this.bounds().width(), 0);
+            this.animation().start().get("slide-transform")
+                .chain()
+                .transform(300, transform)
+                .callback(function() {
+                    self._removeGrayscaleOverlay();
+                    nextCard.filter().clear();
+                    app.endTransition(self);
+                });
+            this.animation().get("slide")
+                .chain()
+                .opacity(300, 100);
+            nextCard.animation().start().get("slide-filter")
+                .chain()
+                .filter(300, new Filter().grayscale(100), new Filter().grayscale(0));
+            nextCard.animation().get("slide-transform")
+                .chain()
+                .transform(300,
+                    new Transform().scale(this._backgroundViewScale, this._backgroundViewScale),
+                    new Transform().scale(1, 1))
+                .callback(function() {
+                    nextCard.transform().clear();
+                });
+            this._grayscaleOverlay.animation().start().get("slide-opacity")
+                .chain()
+                .opacity(300, this._backgroundViewOpacity, 0);
+
+            options.promise = this.animation().promise();
         },
 
         url: function() {

@@ -201,10 +201,14 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             if (this._historyCards.length) {
                 var options = {
                     goingBack: true,
-                    promise: null
+                    promise: null,
+                    previousCard: previousActiveCard
                 };
                 this._activeCard = this._historyCards.pop();
-                this._contentView.append(this._activeCard);
+                if (previousActiveCard)
+                    this._contentView.before(this._activeCard, previousActiveCard);
+                else
+                    this._contentView.append(this._activeCard);
                 this._activeCard._setNavigatorView(this);
                 this._activeCard.trigger("activate", options);
                 if (previousActiveCard) {

@@ -15,7 +15,8 @@
  */
 
 define(["mobileui/utils/basic-animation",
-        "mobileui/utils/filter"], function(BasicAnimation, Filter) {
+        "mobileui/utils/transform",
+        "mobileui/utils/filter"], function(BasicAnimation, Transform, Filter) {
 
     var FilterAnimation = function(name) {
         BasicAnimation.call(this, name);

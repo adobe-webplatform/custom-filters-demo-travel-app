@@ -18,12 +18,20 @@ define([
         "mobileui/views/gesture-view",
         "mobileui/views/layer-view",
         "mobileui/utils/transform",
-        "mobileui/utils/filter"], 
-    function(GestureView, LayerView, Transform, Filter) {
+        "mobileui/utils/filter",
+        "mobileui/utils/momentum",
+        "mobileui/views/gesture-detector"], 
+    function(GestureView, LayerView, Transform, Filter, Momentum, GestureDetector) {
 
     var CheckboxView = GestureView.extend({
         initialize: function() {
             CheckboxView.__super__.initialize.call(this);
+            this.addGestureDetector();
+            this.on("touchdragstart", this._onDragStart, this)
+                .on("touchdragmove", this._onDragMove, this)
+                .on("touchdragend", this._onDragEnd, this);
+            this._momentum = new Momentum().setDuration(100).setFriction(0.000005);
+            this._dragStartValue = 0;
             this.bounds().setSize(100, 30);
             this.forceLayer();
             this._needleView = new LayerView();
@@ -92,6 +100,48 @@ define([
 
         _onTap: function() {
             this.toggle();
+        },
+
+        _onDragStart: function() {
+            var translate = this._needleView.transform().get("translate");
+            this._dragStartValue = translate.x();
+            this._momentum.reset(this._dragStartValue);
+        },
+
+        _onDragMove: function(transform) {
+            var translate = this._needleView.transform().get("translate"),
+                value = Math.max(0, this._dragStartValue + transform.dragX),
+                position = Math.min(this.bounds().width() / 2, Math.max(0, value));
+            translate.setX(position);
+            this._needleView.filter().get("grayscale")
+                .setIntensity(100 - position / this.bounds().width() * 200);
+            this._momentum.injectValue(value);
+        },
+
+        _onDragEnd: function(transform) {
+            this._onDragMove(transform);
+            var value = this._momentum.compute(),
+                direction = this._momentum.direction(),
+                oneQuadWidth = this.bounds().width() / 4;
+            if (!this._checked && ((value < oneQuadWidth) || (direction > 0)))
+                return this._revert();
+            if (this._checked && ((value > oneQuadWidth * 3) || (direction < 0)))
+                return this._revert();
+            this._commit();
+        },
+
+        _commit: function() {
+            this.toggle();
+        },
+
+        _revert: function() {
+            this._validateCheckedWithAnimation();
+        },
+
+        respondsToTouchGesture: function(gesture) {
+            if (gesture.type != GestureDetector.GestureType.DRAG || !gesture.scrollX)
+                return false;
+            return (this._checked) ? gesture.distanceX > 0 : gesture.distanceX < 0;
         }
     });
 

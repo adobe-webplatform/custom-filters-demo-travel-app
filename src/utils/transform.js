@@ -285,8 +285,8 @@ define(function() {
                 });
             } else {
                 var matrix = new Transforms.matrix3d();
-                matrix.fromMatrix(this.toMatrix3d().multiply(percent)
-                    .add(other.toMatrix3d().multiply(1 - percent)));
+                matrix.fromMatrix(this.toMatrix().multiply(percent)
+                    .add(other.toMatrix().multiply(1 - percent)));
                 transform.append(matrix);
             }
             return transform;

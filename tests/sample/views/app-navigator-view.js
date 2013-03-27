@@ -18,7 +18,8 @@ define(['mobileui/ui/navigator-view',
         'mobileui/views/content-view',
         'mobileui/ui/button-view',
         'views/settings-dialog-view',
-        'app'], function(NavigatorView, ContentView, ButtonView, SettingsDialogView, app) {
+        'utils/settings',
+        'app'], function(NavigatorView, ContentView, ButtonView, SettingsDialogView, settings, app) {
 
     var AppNavigatorView = NavigatorView.extend({
 
@@ -68,6 +69,8 @@ define(['mobileui/ui/navigator-view',
             this._settingsButton.margin().setRight(10).setTop(5);
             topBar.append(this._settingsButton.render().addClass("js-navigator-top-bar-button-view")
                 .addClass("js-navigator-top-bar-settings-button-view"));
+
+            settings.on("change:debug.refresh", this.updateBackButton, this);
         },
 
         backButton: function() {
@@ -85,9 +88,12 @@ define(['mobileui/ui/navigator-view',
                 this._refreshButton.hide();
             } else {
                 this._backButton.hide();
-                if (this.activeCard().isDefaultScreen) {
+                if (this.activeCard() && this.activeCard().isDefaultScreen) {
                     this._homeButton.hide();
-                    this._refreshButton.show();
+                    if (settings.getBoolean("debug.refresh"))
+                        this._refreshButton.show();
+                    else
+                        this._refreshButton.hide();
                 } else {
                     this._homeButton.show();
                     this._refreshButton.hide();

@@ -31,55 +31,55 @@ define([
             this.append(this._needleView.render().addClass("js-checkbox-needle-view"));
             this.on("tap", this._onTap, this);
             this.on("tapend", this._onTapEnd, this);
-            this._state = false;
+            this._checked = false;
         },
 
-        setState: function(state) {
-            if (this._state == state)
+        setChecked: function(checked) {
+            if (this._checked == checked)
                 return this;
-            this._state = state;
-            this.invalidate("state");
+            this._checked = checked;
+            this.invalidate("checked");
             this.trigger("change");
             return this;
         },
 
-        state: function() {
-            return this._state;
+        checked: function() {
+            return this._checked;
         },
 
         toggle: function() {
-            this._state = !this._state;
-            this.invalidate("stateWithAnimation");
+            this._checked = !this._checked;
+            this.invalidate("checkedWithAnimation");
             this.trigger("change");
             return this;
         },
 
         layout: function() {
             CheckboxView.__super__.layout.call(this);
-            this._validateState();
+            this._validateChecked();
         },
 
         render: function() {
             CheckboxView.__super__.render.call(this);
             this.$el.addClass("js-checkbox-view");
-            this._validateState();
+            this._validateChecked();
             return this;
         },
 
         _needlePosition: function() {
-            return this._state ? this.bounds().width() / 2 : 0;
+            return this._checked ? this.bounds().width() / 2 : 0;
         },
 
         _needleFilterOpacity: function() {
-            return this._state ? 0 : 100;
+            return this._checked ? 0 : 100;
         },
 
-        _validateState: function() {
+        _validateChecked: function() {
             this._needleView.transform().get("translate").setX(this._needlePosition());
             this._needleView.filter().get("grayscale").setIntensity(this._needleFilterOpacity());
         },
 
-        _validateStateWithAnimation: function() {
+        _validateCheckedWithAnimation: function() {
             this._needleView.animation().start()
                 .get("checkbox-transform").removeAll()
                 .chain()

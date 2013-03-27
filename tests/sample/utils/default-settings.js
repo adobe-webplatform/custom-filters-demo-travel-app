@@ -1,5 +1,6 @@
 define(function() {
     return {
-        "touch.preview": false
+        "touch.preview": "false",
+        "debug.refresh": "false"
     };
 });

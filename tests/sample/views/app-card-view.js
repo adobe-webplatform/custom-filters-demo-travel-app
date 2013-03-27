@@ -19,6 +19,7 @@ define(["mobileui/ui/navigator-card-view",
             this.on("card:precommit", this._updateBackButton, this);
             this.on("activate", this._updateBackButton, this);
             this.forceLayer();
+            this._isInCardTransition = false;
         },
 
         _updateBackButton: function() {
@@ -31,7 +32,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         respondsToTouchGesture: function(gesture) {
-            if (gesture.type != GestureDetector.GestureType.DRAG)
+            if (this._isInCardTransition || gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
             return (gesture.scrollX && gesture.distanceX < 0 &&
                 app.mainView.navigatorView().activeCard() === this &&
@@ -42,6 +43,7 @@ define(["mobileui/ui/navigator-card-view",
         _backgroundViewScale: 0.9,
 
         _onDragStart: function() {
+            this._isInCardTransition = true;
             var nextCard = app.mainView.navigatorView().prepareHistoryCard().nextCard();
             if (!this._grayscaleOverlay)
                 this._grayscaleOverlay = new LayerView()
@@ -90,7 +92,9 @@ define(["mobileui/ui/navigator-card-view",
                 .chain()
                 .transform(300, transform)
                 .callback(function() {
+                    self._removeGrayscaleOverlay();
                     nextCard.filter().clear();
+                    self._isInCardTransition = false;
                     app.mainView.navigatorView().commitNextCard();
                 });
             this.animation().get("slide")
@@ -107,10 +111,7 @@ define(["mobileui/ui/navigator-card-view",
                 });
             this._grayscaleOverlay.animation().start().get("slide-opacity")
                 .chain()
-                .opacity(300, 0)
-                .callback(function() {
-                    self._removeGrayscaleOverlay();
-                });
+                .opacity(300, 0);
         },
 
         _revert: function() {
@@ -120,6 +121,8 @@ define(["mobileui/ui/navigator-card-view",
             this.animation().start().get("slide-transform").chain()
                 .transform(100, transform)
                 .callback(function() {
+                    self._removeGrayscaleOverlay();
+                    self._isInCardTransition = false;
                     app.mainView.navigatorView().revertNextCard();
                 });
             this.animation().get("slide")
@@ -139,10 +142,7 @@ define(["mobileui/ui/navigator-card-view",
                 });
             this._grayscaleOverlay.animation().start().get("slide-opacity")
                 .chain()
-                .opacity(300, this._backgroundViewOpacity)
-                .callback(function() {
-                    self._removeGrayscaleOverlay();
-                });
+                .opacity(300, this._backgroundViewOpacity);
         },
 
         _removeGrayscaleOverlay: function() {

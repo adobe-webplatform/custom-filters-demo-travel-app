@@ -30,17 +30,13 @@ define(["mobileui/utils/request-animation-frame",
         this.animationFrameRequested = false;
     }
 
-    Touch.preview = true;
-
-    Touch.togglePreview = function() {
-        Touch.preview = !Touch.preview;
-    };
+    Touch.preview = false;
 
     Touch.previewBoxesPool = [];
     Touch.popPreviewBox = function() {
         var item = Touch.previewBoxesPool.pop();
         if (!item)
-            item = $("<div />").addClass("touch-preview").appendTo(document.body);
+            item = $("<div />").addClass("js-touch-preview").appendTo(document.body);
         return item;
     };
 

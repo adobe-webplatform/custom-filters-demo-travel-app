@@ -16,14 +16,18 @@
 
 define(['app',
         'mobileui/ui/window-view',
+        'mobileui/views/touch',
         'views/app-navigator-view',
         'views/confirm-dialog-view',
-        'utils/cache'],
+        'utils/cache',
+        'utils/settings'],
     function(app,
              WindowView,
+             Touch,
              AppNavigatorView,
              ConfirmDialogView,
-             cache)
+             cache,
+             settings)
     {
 
     var MainView = WindowView.extend({
@@ -72,6 +76,9 @@ define(['app',
     });
 
     app.on("init", function() {
+        settings.on("change:touch.preview", function() {
+            Touch.preview = settings.getBoolean("touch.preview");
+        });
         app.mainView = new MainView({
             el: $("#main").get(0)
         }).render();

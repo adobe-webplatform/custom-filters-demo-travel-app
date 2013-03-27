@@ -76,6 +76,8 @@ define(['mobileui/views/layout-view',
         },
 
         _validateShowAnimation: function() {
+            if (!this._attachedView)
+                return;
             this._backgroundView.animation().start().get("dialog-opacity")
                 .chain()
                 .opacity(300, 0.3);
@@ -99,6 +101,8 @@ define(['mobileui/views/layout-view',
         },
 
         _validateHideAnimation: function() {
+            if (!this._attachedView)
+                return this._onHideAnimationEnd();
             this._contentView.transform().get("translate");
             this._contentView.animation().start().get("show-transition").removeAll()
                 .chain()
@@ -119,7 +123,7 @@ define(['mobileui/views/layout-view',
         _onHideAnimationEnd: function() {
             if (activeDialogView === this)
                 activeDialogView = null;
-            if (this._canHide) {
+            if (this._canHide && this._attachedView) {
                 this._attachedView.transform().clear();
                 this._attachedView.setDisabled(false);
             }

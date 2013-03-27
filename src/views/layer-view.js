@@ -357,8 +357,12 @@ define(["mobileui/utils/rect",
                 return;
             if (params.width() == LayoutParams.MATCH_PARENT)
                 this.bounds().setWidth(parentView.bounds().width() - this.margin().horizontal());
+            else if (_.isNumber(params.width()))
+                this.bounds().setWidth(parentView.bounds().width() * params.width() - this.margin().horizontal());
             if (params.height() == LayoutParams.MATCH_PARENT)
                 this.bounds().setHeight(parentView.bounds().height() - this.margin().vertical());
+            if (_.isNumber(params.height()))
+                this.bounds().setHeight(parentView.bounds().height() * params.height() - this.margin().vertical());
         },
 
         setLayoutOnChildren: function() {

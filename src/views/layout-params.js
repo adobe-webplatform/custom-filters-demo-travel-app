@@ -105,12 +105,14 @@ define(function() {
 
         hasParentDerivedWidth: function() {
             return this._width == LayoutParams.MATCH_PARENT ||
-                this._width == LayoutParams.FILL_PARENT;
+                this._width == LayoutParams.FILL_PARENT ||
+                _.isNumber(this._width);
         },
 
         hasParentDerivedHeight: function() {
             return this._height == LayoutParams.MATCH_PARENT ||
-                this._height == LayoutParams.FILL_PARENT;
+                this._height == LayoutParams.FILL_PARENT ||
+                _.isNumber(this._height);
         }
 
     });

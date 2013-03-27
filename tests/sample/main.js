@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-define(
-[
+define([
     'app',
+    'utils/settings',
     'router',
     'views/main-view'
-], 
+],
 
-function(app) {
+function(app, settings) {
 
     $(function() {
         app.trigger("init");
-        app.trigger("start");
+        settings.once("ready", function() {
+            app.trigger("start");
+        });
+        settings.init();
     });
 
 });

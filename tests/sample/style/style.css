@@ -42,12 +42,12 @@ body {
     background: black;
 }
 
-.js-app-navigator-content-view {
-    overflow: hidden;
-}
-
 .js-dialog-content-view {
     background-color: white;
+}
+
+.js-app-navigator-content-view {
+    overflow: hidden;
 }
 
 .js-button-view-label {
@@ -211,13 +211,14 @@ body {
     background-color: #372f4a;
 }
 
-.js-navigator-top-bar-button-view {
+.js-navigator-top-bar-button-view, .js-dialog-button-view {
     background-color: #5B4987;
     color: white;
     border-radius: 10px;
 }
 
-.js-navigator-top-bar-button-view.js-button-view-down {
+.js-navigator-top-bar-button-view.js-button-view-down,
+.js-dialog-button-view.js-button-view-down {
     background-color: #3F2E66;
 }
 
@@ -254,4 +255,23 @@ body {
     left: 0px;
     right: 0px;
     content: "";
+}
+
+.js-setting-line-label-content-view {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+}
+
+.js-checkbox-view {
+    background-color: white;
+    border: 1px solid #5B4987;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.js-checkbox-needle-view {
+    background-color: #5B4987;
+    border-radius: 8px;
 }

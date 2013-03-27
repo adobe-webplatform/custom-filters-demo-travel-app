@@ -16,15 +16,20 @@
 
 define(['views/dialog-view',
         'mobileui/views/layout-view',
+        'mobileui/views/content-view',
         'mobileui/ui/button-view',
+        'mobileui/ui/checkbox-view',
         'mobileui/views/layout-params',
-        'utils/cache'],
-    function(DialogView, LayoutView, ButtonView, LayoutParams, cache) {
+        'utils/cache',
+        'utils/settings'],
+    function(DialogView, LayoutView, ContentView, ButtonView, CheckboxView, LayoutParams, cache, settings) {
 
     var SettingsDialogView = DialogView.extend({
 
         initialize: function() {
             SettingsDialogView.__super__.initialize.call(this);
+
+            this._addSettingsLine("Preview touch events", "touch.preview");
             
             var contentView = this.contentView();
             this._updateButton = new ButtonView().setLabel("Update").on("tap", this._onUpdateButtonTap, this);
@@ -32,6 +37,31 @@ define(['views/dialog-view',
             this._updateButton.setParams(new LayoutParams().matchParentWidth());
             contentView.append(this._updateButton.render().addClass("js-dialog-button-view")
                 .addClass("js-dialog-update-button-view"));
+        },
+
+        _addSettingsLine: function(label, valueName) {
+            var boxView = new LayoutView()
+                .addClass("js-setting-line-view")
+                .setLayout("horizontal")
+                .render();
+            boxView.margin().setAll(13);
+            boxView.ensureParams().matchParentWidth();
+            boxView.bounds().setHeight(40);
+
+            var labelView = new ContentView().setTextContent(label).addClass("js-setting-line-label-view").render();
+            labelView.content().addClass("js-setting-line-label-content-view");
+            labelView.ensureParams().fillParentWidth().matchParentHeight();
+            boxView.append(labelView);
+
+            var checkboxView = new CheckboxView().setState(settings.getBoolean(valueName))
+                    .addClass("js-setting-line-checbox-view").render();
+            checkboxView.ensureParams().matchParentHeight();
+            checkboxView.on("change", function() {
+                settings.setBoolean(valueName, checkboxView.state());
+            });
+            boxView.append(checkboxView);
+
+            this.contentView().append(boxView);
         },
 
         render: function() {

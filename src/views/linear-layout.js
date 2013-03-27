@@ -128,7 +128,7 @@ define(["mobileui/utils/transform",
                 }
                 view.everHadLayout = true;
                 if (computeChildrenSize)
-                    maxChildrenSize = Math.max(maxChildrenSize, isVertical ? viewBounds.outerWidth() : viewBounds.outerHeight());
+                    maxChildrenSize = Math.max(maxChildrenSize, isVertical ? view.outerWidth() : view.outerHeight());
             });
 
             if (isVertical) {

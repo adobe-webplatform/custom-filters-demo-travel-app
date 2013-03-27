@@ -15,18 +15,24 @@
  */
 
 define(['app',
+        'mobileui/views/layer-view',
         'mobileui/ui/window-view',
         'mobileui/views/touch',
+        'mobileui/utils/filter',
         'views/app-navigator-view',
         'views/confirm-dialog-view',
         'utils/cache',
+        'utils/fold',
         'utils/settings'],
     function(app,
+             LayerView,
              WindowView,
              Touch,
+             Filter,
              AppNavigatorView,
              ConfirmDialogView,
              cache,
+             fold,
              settings)
     {
 
@@ -38,6 +44,16 @@ define(['app',
             this.append(this._navigatorView.render());
             this.listenTo(cache, 'updateready', this._onUpdateReady);
             this._updateConfirmView = null;
+            if (Filter.supportsCustomFilters) {
+                this._filterPool = new LayerView()
+                    .setDisabled()
+                    .setIsPositioned()
+                    .setOpacity(0)
+                    .forceLayer();
+                this._filterPool.bounds().setY(10000);
+                this._filterPool.filter().get("fold");
+                this.append(this._filterPool.render());
+            }
         },
 
         render: function() {

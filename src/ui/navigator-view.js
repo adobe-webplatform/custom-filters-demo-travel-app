@@ -25,10 +25,12 @@ function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             NavigatorView.__super__.initialize.call(this);
             this.matchParentSize().setLayout("vertical");
 
-            this._topBarView = new NavigatorTopBarView();
+            this._topBarView = new NavigatorTopBarView()
+                .forceLayer();
             this.append(this._topBarView.render());
 
-            this._contentView = new NavigatorContentView();
+            this._contentView = new NavigatorContentView()
+                .forceLayer();
             this.append(this._contentView.render());
 
             this._historyCards = [];

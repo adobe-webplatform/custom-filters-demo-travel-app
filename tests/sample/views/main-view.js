@@ -15,15 +15,19 @@
  */
 
 define(['app',
+        'mobileui/views/layer-view',
         'mobileui/ui/window-view',
         'views/app-navigator-view',
         'views/confirm-dialog-view',
-        'utils/cache'],
+        'utils/cache',
+        'utils/fold'],
     function(app,
+             LayerView,
              WindowView,
              AppNavigatorView,
              ConfirmDialogView,
-             cache)
+             cache,
+             fold)
     {
 
     var MainView = WindowView.extend({
@@ -34,6 +38,14 @@ define(['app',
             this.append(this._navigatorView.render());
             this.listenTo(cache, 'updateready', this._onUpdateReady);
             this._updateConfirmView = null;
+            this._filterPool = new LayerView()
+                .setDisabled()
+                .setIsPositioned()
+                .setOpacity(0)
+                .forceLayer();
+            this._filterPool.bounds().setY(10000);
+            this._filterPool.filter().get("fold");
+            this.append(this._filterPool.render());
         },
 
         render: function() {

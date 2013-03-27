@@ -74,9 +74,8 @@ define(["views/touch-item-view",
             return CityView.__super__.render.call(this);
         },
 
-        _onItemRendererFactory: function(model) {
-            return new ItemView({model: model}).render()
-                .on("selected", this._onItemSelected, this);
+        _createTouchListItemView: function(model) {
+            return new ItemView({model: model});
         },
 
         _internalShouldUseVerticalLayout: function() {

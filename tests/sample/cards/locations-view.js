@@ -126,9 +126,8 @@ define(["views/touch-item-view",
             return LocationsView.__super__.render.call(this);
         },
 
-        _onItemRendererFactory: function(model) {
-            return new ItemView({ model: model, hue: this.hue, saturation: this.saturation }).render()
-                .on("selected", this._onItemSelected, this);
+        _createTouchListItemView: function(model) {
+            return new ItemView({ model: model, hue: this.hue, saturation: this.saturation });
         }
 
     });

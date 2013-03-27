@@ -78,14 +78,14 @@ define([
         },
 
         onTouchStart: function(event) {
-            if (TouchManager.instance.needsNativeTouch(event))
+            if (TouchManager.instance.needsNativeTouch(event) || this.disabled())
                 return;
             this.onTouchStartInternal(event);
             this.inlineUpdate();
         },
 
         onMouseDown: function(event) {
-            if (TouchManager.instance.needsNativeTouch(event))
+            if (TouchManager.instance.needsNativeTouch(event) || this.disabled())
                 return;
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -100,7 +100,7 @@ define([
         },
 
         onClick: function(event) {
-            if (TouchManager.instance.needsNativeTouch(event))
+            if (TouchManager.instance.needsNativeTouch(event) || this.disabled())
                 return;
             event.preventDefault();
             event.stopImmediatePropagation();

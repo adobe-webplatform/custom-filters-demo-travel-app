@@ -23,7 +23,7 @@ define(["views/touch-item-view",
 
     var SplashLabels = [
         {
-            label: "LA",
+            label: "Slide up to start",
             className: "js-la-item-view"
         }
     ];

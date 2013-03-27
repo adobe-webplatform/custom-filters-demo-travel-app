@@ -29,6 +29,7 @@ define(['mobileui/ui/navigator-view',
 
         render: function() {
             this.$el.addClass("js-app-navigator-view");
+            this.contentView().addClass("js-app-navigator-content-view");
             return AppNavigatorView.__super__.render.call(this);
         },
 

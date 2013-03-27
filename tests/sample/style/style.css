@@ -38,8 +38,12 @@ body {
     background-color: white;
 }
 
-.js-dialog-background-view {
+.js-dialog-background-view, .js-app-card-grayscale-overlay {
     background: black;
+}
+
+.js-app-navigator-content-view {
+    overflow: hidden;
 }
 
 .js-dialog-content-view {

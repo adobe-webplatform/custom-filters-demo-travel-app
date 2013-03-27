@@ -1,10 +1,11 @@
-define(["mobileui/ui/navigator-card-view", 
+define(["mobileui/ui/navigator-card-view",
+        "mobileui/views/layer-view",
         "mobileui/utils/transform",
         "mobileui/utils/filter",
         "mobileui/utils/momentum",
-        "mobileui/views/gesture-detector", 
+        "mobileui/views/gesture-detector",
         "app"],
-    function(NavigatorCardView, Transform, Filter, Momentum, GestureDetector, app) {
+    function(NavigatorCardView, LayerView, Transform, Filter, Momentum, GestureDetector, app) {
 
     var AppCardView = NavigatorCardView.extend({
         initialize: function() {
@@ -37,8 +38,15 @@ define(["mobileui/ui/navigator-card-view",
                 app.mainView.navigatorView().canGoBack());
         },
 
+        _backgroundViewOpacity: 0.7,
+
         _onDragStart: function() {
             var nextCard = app.mainView.navigatorView().prepareHistoryCard().nextCard();
+            if (!this._grayscaleOverlay)
+                this._grayscaleOverlay = new LayerView()
+                    .matchParentSize().setOpacity(this._backgroundViewOpacity).render()
+                    .addClass("js-app-card-grayscale-overlay");
+            nextCard.parent().after(this._grayscaleOverlay, nextCard);
             nextCard.filter().get("grayscale").setIntensity(100);
             var translate = this.transform().get("translate");
             this._dragStartValue = translate.x();
@@ -49,8 +57,10 @@ define(["mobileui/ui/navigator-card-view",
             var translate = this.transform().get("translate"),
                 value = Math.max(0, this._dragStartValue + transform.dragX);
             translate.setX(value);
-            var nextCard = app.mainView.navigatorView().nextCard();
-            nextCard.filter().get("grayscale").setIntensity(100 - value / this.bounds().width() * 100);
+            var nextCard = app.mainView.navigatorView().nextCard(),
+                percentCovered = value / this.bounds().width();
+            nextCard.filter().get("grayscale").setIntensity(100 - percentCovered * 100);
+            this._grayscaleOverlay.setOpacity(this._backgroundViewOpacity - percentCovered * this._backgroundViewOpacity);
             this._momentum.injectValue(value);
         },
 
@@ -82,6 +92,12 @@ define(["mobileui/ui/navigator-card-view",
             nextCard.animation().start().get("slide-filter")
                 .chain()
                 .filter(300, new Filter().grayscale(0));
+            this._grayscaleOverlay.animation().start().get("slide-opacity")
+                .chain()
+                .opacity(300, 0)
+                .callback(function() {
+                    self._removeGrayscaleOverlay();
+                });
         },
 
         _revert: function() {
@@ -102,6 +118,19 @@ define(["mobileui/ui/navigator-card-view",
                 .callback(function() {
                     nextCard.filter().clear();
                 });
+            this._grayscaleOverlay.animation().start().get("slide-opacity")
+                .chain()
+                .opacity(300, this._backgroundViewOpacity)
+                .callback(function() {
+                    self._removeGrayscaleOverlay();
+                });
+        },
+
+        _removeGrayscaleOverlay: function() {
+            if (!this._grayscaleOverlay)
+                return;
+            this._grayscaleOverlay.remove();
+            this._grayscaleOverlay = null;
         },
 
         url: function() {

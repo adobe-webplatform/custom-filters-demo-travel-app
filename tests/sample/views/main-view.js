@@ -44,6 +44,7 @@ define(['app',
             this.append(this._navigatorView.render());
             this.listenTo(cache, 'updateready', this._onUpdateReady);
             this._updateConfirmView = null;
+            this._exitConfirmView = null;
             if (Filter.supportsCustomFilters) {
                 this._filterPool = new LayerView()
                     .setDisabled()
@@ -54,6 +55,7 @@ define(['app',
                 this._filterPool.filter().get("fold");
                 this.append(this._filterPool.render());
             }
+            document.addEventListener("backbutton", this._handleBackButton.bind(this), true);
         },
 
         render: function() {
@@ -88,6 +90,36 @@ define(['app',
             } catch(e) {
                 // FIXME: We get an INVALID_STATE_ERR if we get here with no cache update.
             }
+        },
+
+        _handleBackButton: function() {
+            if (!app.canStartTransition())
+                return;
+            if (!this.navigatorView().canGoBack()) {
+                this._confirmExit();
+                return;
+            }
+            this.navigatorView().popCard();
+        },
+
+        _confirmExit: function() {
+            if (this._exitConfirmView)
+                return;
+            this._exitConfirmView = new ConfirmDialogView()
+                .setMessage("Are you sure you want to quit?")
+                .render()
+                .once("hide", this._onExitConfirmViewHidden, this)
+                .once("accept", this._onExitConfirmViewAccepted, this)
+                .show();
+        },
+
+        _onExitConfirmViewHidden: function() {
+            this._exitConfirmView.remove();
+            this._exitConfirmView = null;
+        },
+
+        _onExitConfirmViewAccepted: function() {
+            window.navigator.app.exitApp();
         }
     });
 

@@ -23,12 +23,17 @@ define([
 
 function(app, settings) {
 
-    $(function() {
-        app.trigger("init");
+	function init() {
+		app.trigger("init");
         settings.once("ready", function() {
             app.trigger("start");
         });
         settings.init();
-    });
+	}
+
+	if (window.IsCordova)
+		document.addEventListener("deviceready", init, true);
+	else
+    	$(init);
 
 });

@@ -39,6 +39,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _backgroundViewOpacity: 0.7,
+        _backgroundViewScale: 0.9,
 
         _onDragStart: function() {
             var nextCard = app.mainView.navigatorView().prepareHistoryCard().nextCard();
@@ -47,6 +48,9 @@ define(["mobileui/ui/navigator-card-view",
                     .matchParentSize().setOpacity(this._backgroundViewOpacity).render()
                     .addClass("js-app-card-grayscale-overlay");
             nextCard.parent().after(this._grayscaleOverlay, nextCard);
+            nextCard.transform().get("scale")
+                .setX(this._backgroundViewScale)
+                .setY(this._backgroundViewScale);
             nextCard.filter().get("grayscale").setIntensity(100);
             var translate = this.transform().get("translate");
             this._dragStartValue = translate.x();
@@ -61,6 +65,10 @@ define(["mobileui/ui/navigator-card-view",
                 percentCovered = value / this.bounds().width();
             nextCard.filter().get("grayscale").setIntensity(100 - percentCovered * 100);
             this._grayscaleOverlay.setOpacity(this._backgroundViewOpacity - percentCovered * this._backgroundViewOpacity);
+            var scale = this._backgroundViewScale + percentCovered * (1 - this._backgroundViewScale);
+            nextCard.transform().get("scale")
+                .setX(scale)
+                .setY(scale);
             this._momentum.injectValue(value);
         },
 
@@ -81,7 +89,6 @@ define(["mobileui/ui/navigator-card-view",
             this.animation().start().get("slide-transform")
                 .chain()
                 .transform(300, transform)
-                .wait(100)
                 .callback(function() {
                     nextCard.filter().clear();
                     app.mainView.navigatorView().commitNextCard();
@@ -92,6 +99,12 @@ define(["mobileui/ui/navigator-card-view",
             nextCard.animation().start().get("slide-filter")
                 .chain()
                 .filter(300, new Filter().grayscale(0));
+            nextCard.animation().get("slide-transform")
+                .chain()
+                .transform(300, new Transform().scale(1, 1))
+                .callback(function() {
+                    nextCard.transform().clear();
+                });
             this._grayscaleOverlay.animation().start().get("slide-opacity")
                 .chain()
                 .opacity(300, 0)
@@ -117,6 +130,12 @@ define(["mobileui/ui/navigator-card-view",
                 .filter(100, new Filter().grayscale(100))
                 .callback(function() {
                     nextCard.filter().clear();
+                });
+            nextCard.animation().get("slide-transform")
+                .chain()
+                .transform(100, new Transform().scale(this._backgroundViewScale, this._backgroundViewScale))
+                .callback(function() {
+                    nextCard.transform().clear();
                 });
             this._grayscaleOverlay.animation().start().get("slide-opacity")
                 .chain()

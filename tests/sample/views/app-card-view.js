@@ -19,7 +19,6 @@ define(["mobileui/ui/navigator-card-view",
             this.on("card:precommit", this._updateBackButton, this);
             this.on("activate", this._updateBackButton, this);
             this.forceLayer();
-            this._isInCardTransition = false;
         },
 
         _updateBackButton: function() {
@@ -32,7 +31,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         respondsToTouchGesture: function(gesture) {
-            if (this._isInCardTransition || gesture.type != GestureDetector.GestureType.DRAG)
+            if (!app.canStartTransition() || gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
             return (gesture.scrollX && gesture.distanceX < 0 &&
                 app.mainView.navigatorView().activeCard() === this &&
@@ -43,7 +42,7 @@ define(["mobileui/ui/navigator-card-view",
         _backgroundViewScale: 0.9,
 
         _onDragStart: function() {
-            this._isInCardTransition = true;
+            app.startTransition(this);
             var nextCard = app.mainView.navigatorView().prepareHistoryCard().nextCard();
             if (!this._grayscaleOverlay)
                 this._grayscaleOverlay = new LayerView()
@@ -94,7 +93,7 @@ define(["mobileui/ui/navigator-card-view",
                 .callback(function() {
                     self._removeGrayscaleOverlay();
                     nextCard.filter().clear();
-                    self._isInCardTransition = false;
+                    app.endTransition(self);
                     app.mainView.navigatorView().commitNextCard();
                 });
             this.animation().get("slide")
@@ -122,7 +121,7 @@ define(["mobileui/ui/navigator-card-view",
                 .transform(100, transform)
                 .callback(function() {
                     self._removeGrayscaleOverlay();
-                    self._isInCardTransition = false;
+                    app.endTransition(self);
                     app.mainView.navigatorView().revertNextCard();
                 });
             this.animation().get("slide")

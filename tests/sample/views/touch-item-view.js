@@ -48,17 +48,12 @@ define(["mobileui/views/gesture-detector",
             this._dragStartValue = 0;
             this._useFilter = false;
             this._momentum = new Momentum().setDuration(commitDuration).setFriction(0.000005);
-            this._listViewIsAnimating = false;
             this.forceLayer();
             this.setHorizontalLayout();
         },
 
         filterView: function() {
             return this._filterView;
-        },
-
-        setListViewIsAnimating: function(isAnimating) {
-            this._listViewIsAnimating = isAnimating;
         },
 
         render: function() {
@@ -79,7 +74,7 @@ define(["mobileui/views/gesture-detector",
         },
 
         _onDragStart: function() {
-            this.trigger("animation:start");
+            app.startTransition(this);
             app.mainView.navigatorView().revertNextCard();
             this._onTapStart();
             var nextCard = app.mainView.navigatorView().nextCard();
@@ -212,7 +207,7 @@ define(["mobileui/views/gesture-detector",
                         self._filterView.filter().clear();
                         self.removeClass("js-touch-item-view-filter");
                     }
-                    self.trigger("animation:end");
+                    app.endTransition(self);
                 });
             this.animation().get("slide")
                 .chain()
@@ -253,7 +248,7 @@ define(["mobileui/views/gesture-detector",
                     self._filterView.filter().clear();
                     self.removeClass("js-touch-item-view-filter");
                 }
-                self.trigger("animation:end");
+                app.endTransition(self);
             });
             this.animation().get("slide")
                 .chain()
@@ -277,7 +272,7 @@ define(["mobileui/views/gesture-detector",
         },
 
         _onTap: function() {
-            if (this._listViewIsAnimating)
+            if (!app.canStartTransition())
                 return;
             this.trigger("animation:start");
             this._onTapStart();
@@ -294,7 +289,7 @@ define(["mobileui/views/gesture-detector",
         },
 
         respondsToTouchGesture: function(gesture) {
-            if (this._listViewIsAnimating || gesture.type != GestureDetector.GestureType.DRAG)
+            if (!app.canStartTransition() || gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
             return (this._verticalLayout && gesture.scrollX && gesture.distanceX > 0) ||
                 (!this._verticalLayout && gesture.scrollY);

@@ -49,9 +49,7 @@ define(["views/app-card-view",
 
         _onItemRendererFactory: function(model) {
             return this._createTouchListItemView(model).render()
-                .on("selected", this._onItemSelected, this)
-                .on("animation:start", this._onItemAnimationStart, this)
-                .on("animation:end", this._onItemAnimationEnd, this);
+                .on("selected", this._onItemSelected, this);
         },
 
         _onItemSelected: function(selectedView) {
@@ -62,24 +60,6 @@ define(["views/app-card-view",
                 if (!view || view == selectedView)
                     return;
                 view.animateViewSwitch(Math.abs(selectedViewIndex - index));
-            });
-        },
-
-        _onItemAnimationStart: function() {
-            this._setListViewIsAnimating(true);
-        },
-
-        _onItemAnimationEnd: function() {
-            this._setListViewIsAnimating(false);
-        },
-
-        _setListViewIsAnimating: function(isAnimating) {
-            var self = this;
-            this.model.each(function(model, index) {
-                var view = self._listView.itemView(model);
-                if (!view)
-                    return;
-                view.setListViewIsAnimating(isAnimating);
             });
         },
 

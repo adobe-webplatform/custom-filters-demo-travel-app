@@ -95,15 +95,9 @@ define(['mobileui/ui/navigator-view',
             }
         },
 
-        listButton: function() {
-            return this._listButton;
-        },
-
-        gridButton: function() {
-            return this._gridButton;
-        },
-
         _onBackButtonTap: function() {
+            if (!app.canStartTransition())
+                return;
             if (!this.popCard())
                 this.pushCard(app.router.lookupCard(app.defaultCard));
         },

@@ -39,7 +39,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _backgroundViewOpacity: 0.7,
-        _backgroundViewScale: 0.9,
+        _backgroundViewScale: 0.95,
 
         _onDragStart: function() {
             app.startTransition(this);

@@ -35,7 +35,7 @@ define(["app", "views/index-view", "cards/list", "tests/list"],
         },
 
         card: function(path, pathOptions) {
-            var view = this.lookupCard(decodeURIComponent(path), decodeURIComponent(pathOptions));
+            var view = this.lookupCard(decodeURIComponent(path), pathOptions);
             app.mainView.navigatorView().resetCard(view ? view : new IndexView().render());
         },
 

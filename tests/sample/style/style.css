@@ -229,7 +229,18 @@ body {
 }
 
 .js-location-view {
-    background-color: white;
+    color: white;
+    background-color: #df8051;
+}
+
+.js-location-view-label > .js-content-view-content {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.0em;
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 .js-touch-item-view-filter {

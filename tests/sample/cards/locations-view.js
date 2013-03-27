@@ -17,56 +17,13 @@
 define(["views/touch-item-view",
         "views/touch-list-view",
         "mobileui/views/layout-params",
+        "data/locations",
         "app"],
     function(TouchItemView,
             TouchListView,
             LayoutParams,
+            LocationLabels,
             app) {
-
-    var LocationLabels = [
-        {
-            label: "The Abbey (club)"
-        },
-        {
-            label: "Alameda Corridor"
-        },
-        {
-            label: "Alex Theatre"
-        },
-        {
-            label: "Ambassador Hotel (Los Angeles)"
-        },
-        {
-            label: "Amoeba Music"
-        },
-        {
-            label: "Andaz West Hollywood"
-        },
-        {
-            label: "Anderton Court Shops"
-        },
-        {
-            label: "Angels Flight"
-        },
-        {
-            label: "Angelus Temple"
-        },
-        {
-            label: "Los Angeles Aqueduct"
-        },
-        {
-            label: "ArcLight Hollywood"
-        },
-        {
-            label: "Avalon Hollywood"
-        },
-        {
-            label: "Avenel Cooperative Housing Project"
-        },
-        {
-            label: "The Abbey (club)"
-        }
-    ];
 
     var ItemView = TouchItemView.extend({
         initialize: function(options) {
@@ -92,7 +49,7 @@ define(["views/touch-item-view",
         _onTapStart: function() {
             if (app.mainView.navigatorView().nextCard())
                 return;
-            app.mainView.navigatorView().prepareNextCard(app.router.lookupCard("Location View"));
+            app.mainView.navigatorView().prepareNextCard(app.router.lookupCard("Location View", encodeURIComponent(this.model.get("label"))));
         }
     });
 
@@ -102,14 +59,11 @@ define(["views/touch-item-view",
             this.hue = 283;
             this.saturation = 15;
             if (options && options.path) {
-                var data = options.path.split(":");
+                var data = decodeURIComponent(options.path).split(":");
                 this.hue = parseInt(data[0], 10);
                 this.saturation = parseInt(data[1], 10);
             }
-            this.model = new Backbone.Collection();
-            this.model.add(_.map(LocationLabels, function(item, i) {
-                return new Backbone.Model(item).set("index", i);
-            }));
+            this.model = LocationLabels;
             LocationsView.__super__.initialize.call(this);
             this.listView().setScrollDirection("vertical");
             this.listView().contentView().setParams(new LayoutParams()

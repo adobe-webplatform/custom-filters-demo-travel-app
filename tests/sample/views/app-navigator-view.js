@@ -15,10 +15,10 @@
  */
 
 define(['mobileui/ui/navigator-view',
-        'mobileui/views/measured-view',
+        'mobileui/views/content-view',
         'mobileui/ui/button-view',
         'views/settings-dialog-view',
-        'app'], function(NavigatorView, MeasuredView, ButtonView, SettingsDialogView, app) {
+        'app'], function(NavigatorView, ContentView, ButtonView, SettingsDialogView, app) {
 
     var AppNavigatorView = NavigatorView.extend({
 
@@ -36,7 +36,7 @@ define(['mobileui/ui/navigator-view',
         addTopBarButtons: function() {
             var topBar = this.topBarView();
 
-            this._titleLabel = new MeasuredView()
+            this._titleLabel = new ContentView()
                 .setTextContent("MobileUI")
                 .matchParentSize()
                 .setIsPositioned(true);

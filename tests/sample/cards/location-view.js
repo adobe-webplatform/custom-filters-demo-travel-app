@@ -14,20 +14,41 @@
  * limitations under the License.
  */
 
-define(["views/app-card-view", "app"], function(AppCardView, app) {
+define(["mobileui/views/content-view",
+        "views/app-card-view",
+        "data/locations",
+        "app"],
+    function(ContentView,
+            AppCardView,
+            LocationLabels,
+            app) {
 
     var LocationView = AppCardView.extend({
         initialize: function(options) {
             LocationView.__super__.initialize.call(this);
+            this._labelView = new ContentView()
+                .matchParentSize()
+                .addClass("js-location-view-label");
+            this.append(this._labelView.render());
+            if (options && options.path) {
+                var decodedPath = decodeURIComponent(options.path);
+                this.model = LocationLabels.find(function(item) {
+                    return item.get("label") == decodedPath;
+                });
+            }
+            if (!this.model)
+                this.model = LocationLabels.first();
+            this._labelView.setTextContent(this.model.get("label"));
         },
 
         render: function() {
-            this.$el.addClass("js-location-view").append("Location view");
+            this.$el.addClass("js-location-view");
+
             return LocationView.__super__.render.call(this);
         },
 
         url: function() {
-            return "card/" + encodeURIComponent("Location View");
+            return "card/" + encodeURIComponent("Location View") + "/" + encodeURIComponent(this.model.get("label"));
         }
     });
 

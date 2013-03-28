@@ -15,62 +15,13 @@
  */
 
  define(["mobileui/utils/filter"], function(Filter) {
-    
-    
-    function generateWarpArray(points) {
-        var controlPoints = [];
-        for (var i = 0; i < points.length; ++i) {
-            var l = points[i].length;
-            for (var j = 0; j < l; ++j) {
-                var p = points[i][j];
-                controlPoints.push(p[0].toFixed(6));
-                controlPoints.push(p[1].toFixed(6));
-                controlPoints.push(p[2].toFixed(6));
-            }
-        }
-        return controlPoints.join(", ");
-    }
-    
-    function generateWarpPoints(lineX, lineY) {
-        var l = -0.5,
-            t = -0.5,
-            w = 1,
-            h = 1; // height
-
-        var countX = 4;
-        var countY = 4;
-    
-        var hW = w  / (countX - 1);
-        var hH = h / (countY - 1);
-
-        var touchSize = 0.5;
-    
-        var k = [];
-        for (var j = 0; j < countY; ++j) {
-            var row = []; 
-            for (var i = 0; i < countX; ++i) {
-                var x = i * hW,
-                    y = j * hH,
-                    distanceToTouch = Math.abs(lineX - x),
-                    cos = Math.cos(Math.PI * distanceToTouch * touchSize),
-                    touchFade = Math.max(0, touchSize - distanceToTouch) * 
-                                Math.min(0.5, (1 - lineY) * 5);
-                y *= (lineY - touchFade * cos);
-                row.push([x + l, y + t, 0]);
-            }
-            k.push(row);
-        }
-        
-        return k;
-    }
 
     return Filter.registerCustomFilter("warp", "shadow x y",
         function(fn) {
-            var points = generateWarpPoints(fn._x , fn._y);
             return "custom(url(style/shaders/warp.vert) " +
              "mix(url(style/shaders/warp.frag) multiply source-atop), " +
-             "10 10, k array(" + generateWarpArray(points) + "), " +
-             "matrix perspective(1000), useColoredBack 0, backColor 1 1 1 1)";
+             "30 2, x " + fn._x.toFixed(6) + ", y " + fn._y.toFixed(6) + ", " +
+             "transform perspective(1000), stretch 0.1, touchSize 2)";
     });
 
 });

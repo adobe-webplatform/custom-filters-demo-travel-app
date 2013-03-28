@@ -23,6 +23,7 @@ define(['app',
         'views/confirm-dialog-view',
         'utils/cache',
         'utils/fold',
+        'utils/warp',
         'utils/settings'],
     function(app,
              LayerView,
@@ -33,6 +34,7 @@ define(['app',
              ConfirmDialogView,
              cache,
              fold,
+             warp,
              settings)
     {
 
@@ -53,6 +55,7 @@ define(['app',
                     .forceLayer();
                 this._filterPool.bounds().setY(10000);
                 this._filterPool.filter().get("fold");
+                this._filterPool.filter().get("warp");
                 this.append(this._filterPool.render());
             }
             document.addEventListener("backbutton", this._handleBackButton.bind(this), true);

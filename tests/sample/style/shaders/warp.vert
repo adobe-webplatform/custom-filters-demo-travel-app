@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Adobe Systems Incorporated. All rights reserved.
+ * Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,67 +16,37 @@
 
 precision mediump float;
 
-// Built-in attributes
+// Built-in attributes.
 
-attribute vec2 a_meshCoord;
+attribute vec4 a_position;
 
-// Built-in uniforms
+// Built-in uniforms.
 
 uniform mat4 u_projectionMatrix;
-uniform vec4 u_meshBox;
+
+// Uniforms passed-in from CSS
+
+uniform mat4 transform;
+
+uniform float x;
+uniform float y;
+uniform float stretch;
+uniform float touchSize;
 
 // Constants
 
-const int cols = 4;
-const int rows = 4;
-const int n = rows - 1;
-const int m = cols - 1;
+const float PI = 3.1415629;
 
-// Uniforms passed in from CSS
-
-uniform mat4 matrix;
-uniform float k[cols * rows * 3];
-
-// Helper functions
-
-float factor_fn(int n)
-{
-    return (n < 2) ? 1.0 : ((n < 3) ? 2.0 : 6.0);
-}
-
-float binomialCoefficient(int n, int i)
-{
-    return factor_fn(n) / (factor_fn(i) * factor_fn(n-i));
-}
-
-float calculateB(int i, int n, float u)
-{
-    float bc = binomialCoefficient(n, i);
-    // Adding 0.000001 to avoid having pow(0, 0) which is undefined.
-    return bc * pow(u + 0.000001, float(i)) * pow(1.0 - u + 0.00001, float(n - i));
-}
-
-vec3 calculate(float u, float v)
-{
-    vec3 result = vec3(0.0);
-    vec2 offset = vec2(u_meshBox.x + u_meshBox.z / 2.0, 
-                       u_meshBox.y + u_meshBox.w / 2.0);
-    
-    for (int i = 0; i <= n; ++i) {
-        for (int j = 0; j <= m; ++j) {
-            float c = calculateB(i, n, u) * calculateB(j, m, v);
-            int z = (j * rows + i) * 3;
-            vec3 point = vec3(k[z] * u_meshBox.z + offset.x, k[z + 1] * u_meshBox.w + offset.y, k[z + 2]);
-            result += c * point;
-        }
-    }
-    return result;
-}
-
-// Main.
+// Main
 
 void main()
 {
-    vec3 pos = calculate(a_meshCoord.x, a_meshCoord.y);
-    gl_Position = u_projectionMatrix * matrix * vec4(pos, 1.0);
+    vec4 pos = a_position;
+
+    float distanceToTouch = abs(pos.x + 0.5 - x);
+    float cos = cos(clamp(PI * distanceToTouch * touchSize, 0.0, PI / 2.0));
+    float touchFade = cos * max(0.0, touchSize - distanceToTouch) * min(0.5, (1.0 - y) * stretch);
+    pos.y = (pos.y + 0.5) * max(0.0, y - touchFade * cos) - 0.5;
+
+    gl_Position = u_projectionMatrix * transform * pos;
 }

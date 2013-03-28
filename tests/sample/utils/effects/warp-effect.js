@@ -55,14 +55,14 @@ define(["utils/effects/base-effect",
         onDragMove: function(containerView, filterView, nextCard, transform, dragStartValue) {
             var value = Math.min(0, dragStartValue + transform.dragY);
             var t = Math.min(1, Math.max(0, 2 + value / containerView.bounds().height()));
-            
+
             filterView.filter().get("warp")
                 .setX(transform.touch.currentPosition.localX / containerView.bounds().width())
                 .setY(t)
                 .setShadow(this._computeShadow(t));
 
             if (this._useShadow)
-                containerView.filter().get("dropShadow").setRadius(10).setColor(t);
+                containerView.filter().get("dropShadow").setRadius(10).setColor(1 - t);
 
             nextCard.filter().get("grayscale").setIntensity(t * 100);
             nextCard.setOpacity(1 - t / 2);

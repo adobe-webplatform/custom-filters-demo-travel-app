@@ -26,7 +26,6 @@ attribute vec3 a_triangleCoord;
 // Built-in uniforms.
 
 uniform mat4 u_projectionMatrix;
-uniform vec2 u_textureSize;
 
 // Uniforms passed-in from CSS
 

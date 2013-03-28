@@ -31,32 +31,42 @@
         return controlPoints.join(", ");
     }
     
-    function generateWarpPoints(startX, startY, y) {
+    function generateWarpPoints(lineX, lineY) {
         var l = -0.5,
             t = -0.5,
             w = 1,
-            h = y; // height
+            h = 1; // height
 
         var countX = 4;
         var countY = 4;
     
         var hW = w  / (countX - 1);
         var hH = h / (countY - 1);
+
+        var touchSize = 0.5;
     
         var k = [];
         for (var j = 0; j < countY; ++j) {
             var row = []; 
-            for (var i = 0; i < countX; ++i)
-                row.push([i * hW + l, j * hH + t, 0]);
+            for (var i = 0; i < countX; ++i) {
+                var x = i * hW,
+                    y = j * hH,
+                    distanceToTouch = Math.abs(lineX - x),
+                    cos = Math.cos(Math.PI * distanceToTouch * touchSize),
+                    touchFade = Math.max(0, touchSize - distanceToTouch) * 
+                                Math.min(0.5, (1 - lineY) * 5);
+                y *= (lineY - touchFade * cos);
+                row.push([x + l, y + t, 0]);
+            }
             k.push(row);
         }
         
         return k;
     }
 
-    return Filter.registerCustomFilter("warp", "shadow startX startY y",
+    return Filter.registerCustomFilter("warp", "shadow x y",
         function(fn) {
-            var points = generateWarpPoints(fn._startX, fn._startY , fn._y);
+            var points = generateWarpPoints(fn._x , fn._y);
             return "custom(url(style/shaders/warp.vert) " +
              "mix(url(style/shaders/warp.frag) multiply source-atop), " +
              "10 10, k array(" + generateWarpArray(points) + "), " +

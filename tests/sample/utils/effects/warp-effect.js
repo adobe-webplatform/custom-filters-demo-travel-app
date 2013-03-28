@@ -36,8 +36,7 @@ define(["utils/effects/base-effect",
             containerView.animation().removeAll();
             var warp = filterView.filter()
                 .get("warp")
-                .setStartX(touch.currentPosition.localX / containerView.bounds().width())
-                .setStartY(touch.currentPosition.localY / containerView.bounds().height())
+                .setX(touch.currentPosition.localX / containerView.bounds().width())
                 .setY(1)
                 .setShadow(this._computeShadow(0));
             if (this._useShadow)
@@ -58,6 +57,7 @@ define(["utils/effects/base-effect",
             var t = Math.min(1, Math.max(0, 2 + value / containerView.bounds().height()));
             
             filterView.filter().get("warp")
+                .setX(transform.touch.currentPosition.localX / containerView.bounds().width())
                 .setY(t)
                 .setShadow(this._computeShadow(t));
 
@@ -86,8 +86,10 @@ define(["utils/effects/base-effect",
                 chain = chain.wait(commitDuration);
             }
 
+            var warp = filterView.filter().get("warp");
             var filter = new Filter();
             filter.get("warp")
+                .setX(warp.x())
                 .setY(0)
                 .setShadow(this._computeShadow(1));
             filterView.animation().start().get("slide-filter")
@@ -117,8 +119,10 @@ define(["utils/effects/base-effect",
                 chain = chain.wait(revertDuration);
             }
 
+            var warp = filterView.filter().get("warp");
             var filter = new Filter();
             filter.get("warp")
+                .setX(warp.x())
                 .setY(1)
                 .setShadow(this._computeShadow(0));
 

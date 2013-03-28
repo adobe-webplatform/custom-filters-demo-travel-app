@@ -142,7 +142,8 @@ define(["mobileui/views/touch-manager"],
         computeDragTransform: function(touch) {
             return {
                 dragX: touch.currentPosition.parentX - touch.startPosition.parentX,
-                dragY: touch.currentPosition.parentY - touch.startPosition.parentY
+                dragY: touch.currentPosition.parentY - touch.startPosition.parentY,
+                touch: touch
             };
         },
 

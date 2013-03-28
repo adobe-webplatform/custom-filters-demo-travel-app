@@ -21,12 +21,14 @@ define(["mobileui/views/gesture-detector",
         "mobileui/utils/momentum",
         "utils/effects/drag-effect",
         "utils/effects/fold-effect",
+        "utils/effects/warp-effect",
         "app"],
-    function(GestureDetector, LayerView, LayoutParams, GestureView, Momentum, DragEffect, FoldEffect, app) {
+    function(GestureDetector, LayerView, LayoutParams, GestureView, Momentum, DragEffect, FoldEffect, WarpEffect, app) {
 
     var Effects = {
         "drag": new DragEffect(),
-        "fold": new FoldEffect(/* use shadow */ true)
+        "fold": new FoldEffect(/* use shadow */ true),
+        "warp": new WarpEffect(/* use shadow */ false)
     };
 
     var commitDuration = 300,
@@ -91,12 +93,12 @@ define(["mobileui/views/gesture-detector",
             this.animation().removeAll();
         },
 
-        _onDragStart: function() {
+        _onDragStart: function(touch) {
             app.startTransition(this);
             app.mainView.navigatorView().revertNextCard();
             this._onTapStart();
             var nextCard = app.mainView.navigatorView().nextCard();
-            this._dragStartValue = this._effect.onDragStart(this, this._filterView, nextCard, this._verticalLayout);
+            this._dragStartValue = this._effect.onDragStart(this, this._filterView, nextCard, this._verticalLayout, touch);
             this._momentum.reset(this._dragStartValue);
         },
 
@@ -148,13 +150,13 @@ define(["mobileui/views/gesture-detector",
             this._commit();
         },
 
-        _onTap: function() {
+        _onTap: function(touch) {
             if (!app.canStartTransition())
                 return;
             this.trigger("animation:start");
             this._onTapStart();
             var nextCard = app.mainView.navigatorView().nextCard();
-            this._effect.onDragStart(this, this._filterView, nextCard, this._verticalLayout);
+            this._effect.onDragStart(this, this._filterView, nextCard, this._verticalLayout, touch);
             this._commit();
         },
 

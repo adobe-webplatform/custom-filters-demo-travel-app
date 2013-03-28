@@ -32,6 +32,7 @@ define(["views/touch-item-view",
         initialize: function() {
             ItemView.__super__.initialize.call(this);
             this.$labelEl.addClass("js-splash-item-view-label");
+            this.setEffect("warp");
         },
 
         render: function() {

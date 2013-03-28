@@ -33,7 +33,6 @@ uniform vec2 u_textureSize;
 uniform mat4 transform;
 
 uniform float mapDepth;
-uniform float minSpacing;
 uniform float t;
 uniform float shadow;
 
@@ -50,19 +49,11 @@ const float PI = 3.1415629;
 void main()
 {
     vec4 pos = a_position;
-    float coord = a_triangleCoord.x + 
-                  ((a_triangleCoord.z == 2.0) ? 1.0 : 0.0) +
-                  ((a_triangleCoord.z == 3.0) ? 1.0 : 0.0) +
-                  ((a_triangleCoord.z == 5.0) ? 1.0 : 0.0);
+    bool rightSide = (a_triangleCoord.z == 2.0 || a_triangleCoord.z == 3.0 || a_triangleCoord.z == 5.0);
+    float coord = a_triangleCoord.x + (rightSide ? 1.0 : 0.0);
     if (coord > 0.0)
-        pos.z = -cos(coord * PI) * mapDepth * t + mapDepth * t;
-
-    {
-        float scaleX = mix(1.0, minSpacing, t * t);
-        pos.x = (pos.x + 0.5) * scaleX - 0.5;
-    }
-
-    v_lighting = (1.0 - mod(a_triangleCoord.x, 2.0)) * (1.0 - shadow) + shadow;
-  
+        pos.z = (1.0 - cos(coord * PI)) * mapDepth * t;
+    pos.x = pos.x * (1.0 - t) - 0.5 * t;
+    v_lighting = 1.0 - mod(a_triangleCoord.x, 2.0) * (1.0 - shadow);
     gl_Position = u_projectionMatrix * transform * pos;
 }

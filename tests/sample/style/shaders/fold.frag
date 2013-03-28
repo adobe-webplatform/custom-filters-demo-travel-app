@@ -24,6 +24,5 @@ varying float v_lighting;
 
 void main()
 {
-    css_MixColor = vec4(v_lighting);
-    css_MixColor.a = 1.0;
+    css_MixColor = vec4(v_lighting, v_lighting, v_lighting, 1.0);
 }

@@ -30,7 +30,7 @@ define(["views/touch-item-view",
             _.extend(this, options);
             ItemView.__super__.initialize.call(this);
             this.$labelEl.addClass("js-location-item-view-label");
-            this.useFoldingFilters();
+            this.setEffect("fold");
         },
 
         setVerticalLayout: function() {

@@ -78,11 +78,6 @@ define(["mobileui/views/gesture-detector",
             this.$labelEl.text(this.model.get("label"));
         },
 
-        useFoldingFilters: function() {
-            this.setEffect("fold");
-            return this;
-        },
-
         animateViewDeactived: function() {
             this.animation().start()
                 .get("slide-opacity")

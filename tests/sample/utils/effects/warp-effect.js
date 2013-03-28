@@ -34,7 +34,7 @@ define(["utils/effects/base-effect",
         
         onDragStart: function(containerView, filterView, nextCard, verticalLayout, touch) {
             containerView.animation().removeAll();
-            var warp = filterView.filter()
+            var warp = filterView.forceLayer().filter()
                 .get("warp")
                 .setX(touch.currentPosition.localX / containerView.bounds().width())
                 .setY(1)

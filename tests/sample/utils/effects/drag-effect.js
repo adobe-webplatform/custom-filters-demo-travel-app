@@ -36,7 +36,7 @@ define(["utils/effects/base-effect",
             nextCard.filter().get("grayscale").setIntensity(100);
             nextCard.setOpacity(0.5);
 
-            var translate = containerView.transform().get("translate");
+            var translate = containerView.forceLayer().transform().get("translate");
             return verticalLayout ? translate.x() : translate.y();
         },
 

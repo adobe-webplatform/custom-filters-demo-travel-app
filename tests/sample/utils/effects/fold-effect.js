@@ -34,7 +34,7 @@ define(["utils/effects/base-effect",
 
         onDragStart: function(containerView, filterView) {
             containerView.animation().removeAll();
-            var fold = filterView.filter()
+            var fold = filterView.forceLayer().filter()
                 .get("fold")
                 .setT(this._computeFilterValue(0))
                 .setShadow(this._computeShadow(0))

@@ -45,14 +45,12 @@ define(["mobileui/views/gesture-detector",
             this._filterView = new LayerView();
             this.append(this._filterView
                     .matchParentSize()
-                    .forceLayer()
                     .render()
                     .addClass("js-touch-item-view")
                     .addClass(this.model.get("className")));
             this.$labelEl = $("<div />").addClass("js-touch-item-view-label").appendTo(this._filterView.$el);
             this._dragStartValue = 0;
             this._momentum = new Momentum().setDuration(commitDuration).setFriction(0.000005);
-            this.forceLayer();
             this.setEffect("drag");
             this.setHorizontalLayout();
         },

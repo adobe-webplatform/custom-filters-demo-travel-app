@@ -22,9 +22,10 @@ define(["utils/effects/base-effect",
     var commitDuration = 300,
         revertDuration = 100;
 
-    function FoldEffect(useShadow) {
+    function FoldEffect(useShadow, useGrayscale) {
         BaseEffect.call(this);
         this._useShadow = useShadow;
+        this._useGrayscale = useGrayscale;
     }
 
     _.extend(FoldEffect.prototype, BaseEffect.prototype, {
@@ -70,7 +71,8 @@ define(["utils/effects/base-effect",
             if (this._useShadow)
                 containerView.filter().get("dropShadow").setRadius(10).setColor(t);
 
-            nextCard.filter().get("grayscale").setIntensity(100 - t * 100);
+            if (this._useGrayscale)
+                nextCard.filter().get("grayscale").setIntensity(100 - t * 100);
             nextCard.setOpacity(t / 2 + 0.5);
             return value;
         },
@@ -100,10 +102,12 @@ define(["utils/effects/base-effect",
             filterView.animation().start().get("slide-filter")
                 .chain().filter(commitDuration, filter);
 
-            nextCard.animation().start().get("slide-filter")
-                .chain()
-                .filter(commitDuration, new Filter().grayscale(0));
-            nextCard.animation().get("slide-opacity")
+            if (this._useGrayscale) {
+                nextCard.animation().start().get("slide-filter")
+                    .chain()
+                    .filter(commitDuration, new Filter().grayscale(0));
+            }
+            nextCard.animation().start().get("slide-opacity")
                 .chain()
                 .opacity(commitDuration, 1);
 
@@ -136,10 +140,12 @@ define(["utils/effects/base-effect",
             containerView.animation().get("slide")
                 .chain()
                 .opacity(revertDuration, 1);
-            nextCard.animation().start().get("slide-filter")
-                .chain()
-                .filter(revertDuration, new Filter().grayscale(100));
-            nextCard.animation().get("slide-opacity")
+            if (this._useGrayscale) {
+                nextCard.animation().start().get("slide-filter")
+                    .chain()
+                    .filter(revertDuration, new Filter().grayscale(100));
+            }
+            nextCard.animation().start().get("slide-opacity")
                 .chain()
                 .opacity(revertDuration, 0.5);
 

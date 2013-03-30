@@ -22,8 +22,9 @@ define(["utils/effects/base-effect",
     var commitDuration = 300,
         revertDuration = 100;
 
-    function DragEffect(verticalLayout) {
+    function DragEffect(useGrayscale) {
         BaseEffect.call(this);
+        this._useGrayscale = useGrayscale;
     }
 
     _.extend(DragEffect.prototype, BaseEffect.prototype, {
@@ -33,7 +34,8 @@ define(["utils/effects/base-effect",
 
         onDragStart: function(containerView, filterView, nextCard, verticalLayout) {
             containerView.animation().removeAll();
-            nextCard.filter().get("grayscale").setIntensity(100);
+            if (this._useGrayscale)
+                nextCard.filter().get("grayscale").setIntensity(100);
             nextCard.setOpacity(0.5);
 
             var translate = containerView.forceLayer().transform().get("translate");
@@ -42,17 +44,19 @@ define(["utils/effects/base-effect",
 
         onDragMove: function(containerView, filterView, nextCard, transform, dragStartValue, verticalLayout) {
             var translate = containerView.transform().get("translate"),
-                grayscale = nextCard.filter().get("grayscale"),
+                grayscale = this._useGrayscale ? nextCard.filter().get("grayscale") : null,
                 value;
             if (verticalLayout) {
                 value = Math.min(0, dragStartValue + transform.dragX);
                 translate.setX(value);
-                grayscale.setIntensity(100 + value / containerView.bounds().width() * 100);
+                if (this._useGrayscale)
+                    grayscale.setIntensity(100 + value / containerView.bounds().width() * 100);
                 nextCard.setOpacity(-value / containerView.bounds().width() / 2 + 0.5);
             } else {
                 value = Math.min(0, dragStartValue + transform.dragY);
                 translate.setY(value);
-                grayscale.setIntensity(100 + value / containerView.bounds().height() * 100);
+                if (this._useGrayscale)
+                    grayscale.setIntensity(100 + value / containerView.bounds().height() * 100);
                 nextCard.setOpacity(-value / containerView.bounds().height() / 2 + 0.5);
             }
             return value;
@@ -78,10 +82,12 @@ define(["utils/effects/base-effect",
                 .chain()
                 .opacity(commitDuration, 0);
 
-            nextCard.animation().start().get("slide-filter")
-                .chain()
-                .filter(commitDuration, new Filter().grayscale(0));
-            nextCard.animation().get("slide-opacity")
+            if (this._useGrayscale) {
+                nextCard.animation().start().get("slide-filter")
+                    .chain()
+                    .filter(commitDuration, new Filter().grayscale(0));
+            }
+            nextCard.animation().start().get("slide-opacity")
                 .chain()
                 .opacity(commitDuration, 1);
 
@@ -95,10 +101,12 @@ define(["utils/effects/base-effect",
             containerView.animation().get("slide")
                 .chain()
                 .opacity(revertDuration, 1);
-            nextCard.animation().start().get("slide-filter")
-                .chain()
-                .filter(revertDuration, new Filter().grayscale(100));
-            nextCard.animation().get("slide-opacity")
+            if (this._useGrayscale) {
+                nextCard.animation().start().get("slide-filter")
+                    .chain()
+                    .filter(revertDuration, new Filter().grayscale(100));
+            }
+            nextCard.animation().start().get("slide-opacity")
                 .chain()
                 .opacity(revertDuration, 0.5);
 

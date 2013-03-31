@@ -358,27 +358,36 @@ define(["mobileui/utils/rect",
 
             // Take the whole width of the parent.
             if (params.width() == LayoutParams.MATCH_PARENT)
-                this.bounds().setWidth(parentView.bounds().width() - this.margin().horizontal());
+                this.setOuterWidth(parentView.bounds().width());
 
             // A simple number will be a percentage out of the parent view bounds.
             else if (_.isNumber(params.width()))
-                this.bounds().setWidth(parentView.bounds().width() * params.width() - this.margin().horizontal());
+                this.setOuterWidth(parentView.bounds().width() * params.width());
 
             // Equivalent of "matchWidthOf".
             else if (_.isObject(params.width()))
-                this.bounds().setWidth(params.width().bounds().width() - this.margin().horizontal());
+                this.setOuterWidth(params.width().bounds().width());
 
             // Take the whole height of the parent.
             if (params.height() == LayoutParams.MATCH_PARENT)
-                this.bounds().setHeight(parentView.bounds().height() - this.margin().vertical());
+                this.setOuterHeight(parentView.bounds().height());
 
             // A simple number will be a percentage out of the parent view bounds.
             else if (_.isNumber(params.height()))
-                this.bounds().setHeight(parentView.bounds().height() * params.height() - this.margin().vertical());
+                this.setOuterHeight(parentView.bounds().height() * params.height());
 
             // Equivalent of "matchHeightOf".
             else if (_.isObject(params.height()))
-                this.bounds().setHeight(params.height().bounds().height() - this.margin().vertical());
+                this.setOuterHeight(params.height().bounds().height());
+        },
+
+        setOuterWidth: function(width) {
+            this.bounds().setWidth(width - this.margin().horizontal() - this.padding().horizontal());
+            return this;
+        },
+
+        setOuterHeight: function(height) {
+            this.bounds().setHeight(height - this.margin().vertical() - this.padding().vertical());
         },
 
         setLayoutOnChildren: function() {
@@ -444,10 +453,22 @@ define(["mobileui/utils/rect",
 
         outerWidth: function() {
             return this.bounds().width() +
-                this.padding().horizontal();
+                this.padding().horizontal() +
+                this.margin().horizontal();
         },
 
         outerHeight: function() {
+            return this.bounds().height() +
+                this.padding().vertical() +
+                this.margin().vertical();
+        },
+
+        paddingWidth: function() {
+            return this.bounds().width() +
+                this.padding().horizontal();
+        },
+
+        paddingHeight: function() {
             return this.bounds().height() +
                 this.padding().vertical();
         },

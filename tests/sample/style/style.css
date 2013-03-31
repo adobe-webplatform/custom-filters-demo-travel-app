@@ -34,6 +34,14 @@ body {
     font-family: "source", verdana;
 }
 
+.center {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    text-align: center;
+}
+
 .js-index-view, .js-old-test-view {
     background-color: white;
 }
@@ -229,19 +237,35 @@ body {
     font-family: "source-sb";
 }
 
-.js-location-view {
-    color: white;
-    background-color: #df8051;
+.js-location-content-view {
+    color: black;
+    background-color: white;
 }
 
 .js-location-view-label > .js-content-view-content {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     font-size: 2.0em;
-    width: 100%;
-    text-align: center;
     text-transform: uppercase;
+}
+
+.js-location-two-column-view {
+    box-sizing: border-box;
+    background-color: LightGray;
+    border-top: 1px solid MidnightBlue;
+    border-bottom: 1px solid MidnightBlue;
+}
+
+.js-location-two-column-view + .js-location-two-column-view {
+    border-top: none;
+}
+
+.js-location-two-column-cell-view + .js-location-two-column-cell-view {
+    box-sizing: border-box;
+    border-left: 1px solid MidnightBlue;
+}
+
+.js-location-view-paragraph {
+    padding-bottom: 10px;
+    text-align: justify;
 }
 
 .js-touch-item-view-filter {

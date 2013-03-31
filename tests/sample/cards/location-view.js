@@ -15,6 +15,7 @@
  */
 
 define(["mobileui/views/content-view",
+        "mobileui/views/measured-view",
         "mobileui/views/scroll-view",
         "mobileui/views/layout-view",
         "mobileui/views/layer-view",
@@ -22,6 +23,7 @@ define(["mobileui/views/content-view",
         "data/locations",
         "app"],
     function(ContentView,
+            MeasuredView,
             ScrollView,
             LayoutView,
             LayerView,
@@ -29,7 +31,7 @@ define(["mobileui/views/content-view",
             LocationLabels,
             app) {
 
-    var imagePaddingHeight = 50;
+    var imagePaddingHeight = 150;
 
     var LocationView = AppCardView.extend({
         initialize: function(options) {
@@ -39,14 +41,17 @@ define(["mobileui/views/content-view",
             this._scrollView.matchParentSize();
             this.append(this._scrollView.render());
 
-            this._contentView = new LayoutView().setLayout("vertical");
+            this._contentView = new LayoutView().setLayout("vertical")
+                .addClass("js-location-content-view");
             this._contentView.ensureParams().matchParentWidth().matchChildrenHeight();
             this._contentView.margin().setTop(imagePaddingHeight);
             this._scrollView.setContentView(this._contentView.render());
 
             this._labelView = new ContentView()
-                .addClass("js-location-view-label");
-            this._labelView.ensureParams().matchParentWidth().matchHeightOf(this._scrollView);
+                .addClass("js-location-view-label")
+                .addContentClass("center");
+            this._labelView.ensureParams().matchParentWidth();
+            this._labelView.bounds().setHeight(100);
             this._contentView.append(this._labelView.render());
 
             if (options && options.path) {
@@ -58,6 +63,56 @@ define(["mobileui/views/content-view",
             if (!this.model)
                 this.model = LocationLabels.first();
             this._labelView.setTextContent(this.model.get("label"));
+
+            this._twoColumnView1 = new LayoutView().setLayout("horizontal")
+                .addClass("js-location-two-column-view");
+            this._twoColumnView1.ensureParams().matchParentWidth().matchChildrenHeight();
+            this._contentView.append(this._twoColumnView1.render());
+
+            this._labelView1 = new ContentView()
+                .addClass("js-location-two-column-cell-view")
+                .addContentClass("center");
+            this._labelView1.ensureParams().fillParentWidth();
+            this._labelView1.bounds().setHeight(40);
+            this._labelView1.setTextContent("Label1");
+            this._twoColumnView1.append(this._labelView1.render());
+
+            this._labelView2 = new ContentView()
+                .addClass("js-location-two-column-cell-view")
+                .addContentClass("center");
+            this._labelView2.ensureParams().fillParentWidth();
+            this._labelView2.bounds().setHeight(40);
+            this._labelView2.setTextContent("Label2");
+            this._twoColumnView1.append(this._labelView2.render());
+
+            this._twoColumnView2 = new LayoutView().setLayout("horizontal")
+                .addClass("js-location-two-column-view");
+            this._twoColumnView2.ensureParams().matchParentWidth().matchChildrenHeight();
+            this._contentView.append(this._twoColumnView2.render());
+
+            this._labelView3 = new ContentView()
+                .addClass("js-location-two-column-cell-view")
+                .addContentClass("center");
+            this._labelView3.ensureParams().fillParentWidth();
+            this._labelView3.bounds().setHeight(40);
+            this._labelView3.setTextContent("Label3");
+            this._twoColumnView2.append(this._labelView3.render());
+
+            this._labelView4 = new ContentView()
+                .addClass("js-location-two-column-cell-view")
+                .addContentClass("center");
+            this._labelView4.ensureParams().fillParentWidth();
+            this._labelView4.bounds().setHeight(40);
+            this._labelView4.setTextContent("Label4");
+            this._twoColumnView2.append(this._labelView4.render());
+
+            this._textContentView = new MeasuredView().setContent(
+                "<div class='js-location-view-paragraph'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin aliquam velit a ante tincidunt vitae tristique purus pharetra. Maecenas ut bibendum augue. Suspendisse dignissim vestibulum feugiat. Nulla facilisi. Nam purus risus, vehicula quis adipiscing sed, rhoncus nec tellus. Cras elementum, odio et pharetra elementum, est mauris pharetra magna, non malesuada nunc elit non augue. Duis commodo nisl vel augue semper eget tincidunt neque ultrices.</div>" +
+                "<div class='js-location-view-paragraph'>Phasellus in velit mauris. Quisque cursus dapibus imperdiet. Aliquam erat volutpat. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum ut elit dui, ac sagittis nisi. Donec porta magna sit amet ante vulputate in semper neque interdum. Nulla non lacus quam, et tempor mauris. Vestibulum non suscipit est. Donec mollis lectus eu purus lobortis cursus. Mauris facilisis ligula vitae mauris suscipit tempus. Praesent malesuada rhoncus quam, in interdum tortor pulvinar in. Fusce suscipit, nisl et lobortis convallis, sapien massa pharetra felis, vitae adipiscing libero est dictum mi. Integer lobortis diam ut quam ultricies quis auctor dui pulvinar. Nulla facilisi. Ut pellentesque adipiscing tempor.</div>" +
+                "<div class='js-location-view-paragraph'>Nullam at lobortis justo. Sed vel sapien sem. Aliquam elementum erat non tortor vehicula porttitor. Nam euismod, nulla vitae semper aliquam, quam tortor convallis mi, quis hendrerit mauris nisl at elit. Nunc eu leo orci, vitae fringilla ipsum. Praesent urna massa, sodales eget faucibus et, ultrices at augue. Nunc sit amet augue vel mi posuere sagittis in sed lacus. Proin ac enim sed sem placerat laoreet sed nec lectus. Suspendisse porta libero eget urna imperdiet at rhoncus risus molestie.</div>");
+            this._textContentView.padding().setAll(10);
+            this._textContentView.ensureParams().matchParentWidth();
+            this._contentView.append(this._textContentView.render());
 
             // Append the picture view first, so that it displays under
             // the content of our card when it is scrolled.

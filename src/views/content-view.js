@@ -20,14 +20,14 @@ define(["mobileui/views/layer-view",
     var ContentView = LayerView.extend({
         initialize: function() {
             ContentView.__super__.initialize.call(this);
+            this.$contentView = this.createContentElement()
+                .addClass("js-content-view-content");
             this._html = null;
             this._text = null;
         },
 
         render: function() {
             this.$el.addClass("js-content-view");
-            this.$contentView = this.createContentElement()
-                .addClass("js-content-view-content");
             this.$el.append(this.$contentView);
             return ContentView.__super__.render.call(this);
         },
@@ -57,6 +57,11 @@ define(["mobileui/views/layer-view",
             this._html = null;
             this._text = text;
             this.setNeedsLayout(true);
+            return this;
+        },
+
+        addContentClass: function(className) {
+            this.$contentView.addClass(className);
             return this;
         },
 

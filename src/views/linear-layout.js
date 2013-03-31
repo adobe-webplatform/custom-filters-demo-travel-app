@@ -63,7 +63,7 @@ define(["mobileui/utils/transform",
                 }
                 view.layoutIfNeeded();
                 var viewMargin = view.margin();
-                offset += isVertical ? (view.outerHeight() + viewMargin.bottom()) : (view.outerWidth() + viewMargin.right());
+                offset += isVertical ? (view.paddingHeight() + viewMargin.bottom()) : (view.paddingWidth() + viewMargin.right());
 
                 // Collapse top margin for the current view with the bottom margin of the previous view.
                 var collapedMargin = isVertical ? viewMargin.top() - (previousMargin ? previousMargin.bottom() : 0) :
@@ -123,7 +123,7 @@ define(["mobileui/utils/transform",
                         }
                         viewBounds.setX(newX).setY(newY);
                     }
-                    offset += isVertical ? (view.outerHeight() + viewMargin.bottom()) : (view.outerWidth() + viewMargin.right());
+                    offset += isVertical ? (view.paddingHeight() + viewMargin.bottom()) : (view.paddingWidth() + viewMargin.right());
                     previousMargin = viewMargin;
                 }
                 view.everHadLayout = true;

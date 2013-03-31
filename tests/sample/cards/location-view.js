@@ -15,21 +15,40 @@
  */
 
 define(["mobileui/views/content-view",
+        "mobileui/views/scroll-view",
+        "mobileui/views/layout-view",
+        "mobileui/views/layer-view",
         "views/app-card-view",
         "data/locations",
         "app"],
     function(ContentView,
+            ScrollView,
+            LayoutView,
+            LayerView,
             AppCardView,
             LocationLabels,
             app) {
 
+    var imagePaddingHeight = 50;
+
     var LocationView = AppCardView.extend({
         initialize: function(options) {
             LocationView.__super__.initialize.call(this);
+
+            this._scrollView = new ScrollView().setScrollDirection("vertical");
+            this._scrollView.matchParentSize();
+            this.append(this._scrollView.render());
+
+            this._contentView = new LayoutView().setLayout("vertical");
+            this._contentView.ensureParams().matchParentWidth().matchChildrenHeight();
+            this._contentView.margin().setTop(imagePaddingHeight);
+            this._scrollView.setContentView(this._contentView.render());
+
             this._labelView = new ContentView()
-                .matchParentSize()
                 .addClass("js-location-view-label");
-            this.append(this._labelView.render());
+            this._labelView.ensureParams().matchParentWidth().matchHeightOf(this._scrollView);
+            this._contentView.append(this._labelView.render());
+
             if (options && options.path) {
                 var decodedPath = decodeURIComponent(options.path);
                 this.model = LocationLabels.find(function(item) {
@@ -39,6 +58,25 @@ define(["mobileui/views/content-view",
             if (!this.model)
                 this.model = LocationLabels.first();
             this._labelView.setTextContent(this.model.get("label"));
+
+            // Append the picture view first, so that it displays under
+            // the content of our card when it is scrolled.
+            this._pictureScrollView = new ScrollView().setScrollDirection("horizontal");
+            this._pictureScrollView.ensureParams().matchParentWidth();
+            this._pictureScrollView.bounds().setHeight(imagePaddingHeight);
+            this._scrollView.before(this._pictureScrollView.render(), this._contentView);
+
+            this._pictureView =  new LayoutView().setLayout("horizontal");
+            this._pictureView.ensureParams().matchChildrenWidth().matchParentHeight();
+            this._pictureScrollView.setContentView(this._pictureView.render());
+
+            var colors = ["DeepSkyBlue", "PaleVioletRed", "MediumSlateBlue", "DarkSeaGreen", "BurlyWood"];
+            for (var i = 0; i < colors.length; ++i) {
+                var picture = new LayerView();
+                picture.ensureParams().matchWidthOf(this._pictureScrollView).matchParentHeight();
+                picture.$el.css("background-color", colors[i]);
+                this._pictureView.append(picture.render());
+            }
         },
 
         render: function() {

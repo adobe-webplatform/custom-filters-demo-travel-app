@@ -55,6 +55,10 @@ define(function() {
             return this.setWidth(LayoutParams.MATCH_CHILDREN);
         },
 
+        matchWidthOf: function(parentView) {
+            return this.setWidth(parentView);
+        },
+
         height: function() {
             return this._height;
         },
@@ -74,6 +78,10 @@ define(function() {
 
         matchChildrenHeight: function() {
             return this.setHeight(LayoutParams.MATCH_CHILDREN);
+        },
+
+        matchHeightOf: function(parentView) {
+            return this.setHeight(parentView);
         },
 
         matchParent: function() {

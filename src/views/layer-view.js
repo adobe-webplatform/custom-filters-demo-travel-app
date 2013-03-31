@@ -355,14 +355,30 @@ define(["mobileui/utils/rect",
             var parentView = this.parent();
             if (!parentView)
                 return;
+
+            // Take the whole width of the parent.
             if (params.width() == LayoutParams.MATCH_PARENT)
                 this.bounds().setWidth(parentView.bounds().width() - this.margin().horizontal());
+
+            // A simple number will be a percentage out of the parent view bounds.
             else if (_.isNumber(params.width()))
                 this.bounds().setWidth(parentView.bounds().width() * params.width() - this.margin().horizontal());
+
+            // Equivalent of "matchWidthOf".
+            else if (_.isObject(params.width()))
+                this.bounds().setWidth(params.width().bounds().width() - this.margin().horizontal());
+
+            // Take the whole height of the parent.
             if (params.height() == LayoutParams.MATCH_PARENT)
                 this.bounds().setHeight(parentView.bounds().height() - this.margin().vertical());
-            if (_.isNumber(params.height()))
+
+            // A simple number will be a percentage out of the parent view bounds.
+            else if (_.isNumber(params.height()))
                 this.bounds().setHeight(parentView.bounds().height() * params.height() - this.margin().vertical());
+
+            // Equivalent of "matchHeightOf".
+            else if (_.isObject(params.height()))
+                this.bounds().setHeight(params.height().bounds().height() - this.margin().vertical());
         },
 
         setLayoutOnChildren: function() {

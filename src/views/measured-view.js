@@ -39,12 +39,21 @@ define(["mobileui/views/content-view",
                 this.$contentView.css("width", hasParentDerivedWidth ? this.bounds().width() : "");
                 this.$contentView.css("height", hasParentDerivedHeight ? this.bounds().height() : "");
             }
-            if (!hasParentDerivedWidth)
-                this.bounds().setWidth(this.$contentView.outerWidth());
-            if (!hasParentDerivedHeight)
-                this.bounds().setHeight(this.$contentView.outerHeight());
+            if (hasParentDerivedWidth || hasParentDerivedHeight) {
+                // Make sure we are not going to flicker while doing this forced layout.
+                this.$contentView.css("visibility", "hidden");
+                if (!hasParentDerivedWidth)
+                    this.bounds().setWidth(this.$contentView.outerWidth());
+                if (!hasParentDerivedHeight)
+                    this.bounds().setHeight(this.$contentView.outerHeight());
+                this.invalidate("layoutVisibility");
+            }
 
             this.setNeedsLayout(false);
+        },
+
+        _validateLayoutVisibility: function() {
+            this.$contentView.css("visibility", "");
         }
     });
 

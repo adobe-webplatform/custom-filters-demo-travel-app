@@ -53,6 +53,7 @@ define(["mobileui/views/gesture-detector",
             this._momentum = new Momentum().setDuration(commitDuration).setFriction(0.000005);
             this.setEffect("drag");
             this.setHorizontalLayout();
+            this.forceLayer();
         },
 
         setEffect: function(effectOrName) {

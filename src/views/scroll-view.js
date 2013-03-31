@@ -48,7 +48,8 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             this._horizontalView = new LayerView();
             this._horizontalView.forceLayer()
                 .addClass("js-scroll-view-indicator")
-                .addClass("js-scroll-view-horizontal-indicator");
+                .addClass("js-scroll-view-horizontal-indicator")
+                .setOpacity(0);
             this._horizontalView.bounds().setSize(1, 4);
             this._horizontalView.transform().translate().scale(0, 1);
             this.append(this._horizontalView.render());
@@ -56,12 +57,14 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             this._verticalView = new LayerView();
             this._verticalView.forceLayer()
                 .addClass("js-scroll-view-indicator")
-                .addClass("js-scroll-view-vertical-indicator");
+                .addClass("js-scroll-view-vertical-indicator")
+                .setOpacity(0);
             this._verticalView.bounds().setSize(4, 1);
             this._verticalView.transform().translate().scale(1, 0);
             this.append(this._verticalView.render());
 
             this._snapToChildrenBounds = false;
+            this._scrollBarsVisible = false;
         },
 
         render: function() {
@@ -97,17 +100,55 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             return Math.max(minScrollIndicatorSize, this.bounds().width() / this.scrollWidth() * this.bounds().width());
         },
 
+        _updateScrollBarVisibility: function(scrollBar, visible) {
+            var wasVisible = scrollBar.visible();
+            if (wasVisible == visible)
+                return;
+            scrollBar.setVisible(visible);
+            scrollBar.animation().get("scrollbar-opacity").removeAll();
+            scrollBar.setOpacity((visible && this._scrollBarsVisible) ? 1 : 0);
+        },
+
         layout: function() {
             ScrollView.__super__.layout.call(this);
-            this._verticalView.setVisible(this.hasVerticalScroll())
+
+            this._updateScrollBarVisibility(this._verticalView, this.hasVerticalScroll());
+            this._verticalView
                 .bounds().setX(this.bounds().width() - this._verticalView.bounds().width());
-            this._horizontalView.setVisible(this.hasHorizontalScroll())
+
+            this._updateScrollBarVisibility(this._horizontalView, this.hasHorizontalScroll());
+            this._horizontalView
                 .bounds().setY(this.bounds().height() - this._horizontalView.bounds().height());
 
             this._verticalView.transform().get("scale").setY(this._verticalScrollHeight());
             this._horizontalView.transform().get("scale").setX(this._horizontalScrollWidth());
 
             this.invalidate("scroll");
+        },
+
+        _animateScrollBar: function(scrollBar, show) {
+            if (!scrollBar.visible())
+                return;
+            scrollBar.animation().start().get("scrollbar-opacity")
+                .removeAll()
+                .chain()
+                .opacity(100, show ? 1 : 0);
+        },
+
+        showScrollBars: function() {
+            if (this._scrollBarsVisible)
+                return;
+            this._scrollBarsVisible = true;
+            this._animateScrollBar(this._verticalView, true);
+            this._animateScrollBar(this._horizontalView, true);
+        },
+
+        hideScrollBars: function() {
+            if (!this._scrollBarsVisible)
+                return;
+            this._scrollBarsVisible = false;
+            this._animateScrollBar(this._verticalView, false);
+            this._animateScrollBar(this._horizontalView, false);
         },
 
         setContentView: function(view) {
@@ -277,6 +318,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
         },
 
         _internalScrollWithAnimation: function(momentumLeft, momentumTop) {
+            this.showScrollBars();
             var contentView = this.contentView();
             var chain = contentView.animation().inlineStart().get("scroll").removeAll().chain();
             var chainVertical = this._verticalView.animation().inlineStart().get("scroll").removeAll().chain();
@@ -302,7 +344,8 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             }
             chain.transform(this._scrollAnimationDuration,
                             new Transform().translate(-this._scrollLeft, -this._scrollTop))
-                 .setTimingFunction("easeOut");
+                 .setTimingFunction("easeOut")
+                 .callback(this.hideScrollBars, this);
 
             verticalTransform = this._verticalView.transform().clone();
             verticalTransform.get("translate").setY(this._computeVerticalBarPosition(this._scrollTop));
@@ -329,6 +372,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
                 top *= -1;
             }
             this.scrollBy(left, top);
+            this.showScrollBars();
         },
 
         respondsToTouchGesture: function(gesture) {
@@ -359,6 +403,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             this._momentumLeft.reset(this._scrollLeft);
             this._momentumTop.reset(this._scrollTop);
             this._canOverScroll = true;
+            this.showScrollBars();
         },
 
         _onTouchDragMove: function(transform) {

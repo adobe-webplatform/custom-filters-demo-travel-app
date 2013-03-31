@@ -14,27 +14,9 @@
  * limitations under the License.
  */
 
-define(["mobileui/views/touch-manager"],
-    function(TouchManager) {
-
-    function dist(x1, y1, x2, y2) {
-        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-    }
-
-    function angle(x1, y1, x2, y2) {
-        var cos = (x1 * x2 + y1 * y2) / (dist(0, 0, x1, y1) * dist(0, 0, x2, y2));
-        return Math.acos(cos) * 180 / Math.PI;
-    }
-
-    function rotation(x1, y1, x2, y2) {
-        var angle1 = angle(1, 0, x1, y1);
-        var angle2 = angle(1, 0, x2, y2);
-        if (y1 > 0)
-            angle1 = - angle1;
-        if (y2 > 0)
-            angle2 = - angle2;
-        return angle1 - angle2;
-    }
+define(["mobileui/views/touch-manager",
+        "mobileui/utils/geometry"],
+    function(TouchManager, Geometry) {
 
     function GestureType(type, scrollX, scrollY, distanceX, distanceY) {
         this.type = type;
@@ -116,13 +98,13 @@ define(["mobileui/views/touch-manager"],
 
             var centerStartX = (pointA.startPosition.parentX + pointB.startPosition.parentX) / 2;
             var centerStartY = (pointA.startPosition.parentY + pointB.startPosition.parentY) / 2;
-            var distanceStart = dist(pointA.startPosition.parentX, pointA.startPosition.parentY, pointB.startPosition.parentX, pointB.startPosition.parentY);
+            var distanceStart = Geometry.dist(pointA.startPosition.parentX, pointA.startPosition.parentY, pointB.startPosition.parentX, pointB.startPosition.parentY);
 
             var centerEndX = (pointA.currentPosition.parentX + pointB.currentPosition.parentX) / 2;
             var centerEndY = (pointA.currentPosition.parentY + pointB.currentPosition.parentY) / 2;
-            var distanceEnd = dist(pointA.currentPosition.parentX, pointA.currentPosition.parentY, pointB.currentPosition.parentX, pointB.currentPosition.parentY);
+            var distanceEnd = Geometry.dist(pointA.currentPosition.parentX, pointA.currentPosition.parentY, pointB.currentPosition.parentX, pointB.currentPosition.parentY);
 
-            var vectorRotation = rotation(
+            var vectorRotation = Geometry.rotation(
                     pointB.startPosition.parentX - pointA.startPosition.parentX,
                     pointB.startPosition.parentY - pointA.startPosition.parentY,
                     pointB.currentPosition.parentX - pointA.currentPosition.parentX,

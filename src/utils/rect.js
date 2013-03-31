@@ -42,6 +42,14 @@ define(function() {
         setWidth: function(width) { this._width = width; this._changedSize(); return this; },
         setHeight: function(height) { this._height = height; this._changedSize(); return this; },
 
+        centerX: function() {
+            return this._x + this._width / 2;
+        },
+
+        centerY: function() {
+            return this._y + this._height / 2;
+        },
+
         setPosition: function(x, y) {
             this._x = x;
             this._y = y;

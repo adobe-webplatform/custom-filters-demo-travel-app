@@ -19,9 +19,10 @@ define(["mobileui/views/gesture-view",
         "mobileui/views/gesture-detector",
         "mobileui/utils/boilerplate",
         "mobileui/utils/momentum",
+        "mobileui/utils/geometry",
         "mobileui/utils/transform"],
 function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
-            Transform) {
+            Geometry, Transform) {
 
     var minScrollIndicatorSize = 10;
 
@@ -59,6 +60,8 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             this._verticalView.bounds().setSize(4, 1);
             this._verticalView.transform().translate().scale(1, 0);
             this.append(this._verticalView.render());
+
+            this._snapToChildrenBounds = false;
         },
 
         render: function() {
@@ -66,6 +69,11 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
                 .addClass("js-scroll-view")
                 .on("mousewheel", this._onMouseWheel.bind(this));
             return ScrollView.__super__.render.call(this);
+        },
+
+        setSnapToChildrenBounds: function() {
+            this._snapToChildrenBounds = true;
+            return this;
         },
 
         setScrollAnimationDuration: function(duration) {
@@ -163,7 +171,31 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             return this.scrollHeight() > this.bounds().height();
         },
 
+        _snapScrollToChildrenPosition: function() {
+            // Align scroll with child objects.
+            if (!this._contentView)
+                return;
+            var shortestDistance = 0, nearestView = null,
+                centerX = this._scrollLeft + this.bounds().width() / 2,
+                centerY = this._scrollTop + this.bounds().height() / 2;
+            _.each(this._contentView.childrenViews(), function(view) {
+                var dist = Geometry.dist(centerX, centerY, view.bounds().centerX(), view.bounds().centerY());
+                if (!nearestView || shortestDistance > dist) {
+                    shortestDistance = dist;
+                    nearestView = view;
+                }
+            });
+            if (!nearestView)
+                return;
+            if (this._scrollDirection != ScrollView.VERTICAL)
+                this._scrollLeft = nearestView.bounds().x();
+            if (this._scrollDirection != ScrollView.HORIZONTAL)
+                this._scrollTop = nearestView.bounds().y();
+        },
+
         _checkScrollPosition: function() {
+            if (!this._canOverScroll && this._snapToChildrenBounds)
+                this._snapScrollToChildrenPosition();
             if (!this._canOverScroll || this._scrollDirection == ScrollView.VERTICAL)
                 this._scrollLeft = Math.max(0, Math.min(this._scrollLeft, this.maxScrollLeft()));
             if (!this._canOverScroll || this._scrollDirection == ScrollView.HORIZONTAL)

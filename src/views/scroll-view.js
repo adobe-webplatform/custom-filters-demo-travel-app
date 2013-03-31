@@ -285,8 +285,8 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
         },
 
         _adjustMomentum: function(momentum, scroll, maxScroll) {
-            return ((momentum > 0 && scroll <= 0) ||
-                (momentum < maxScroll && scroll >= maxScroll)) ?
+            return ((momentum > 0 && scroll >= 0) ||
+                (momentum < maxScroll && scroll <= maxScroll)) ?
                     scroll :
                     Math.max(scroll - this._maxMomentum, Math.min(momentum, scroll + this._maxMomentum));
         },

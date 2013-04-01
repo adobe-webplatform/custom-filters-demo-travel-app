@@ -124,6 +124,7 @@ define(["mobileui/views/content-view",
             // the content of our card when it is scrolled.
             this._pictureScrollView = new ScrollView().setScrollDirection("horizontal").setSnapToChildrenBounds()
                 .addClass("js-location-picture-scroll-view");
+            this._pictureScrollView.on("scroll", this._onPictureViewScroll, this);
             this._pictureScrollView.ensureParams().matchParentWidth();
             this._pictureScrollView.bounds().setHeight(imagePaddingHeight);
             this._scrollView.before(this._pictureScrollView.render(), this._contentView);
@@ -173,6 +174,11 @@ define(["mobileui/views/content-view",
                 .callback(function() {
                     this._hadPictureScrollScale = scrollTop < 0;
                 }, this);
+        },
+
+        _onPictureViewScroll: function() {
+            if (this._scrollView.scrollTop() > 0)
+                this._scrollView.scrollToWithAnimation(0, 0);
         },
 
         render: function() {

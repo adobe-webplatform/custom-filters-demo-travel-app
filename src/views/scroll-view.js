@@ -186,6 +186,11 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             return this._contentView;
         },
 
+        scrollToWithAnimation: function(left, top) {
+            this._useAnimation = true;
+            this.scrollTo(left, top);
+        },
+
         scrollTo: function(left, top, noSelectedViewUpdate) {
             if (!this._contentView)
                 return;

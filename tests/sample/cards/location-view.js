@@ -182,7 +182,7 @@ define(["mobileui/views/content-view",
         },
 
         _onPictureViewScroll: function() {
-            if (this._scrollView.scrollTop() > 0)
+            if (this._scrollView.scrollTop() > 0 && !this._scrollView.isScrolling())
                 this._scrollView.scrollToWithAnimation(0, 0);
         },
 

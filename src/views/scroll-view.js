@@ -106,6 +106,10 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             return this._scrollTop;
         },
 
+        isScrolling: function() {
+            return this._canOverScroll;
+        },
+
         _verticalScrollHeight: function() {
             return Math.max(minScrollIndicatorSize, this.bounds().height() / this.scrollHeight() * this.bounds().height());
         },

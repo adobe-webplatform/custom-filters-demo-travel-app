@@ -45,6 +45,7 @@ define(["mobileui/ui/navigator-card-view",
         _ensureGrayscaleOverlay: function() {
             if (!this._grayscaleOverlay) {
                 this._grayscaleOverlay = new LayerView()
+                    .setDisabled(true)
                     .matchParentSize().setOpacity(this._backgroundViewOpacity).render()
                     .addClass("js-app-card-grayscale-overlay");
             }

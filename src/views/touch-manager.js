@@ -23,7 +23,6 @@ define(["mobileui/views/touch",
            onTouchMove: this.onTouchMove.bind(this),
            onTouchEnd: this.onTouchEnd.bind(this),
            onTouchCancel: this.onTouchCancel.bind(this),
-           onMouseDown: this.onMouseDown.bind(this),
            onMouseMove: this.onMouseMove.bind(this),
            onMouseUp: this.onMouseUp.bind(this)
         };
@@ -48,6 +47,7 @@ define(["mobileui/views/touch",
         setTouch: function(touch) {
             this.touchPointsSet[touch.identifier] = touch;
             this.touchPoints.push(touch);
+            this.installTouchTrackingEvents();
         },
 
         cancelTouch: function(identifier) {
@@ -64,11 +64,13 @@ define(["mobileui/views/touch",
         },
 
         removeTouch: function(touch) {
-            this.touchPointsSet[touch.identifier] = null;
+            delete this.touchPointsSet[touch.identifier];
             var index = this.touchPoints.indexOf(touch);
             if (index != -1)
                 this.touchPoints.splice(index, 1);
-            if (!this.touchPoints.length)
+            if (touch.identifier == Touch.MOUSE)
+                this.removeMouseTrackingEvents();
+            else if (!this.touchPoints.length)
                 this.removeTouchTrackingEvents();
         },
 
@@ -96,7 +98,6 @@ define(["mobileui/views/touch",
             if (this.mouseEventsInstalled)
                 return;
             this.mouseEventsInstalled = true;
-            window.addEventListener("mousedown", this.touchEvents.onMouseDown, true);
             window.addEventListener("mousemove", this.touchEvents.onMouseMove, true);
             window.addEventListener("mouseup", this.touchEvents.onMouseUp, true);
         },
@@ -105,7 +106,6 @@ define(["mobileui/views/touch",
             if (!this.mouseEventsInstalled)
                 return;
             this.mouseEventsInstalled = false;
-            window.removeEventListener("mousedown", this.touchEvents.onMouseDown, true);
             window.removeEventListener("mousemove", this.touchEvents.onMouseMove, true);
             window.removeEventListener("mouseup", this.touchEvents.onMouseUp, true);
         },
@@ -123,7 +123,7 @@ define(["mobileui/views/touch",
         },
 
         onTouchStart: function(event) {
-            if (this.needsNativeTouch(event))
+            if (!this.captureTouchSurface)
                 return;
             this.removeFocus();
             var touches = event.changedTouches;
@@ -156,7 +156,6 @@ define(["mobileui/views/touch",
             internalTouch.startPosition = internalTouch.currentPosition = Touch.getPosition(touch);
             internalTouch.updatePreviewBox();
             this.setTouch(internalTouch);
-            this.installTouchTrackingEvents();
             return internalTouch;
         },
 
@@ -223,22 +222,14 @@ define(["mobileui/views/touch",
             this.inlineUpdate();
         },
 
-        onMouseDown: function(event) {
-            if (this.needsNativeTouch(event))
-                return;
-            this.removeFocus();
-            this.cancelTouch(Touch.MOUSE);
-            var internalTouch = new Touch(Touch.MOUSE);
-            internalTouch.type = Touch.MOUSE;
-            internalTouch.view = null;
-            this.mouseEvent = internalTouch;
-            this.setTouch(internalTouch);
-            internalTouch.startPosition = internalTouch.currentPosition = Touch.getPosition(event);
-            internalTouch.state = Touch.START;
+        internalTouchInvalidate: function(internalTouch) {
+            internalTouch.state = Touch.CANCELED;
+            this.removeTouch(internalTouch);
             internalTouch.updatePreviewBox();
-            if (this.captureTouchSurface)
-                this.captureTouchSurface.onMouseDown(event);
-            this.inlineUpdate();
+            if (internalTouch.view) {
+                internalTouch.view.removeTouch(internalTouch);
+                internalTouch.view.trigger("touchcanceled", internalTouch);
+            }
         },
 
         handleMouseDown: function(event) {
@@ -284,7 +275,6 @@ define(["mobileui/views/touch",
                 internalTouch.view.removeTouch(internalTouch);
                 internalTouch.view.trigger("touchend", internalTouch);
             }
-            this.removeMouseTrackingEvents();
             this.inlineUpdate();
         }
     });

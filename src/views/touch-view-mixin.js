@@ -50,10 +50,19 @@ define([
         },
 
         removeTouch: function(touch) {
-            this.touchPointsSet[touch.identifier] = null;
+            delete this.touchPointsSet[touch.identifier];
             var index = this.touchPoints.indexOf(touch);
             if (index != -1)
                 this.touchPoints.splice(index, 1);
+        },
+
+        _invalidateTouch: function() {
+            if (!this.touchPoints)
+                return;
+            // Make a clone as the touch manager will invalidate the original array.
+            _.each(_.clone(this.touchPoints), function(touch) {
+                TouchManager.instance.internalTouchInvalidate(touch);
+            });
         },
 
         setTouch: function(touch) {

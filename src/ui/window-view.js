@@ -21,6 +21,9 @@ define(["mobileui/views/layout-view"], function(LayoutView) {
             WindowView.__super__.initialize.call(this);
             $(window).on("resize", this._onWindowResize.bind(this));
             this._onWindowResize();
+            // Make sure we eat all the events before reaching the browser,
+            // to prevent any default scrolling behavior.
+            this.setNeedsTouchEvents(true);
         },
 
         render: function() {

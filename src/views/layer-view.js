@@ -234,8 +234,16 @@ define(["mobileui/utils/rect",
             return $.Deferred().resolveWith(view).promise();
         },
 
+        _invalidateTouchRecursive: function() {
+            this._invalidateTouch();
+            _.each(this.childrenViews(), function(view) {
+                view._invalidateTouchRecursive();
+            });
+        },
+
         _internalDetachRemove: function(detach) {
             requestAnimationFrame.setHadDOMUpdates();
+            this._invalidateTouchRecursive();
             if (detach == "detach")
                 this.$el.detach();
             else

@@ -137,7 +137,11 @@ define(["mobileui/views/content-view",
             for (var i = 0; i < colors.length; ++i) {
                 var picture = new LayerView();
                 picture.ensureParams().matchWidthOf(this._pictureScrollView).matchParentHeight();
-                picture.$el.css("background-color", colors[i]);
+                picture.$el.css("background-color", colors[i])
+                    .append($("<div />")
+                        .css("font-size", "2.5em")
+                        .addClass("center")
+                        .text(i + 1));
                 this._pictureView.append(picture.render());
             }
         },
@@ -171,6 +175,7 @@ define(["mobileui/views/content-view",
                 .removeAll()
                 .chain()
                 .transform(duration, new Transform().scale(scaleRatio, scaleRatio))
+                .setTimingFunction("easeOut")
                 .callback(function() {
                     this._hadPictureScrollScale = scrollTop < 0;
                 }, this);

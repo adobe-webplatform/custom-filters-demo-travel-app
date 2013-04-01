@@ -3,9 +3,9 @@ CACHE MANIFEST
 dist/all.min.js
 style/shaders/fold.frag
 style/shaders/fold.vert
+style/shaders/warp.frag
+style/shaders/warp.vert
 style/style.css
 style/font/SourceSansPro-Regular.otf
 style/font/SourceSansPro-Semibold.otf
 ../../style/mobile-ui.css
-
-

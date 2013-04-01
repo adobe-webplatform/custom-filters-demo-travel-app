@@ -65,6 +65,7 @@ define(['mobileui/ui/navigator-view',
             this._settingsButton = new ButtonView().setLabel("Settings")
                 .on("tap", this._onSettingsButtonTap, this);
             this._settingsButton.margin().setRight(10).setTop(5);
+            this._settingsButton.bounds().setWidth(80);
             topBar.append(this._settingsButton.render().addClass("dark-button"));
 
             settings.on("change:debug.refresh", this.updateBackButton, this);

@@ -198,17 +198,6 @@ body {
     right: 20px;
 }
 
-.js-navigator-top-bar-button-view, .js-dialog-button-view {
-    background-color: #5B4987;
-    color: white;
-    border-radius: 10px;
-}
-
-.js-navigator-top-bar-button-view.js-button-view-down,
-.js-dialog-button-view.js-button-view-down {
-    background-color: #3F2E66;
-}
-
 .js-navigator-top-bar-title-view {
     color: white;
     font-size: 1.3em;

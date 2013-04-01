@@ -123,7 +123,8 @@ define(["mobileui/views/content-view",
             // Append the picture view first, so that it displays under
             // the content of our card when it is scrolled.
             this._pictureScrollView = new ScrollView().setScrollDirection("horizontal").setSnapToChildrenBounds()
-                .addClass("js-location-picture-scroll-view");
+                .addClass("js-location-picture-scroll-view")
+                .forceLayer();
             this._pictureScrollView.on("scroll", this._onPictureViewScroll, this);
             this._pictureScrollView.ensureParams().matchParentWidth();
             this._pictureScrollView.bounds().setHeight(imagePaddingHeight);

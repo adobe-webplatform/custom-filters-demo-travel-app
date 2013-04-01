@@ -153,6 +153,8 @@ define(["mobileui/views/gesture-detector",
         _onTap: function(touch) {
             if (!app.canStartTransition())
                 return;
+            app.startTransition(this);
+            app.mainView.navigatorView().revertNextCard();
             this.trigger("animation:start");
             this._onTapStart();
             var nextCard = app.mainView.navigatorView().nextCard();

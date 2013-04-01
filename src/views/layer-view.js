@@ -91,7 +91,7 @@ define(["mobileui/utils/rect",
         forceLayer: function() {
             // Force a 3D layer by activating the animation.
             this.animation();
-            this.transform().clear();
+            this.invalidate("transform");
             return this;
         },
 

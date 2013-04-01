@@ -31,13 +31,13 @@ define(['views/dialog-view',
 
             this._addSettingsLine("Preview touch events", "touch.preview");
             this._addSettingsLine("Show refresh button", "debug.refresh");
-            
+
             var contentView = this.contentView();
-            this._updateButton = new ButtonView().setLabel("Check for updates").on("tap", this._onUpdateButtonTap, this);
+            this._updateButton = new ButtonView().setLabel("Check for updates")
+                .on("tap", this._onUpdateButtonTap, this);
             this._updateButton.margin().setAll(10);
-            this._updateButton.setParams(new LayoutParams().matchParentWidth());
-            contentView.append(this._updateButton.render().addClass("js-dialog-button-view")
-                .addClass("js-dialog-update-button-view"));
+            this._updateButton.ensureParams().matchParentWidth();
+            contentView.append(this._updateButton.render().addClass("dark-button"));
         },
 
         _addSettingsLine: function(label, valueName) {

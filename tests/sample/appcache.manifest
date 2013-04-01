@@ -8,6 +8,10 @@ style/shaders/warp.vert
 style/topcoat/normalize.css
 style/topcoat/topcoat-mobile.css
 style/style.css
-style/font/SourceSansPro-Regular.otf
-style/font/SourceSansPro-Semibold.otf
+style/font/SourceSansPro/SourceSansPro-Regular.otf
+style/font/SourceSansPro/SourceSansPro-Light.otf
+style/font/SourceSansPro/SourceSansPro-Semibold.otf
+style/font/SourceSansPro/SourceSansPro-Regular.otf
+style/font/SourceSansPro/SourceSansPro-Light.otf
+style/font/SourceSansPro/SourceSansPro-Semibold.otf
 ../../style/mobile-ui.css

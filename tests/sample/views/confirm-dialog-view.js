@@ -36,15 +36,13 @@ define(['views/dialog-view',
 
             this._acceptButton = new ButtonView().setLabel("Yes").on("tap", this._onAcceptButtonTap, this);
             this._acceptButton.margin().setAll(10);
-            this._acceptButton.setParams(new LayoutParams().matchParentWidth());
-            contentView.append(this._acceptButton.render().addClass("js-dialog-button-view")
-                .addClass("js-dialog-accept-button-view"));
+            this._acceptButton.ensureParams().matchParentWidth();
+            contentView.append(this._acceptButton.render().addClass("dark-button"));
 
             this._refuseButton = new ButtonView().setLabel("No").on("tap", this._onRefuseButtonTap, this);
             this._refuseButton.margin().setAll(10);
-            this._refuseButton.setParams(new LayoutParams().matchParentWidth());
-            contentView.append(this._refuseButton.render().addClass("js-dialog-button-view")
-                .addClass("js-dialog-refuse-button-view"));
+            this._refuseButton.ensureParams().matchParentWidth();
+            contentView.append(this._refuseButton.render().addClass("dark-button"));
         },
 
         setMessage: function(message) {

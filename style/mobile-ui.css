@@ -73,11 +73,6 @@ body {
     color: white;
 }
 
-.js-navigator-top-bar-view {
-    background: #ccc;
-    color: white;
-}
-
 .js-touch-preview {
     position: absolute;
     border-radius: 50px;

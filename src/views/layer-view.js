@@ -140,6 +140,11 @@ define(["mobileui/utils/rect",
             return this;
         },
 
+        matchLineHeight: function() {
+            this.ensureParams().setMatchLineHeight(true);
+            return this;
+        },
+
         append: function(view) {
             requestAnimationFrame.setHadDOMUpdates();
             this.$el.append(view.$el);
@@ -387,6 +392,9 @@ define(["mobileui/utils/rect",
             // Equivalent of "matchHeightOf".
             else if (_.isObject(params.height()))
                 this.setOuterHeight(params.height().bounds().height());
+
+            if (params.matchLineHeight())
+                this.invalidate("lineHeight");
         },
 
         setOuterWidth: function(width) {
@@ -596,6 +604,11 @@ define(["mobileui/utils/rect",
 
         _validateMargin: function() {
             this.$el.css("margin", this._margin.toCSSString("px"));
+        },
+
+        _validateLineHeight: function() {
+            if (this._params && this._params.matchLineHeight())
+                this.$el.css("line-height", this.bounds().height() + "px");
         },
 
         _onPositionChanged: function() {

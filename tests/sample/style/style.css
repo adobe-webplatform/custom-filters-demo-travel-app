@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-@font-face {
-    font-family: "source";
-    src: url("font/SourceSansPro-Regular.otf");
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "source-sb";
-    src: url("font/SourceSansPro-Semibold.otf");
-    font-weight: 600;
-    font-style: normal;
-}
-
 html, body, .js-window-view { overflow: hidden; margin: 0; }
 body {
     background-color: black;
     font-family: "source", verdana;
+}
+
+/* topcoat fixes */
+.dark-button, .light-button {
+    padding: 0;
 }
 
 .center {
@@ -56,14 +47,6 @@ body {
 
 .js-app-navigator-content-view {
     overflow: hidden;
-}
-
-.js-button-view-label {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    text-align: center;
 }
 
 .js-item-view {
@@ -213,10 +196,6 @@ body {
     white-space: nowrap;
     left: 20px;
     right: 20px;
-}
-
-.js-navigator-top-bar-view {
-    background-color: #372f4a;
 }
 
 .js-navigator-top-bar-button-view, .js-dialog-button-view {

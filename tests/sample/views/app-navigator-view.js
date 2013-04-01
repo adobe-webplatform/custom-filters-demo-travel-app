@@ -25,6 +25,7 @@ define(['mobileui/ui/navigator-view',
 
         initialize: function() {
             AppNavigatorView.__super__.initialize.call(this);
+            this.topBarView().addClass("dark-header-bar");
             this.addTopBarButtons();
         },
 
@@ -40,35 +41,31 @@ define(['mobileui/ui/navigator-view',
             this._titleLabel = new ContentView()
                 .setTextContent("MobileUI")
                 .matchParentSize()
-                .setIsPositioned(true);
-            this._titleLabel.margin().setTop(12);
+                .setIsPositioned(true)
+                .matchLineHeight();
             topBar.append(this._titleLabel.render().addClass("js-navigator-top-bar-title-view"));
 
             this._backButton = new ButtonView().setLabel("Back")
                 .on("tap", this._onBackButtonTap, this);
             this._backButton.margin().setLeft(10).setTop(5);
-            topBar.append(this._backButton.render().addClass("js-navigator-top-bar-button-view")
-                .addClass("js-navigator-top-bar-back-button-view"));
+            topBar.append(this._backButton.render().addClass("dark-button"));
 
             this._homeButton = new ButtonView().setLabel("Home")
                 .on("tap", this._onBackButtonTap, this);
             this._homeButton.margin().setLeft(10).setTop(5);
-            topBar.append(this._homeButton.render().addClass("js-navigator-top-bar-button-view")
-                .addClass("js-navigator-top-bar-home-button-view"));
+            topBar.append(this._homeButton.render().addClass("dark-button"));
 
             this._refreshButton = new ButtonView().setLabel("Refresh")
                 .on("tap", this._onRefreshButtonTap, this);
             this._refreshButton.margin().setLeft(10).setTop(5);
-            topBar.append(this._refreshButton.render().addClass("js-navigator-top-bar-button-view")
-                .addClass("js-navigator-top-bar-refresh-button-view"));
+            topBar.append(this._refreshButton.render().addClass("dark-button"));
 
             topBar.appendFiller();
 
             this._settingsButton = new ButtonView().setLabel("Settings")
                 .on("tap", this._onSettingsButtonTap, this);
             this._settingsButton.margin().setRight(10).setTop(5);
-            topBar.append(this._settingsButton.render().addClass("js-navigator-top-bar-button-view")
-                .addClass("js-navigator-top-bar-settings-button-view"));
+            topBar.append(this._settingsButton.render().addClass("dark-button"));
 
             settings.on("change:debug.refresh", this.updateBackButton, this);
         },

@@ -5,6 +5,8 @@ style/shaders/fold.frag
 style/shaders/fold.vert
 style/shaders/warp.frag
 style/shaders/warp.vert
+style/topcoat/normalize.css
+style/topcoat/topcoat-mobile.css
 style/style.css
 style/font/SourceSansPro-Regular.otf
 style/font/SourceSansPro-Semibold.otf

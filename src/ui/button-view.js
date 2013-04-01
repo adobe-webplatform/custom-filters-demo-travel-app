@@ -19,7 +19,8 @@ define(["mobileui/views/gesture-view"], function(GestureView) {
     var ButtonView = GestureView.extend({
         initialize: function() {
             ButtonView.__super__.initialize.call(this);
-            this.forceLayer();
+            this.matchLineHeight()
+                .forceLayer();
             this._label = "Button";
             this.bounds().setSize(70, 40);
             this.on("tapstart", this._onTapStart, this);

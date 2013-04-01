@@ -21,6 +21,7 @@ define(function() {
         this._height = null;
         this._weight = 1;
         this._isPostioned = false;
+        this._matchLineHeight = false;
     };
 
     _.extend(LayoutParams.prototype, {
@@ -121,8 +122,16 @@ define(function() {
             return this._height == LayoutParams.MATCH_PARENT ||
                 this._height == LayoutParams.FILL_PARENT ||
                 _.isNumber(this._height);
-        }
+        },
 
+        matchLineHeight: function() {
+            return this._matchLineHeight;
+        },
+
+        setMatchLineHeight: function(matchLineHeight) {
+            this._matchLineHeight = matchLineHeight;
+            return this;
+        }
     });
 
     _.extend(LayoutParams, {

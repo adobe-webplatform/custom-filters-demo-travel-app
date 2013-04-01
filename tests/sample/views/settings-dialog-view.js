@@ -18,11 +18,11 @@ define(['views/dialog-view',
         'mobileui/views/layout-view',
         'mobileui/views/content-view',
         'mobileui/ui/button-view',
-        'mobileui/ui/checkbox-view',
+        'ui/app-checkbox-view',
         'mobileui/views/layout-params',
         'utils/cache',
         'utils/settings'],
-    function(DialogView, LayoutView, ContentView, ButtonView, CheckboxView, LayoutParams, cache, settings) {
+    function(DialogView, LayoutView, ContentView, ButtonView, AppCheckboxView, LayoutParams, cache, settings) {
 
     var SettingsDialogView = DialogView.extend({
 
@@ -55,7 +55,7 @@ define(['views/dialog-view',
             labelView.ensureParams().fillParentWidth().matchParentHeight();
             boxView.append(labelView);
 
-            var checkboxView = new CheckboxView().setChecked(settings.getBoolean(valueName))
+            var checkboxView = new AppCheckboxView().setChecked(settings.getBoolean(valueName))
                     .addClass("js-setting-line-checbox-view").render();
             checkboxView.ensureParams().matchParentHeight();
             checkboxView.on("change", function() {

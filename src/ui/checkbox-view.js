@@ -108,13 +108,17 @@ define([
             this._momentum.reset(this._dragStartValue);
         },
 
-        _onDragMove: function(transform) {
-            var translate = this._needleView.transform().get("translate"),
-                value = Math.max(0, this._dragStartValue + transform.dragX),
-                position = Math.min(this.bounds().width() / 2, Math.max(0, value));
+        _updateDragPosition: function(value) {
+            var position = Math.min(this.bounds().width() / 2, Math.max(0, value)),
+                translate = this._needleView.transform().get("translate");
             translate.setX(position);
             this._needleView.filter().get("grayscale")
                 .setIntensity(100 - position / this.bounds().width() * 200);
+        },
+
+        _onDragMove: function(transform) {
+            var value = Math.max(0, this._dragStartValue + transform.dragX);
+            this._updateDragPosition(value);
             this._momentum.injectValue(value);
         },
 

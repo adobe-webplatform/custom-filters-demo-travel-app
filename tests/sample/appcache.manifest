@@ -7,6 +7,7 @@ style/shaders/warp.frag
 style/shaders/warp.vert
 style/topcoat/normalize.css
 style/topcoat/topcoat-mobile.css
+style/img/dark-grips.png
 style/style.css
 style/font/SourceSansPro/SourceSansPro-Regular.otf
 style/font/SourceSansPro/SourceSansPro-Light.otf
@@ -15,3 +16,4 @@ style/font/SourceSansPro/SourceSansPro-Regular.otf
 style/font/SourceSansPro/SourceSansPro-Light.otf
 style/font/SourceSansPro/SourceSansPro-Semibold.otf
 ../../style/mobile-ui.css
+

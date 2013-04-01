@@ -47,24 +47,24 @@ define(['mobileui/ui/navigator-view',
 
             this._backButton = new ButtonView().setLabel("Back")
                 .on("tap", this._onBackButtonTap, this);
-            this._backButton.margin().setLeft(10).setTop(5);
+            this._backButton.margin().setLeft(5).setTop(5);
             topBar.append(this._backButton.render().addClass("dark-button"));
 
             this._homeButton = new ButtonView().setLabel("Home")
                 .on("tap", this._onBackButtonTap, this);
-            this._homeButton.margin().setLeft(10).setTop(5);
+            this._homeButton.margin().setLeft(5).setTop(5);
             topBar.append(this._homeButton.render().addClass("dark-button"));
 
             this._refreshButton = new ButtonView().setLabel("Refresh")
                 .on("tap", this._onRefreshButtonTap, this);
-            this._refreshButton.margin().setLeft(10).setTop(5);
+            this._refreshButton.margin().setLeft(5).setTop(5);
             topBar.append(this._refreshButton.render().addClass("dark-button"));
 
             topBar.appendFiller();
 
             this._settingsButton = new ButtonView().setLabel("Settings")
                 .on("tap", this._onSettingsButtonTap, this);
-            this._settingsButton.margin().setRight(10).setTop(5);
+            this._settingsButton.margin().setRight(5).setTop(5);
             this._settingsButton.bounds().setWidth(80);
             topBar.append(this._settingsButton.render().addClass("dark-button"));
 

@@ -50,29 +50,6 @@ body {
     transform-origin: 0% 100%;
 }
 
-.js-checkbox-view {
-    border: 1px solid #ccc;
-}
-
-.js-checkbox-needle-view {
-    background-color: #0f0;
-}
-
-.red-box {
-    background: red;
-    color: white;
-}
-
-.blue-box {
-    background: blue;
-    color: white;
-}
-
-.green-box {
-    background: green;
-    color: white;
-}
-
 .js-touch-preview {
     position: absolute;
     border-radius: 50px;

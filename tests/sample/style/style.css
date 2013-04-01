@@ -25,6 +25,34 @@ body {
     padding: 0;
 }
 
+.slide-switch-container {
+    margin: 0;
+}
+
+.js-checkbox-on-label, .js-checkbox-off-label {
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.dark-slide-switch .js-checkbox-on-label {
+    background-color: #404141;
+    box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
+    color: #5DC1FF;
+}
+
+.dark-slide-switch .js-checkbox-off-label {
+    background-color: #404141;
+    box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
+    color: #909090;
+}
+
+.slide-switch-container > .dark-slide-switch > .switch {
+    transition: none;
+}
+
+/* end topcoat fixes */
+
 .center {
     position: absolute;
     top: 50%;
@@ -258,16 +286,4 @@ body {
     top: 50%;
     transform: translateY(-50%);
     font-weight: bold;
-}
-
-.js-checkbox-view {
-    background-color: white;
-    border: 1px solid #5B4987;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.js-checkbox-needle-view {
-    background-color: #5B4987;
-    border-radius: 8px;
 }

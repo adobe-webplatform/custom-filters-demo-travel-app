@@ -65,6 +65,8 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
 
             this._snapToChildrenBounds = false;
             this._scrollBarsVisible = false;
+            this._selectedView = null;
+            this._maxIncrement = 1;
         },
 
         render: function() {
@@ -92,6 +94,10 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             return this;
         },
 
+        selectedView: function() {
+            return this._selectedView;
+        },
+
         _verticalScrollHeight: function() {
             return Math.max(minScrollIndicatorSize, this.bounds().height() / this.scrollHeight() * this.bounds().height());
         },
@@ -111,6 +117,9 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
 
         layout: function() {
             ScrollView.__super__.layout.call(this);
+
+            if (!this._selectedView)
+                this._updateSelectedView();
 
             this._updateScrollBarVisibility(this._verticalView, this.hasVerticalScroll());
             this._verticalView
@@ -169,7 +178,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             return this._contentView;
         },
 
-        scrollTo: function(left, top) {
+        scrollTo: function(left, top, noSelectedViewUpdate) {
             if (!this._contentView)
                 return;
             if (this._scrollLeft == left &&
@@ -177,14 +186,18 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
                 return;
             this._scrollLeft = left;
             this._scrollTop = top;
+            if (!noSelectedViewUpdate)
+                this._updateSelectedView();
             this.invalidate("scroll");
         },
 
-        scrollBy: function(left, top) {
+        scrollBy: function(left, top, noSelectedViewUpdate) {
             if (!this._contentView || (!left && !top))
                 return;
             this._scrollLeft += left;
             this._scrollTop += top;
+            if (!noSelectedViewUpdate)
+                this._updateSelectedView();
             this.invalidate("scroll");
         },
 
@@ -212,26 +225,54 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             return this.scrollHeight() > this.bounds().height();
         },
 
-        _snapScrollToChildrenPosition: function() {
-            // Align scroll with child objects.
-            if (!this._contentView)
+        _internalSetSelectedView: function(view) {
+            if (this._selectedView == view)
                 return;
+            this._selectedView = view;
+            this.trigger("change:selected");
+        },
+
+        _updateSelectedView: function(checkForMaxIncrement) {
+            if (!this._snapToChildrenBounds)
+                return;
+            // Align scroll with child objects.
+            if (!this._contentView) {
+                this._internalSetSelectedView(null);
+                return;
+            }
             var shortestDistance = 0, nearestView = null,
                 centerX = this._scrollLeft + this.bounds().width() / 2,
                 centerY = this._scrollTop + this.bounds().height() / 2;
-            _.each(this._contentView.childrenViews(), function(view) {
+            var children = this._contentView.childrenViews();
+            _.each(children, function(view) {
                 var dist = Geometry.dist(centerX, centerY, view.bounds().centerX(), view.bounds().centerY());
                 if (!nearestView || shortestDistance > dist) {
                     shortestDistance = dist;
                     nearestView = view;
                 }
             });
-            if (!nearestView)
+            if (!nearestView || !children.length) {
+                this._internalSetSelectedView(null);
+                return;
+            }
+            var newIndex = _.indexOf(children, nearestView);
+            if (checkForMaxIncrement) {
+                var oldIndex = this._selectedView ? _.indexOf(children, this._selectedView) : -1;
+                if (oldIndex != -1 && Math.abs(newIndex - oldIndex) > this._maxIncrement) {
+                    newIndex = Math.min(children.length - 1, Math.max(0, oldIndex + (newIndex > oldIndex ? 1 : -1)));
+                    nearestView = children[newIndex];
+                }
+            }
+            this._internalSetSelectedView(nearestView);
+        },
+
+        _snapScrollToChildrenPosition: function() {
+            if (!this._selectedView || !this._snapToChildrenBounds)
                 return;
             if (this._scrollDirection != ScrollView.VERTICAL)
-                this._scrollLeft = nearestView.bounds().x();
+                this._scrollLeft = this._selectedView.bounds().x();
             if (this._scrollDirection != ScrollView.HORIZONTAL)
-                this._scrollTop = nearestView.bounds().y();
+                this._scrollTop = this._selectedView.bounds().y();
         },
 
         _checkScrollPosition: function() {
@@ -413,7 +454,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
                 deltaY = this._touchStartState.scrollTop - transform.dragY;
             this._momentumLeft.injectValue(deltaX);
             this._momentumTop.injectValue(deltaY);
-            this.scrollTo(deltaX, deltaY);
+            this.scrollTo(deltaX, deltaY, true);
         },
 
         _onTouchDragEnd: function(transform) {
@@ -426,6 +467,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             this._useAnimation = true;
             this._canOverScroll = false;
             this._touchStartState = null;
+            this._updateSelectedView(true);
             this.invalidate("scroll");
         }
     }, {

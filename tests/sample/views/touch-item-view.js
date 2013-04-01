@@ -110,10 +110,10 @@ define(["mobileui/views/gesture-detector",
 
         _commit: function() {
             var self = this,
+                activeCard = app.mainView.navigatorView().activeCard(),
                 nextCard = app.mainView.navigatorView().nextCard();
 
-            // Disable the tap while animating.
-            this.off("tap", this._onTap, this);
+            activeCard.setDisabled(true);
 
             app.mainView.navigatorView().precommitNextCard();
 
@@ -122,6 +122,7 @@ define(["mobileui/views/gesture-detector",
 
             var chain = this._effect.commit(this, this._filterView, nextCard, this._verticalLayout);
             chain.callback(function() {
+                    activeCard.setDisabled(false);
                     nextCard.filter().clear();
                     app.mainView.navigatorView().commitNextCard();
                     // We are safely hidden, revert the tap listener to the previous state.

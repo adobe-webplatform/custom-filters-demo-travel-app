@@ -95,11 +95,13 @@ define(["mobileui/ui/navigator-card-view",
                 nextCard = app.mainView.navigatorView().nextCard();
             app.mainView.navigatorView().precommitNextCard();
             var transform = new Transform().translate(this.bounds().width(), 0);
-            this.animation().start().get("slide-transform")
+            this.setDisabled(true)
+                .animation().start().get("slide-transform")
                 .chain()
                 .transform(300, transform)
                 .callback(function() {
-                    self._removeGrayscaleOverlay();
+                    self.setDisabled(false)
+                        ._removeGrayscaleOverlay();
                     nextCard.filter().clear();
                     app.endTransition(self);
                     app.mainView.navigatorView().commitNextCard();

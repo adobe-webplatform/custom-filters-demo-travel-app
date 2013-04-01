@@ -26,9 +26,9 @@ define(["mobileui/views/gesture-detector",
     function(GestureDetector, LayerView, LayoutParams, GestureView, Momentum, DragEffect, FoldEffect, WarpEffect, app) {
 
     var Effects = {
-        "drag": new DragEffect(/* use grayscale*/ false),
-        "fold": new FoldEffect(/* use shadow */ false, /* use grayscale*/ false),
-        "warp": new WarpEffect(/* use shadow */ false, /* use grayscale*/ false)
+        "drag": new DragEffect(/* use grayscale*/ true),
+        "fold": new FoldEffect(/* use shadow */ true, /* use grayscale*/ true),
+        "warp": new WarpEffect(/* use shadow */ false, /* use grayscale*/ true)
     };
 
     var commitDuration = 300,

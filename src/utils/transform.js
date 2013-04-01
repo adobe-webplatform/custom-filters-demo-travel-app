@@ -180,6 +180,8 @@ define(function() {
         },
 
         clear: function() {
+            if (!this._data.length)
+                return;
             _.each(this._data, function(fn) {
                 fn.off("change", self._onFunctionValueChange, self);
             });

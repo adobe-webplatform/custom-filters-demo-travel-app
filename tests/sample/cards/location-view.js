@@ -19,6 +19,7 @@ define(["mobileui/views/content-view",
         "mobileui/views/scroll-view",
         "mobileui/views/layout-view",
         "mobileui/views/layer-view",
+        "mobileui/utils/transform",
         "views/app-card-view",
         "data/locations",
         "app"],
@@ -27,6 +28,7 @@ define(["mobileui/views/content-view",
             ScrollView,
             LayoutView,
             LayerView,
+            Transform,
             AppCardView,
             LocationLabels,
             app) {
@@ -36,9 +38,13 @@ define(["mobileui/views/content-view",
     var LocationView = AppCardView.extend({
         initialize: function(options) {
             LocationView.__super__.initialize.call(this);
+            this._hadPictureScrollScale = false;
 
             this._scrollView = new ScrollView().setScrollDirection("vertical");
             this._scrollView.matchParentSize();
+            this._scrollView
+                .on("scroll", this._onScroll, this)
+                .on("scroll:animation", this._onScrollAnimation, this);
             this.append(this._scrollView.render());
 
             this._contentView = new LayoutView().setLayout("vertical")
@@ -116,7 +122,8 @@ define(["mobileui/views/content-view",
 
             // Append the picture view first, so that it displays under
             // the content of our card when it is scrolled.
-            this._pictureScrollView = new ScrollView().setScrollDirection("horizontal").setSnapToChildrenBounds();
+            this._pictureScrollView = new ScrollView().setScrollDirection("horizontal").setSnapToChildrenBounds()
+                .addClass("js-location-picture-scroll-view");
             this._pictureScrollView.ensureParams().matchParentWidth();
             this._pictureScrollView.bounds().setHeight(imagePaddingHeight);
             this._scrollView.before(this._pictureScrollView.render(), this._contentView);
@@ -132,6 +139,40 @@ define(["mobileui/views/content-view",
                 picture.$el.css("background-color", colors[i]);
                 this._pictureView.append(picture.render());
             }
+        },
+
+        _onScroll: function() {
+            var scrollTop = this._scrollView.scrollTop();
+            if (this._hadPictureScrollScale)
+                this._pictureScrollView.animation().get("scroll-scale").removeAll();
+            if (scrollTop < 0) {
+                this._hadPictureScrollScale = true;
+                var height = imagePaddingHeight - scrollTop,
+                    scaleRatio = height / imagePaddingHeight;
+                this._pictureScrollView.forceLayer()
+                    .transform()
+                        .get("scale")
+                        .setX(scaleRatio)
+                        .setY(scaleRatio);
+            } else if (this._hadPictureScrollScale) {
+                this._hadPictureScrollScale = false;
+                this._pictureScrollView.transform().clear();
+            }
+        },
+
+        _onScrollAnimation: function(scrollLeft, scrollTop, duration) {
+            if (!this._hadPictureScrollScale && scrollTop >= 0)
+                return;
+            var height = imagePaddingHeight - scrollTop,
+                scaleRatio = height / imagePaddingHeight;
+            this._pictureScrollView.animation().start()
+                .get("scroll-scale")
+                .removeAll()
+                .chain()
+                .transform(duration, new Transform().scale(scaleRatio, scaleRatio))
+                .callback(function() {
+                    this._hadPictureScrollScale = scrollTop < 0;
+                }, this);
         },
 
         render: function() {

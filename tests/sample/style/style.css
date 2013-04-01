@@ -247,6 +247,10 @@ body {
     text-transform: uppercase;
 }
 
+.js-location-picture-scroll-view {
+    transform-origin: 50% 0;
+}
+
 .js-location-two-column-view {
     box-sizing: border-box;
     background-color: LightGray;

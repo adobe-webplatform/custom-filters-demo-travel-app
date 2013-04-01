@@ -98,6 +98,14 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             return this._selectedView;
         },
 
+        scrollLeft: function() {
+            return this._scrollLeft;
+        },
+
+        scrollTop: function() {
+            return this._scrollTop;
+        },
+
         _verticalScrollHeight: function() {
             return Math.max(minScrollIndicatorSize, this.bounds().height() / this.scrollHeight() * this.bounds().height());
         },
@@ -189,6 +197,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             if (!noSelectedViewUpdate)
                 this._updateSelectedView();
             this.invalidate("scroll");
+            this.trigger("scroll");
         },
 
         scrollBy: function(left, top, noSelectedViewUpdate) {
@@ -199,6 +208,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             if (!noSelectedViewUpdate)
                 this._updateSelectedView();
             this.invalidate("scroll");
+            this.trigger("scroll");
         },
 
         scrollWidth: function() {
@@ -382,11 +392,17 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
                 horizontalTransform.get("translate").setX(this._computeHorizontalBarPosition(momentumLeft));
                 chainHorizontal = chainHorizontal.transform(this._scrollAnimationDuration / 2, horizontalTransform)
                                 .setTimingFunction("easeOut");
+
+                this.trigger("scroll:animation", momentumLeft, momentumTop, this._scrollAnimationDuration / 2);
             }
+            this.trigger("scroll:animation", this._scrollLeft, this._scrollTop, this._scrollAnimationDuration);
             chain.transform(this._scrollAnimationDuration,
                             new Transform().translate(-this._scrollLeft, -this._scrollTop))
                  .setTimingFunction("easeOut")
-                 .callback(this.hideScrollBars, this);
+                 .callback(function() {
+                     this.hideScrollBars();
+                     this.trigger("scroll");
+                 }, this);
 
             verticalTransform = this._verticalView.transform().clone();
             verticalTransform.get("translate").setY(this._computeVerticalBarPosition(this._scrollTop));
@@ -432,6 +448,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
                 this._scrolLeft = -transform.x();
                 this._scrollTop = -transform.y();
                 this.contentView().animation().stop().get("scroll").removeAll();
+                this.trigger("scroll");
             }
         },
 

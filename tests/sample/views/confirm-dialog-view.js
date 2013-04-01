@@ -34,15 +34,21 @@ define(['views/dialog-view',
             this._labelView.setParams(new LayoutParams().matchParentWidth());
             contentView.append(this._labelView.render());
 
-            this._acceptButton = new ButtonView().setLabel("Yes").on("tap", this._onAcceptButtonTap, this);
+            this._acceptButton = new ButtonView()
+                .setLabel("Yes")
+                .on("tap", this._onAcceptButtonTap, this)
+                .addClass("dark-button").addClass("dark-cta");
             this._acceptButton.margin().setAll(10);
             this._acceptButton.ensureParams().matchParentWidth();
-            contentView.append(this._acceptButton.render().addClass("dark-button"));
+            contentView.append(this._acceptButton.render());
 
-            this._refuseButton = new ButtonView().setLabel("No").on("tap", this._onRefuseButtonTap, this);
+            this._refuseButton = new ButtonView()
+                .setLabel("No")
+                .on("tap", this._onRefuseButtonTap, this)
+                .addClass("dark-button");
             this._refuseButton.margin().setAll(10);
             this._refuseButton.ensureParams().matchParentWidth();
-            contentView.append(this._refuseButton.render().addClass("dark-button"));
+            contentView.append(this._refuseButton.render());
         },
 
         setMessage: function(message) {

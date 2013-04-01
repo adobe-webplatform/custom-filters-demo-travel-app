@@ -49,7 +49,8 @@ define(['views/dialog-view',
             boxView.ensureParams().matchParentWidth();
             boxView.bounds().setHeight(40);
 
-            var labelView = new ContentView().setTextContent(label).addClass("js-setting-line-label-view").render();
+            var labelView = new ContentView().setTextContent(label)
+                .addClass("js-setting-line-label-view").render();
             labelView.content().addClass("js-setting-line-label-content-view");
             labelView.ensureParams().fillParentWidth().matchParentHeight();
             boxView.append(labelView);

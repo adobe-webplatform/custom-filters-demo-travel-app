@@ -82,18 +82,38 @@ body {
 }
 
 .js-splash-item-view {
+    background: url(../assets/main_bg.jpg) no-repeat center;
+    background-size: cover;
     color: white;
-    background-color: #cfd051;
+}
+
+.js-splash-item-view-guide-label {
+    font-family: "source-l";
+    font-style: italic;
+    font-size: 40px;
+    text-align: center;
+    text-transform: none;
+}
+
+.js-splash-item-view-explore-label {
+    font-family: "source-l";
+    font-style: italic;
+    font-size: 25px;
+    text-align: center;
+    text-transform: none;
 }
 
 .js-splash-item-view-label {
+    font-family: "source-sb";
     position: absolute;
+    border: 5px solid white;
+    left: 50%;
     top: 50%;
-    transform: translateY(-50%);
-    font-size: 2.0em;
-    width: 100%;
-    text-align: center;
+    transform: translate(-50%, -50%);
+    font-size: 100px;
+    padding: 0 30px 0 30px;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .js-city-item-view {

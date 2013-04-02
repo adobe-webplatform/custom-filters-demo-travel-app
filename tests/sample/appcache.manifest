@@ -12,8 +12,5 @@ style/style.css
 style/font/SourceSansPro/SourceSansPro-Regular.otf
 style/font/SourceSansPro/SourceSansPro-Light.otf
 style/font/SourceSansPro/SourceSansPro-Semibold.otf
-style/font/SourceSansPro/SourceSansPro-Regular.otf
-style/font/SourceSansPro/SourceSansPro-Light.otf
-style/font/SourceSansPro/SourceSansPro-Semibold.otf
+assets/main_bg.jpg
 ../../style/mobile-ui.css
-

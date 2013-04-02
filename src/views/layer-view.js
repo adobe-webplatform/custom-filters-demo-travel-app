@@ -141,7 +141,7 @@ define(["mobileui/utils/rect",
         },
 
         matchLineHeight: function() {
-            this.ensureParams().setMatchLineHeight(true);
+            this.ensureParams().matchLineHeight(true);
             return this;
         },
 
@@ -392,9 +392,6 @@ define(["mobileui/utils/rect",
             // Equivalent of "matchHeightOf".
             else if (_.isObject(params.height()))
                 this.setOuterHeight(params.height().bounds().height());
-
-            if (params.matchLineHeight())
-                this.invalidate("lineHeight");
         },
 
         setOuterWidth: function(width) {
@@ -571,6 +568,10 @@ define(["mobileui/utils/rect",
             this.$el
                 .css("width", this._bounds.width())
                 .css("height", this._bounds.height());
+            if (this._params && this._params.shouldMatchLineHeight()) {
+                console.log("setting line height ", this.$el.get(0), this.bounds().height() + "px");
+                this.$el.css("line-height", this.bounds().height() + "px");
+            }
         },
 
         _validateTransform: function() {
@@ -604,11 +605,6 @@ define(["mobileui/utils/rect",
 
         _validateMargin: function() {
             this.$el.css("margin", this._margin.toCSSString("px"));
-        },
-
-        _validateLineHeight: function() {
-            if (this._params && this._params.matchLineHeight())
-                this.$el.css("line-height", this.bounds().height() + "px");
         },
 
         _onPositionChanged: function() {

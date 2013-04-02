@@ -59,11 +59,13 @@ define(["mobileui/utils/transform",
                 if (params && fillsParent(params, isVertical)) {
                     childrenWeight += params.weight();
                     hasParentFillers = true;
-                    return;
+                    offset += isVertical ? view.padding().vertical() : view.padding().horizontal();
+                } else {
+                    view.layoutIfNeeded();
+                    offset += isVertical ? view.paddingHeight() : view.paddingWidth();
                 }
-                view.layoutIfNeeded();
                 var viewMargin = view.margin();
-                offset += isVertical ? (view.paddingHeight() + viewMargin.bottom()) : (view.paddingWidth() + viewMargin.right());
+                offset += isVertical ? viewMargin.bottom() : viewMargin.right();
 
                 // Collapse top margin for the current view with the bottom margin of the previous view.
                 var collapedMargin = isVertical ? viewMargin.top() - (previousMargin ? previousMargin.bottom() : 0) :

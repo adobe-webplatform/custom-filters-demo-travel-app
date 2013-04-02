@@ -124,11 +124,11 @@ define(function() {
                 _.isNumber(this._height);
         },
 
-        matchLineHeight: function() {
+        shouldMatchLineHeight: function() {
             return this._matchLineHeight;
         },
 
-        setMatchLineHeight: function(matchLineHeight) {
+        matchLineHeight: function(matchLineHeight) {
             this._matchLineHeight = matchLineHeight;
             return this;
         }

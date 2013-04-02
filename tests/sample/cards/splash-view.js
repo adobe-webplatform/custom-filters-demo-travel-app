@@ -16,14 +16,18 @@
 
 define(["views/touch-item-view",
         "views/touch-list-view",
+        "mobileui/views/layout-view",
+        "mobileui/views/content-view",
         "app"],
     function(TouchItemView,
             TouchListView,
+            LayotView,
+            ContentView,
             app) {
 
     var SplashLabels = [
         {
-            label: "Slide up to start",
+            label: "Los Angeles",
             className: "js-la-item-view"
         }
     ];
@@ -31,7 +35,31 @@ define(["views/touch-item-view",
     var ItemView = TouchItemView.extend({
         initialize: function() {
             ItemView.__super__.initialize.call(this);
-            this.$labelEl.addClass("js-splash-item-view-label");
+
+            this._layoutView = new LayotView()
+                .matchParentSize()
+                .setLayout("vertical");
+            this._filterView.append(this._layoutView.render());
+
+            this._travelGuideView = new ContentView()
+                .setTextContent("Travel Guide")
+                .addClass("js-splash-item-view-guide-label");
+            this._travelGuideView.ensureParams().matchParentWidth().fillParentHeight().matchLineHeight(true);
+            this._travelGuideView.padding().setTop(30);
+            this._layoutView.append(this._travelGuideView.render());
+
+            this._labelView = new ContentView();
+            this._labelView.$el.append(this.$labelEl.addClass("js-splash-item-view-label"));
+            this._labelView.ensureParams().matchParentWidth().fillParentHeight();
+            this._layoutView.append(this._labelView.render());
+
+            this._exploreContentView = new ContentView()
+                .setTextContent("Explore Content")
+                .addClass("js-splash-item-view-explore-label");
+            this._exploreContentView.ensureParams().matchParentWidth().fillParentHeight().matchLineHeight(true);
+            this._exploreContentView.padding().setBottom(30);
+            this._layoutView.append(this._exploreContentView.render());
+
             this.setEffect("warp");
         },
 
@@ -39,6 +67,12 @@ define(["views/touch-item-view",
             ItemView.__super__.render.call(this);
             this.filterView().$el.addClass("js-splash-item-view");
             return this;
+        },
+
+        layout: function() {
+            ItemView.__super__.layout.call(this);
+            this.$labelEl.css("font-size", Math.min(this._labelView.bounds().height() / 2,
+                this._labelView.bounds().width() / 8) + "px");
         },
 
         _onTapStart: function() {

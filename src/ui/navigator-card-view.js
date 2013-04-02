@@ -24,8 +24,7 @@ function(LayerView, LayoutParams) {
             NavigatorCardView.__super__.initialize.call(this);
             this.matchParentSize();
             this._navigatorView = null;
-            this.on("activate", this.updateRouterLocation, this);
-            this.on("activate", this._updateNavigationBar, this);
+            this.on("activate", this._onActivate, this);
         },
 
         render: function() {
@@ -55,6 +54,11 @@ function(LayerView, LayoutParams) {
             if (topBarView)
                 this.margin().setTop(this.needsTopBar() && !this.displaysOnTop() ? topBarView.bounds().height() : 0);
             NavigatorCardView.__super__.layout.call(this);
+        },
+
+        _onActivate: function() {
+            this.updateRouterLocation();
+            this._updateNavigationBar();
         },
 
         _updateNavigationBar: function() {

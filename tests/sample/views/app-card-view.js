@@ -19,7 +19,6 @@ define(["mobileui/ui/navigator-card-view",
             this.on("card:precommit", this._updateBackButton, this);
             this.on("activate", this._updateBackButton, this);
             this.forceLayer();
-            this.on("activate", this._onAppCardViewActivate, this);
         },
 
         _updateBackButton: function() {
@@ -183,7 +182,8 @@ define(["mobileui/ui/navigator-card-view",
             this._grayscaleOverlay = null;
         },
 
-        _onAppCardViewActivate: function(options) {
+        _onActivate: function(options) {
+            AppCardView.__super__._onActivate.call(this, options);
             if (!options.goingBack || !app.canStartTransition())
                 return;
             var prevCard = options.previousCard;

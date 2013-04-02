@@ -170,7 +170,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             }
         },
 
-        pushCard: function(card) {
+        pushCard: function(card, pushOptions) {
             this.revertNextCard();
             var previousActiveCard = this._activeCard;
             if (this._activeCard) {
@@ -178,10 +178,10 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 this._historyCards.push(this._activeCard);
                 this._activeCard = null;
             }
-            var options = {
+            var options = _.extend({
                 goingBack: false,
                 promise: null
-            };
+            }, pushOptions);
             if (card) {
                 this._activeCard = card;
                 this._activeCard._setNavigatorView(this);

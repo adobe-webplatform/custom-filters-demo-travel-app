@@ -19,7 +19,8 @@ define([
     "cards/city-view",
     "cards/mood-view",
     "cards/locations-view",
-    "cards/location-view"
+    "cards/location-view",
+    "cards/picture-view"
     ],
 function() {
     return _.toArray(arguments);

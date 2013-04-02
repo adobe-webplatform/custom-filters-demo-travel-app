@@ -137,6 +137,10 @@ define(["mobileui/views/content-view",
             var colors = ["DeepSkyBlue", "PaleVioletRed", "MediumSlateBlue", "DarkSeaGreen", "BurlyWood"];
             for (var i = 0; i < colors.length; ++i) {
                 var picture = new LayerView();
+                picture.addGestureDetector()
+                    .on("tap", this._onPictureTap.bind(this, picture));
+                picture.color = colors[i];
+                picture.index = i + 1;
                 picture.ensureParams().matchWidthOf(this._pictureScrollView).matchParentHeight();
                 picture.$el.css("background-color", colors[i])
                     .append($("<div />")
@@ -145,6 +149,13 @@ define(["mobileui/views/content-view",
                         .text(i + 1));
                 this._pictureView.append(picture.render());
             }
+        },
+
+        _onPictureTap: function(view) {
+            app.mainView.navigatorView().pushCard(app.router.lookupCard("Picture View",
+                encodeURIComponent(view.color + ":" + view.index)), {
+                scaleFrom: this._pictureScrollView
+            });
         },
 
         _onScroll: function() {
@@ -180,6 +191,12 @@ define(["mobileui/views/content-view",
                 .callback(function() {
                     this._hadPictureScrollScale = scrollTop < 0;
                 }, this);
+
+            if (this._pictureScrollView.transform().get('scale').y() > 2) {
+                var view = this._pictureScrollView.selectedView();
+                if (view)
+                    this._onPictureTap(view);
+            }
         },
 
         _onPictureViewScroll: function() {

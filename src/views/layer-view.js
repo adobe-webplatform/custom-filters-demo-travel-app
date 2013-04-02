@@ -512,6 +512,10 @@ define(["mobileui/utils/rect",
             return this;
         },
 
+        getScreenRect: function() {
+            return this.$el.get(0).getBoundingClientRect();
+        },
+
         render: function() {
             this.$el.addClass("js-layer-view");
             this._validatePosition();

@@ -307,3 +307,7 @@ body {
     transform: translateY(-50%);
     font-weight: bold;
 }
+
+.js-picture-view {
+    transform-origin: 0 0;
+}

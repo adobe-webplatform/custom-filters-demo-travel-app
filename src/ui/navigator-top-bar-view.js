@@ -26,7 +26,7 @@ function(LayoutView, LayoutParams, Transform, ButtonView) {
             this.bounds().setHeight(NavigatorTopBarView.height);
             this.ensureParams().matchParentWidth();
             this.setLayout("horizontal");
-            this._topBarVisible = false;
+            this._topBarVisible = true;
             this.invalidate("topBarVisibility");
         },
 

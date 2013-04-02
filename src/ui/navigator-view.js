@@ -31,7 +31,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
 
             this._topBarView = new NavigatorTopBarView()
                 .forceLayer();
-            this.append(this._topBarView.render());
+            this._contentView.append(this._topBarView.render());
 
             this._historyCards = [];
             this._activeCard = null;
@@ -76,10 +76,10 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 this.revertNextCard();
             this._wasLastHistoryCard = false;
             this._nextCard = card;
-            if (this._activeCard)
+            if (this._activeCard && !this._activeCard.displaysOnTop())
                 this.contentView().before(this._nextCard, this._activeCard);
             else
-                this.contentView().append(this._nextCard);
+                this.contentView().before(this._nextCard, this._topBarView);
             this._nextCard._setNavigatorView(this);
             this._nextCard.trigger("card:next");
             return this;
@@ -133,6 +133,8 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                     this._precommitCard.detach();
                 this._precommitCard = null;
             }
+            if (this._activeCard.displaysOnTop())
+                this._contentView.append(this._activeCard);
             this._activeCard.trigger("card:commit");
             this._activeCard.trigger("activate", { goingBack: false });
             return this;
@@ -153,7 +155,10 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 this._activeCard = card;
                 this._activeCard._setNavigatorView(this);
                 this._activeCard.trigger("activate", options);
-                this._contentView.append(card);
+                if (card.displaysOnTop())
+                    this._contentView.append(card);
+                else
+                    this._contentView.before(card, this._topBarView);
             }
             if (previousActiveCard) {
                 if (!options.promise)
@@ -181,7 +186,10 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 this._activeCard = card;
                 this._activeCard._setNavigatorView(this);
                 this._activeCard.trigger("activate", options);
-                this._contentView.append(card);
+                if (card.displaysOnTop())
+                    this._contentView.append(card);
+                else
+                    this._contentView.before(card, this._topBarView);
             }
             if (previousActiveCard) {
                 if (!options.promise)
@@ -195,7 +203,8 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
 
         popCard: function() {
             this.revertNextCard();
-            var previousActiveCard = this._activeCard;
+            var previousActiveCard = this._activeCard,
+                self = this;
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");
                 this._activeCard = null;
@@ -210,15 +219,19 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 if (previousActiveCard)
                     this._contentView.before(this._activeCard, previousActiveCard);
                 else
-                    this._contentView.append(this._activeCard);
+                    this._contentView.before(this._activeCard, this._topBarView);
                 this._activeCard._setNavigatorView(this);
                 this._activeCard.trigger("activate", options);
                 if (previousActiveCard) {
-                    if (!options.promise)
+                    if (!options.promise) {
                         previousActiveCard._setNavigatorView(null).remove();
-                    else
+                        if (this._activeCard.displaysOnTop())
+                            this._contentView.append(this._activeCard);
+                    } else
                         options.promise.then(function() {
                             previousActiveCard._setNavigatorView(null).remove();
+                            if (self._activeCard.displaysOnTop())
+                                self._contentView.append(self._activeCard);
                         });
                 }
             } else if (previousActiveCard)

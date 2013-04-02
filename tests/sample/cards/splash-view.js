@@ -94,8 +94,8 @@ define(["views/touch-item-view",
             SplashView.__super__.initialize.call(this);
         },
 
-        needsTopBar: function() {
-            return false;
+        displaysOnTop: function() {
+            return true;
         },
 
         url: function() {

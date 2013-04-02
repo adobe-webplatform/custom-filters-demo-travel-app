@@ -78,6 +78,10 @@ define(["mobileui/ui/navigator-card-view",
             nextCard.transform().get("scale")
                 .setX(scale)
                 .setY(scale);
+            if (nextCard.displaysOnTop()) {
+                // Take the menu with us.
+                this.topBarView().transform().get("translate").setX(value);
+            }
             this._momentum.injectValue(value);
         },
 
@@ -118,6 +122,17 @@ define(["mobileui/ui/navigator-card-view",
                 .callback(function() {
                     nextCard.transform().clear();
                 });
+            if (nextCard.displaysOnTop()) {
+                // Take the menu with us.
+                var topBarView = this.topBarView();
+                topBarView.animation().start().get("card-slide")
+                    .removeAll()
+                    .chain()
+                    .transform(300, new Transform().translate(this.bounds().width(), 0))
+                    .callback(function() {
+                        topBarView.transform().clear();
+                    });
+            }
             this._grayscaleOverlay.animation().start().get("slide-opacity")
                 .chain()
                 .opacity(300, 0);
@@ -149,9 +164,16 @@ define(["mobileui/ui/navigator-card-view",
                 .callback(function() {
                     nextCard.transform().clear();
                 });
+            if (nextCard.displaysOnTop()) {
+                // Take the menu with us.
+                this.topBarView().animation().start().get("card-slide")
+                    .removeAll()
+                    .chain()
+                    .transform(100, new Transform());
+            }
             this._grayscaleOverlay.animation().start().get("slide-opacity")
                 .chain()
-                .opacity(300, this._backgroundViewOpacity);
+                .opacity(100, this._backgroundViewOpacity);
         },
 
         _removeGrayscaleOverlay: function() {
@@ -198,6 +220,17 @@ define(["mobileui/ui/navigator-card-view",
                 .callback(function() {
                     nextCard.transform().clear();
                 });
+            if (nextCard.displaysOnTop()) {
+                // Take the menu with us.
+                var topBarView = this.topBarView();
+                topBarView.animation().start().get("card-slide")
+                    .removeAll()
+                    .chain()
+                    .transform(300, new Transform().translate(this.bounds().width(), 0))
+                    .callback(function() {
+                        topBarView.transform().clear();
+                    });
+            }
             this._grayscaleOverlay.animation().start().get("slide-opacity")
                 .chain()
                 .opacity(300, this._backgroundViewOpacity, 0);

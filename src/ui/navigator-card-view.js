@@ -46,10 +46,14 @@ function(LayerView, LayoutParams) {
             return true;
         },
 
+        displaysOnTop: function() {
+            return false;
+        },
+
         layout: function() {
             var topBarView = this.topBarView();
             if (topBarView)
-                this.margin().setTop(this.needsTopBar() ? topBarView.bounds().height() : 0);
+                this.margin().setTop(this.needsTopBar() && !this.displaysOnTop() ? topBarView.bounds().height() : 0);
             NavigatorCardView.__super__.layout.call(this);
         },
 

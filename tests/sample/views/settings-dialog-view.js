@@ -30,7 +30,6 @@ define(['views/dialog-view',
             SettingsDialogView.__super__.initialize.call(this);
 
             this._addSettingsLine("Preview touch events", "touch.preview");
-            this._addSettingsLine("Show refresh button", "debug.refresh");
 
             var contentView = this.contentView();
             this._updateButton = new ButtonView().setLabel("Check for updates")
@@ -38,6 +37,12 @@ define(['views/dialog-view',
             this._updateButton.margin().setAll(10);
             this._updateButton.ensureParams().matchParentWidth();
             contentView.append(this._updateButton.render().addClass("dark-button"));
+
+            this._refreshButton = new ButtonView().setLabel("Refresh")
+                .on("tap", this._onRefreshButtonTap, this);
+            this._refreshButton.margin().setAll(10);
+            this._refreshButton.ensureParams().matchParentWidth();
+            contentView.append(this._refreshButton.render().addClass("dark-button").addClass("dark-cta"));
         },
 
         _addSettingsLine: function(label, valueName) {
@@ -75,6 +80,10 @@ define(['views/dialog-view',
         _onUpdateButtonTap: function() {
             this.hide();
             cache.checkForUpdates();
+        },
+
+        _onRefreshButtonTap: function() {
+            window.location.reload();
         }
 
     });

@@ -55,11 +55,6 @@ define(['mobileui/ui/navigator-view',
             this._homeButton.margin().setLeft(5).setTop(5);
             topBar.append(this._homeButton.render().addClass("dark-button"));
 
-            this._refreshButton = new ButtonView().setLabel("Refresh")
-                .on("tap", this._onRefreshButtonTap, this);
-            this._refreshButton.margin().setLeft(5).setTop(5);
-            topBar.append(this._refreshButton.render().addClass("dark-button"));
-
             topBar.appendFiller();
 
             this._settingsButton = new ButtonView().setLabel("Settings")
@@ -67,8 +62,6 @@ define(['mobileui/ui/navigator-view',
             this._settingsButton.margin().setRight(5).setTop(5);
             this._settingsButton.bounds().setWidth(80);
             topBar.append(this._settingsButton.render().addClass("dark-button"));
-
-            settings.on("change:debug.refresh", this.updateBackButton, this);
         },
 
         backButton: function() {
@@ -83,18 +76,12 @@ define(['mobileui/ui/navigator-view',
             if (this.canGoBack()) {
                 this._backButton.show();
                 this._homeButton.hide();
-                this._refreshButton.hide();
             } else {
                 this._backButton.hide();
                 if (this.activeCard() && this.activeCard().isDefaultScreen) {
                     this._homeButton.hide();
-                    if (settings.getBoolean("debug.refresh"))
-                        this._refreshButton.show();
-                    else
-                        this._refreshButton.hide();
                 } else {
                     this._homeButton.show();
-                    this._refreshButton.hide();
                 }
             }
         },
@@ -104,10 +91,6 @@ define(['mobileui/ui/navigator-view',
                 return;
             if (!this.popCard())
                 this.pushCard(app.router.lookupCard(app.defaultCard));
-        },
-
-        _onRefreshButtonTap: function() {
-            window.location.reload();
         },
 
         _onSettingsButtonTap: function() {

@@ -192,7 +192,7 @@ define(["mobileui/views/content-view",
                     this._hadPictureScrollScale = scrollTop < 0;
                 }, this);
 
-            if (this._pictureScrollView.transform().get('scale').y() > 2) {
+            if (this._pictureScrollView.transform().get('scale').y() > 1.5) {
                 var view = this._pictureScrollView.selectedView();
                 if (view)
                     this._onPictureTap(view);

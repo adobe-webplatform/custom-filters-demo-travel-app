@@ -23,7 +23,7 @@ define(["mobileui/utils/filter"], function(Filter) {
             var result = "custom(url(style/shaders/fold.vert) " +
              "mix(url(style/shaders/fold.frag) overlay source-atop), " +
              "11 " + fn._segmentsY + " detached" +
-             ", distance " + (distance / fn._width).toFixed(6) +
+             ", drag_distance " + (distance / fn._width).toFixed(6) +
              ", light_intensity 0.5" +
              ", padding_height " + (fn._paddingHeight * segYPixelRatio).toFixed(6) +
              ", margin_height " + (fn._marginHeight * segYPixelRatio).toFixed(6) +

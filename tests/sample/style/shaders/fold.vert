@@ -31,7 +31,7 @@ uniform vec2 u_meshSize;
 // Uniforms passed-in from CSS
 
 uniform mat4 transform;
-uniform float distance;
+uniform float drag_distance;
 uniform float light_intensity;
 uniform float padding_height;
 uniform float margin_height;
@@ -57,14 +57,14 @@ void main()
 
     float coord = a_triangleCoord.x + (rightSide ? 1.0 : 0.0);
     float down_col = down_x * u_meshSize.x;
-    float ratio = cos((down_col - coord) / down_col * PI / 2.0 ) * distance;
+    float ratio = cos((down_col - coord) / down_col * PI / 2.0 ) * drag_distance;
 
     if (coord < down_col ) {
         pos.y = pos.y + mod(coord, 2.0)  * padding_height * ratio;
-        pos.x = pos.x - (down_col - coord) / down_col * distance * ( 1.0 - ratio) * .5;
+        pos.x = pos.x - (down_col - coord) / down_col * drag_distance * ( 1.0 - ratio) * .5;
         v_lighting = .5 + (mod(a_triangleCoord.x, 2.0) - .5) * ratio * light_intensity;
     } else {
-        pos.x = pos.x + distance * (1.0 - down_x) * .3;
+        pos.x = pos.x + drag_distance * (1.0 - down_x) * .3;
         v_lighting = .5;
     }
     if(isShadow) {

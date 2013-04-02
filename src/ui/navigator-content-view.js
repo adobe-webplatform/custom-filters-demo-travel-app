@@ -21,7 +21,7 @@ function(LayerView, LayoutParams) {
     var NavigatorContentView = LayerView.extend({
         initialize: function() {
             NavigatorContentView.__super__.initialize.call(this);
-            this.setParams(new LayoutParams().matchParentWidth().fillParentHeight());
+            this.ensureParams().matchParentWidth().matchParentHeight();
         },
 
         render: function() {

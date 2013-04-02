@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-define(["mobileui/views/layout-view",
+define(["mobileui/views/layer-view",
         "mobileui/views/layout-params",
         "mobileui/ui/navigator-top-bar-view",
         "mobileui/ui/navigator-content-view"],
-function(LayoutView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
+function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
 
-    var NavigatorView = LayoutView.extend({
+    var NavigatorView = LayerView.extend({
         initialize: function() {
             NavigatorView.__super__.initialize.call(this);
-            this.matchParentSize().setLayout("vertical");
-
-            this._topBarView = new NavigatorTopBarView()
-                .forceLayer();
-            this.append(this._topBarView.render());
+            this.matchParentSize();
 
             this._contentView = new NavigatorContentView()
                 .forceLayer();
             this.append(this._contentView.render());
+
+            this._topBarView = new NavigatorTopBarView()
+                .forceLayer();
+            this.append(this._topBarView.render());
 
             this._historyCards = [];
             this._activeCard = null;

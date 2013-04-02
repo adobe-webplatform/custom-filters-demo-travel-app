@@ -25,6 +25,7 @@ function(LayerView, LayoutParams) {
             this.matchParentSize();
             this._navigatorView = null;
             this.on("activate", this.updateRouterLocation, this);
+            this.on("activate", this._updateNavigationBar, this);
         },
 
         render: function() {
@@ -37,7 +38,25 @@ function(LayerView, LayoutParams) {
             this._navigatorView = navigatorView;
             this.trigger("change:navigatorView");
             this.trigger(this._navigatorView ? "attached" : "detached");
+            this.setNeedsLayout(true);
             return this;
+        },
+
+        needsTopBar: function() {
+            return true;
+        },
+
+        layout: function() {
+            var topBarView = this.topBarView();
+            if (topBarView)
+                this.margin().setTop(this.needsTopBar() ? topBarView.bounds().height() : 0);
+            NavigatorCardView.__super__.layout.call(this);
+        },
+
+        _updateNavigationBar: function() {
+            var topBarView = this.topBarView();
+            if (topBarView)
+                topBarView.updateVisiblity(this.needsTopBar());
         },
 
         updateRouterLocation: function() {

@@ -568,10 +568,8 @@ define(["mobileui/utils/rect",
             this.$el
                 .css("width", this._bounds.width())
                 .css("height", this._bounds.height());
-            if (this._params && this._params.shouldMatchLineHeight()) {
-                console.log("setting line height ", this.$el.get(0), this.bounds().height() + "px");
+            if (this._params && this._params.shouldMatchLineHeight())
                 this.$el.css("line-height", this.bounds().height() + "px");
-            }
         },
 
         _validateTransform: function() {

@@ -94,6 +94,10 @@ define(["views/touch-item-view",
             SplashView.__super__.initialize.call(this);
         },
 
+        needsTopBar: function() {
+            return false;
+        },
+
         url: function() {
             return "card/" + encodeURIComponent("Splash View");
         },

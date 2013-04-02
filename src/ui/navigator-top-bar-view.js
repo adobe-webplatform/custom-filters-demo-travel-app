@@ -16,20 +16,45 @@
 
 define(["mobileui/views/layout-view",
         "mobileui/views/layout-params",
+        "mobileui/utils/transform",
         "mobileui/ui/button-view"],
-function(LayoutView, LayoutParams, ButtonView) {
+function(LayoutView, LayoutParams, Transform, ButtonView) {
 
     var NavigatorTopBarView = LayoutView.extend({
         initialize: function() {
             NavigatorTopBarView.__super__.initialize.call(this);
             this.bounds().setHeight(NavigatorTopBarView.height);
-            this.setParams(new LayoutParams().matchParentWidth());
+            this.ensureParams().matchParentWidth();
             this.setLayout("horizontal");
+            this._topBarVisible = false;
+            this.invalidate("topBarVisibility");
         },
 
         render: function() {
             this.$el.addClass("js-navigator-top-bar-view");
             return NavigatorTopBarView.__super__.render.call(this);
+        },
+
+        updateVisiblity: function(visible) {
+            if (this._topBarVisible == visible)
+                return;
+            this._topBarVisible = visible;
+            this.invalidate("topBarVisibilityWithAnimation");
+        },
+
+        _topBarPosition: function() {
+            return this._topBarVisible ? 0 : - this.bounds().height();
+        },
+
+        _validateTopBarVisibility: function() {
+            this.transform().get("translate").setY(this._topBarPosition());
+        },
+
+        _validateTopBarVisibilityWithAnimation: function() {
+            this.animation().start().get("visibility").removeAll()
+                .chain()
+                .transform(100, new Transform().translate(0,
+                    this._topBarPosition()));
         }
     });
 

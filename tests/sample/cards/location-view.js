@@ -149,6 +149,8 @@ define(["mobileui/views/content-view",
                         .text(i + 1));
                 this._pictureView.append(picture.render());
             }
+
+            this._canOpenPictureView = false;
         },
 
         _onPictureTap: function(view) {
@@ -166,6 +168,7 @@ define(["mobileui/views/content-view",
                 this._hadPictureScrollScale = true;
                 var height = imagePaddingHeight - scrollTop,
                     scaleRatio = height / imagePaddingHeight;
+                this._canOpenPictureView = scaleRatio > this._pictureScrollView.transform().get("scale").y();
                 this._pictureScrollView.forceLayer()
                     .transform()
                         .get("scale")
@@ -173,15 +176,18 @@ define(["mobileui/views/content-view",
                         .setY(scaleRatio);
             } else if (this._hadPictureScrollScale) {
                 this._hadPictureScrollScale = false;
+                this._canOpenPictureView = false;
                 this._pictureScrollView.transform().clear();
             }
         },
 
-        _onScrollAnimation: function(scrollLeft, scrollTop, duration) {
+        _onScrollAnimation: function(scrollLeft, scrollTop, duration, momentumScroll) {
             if (!this._hadPictureScrollScale && scrollTop >= 0)
                 return;
             var height = imagePaddingHeight - scrollTop,
                 scaleRatio = height / imagePaddingHeight;
+            if (!momentumScroll)
+                scaleRatio = Math.max(1, scaleRatio);
             this._pictureScrollView.animation().start()
                 .get("scroll-scale")
                 .removeAll()
@@ -189,10 +195,12 @@ define(["mobileui/views/content-view",
                 .transform(duration, new Transform().scale(scaleRatio, scaleRatio))
                 .setTimingFunction("easeOut")
                 .callback(function() {
-                    this._hadPictureScrollScale = scrollTop < 0;
+                    if (!momentumScroll)
+                        this._hadPictureScrollScale = scrollTop < 0;
                 }, this);
 
-            if (this._pictureScrollView.transform().get('scale').y() > 1.5) {
+            if (!momentumScroll && this._canOpenPictureView &&
+                this._pictureScrollView.transform().get('scale').y() > 1.5) {
                 var view = this._pictureScrollView.selectedView();
                 if (view)
                     this._onPictureTap(view);

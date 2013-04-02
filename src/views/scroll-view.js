@@ -402,9 +402,9 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
                 chainHorizontal = chainHorizontal.transform(this._scrollAnimationDuration / 2, horizontalTransform)
                                 .setTimingFunction("easeOut");
 
-                this.trigger("scroll:animation", momentumLeft, momentumTop, this._scrollAnimationDuration / 2);
+                this.trigger("scroll:animation", momentumLeft, momentumTop, this._scrollAnimationDuration / 2, /* momentum */ true);
             }
-            this.trigger("scroll:animation", this._scrollLeft, this._scrollTop, this._scrollAnimationDuration);
+            this.trigger("scroll:animation", this._scrollLeft, this._scrollTop, this._scrollAnimationDuration, /* momentum */ false);
             chain.transform(this._scrollAnimationDuration,
                             new Transform().translate(-this._scrollLeft, -this._scrollTop))
                  .setTimingFunction("easeOut")

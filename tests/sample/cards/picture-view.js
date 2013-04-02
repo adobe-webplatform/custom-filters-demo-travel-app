@@ -103,6 +103,10 @@ define(["views/app-card-view",
             return this._needsTopBar;
         },
 
+        hasLayoutMarginFromTopBar: function() {
+            return false;
+        },
+
         url: function() {
             return "card/" + encodeURIComponent("Picture View") + "/" + encodeURIComponent(this.color + ":" + this.index);
         },

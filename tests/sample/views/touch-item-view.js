@@ -27,7 +27,7 @@ define(["mobileui/views/gesture-detector",
 
     var Effects = {
         "drag": new DragEffect(/* use grayscale*/ true),
-        "fold": new FoldEffect(/* use shadow */ true, /* use grayscale*/ true),
+        "fold": new FoldEffect(/* use shadow */ false, /* use grayscale*/ true),
         "warp": new WarpEffect(/* use shadow */ false, /* use grayscale*/ true)
     };
 

@@ -16,8 +16,9 @@
 
 define(["utils/effects/base-effect",
         "mobileui/utils/filter",
+        "mobileui/utils/transform",
         "utils/fold"],
-    function(BaseEffect, Filter, Fold) {
+    function(BaseEffect, Filter, Transform, Fold) {
 
     var commitDuration = 300,
         revertDuration = 100;
@@ -33,17 +34,18 @@ define(["utils/effects/base-effect",
             return Filter.supportsCustomFilters;
         },
 
-        onDragStart: function(containerView, filterView) {
+        onDragStart: function(containerView, filterView, nextCard, verticalLayout, touch) {
             containerView.animation().removeAll();
             var fold = filterView.forceLayer().filter()
                 .get("fold")
-                .setT(this._computeFilterValue(0))
-                .setShadow(this._computeShadow(0))
-                .setWidth(containerView.bounds().width());
+                .setStartPosition(touch.currentPosition.localX)
+                .setCurrentPosition(touch.currentPosition.localX)
+                .setWidth(containerView.bounds().width())
+                .setHeight(containerView.bounds().height());
             if (this._useShadow)
                 containerView.filter().get("dropShadow").setRadius(10).setColor(0);
-            containerView.addClass("js-touch-item-view-filter");
-            return -fold.t() * containerView.bounds().width();
+            containerView.addClass("js-touch-item-view-fold-filter");
+            return -this._computeFilterValue(0) * containerView.bounds().width();
         },
 
         _minShadow: 0.7,
@@ -63,10 +65,14 @@ define(["utils/effects/base-effect",
         onDragMove: function(containerView, filterView, nextCard, transform, dragStartValue) {
             var value = Math.min(0, dragStartValue + transform.dragX);
             var t = Math.min(1, Math.max(0, - value / containerView.bounds().width()));
+            
+            filterView.transform().get("translate")
+                .setX(Math.min(0, (dragStartValue + transform.dragX) / 2));
 
-            filterView.filter().get("fold").setT(this._computeFilterValue(t))
-                .setShadow(this._computeShadow(t))
-                .setWidth(containerView.bounds().width());
+            filterView.filter().get("fold")
+                .setCurrentPosition(transform.touch.currentPosition.localX)
+                .setWidth(containerView.bounds().width())
+                .setHeight(containerView.bounds().height());
 
             if (this._useShadow)
                 containerView.filter().get("dropShadow").setRadius(10).setColor(t);
@@ -83,7 +89,7 @@ define(["utils/effects/base-effect",
         },
 
         commit: function(containerView, filterView, nextCard) {
-            var chain = containerView.animation().start().get("slide-transform").chain();
+            var chain = containerView.animation().start().get("slide-opacity").chain();
 
             if (this._useShadow) {
                 var filterShadow = new Filter();
@@ -94,11 +100,17 @@ define(["utils/effects/base-effect",
                 chain = chain.wait(commitDuration);
             }
 
+            filterView.animation().start().get("slide-transform")
+                .chain()
+                .transform(commitDuration, 
+                    new Transform().translate(-containerView.bounds().width() / 2, 0));
+
             var filter = new Filter();
             filter.get("fold")
-                .setT(this._computeFilterValue(1))
-                .setShadow(this._computeShadow(1))
-                .setWidth(containerView.bounds().width());
+                .setStartPosition(filterView.filter().get("fold").startPosition())
+                .setCurrentPosition(0)
+                .setWidth(containerView.bounds().width())
+                .setHeight(containerView.bounds().height());
             filterView.animation().start().get("slide-filter")
                 .chain().filter(commitDuration, filter);
 
@@ -115,7 +127,7 @@ define(["utils/effects/base-effect",
         },
 
         revert: function(containerView, filterView, nextCard) {
-            var chain = containerView.animation().start().get("slide-transform").chain();
+            var chain = containerView.animation().start().get("slide-opacity").chain();
 
             if (this._useShadow) {
                 var filterShadow = new Filter();
@@ -128,11 +140,17 @@ define(["utils/effects/base-effect",
                 chain = chain.wait(revertDuration);
             }
 
+            filterView.animation().start().get("slide-transform")
+                .chain()
+                .transform(commitDuration, 
+                    new Transform().translate(0, 0));
+
             var filter = new Filter();
             filter.get("fold")
-                .setT(this._computeFilterValue(0))
-                .setShadow(this._computeShadow(0))
-                .setWidth(containerView.bounds().width());
+                .setStartPosition(filterView.filter().get("fold").startPosition())
+                .setCurrentPosition(filterView.filter().get("fold").startPosition())
+                .setWidth(containerView.bounds().width())
+                .setHeight(containerView.bounds().height());
 
             filterView.animation().start().get("slide-filter").
                 chain().filter(revertDuration, filter);
@@ -154,9 +172,10 @@ define(["utils/effects/base-effect",
 
         cleanup: function(containerView, filterView, nextCard) {
             nextCard.filter().clear();
-            containerView.filter().clear();
             filterView.filter().clear();
-            containerView.removeClass("js-touch-item-view-filter");
+            filterView.transform().clear();
+            containerView.filter().clear();
+            containerView.removeClass("js-touch-item-view-fold-filter");
         }
     });
 

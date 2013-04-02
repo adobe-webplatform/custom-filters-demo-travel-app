@@ -16,14 +16,26 @@
 
 define(["mobileui/utils/filter"], function(Filter) {
 
-    return Filter.registerCustomFilter("fold", "t shadow width",
+    return Filter.registerCustomFilter("fold", "width height startPosition currentPosition",
         function(fn) {
-            var width = fn._width * fn._t / 3;
-            return "custom(url(style/shaders/fold.vert) " +
-             "mix(url(style/shaders/fold.frag) multiply source-atop), " +
-             "6 1 detached, t " + fn._t.toFixed(6) + ", shadow " + fn._shadow.toFixed(6) +
-             ", transform translate(" + (-width).toFixed(6) + "px, 0) perspective(1500) translate(" + (width).toFixed(6) +
-             "px, 0), mapDepth 150)";
-    });
+            var segments = 7,
+                padding_height = 40,
+                margin_height = 60,
+                distance = Math.min(0, fn._currentPosition - fn._startPosition),
+                segYPixelRatio =  1 / segments / padding_height;
 
+            var result = "custom(url(style/shaders/fold.vert) " +
+             "mix(url(style/shaders/fold.frag) overlay source-atop), " +
+             "11 " + segments + " detached" +
+             ", distance " + (distance / fn._width).toFixed(6) +
+             ", light_intensity 0.5" +
+             ", padding_height " + (padding_height * segYPixelRatio).toFixed(6) +
+             ", margin_height " + (margin_height * segYPixelRatio).toFixed(6) +
+             ", down_x " + (fn._startPosition / fn._width).toFixed(6) +
+             ", transform translate3d(" + (distance / 2).toFixed(6) + "px, 0, 0)" +
+             ")";
+
+            // console.log(result);
+            return result;
+    });
 });

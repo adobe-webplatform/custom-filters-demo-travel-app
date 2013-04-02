@@ -30,13 +30,17 @@ define(["views/app-card-view",
 
             this._pictureView = new LayerView().matchParentSize().addClass("js-picture-view");
             this.append(this._pictureView.render());
+            this.color = "";
+            this.index = 0;
             if (options && options.path) {
                 var data = decodeURIComponent(options.path).split(":");
-                this._pictureView.$el.css("background-color", data[0])
+                this.color = data[0];
+                this.index = data[1];
+                this._pictureView.$el.css("background-color", this.color)
                     .append($("<div />")
                         .css("font-size", "2.5em")
                         .addClass("center")
-                        .text(data[1]));
+                        .text(this.index));
             }
         },
 
@@ -100,7 +104,7 @@ define(["views/app-card-view",
         },
 
         url: function() {
-            return "card/" + encodeURIComponent("Picture View");
+            return "card/" + encodeURIComponent("Picture View") + "/" + encodeURIComponent(this.color + ":" + this.index);
         },
 
         render: function() {

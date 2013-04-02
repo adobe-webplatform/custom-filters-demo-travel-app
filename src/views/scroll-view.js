@@ -180,7 +180,7 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
                 this._contentView = null;
             }
             if (view) {
-                this._contentView = view;
+                this._contentView = view.forceLayer();
                 this.prepend(view);
             }
             return this;

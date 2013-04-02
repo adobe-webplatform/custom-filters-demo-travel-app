@@ -28,7 +28,7 @@ define(["views/app-card-view",
             this._initialView = null;
             this._needsTopBar = false;
 
-            this._pictureView = new LayerView().matchParentSize().addClass("js-picture-view");
+            this._pictureView = new LayerView().matchParentSize().addClass("js-picture-view").forceLayer();
             this.append(this._pictureView.render());
             this.color = "";
             this.index = 0;

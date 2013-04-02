@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-define(["utils/effects/base-effect",
+define(["mobileui/views/layer-view",
+        "utils/effects/base-effect",
         "mobileui/utils/filter",
         "mobileui/utils/transform",
         "utils/fold"],
-    function(BaseEffect, Filter, Transform, Fold) {
+    function(LayerView, BaseEffect, Filter, Transform, Fold) {
 
     var commitDuration = 300,
-        revertDuration = 100;
+        revertDuration = 100,
+        shadowSize = 40;
 
     function FoldEffect(useShadow, useGrayscale) {
         BaseEffect.call(this);
@@ -34,10 +36,49 @@ define(["utils/effects/base-effect",
             return Filter.supportsCustomFilters;
         },
 
+        _ensureMarginLayer: function(view) {
+            if (!view._filterMarginLayer) {
+                view._filterMarginLayer = new LayerView().addClass("js-fold-effect-filter-margin");
+                view.prepend(view._filterMarginLayer.render());
+
+                var shadow = new LayerView().addClass("js-fold-effect-filter-margin-shadow");
+                shadow.ensureParams().matchParentWidth();
+                shadow.bounds().setHeight(shadowSize);
+                view._filterMarginLayer.append(shadow.render());
+                view._filterMarginLayer._shadow = shadow;
+            }
+            return view._filterMarginLayer;
+        },
+
+        _removeMarginLayer: function(view) {
+            if (!view._filterMarginLayer)
+                return;
+            view._filterMarginLayer.remove();
+            view._filterMarginLayer = null;
+        },
+
         onDragStart: function(containerView, filterView, nextCard, verticalLayout, touch) {
             containerView.animation().removeAll();
+            // Compute the mesh and the margin of the effect
+            // so that we get exactly one tile for the shadow.
+            var itemHeight = filterView.bounds().height(),
+                segmentsY = Math.ceil(itemHeight / shadowSize) + 2,
+                marginHeight = (segmentsY * shadowSize - itemHeight) / 2;
+            
+            var filterMargins = this._ensureMarginLayer(filterView);
+            filterMargins.bounds()
+                .setY(-marginHeight)
+                .setHeight(itemHeight + 2 * marginHeight)
+                .setX(0)
+                .setWidth(filterView.bounds().width());
+            filterMargins._shadow.bounds()
+                .setY(filterMargins.bounds().height() - shadowSize);
+
             var fold = filterView.forceLayer().filter()
                 .get("fold")
+                .setSegmentsY(segmentsY)
+                .setPaddingHeight(shadowSize)
+                .setMarginHeight(marginHeight)
                 .setStartPosition(touch.currentPosition.localX)
                 .setCurrentPosition(touch.currentPosition.localX)
                 .setWidth(containerView.bounds().width())
@@ -70,9 +111,7 @@ define(["utils/effects/base-effect",
                 .setX(Math.min(0, (dragStartValue + transform.dragX) / 2));
 
             filterView.filter().get("fold")
-                .setCurrentPosition(transform.touch.currentPosition.localX)
-                .setWidth(containerView.bounds().width())
-                .setHeight(containerView.bounds().height());
+                .setCurrentPosition(transform.touch.currentPosition.localX);
 
             if (this._useShadow)
                 containerView.filter().get("dropShadow").setRadius(10).setColor(t);
@@ -105,12 +144,9 @@ define(["utils/effects/base-effect",
                 .transform(commitDuration, 
                     new Transform().translate(-containerView.bounds().width() / 2, 0));
 
-            var filter = new Filter();
+            var filter = filterView.filter().clone();
             filter.get("fold")
-                .setStartPosition(filterView.filter().get("fold").startPosition())
-                .setCurrentPosition(0)
-                .setWidth(containerView.bounds().width())
-                .setHeight(containerView.bounds().height());
+                .setCurrentPosition(0);
             filterView.animation().start().get("slide-filter")
                 .chain().filter(commitDuration, filter);
 
@@ -145,12 +181,9 @@ define(["utils/effects/base-effect",
                 .transform(commitDuration, 
                     new Transform().translate(0, 0));
 
-            var filter = new Filter();
+            var filter = filterView.filter().clone();
             filter.get("fold")
-                .setStartPosition(filterView.filter().get("fold").startPosition())
-                .setCurrentPosition(filterView.filter().get("fold").startPosition())
-                .setWidth(containerView.bounds().width())
-                .setHeight(containerView.bounds().height());
+                .setCurrentPosition(filterView.filter().get("fold").startPosition());
 
             filterView.animation().start().get("slide-filter").
                 chain().filter(revertDuration, filter);
@@ -175,6 +208,7 @@ define(["utils/effects/base-effect",
             filterView.filter().clear();
             filterView.transform().clear();
             containerView.filter().clear();
+            this._removeMarginLayer(filterView);
             containerView.removeClass("js-touch-item-view-fold-filter");
         }
     });

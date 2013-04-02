@@ -301,15 +301,8 @@ body {
     content: "";
 }
 
-.js-touch-item-view-fold-filter > .js-touch-item-view:before {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -60px;
-    bottom: -60px;
-    content: "";
-    border-top: 40px solid transparent;
-    border-bottom: 40px solid rgba(0, 0, 0, 0.3);
+.js-fold-effect-filter-margin-shadow {
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .js-setting-line-label-content-view {

@@ -16,26 +16,21 @@
 
 define(["mobileui/utils/filter"], function(Filter) {
 
-    return Filter.registerCustomFilter("fold", "width height startPosition currentPosition",
+    return Filter.registerCustomFilter("fold", "width height startPosition currentPosition paddingHeight marginHeight segmentsY",
         function(fn) {
-            var segments = 7,
-                padding_height = 40,
-                margin_height = 60,
-                distance = Math.min(0, fn._currentPosition - fn._startPosition),
-                segYPixelRatio =  1 / segments / padding_height;
-
+            var distance = Math.min(0, fn._currentPosition - fn._startPosition),
+                segYPixelRatio =  1 / fn._segmentsY / fn._paddingHeight;
             var result = "custom(url(style/shaders/fold.vert) " +
              "mix(url(style/shaders/fold.frag) overlay source-atop), " +
-             "11 " + segments + " detached" +
+             "11 " + fn._segmentsY + " detached" +
              ", distance " + (distance / fn._width).toFixed(6) +
              ", light_intensity 0.5" +
-             ", padding_height " + (padding_height * segYPixelRatio).toFixed(6) +
-             ", margin_height " + (margin_height * segYPixelRatio).toFixed(6) +
+             ", padding_height " + (fn._paddingHeight * segYPixelRatio).toFixed(6) +
+             ", margin_height " + (fn._marginHeight * segYPixelRatio).toFixed(6) +
              ", down_x " + (fn._startPosition / fn._width).toFixed(6) +
              ", transform translate3d(" + (distance / 2).toFixed(6) + "px, 0, 0)" +
              ")";
 
-            // console.log(result);
             return result;
     });
 });

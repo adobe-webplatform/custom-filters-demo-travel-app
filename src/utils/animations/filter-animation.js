@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define(["mobileui/utils/basic-animation",
+define(["mobileui/utils/animations/basic-animation",
         "mobileui/utils/transform",
         "mobileui/utils/filter"], function(BasicAnimation, Transform, Filter) {
 

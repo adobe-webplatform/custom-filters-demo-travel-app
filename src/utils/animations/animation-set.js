@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-define(["mobileui/utils/animation-controller",
-        "mobileui/utils/animation",
+define(["mobileui/utils/animations/animation-controller",
+        "mobileui/utils/animations/animation",
         // Initialize all types of animations here.
-        "mobileui/utils/transform-animation",
-        "mobileui/utils/opacity-animation",
-        "mobileui/utils/filter-animation"
+        "mobileui/utils/animations/transform-animation",
+        "mobileui/utils/animations/opacity-animation",
+        "mobileui/utils/animations/filter-animation"
         ], function(AnimationController, Animation) {
 
     var AnimationSet = function(view) {

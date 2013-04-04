@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define(["mobileui/utils/basic-animation"], function(BasicAnimation) {
+define(["mobileui/utils/animations/basic-animation"], function(BasicAnimation) {
 
     var OpacityAnimation = function(name) {
         BasicAnimation.call(this, name);

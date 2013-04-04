@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-define(["mobileui/utils/animation", "require",
-        "mobileui/utils/timing-functions"], function(Animation, require, TimingFunctions) {
+define(["mobileui/utils/animations/animation", "require",
+        "mobileui/utils/animations/timing-functions"], function(Animation, require, TimingFunctions) {
 
     var BasicAnimationState = function(time) {
         this.startTime = time;
@@ -117,7 +117,7 @@ define(["mobileui/utils/animation", "require",
                 endTransform = startTransform;
                 startTransform = null;
             }
-            var TransformAnimation = require("mobileui/utils/transform-animation");
+            var TransformAnimation = require("mobileui/utils/animations/transform-animation");
             var transformAnimation = new TransformAnimation("transform");
             transformAnimation.getTransform().take(endTransform);
             if (startTransform)
@@ -130,7 +130,7 @@ define(["mobileui/utils/animation", "require",
                 endFilter = startFilter;
                 startFilter = null;
             }
-            var FilterAnimation = require("mobileui/utils/filter-animation");
+            var FilterAnimation = require("mobileui/utils/animations/filter-animation");
             var filterAnimation = new FilterAnimation("filter");
             filterAnimation.getFilter().take(endFilter);
             if (startFilter)
@@ -143,7 +143,7 @@ define(["mobileui/utils/animation", "require",
                 endOpacity = startOpacity;
                 startOpacity = null;
             }
-            var OpacityAnimation = require("mobileui/utils/opacity-animation");
+            var OpacityAnimation = require("mobileui/utils/animations/opacity-animation");
             var opacityAnimation = new OpacityAnimation("opacity");
             opacityAnimation.setOpacity(endOpacity);
             if (startOpacity !== null)

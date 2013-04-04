@@ -21,6 +21,7 @@ define(["mobileui/views/content-view",
         "mobileui/views/layer-view",
         "mobileui/utils/transform",
         "mobileui/ui/app-card-view",
+        "views/url-card-view-mixin",
         "data/locations",
         "app"],
     function(ContentView,
@@ -30,12 +31,13 @@ define(["mobileui/views/content-view",
             LayerView,
             Transform,
             AppCardView,
+            UrlCardViewMixin,
             LocationLabels,
             app) {
 
     var imagePaddingHeight = 150;
 
-    var LocationView = AppCardView.extend({
+    var LocationView = AppCardView.extend(_.extend({
         initialize: function(options) {
             LocationView.__super__.initialize.call(this);
             this._hadPictureScrollScale = false;
@@ -221,7 +223,7 @@ define(["mobileui/views/content-view",
         url: function() {
             return "card/" + encodeURIComponent("Location View") + "/" + encodeURIComponent(this.model.get("label"));
         }
-    });
+    }, UrlCardViewMixin));
 
     return {
         label: "Location View",

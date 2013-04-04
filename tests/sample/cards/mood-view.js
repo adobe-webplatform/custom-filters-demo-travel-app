@@ -16,9 +16,11 @@
 
 define(["mobileui/ui/touch-item-view",
         "mobileui/ui/touch-list-view",
+        "views/url-card-view-mixin",
         "app"],
     function(TouchItemView,
             TouchListView,
+            UrlCardViewMixin,
             app) {
 
     var MoodLabels = [
@@ -70,7 +72,7 @@ define(["mobileui/ui/touch-item-view",
         }
     });
 
-    var MoodView = TouchListView.extend({
+    var MoodView = TouchListView.extend(_.extend({
 
         initialize: function(options) {
             this.model = new Backbone.Collection();
@@ -93,7 +95,7 @@ define(["mobileui/ui/touch-item-view",
             return new ItemView({model: model});
         }
 
-    });
+    }, UrlCardViewMixin));
 
     return {
         label: "Mood View",

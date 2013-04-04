@@ -17,11 +17,13 @@
 define(["mobileui/ui/touch-item-view",
         "mobileui/ui/touch-list-view",
         "mobileui/views/layout-params",
+        "views/url-card-view-mixin",
         "data/locations",
         "app"],
     function(TouchItemView,
             TouchListView,
             LayoutParams,
+            UrlCardViewMixin,
             LocationLabels,
             app) {
 
@@ -53,7 +55,7 @@ define(["mobileui/ui/touch-item-view",
         }
     });
 
-    var LocationsView = TouchListView.extend({
+    var LocationsView = TouchListView.extend(_.extend({
 
         initialize: function(options) {
             this.hue = 283;
@@ -84,7 +86,7 @@ define(["mobileui/ui/touch-item-view",
             return new ItemView({ model: model, hue: this.hue, saturation: this.saturation });
         }
 
-    });
+    }, UrlCardViewMixin));
 
     return {
         label: "Locations View",

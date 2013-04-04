@@ -234,19 +234,8 @@ define(["mobileui/ui/navigator-card-view",
                 .opacity(300, this._backgroundViewOpacity, 0);
 
             options.promise = this.animation().promise();
-        },
-
-        url: function() {
-            return null;
-        },
-
-        // FIXME: move this to application specific subclass.
-        updateRouterLocation: function() {
-            var url = this.url();
-            if (!url)
-                return;
-            // app.router.navigate(url, { trigger: false });
         }
+
     });
 
     return AppCardView;

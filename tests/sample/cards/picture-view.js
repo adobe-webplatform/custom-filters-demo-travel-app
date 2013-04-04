@@ -17,10 +17,11 @@
 define(["mobileui/ui/app-card-view",
         "mobileui/views/layer-view",
         "mobileui/utils/transform",
+        "views/url-card-view-mixin",
         "app"],
-    function(AppCardView, LayerView, Transform, app) {
+    function(AppCardView, LayerView, Transform, UrlCardViewMixin, app) {
 
-    var PictureView = AppCardView.extend({
+    var PictureView = AppCardView.extend(_.extend({
         initialize: function(options) {
             PictureView.__super__.initialize.call(this);
             this.addGestureDetector();
@@ -121,7 +122,7 @@ define(["mobileui/ui/app-card-view",
             this._updateNavigationBar();
         }
 
-    });
+    }, UrlCardViewMixin));
 
     return {
         label: "Picture View",

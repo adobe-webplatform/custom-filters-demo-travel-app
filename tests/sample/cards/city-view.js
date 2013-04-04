@@ -16,9 +16,11 @@
 
 define(["mobileui/ui/touch-item-view",
         "mobileui/ui/touch-list-view",
+        "views/url-card-view-mixin",
         "app"],
     function(TouchItemView,
             TouchListView,
+            UrlCardViewMixin,
             app) {
 
     var CityLabels = [
@@ -55,7 +57,7 @@ define(["mobileui/ui/touch-item-view",
         }
     });
 
-    var CityView = TouchListView.extend({
+    var CityView = TouchListView.extend(_.extend({
 
         initialize: function(options) {
             this.model = new Backbone.Collection();
@@ -83,7 +85,7 @@ define(["mobileui/ui/touch-item-view",
             return this.bounds().width() < 600;
         }
 
-    });
+    }, UrlCardViewMixin));
 
     return {
         label: "City View",

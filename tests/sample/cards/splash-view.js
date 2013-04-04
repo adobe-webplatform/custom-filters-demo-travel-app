@@ -18,11 +18,13 @@ define(["mobileui/ui/touch-item-view",
         "mobileui/ui/touch-list-view",
         "mobileui/views/layout-view",
         "mobileui/views/content-view",
+        "views/url-card-view-mixin",
         "app"],
     function(TouchItemView,
             TouchListView,
             LayotView,
             ContentView,
+            UrlCardViewMixin,
             app) {
 
     var SplashLabels = [
@@ -82,7 +84,7 @@ define(["mobileui/ui/touch-item-view",
         }
     });
 
-    var SplashView = TouchListView.extend({
+    var SplashView = TouchListView.extend(_.extend({
 
         isDefaultScreen: true,
 
@@ -115,7 +117,7 @@ define(["mobileui/ui/touch-item-view",
             return false;
         }
 
-    });
+    }, UrlCardViewMixin));
 
     return {
         label: "Splash View",

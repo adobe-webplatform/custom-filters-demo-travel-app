@@ -25,7 +25,6 @@ define(['mobileui/ui/settings-dialog-view',
         initialize: function() {
             AppSettingsDialogView.__super__.initialize.call(this);
 
-            // FIXME: this is application specific. Consider moving back to a subclass.
             this._addSettingsLine("Preview touch events", "touch.preview");
 
             var contentView = this.contentView();

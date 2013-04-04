@@ -16,7 +16,7 @@
 
 define(["mobileui/utils/effects/base-effect",
         "mobileui/utils/filter",
-        "mobileui/utils/warp"],
+        "mobileui/utils/filters/warp"],
     function(BaseEffect, Filter, Warp) {
 
     function WarpEffect(useShadow, useGrayscale) {

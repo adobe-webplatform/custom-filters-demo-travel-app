@@ -18,7 +18,7 @@ define(["mobileui/views/layer-view",
         "mobileui/utils/effects/base-effect",
         "mobileui/utils/filter",
         "mobileui/utils/transform",
-        "mobileui/utils/fold"],
+        "mobileui/utils/filters/fold"],
     function(LayerView, BaseEffect, Filter, Transform, Fold) {
 
     var shadowSize = 40;

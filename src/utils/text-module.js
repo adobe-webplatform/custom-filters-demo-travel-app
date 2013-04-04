@@ -27,7 +27,7 @@ define(["mobileui/utils/underscore", "mobileui/utils/load-module"],
 
         // Overwrite this function in your sub-classes to 
         // provide different content.
-        createModule: function(moduleName, content) {
+        createModule: function(content, moduleName, parsedName) {
             return "define(function () { return " +
                                JSON.stringify(this.encodeContent(content, moduleName)) +
                                ";});\n";

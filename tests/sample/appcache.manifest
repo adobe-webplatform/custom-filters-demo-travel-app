@@ -1,17 +1,13 @@
 CACHE MANIFEST
 
-dist/all.min.js
-style/shaders/fold.frag
-style/shaders/fold.vert
-style/shaders/warp.frag
-style/shaders/warp.vert
-style/topcoat/normalize.css
-style/topcoat/topcoat-mobile.css
-style/img/dark-grips.png
-style/style.css
-style/font/SourceSansPro/SourceSansPro-Regular.otf
-style/font/SourceSansPro/SourceSansPro-Light.otf
-style/font/SourceSansPro/SourceSansPro-Semibold.otf
-assets/main_bg.jpg
+../../style/topcoat/normalize.css
+../../style/topcoat/topcoat-mobile.css
+../../style/img/dark-grips.png
 ../../style/mobile-ui.css
-
+../../style/components.css
+../../style/font/SourceSansPro/SourceSansPro-Regular.otf
+../../style/font/SourceSansPro/SourceSansPro-Light.otf
+../../style/font/SourceSansPro/SourceSansPro-Semibold.otf
+dist/all.min.js
+assets/main_bg.jpg
+style/style.css

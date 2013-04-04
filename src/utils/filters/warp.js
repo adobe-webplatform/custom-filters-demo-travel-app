@@ -15,20 +15,14 @@
  */
 
  define(["mobileui/utils/filter",
-         "mobileui/utils/base64",
-         "third-party/text!mobileui/utils/filters/shaders/warp.vert",
-         "third-party/text!mobileui/utils/filters/shaders/warp.frag"], function(Filter, base64, vert, frag) {
+         "mobileui/utils/base64_text!mobileui/utils/filters/shaders/warp.vert",
+         "mobileui/utils/base64_text!mobileui/utils/filters/shaders/warp.frag"], function(Filter, vert, frag) {
 
-    var header;
-    function initHeader() {
-        if (header)
-            return;
-        header = "custom(url(" + base64.url(vert) + ") mix(url(" + base64.url(frag) + ") multiply source-atop)";
-    }
+    var header = "custom(url(data:text/plain;base64," + vert +
+        ") mix(url(data:text/plain;base64," + frag + ") multiply source-atop)";
 
     return Filter.registerCustomFilter("warp", "shadow x y",
         function(fn) {
-            initHeader();
             return header + ", " +
              "30 2, x " + fn._x.toFixed(6) + ", y " + fn._y.toFixed(6) + ", " +
              "transform perspective(1000), stretch 0.1, touchSize 2)";

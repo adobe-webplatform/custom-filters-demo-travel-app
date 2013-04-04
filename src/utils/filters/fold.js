@@ -15,20 +15,14 @@
  */
 
 define(["mobileui/utils/filter",
-        "mobileui/utils/base64",
-        "third-party/text!mobileui/utils/filters/shaders/fold.vert",
-        "third-party/text!mobileui/utils/filters/shaders/fold.frag"], function(Filter, base64, vert, frag) {
+        "mobileui/utils/base64_text!mobileui/utils/filters/shaders/fold.vert",
+        "mobileui/utils/base64_text!mobileui/utils/filters/shaders/fold.frag"], function(Filter, vert, frag) {
 
-    var header;
-    function initHeader() {
-        if (header)
-            return;
-        header = "custom(url(" + base64.url(vert) + ") mix(url(" + base64.url(frag) + ") overlay source-atop)";
-    }
+    var header = "custom(url(data:text/plain;base64," + vert +
+        ") mix(url(data:text/plain;base64," + frag + ") overlay source-atop)";
 
     return Filter.registerCustomFilter("fold", "width height startPosition currentPosition paddingHeight marginHeight segmentsY",
         function(fn) {
-            initHeader();
             var distance = Math.min(0, fn._currentPosition - fn._startPosition),
                 segYPixelRatio =  1 / fn._segmentsY / fn._paddingHeight;
             var result = header + ", " +

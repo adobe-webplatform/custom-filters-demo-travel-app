@@ -16,9 +16,9 @@
 
 /* Workaround module for cases when underscore is preloaded in the environment. */
 (function() {
-    var global = this;
-    if (global._)
-        define(function() { return global._; });
-    else
-        define(["third-party/underscore"], function() { return global._; });
+    var global = this,
+        requireList = [];
+    if (!global._)
+        requireList.push("third-party/underscore");
+    define("mobileui/utils/underscore", requireList, function() { return global._; });
 }).call(this);

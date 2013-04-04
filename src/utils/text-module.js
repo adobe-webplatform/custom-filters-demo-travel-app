@@ -69,8 +69,10 @@ define(["mobileui/utils/underscore", "mobileui/utils/load-module"],
                 url = req.toUrl(parsedName.file);
             
             fileLoader(url, function (content) {
-                if (config.isBuild)
+                if (config.isBuild) {
                     self.saveModuleContent(content, moduleName, parsedName);
+                    onLoad();
+                }
                 self.encodeContentAsync(content, moduleName, parsedName, onLoad);
             }, function (err) {
                 if (onLoad.error) {
@@ -81,7 +83,7 @@ define(["mobileui/utils/underscore", "mobileui/utils/load-module"],
 
         write: function (pluginName, moduleName, write, config) {
             if (this._buildMap && this._buildMap.hasOwnProperty(moduleName))
-                write.asModule(pluginName + "!" + moduleName, fileName, this._buildMap[moduleName]);
+                write.asModule(pluginName + "!" + moduleName, this._buildMap[moduleName]);
         }
     };
 

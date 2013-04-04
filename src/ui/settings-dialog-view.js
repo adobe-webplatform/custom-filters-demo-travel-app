@@ -17,34 +17,11 @@
 define(['mobileui/ui/dialog-view',
         'mobileui/views/layout-view',
         'mobileui/views/content-view',
-        'mobileui/ui/button-view',
         'mobileui/ui/app-checkbox-view',
-        'mobileui/views/layout-params',
-        'mobileui/utils/cache',
         'mobileui/utils/settings'],
-    function(DialogView, LayoutView, ContentView, ButtonView, AppCheckboxView, LayoutParams, cache, settings) {
+    function(DialogView, LayoutView, ContentView, AppCheckboxView, settings) {
 
     var SettingsDialogView = DialogView.extend({
-
-        initialize: function() {
-            SettingsDialogView.__super__.initialize.call(this);
-
-            // FIXME: this is application specific. Consider moving back to a subclass.
-            this._addSettingsLine("Preview touch events", "touch.preview");
-
-            var contentView = this.contentView();
-            this._updateButton = new ButtonView().setLabel("Check for updates")
-                .on("tap", this._onUpdateButtonTap, this);
-            this._updateButton.margin().setAll(10);
-            this._updateButton.ensureParams().matchParentWidth();
-            contentView.append(this._updateButton.render().addClass("dark-button"));
-
-            this._refreshButton = new ButtonView().setLabel("Refresh")
-                .on("tap", this._onRefreshButtonTap, this);
-            this._refreshButton.margin().setAll(10);
-            this._refreshButton.ensureParams().matchParentWidth();
-            contentView.append(this._refreshButton.render().addClass("dark-button").addClass("dark-cta"));
-        },
 
         _addSettingsLine: function(label, valueName) {
             var boxView = new LayoutView()
@@ -76,15 +53,6 @@ define(['mobileui/ui/dialog-view',
             SettingsDialogView.__super__.render.call(this);
             this.$el.addClass("js-settings-dialog-view");
             return this;
-        },
-
-        _onUpdateButtonTap: function() {
-            this.hide();
-            cache.checkForUpdates();
-        },
-
-        _onRefreshButtonTap: function() {
-            window.location.reload();
         }
 
     });

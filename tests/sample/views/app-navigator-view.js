@@ -17,10 +17,10 @@
 define(['mobileui/ui/navigator-view',
         'mobileui/views/content-view',
         'mobileui/ui/button-view',
-        'mobileui/ui/settings-dialog-view',
+        'views/app-settings-dialog-view',
         'mobileui/utils/settings',
         'mobileui/utils/lock',
-        'app'], function(NavigatorView, ContentView, ButtonView, SettingsDialogView, settings, lock, app) {
+        'app'], function(NavigatorView, ContentView, ButtonView, AppSettingsDialogView, settings, lock, app) {
 
     var AppNavigatorView = NavigatorView.extend({
 
@@ -100,7 +100,7 @@ define(['mobileui/ui/navigator-view',
         _onSettingsButtonTap: function() {
             if (this._settingsView)
                 return;
-            this._settingsView = new SettingsDialogView()
+            this._settingsView = new AppSettingsDialogView()
                 .once("hide", this._onSettingsViewHidden, this)
                 .render()
                 .show();

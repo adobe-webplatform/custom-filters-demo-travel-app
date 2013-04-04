@@ -15,8 +15,8 @@
  */
 
 define(["mobileui/utils/filter",
-        "mobileui/utils/base64_text!mobileui/utils/filters/shaders/fold.vert",
-        "mobileui/utils/base64_text!mobileui/utils/filters/shaders/fold.frag"], function(Filter, vert, frag) {
+        "mobileui/utils/base64-text!mobileui/utils/filters/shaders/fold.vert",
+        "mobileui/utils/base64-text!mobileui/utils/filters/shaders/fold.frag"], function(Filter, vert, frag) {
 
     var header = "custom(url(data:text/plain;base64," + vert +
         ") mix(url(data:text/plain;base64," + frag + ") overlay source-atop)";

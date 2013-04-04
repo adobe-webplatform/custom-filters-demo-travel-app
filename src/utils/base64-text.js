@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /* Module based on requirejs.text to provide ahead of time base64 encoding. */
-define(['mobileui/utils/underscore', 'mobileui/utils/text_module', 'mobileui/utils/base64'], function (_, text, base64) {
+define(['mobileui/utils/underscore', 'mobileui/utils/text-module', 'mobileui/utils/base64'], function (_, text, base64) {
 
     var base64_text = _.extend({}, text, {
         encodeContent: base64.encode

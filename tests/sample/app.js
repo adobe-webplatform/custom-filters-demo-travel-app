@@ -20,21 +20,7 @@ define(function() {
     return _.extend(app, Backbone.Events, {
         router: null,
         mainView: null,
-        defaultCard: "Splash View",
-
-        _inTransition: false,
-
-        startTransition: function(view) {
-            this._inTransition = true;
-        },
-
-        endTransition: function(view) {
-            this._inTransition = false;
-        },
-
-        canStartTransition: function() {
-            return !this._inTransition;
-        }
+        defaultCard: "Splash View"
     });
 
 });

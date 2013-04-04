@@ -18,8 +18,8 @@ define(["mobileui/ui/app-card-view",
         "mobileui/views/layer-view",
         "mobileui/utils/transform",
         "views/url-card-view-mixin",
-        "app"],
-    function(AppCardView, LayerView, Transform, UrlCardViewMixin, app) {
+        "mobileui/utils/lock"],
+    function(AppCardView, LayerView, Transform, UrlCardViewMixin, lock) {
 
     var PictureView = AppCardView.extend(_.extend({
         initialize: function(options) {
@@ -62,7 +62,7 @@ define(["mobileui/ui/app-card-view",
             
             this.updateRouterLocation();
 
-            app.startTransition();
+            lock.startTransition();
             
             this._initialView = options.scaleFrom;
             this._pictureView.transform().take(this._computeViewTransform(this._initialView));
@@ -71,7 +71,7 @@ define(["mobileui/ui/app-card-view",
                 .chain()
                 .transform(100, new Transform().translate(0, 0).scale(1, 1))
                 .callback(function() {
-                    app.endTransition(this);
+                    lock.endTransition(this);
                     this._updateNavigationBar();
                 }, this);
             options.promise = this._pictureView.animation().promise();
@@ -82,13 +82,13 @@ define(["mobileui/ui/app-card-view",
                 return PictureView.__super__._animateBackButton.call(this, nextCard, options);
 
             var self = this;
-            app.startTransition();
+            lock.startTransition();
             
             this._pictureView.animation().start().get("show")
                 .chain()
                 .transform(100, this._computeViewTransform(this._initialView))
                 .callback(function() {
-                    app.endTransition(this);
+                    lock.endTransition(this);
                 }, this);
             
             options.promise = this._pictureView.animation().promise();

@@ -104,6 +104,14 @@ define(["mobileui/utils/animation", "require",
             return this.setNext(new BasicAnimation("callback").setDuration(0).on("stop", callback, context)).next();
         },
 
+        promise: function() {
+            var deferred = $.Deferred();
+            this.setNext(new BasicAnimation("promise").setDuration(0).on("stop", function() {
+                deferred.resolveWith(this);
+            }, this));
+            return deferred.promise();
+        },
+
         transform: function(duration, startTransform, endTransform) {
             if (!endTransform) {
                 endTransform = startTransform;

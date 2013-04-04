@@ -19,11 +19,12 @@ define(["mobileui/views/gesture-detector",
         "mobileui/views/layout-params",
         "mobileui/views/gesture-view",
         "mobileui/utils/momentum",
+        "mobileui/utils/transform",
         "utils/effects/drag-effect",
         "utils/effects/fold-effect",
         "utils/effects/warp-effect",
         "app"],
-    function(GestureDetector, LayerView, LayoutParams, GestureView, Momentum, DragEffect, FoldEffect, WarpEffect, app) {
+    function(GestureDetector, LayerView, LayoutParams, GestureView, Momentum, Transform, DragEffect, FoldEffect, WarpEffect, app) {
 
     var Effects = {
         "drag": new DragEffect(/* use grayscale*/ true),
@@ -31,7 +32,7 @@ define(["mobileui/views/gesture-detector",
         "warp": new WarpEffect(/* use shadow */ false, /* use grayscale*/ true)
     };
 
-    var commitDuration = 300,
+    var commitDuration = 500,
         revertDuration = 100;
 
     var ItemView = GestureView.extend({
@@ -79,11 +80,32 @@ define(["mobileui/views/gesture-detector",
             this.$labelEl.text(this.model.get("label"));
         },
 
-        animateViewDeactived: function() {
+        animateViewDeactived: function(promiseList, scrollView, selectedView, index) {
+            var transform = new Transform(),
+                translate = transform.get("translate"),
+                delta;
+
+            if (!this._verticalLayout) {
+                delta = scrollView.scrollLeft() - selectedView.bounds().x();
+                if (index > 0)
+                    delta = scrollView.bounds().width() - (selectedView.bounds().width() - delta);
+                translate.setX(delta);
+            } else {
+                delta = scrollView.scrollTop() - selectedView.bounds().y();
+                if (index > 0)
+                    delta = scrollView.bounds().height() - (selectedView.bounds().height() - delta);
+                translate.setY(delta);
+            }
+
+            // Start from zero.
+            this.transform().clear().get("translate");
             this.animation().start()
-                .get("slide-opacity")
+                .get("slide-transform")
                 .chain()
-                .opacity(commitDuration, 0);
+                .transform(commitDuration, transform)
+                .setTimingFunction("easeOut");
+
+            promiseList.push(this.animation().promise());
         },
 
         resetAnimations: function() {
@@ -118,24 +140,27 @@ define(["mobileui/views/gesture-detector",
             app.mainView.navigatorView().precommitNextCard();
 
             // Start animating the rest of the items in the list.
-            this.trigger("selected", this);
+            var promiseList = [];
+            this.trigger("selected", this, promiseList);
 
-            var chain = this._effect.commit(this, this._filterView, nextCard, this._verticalLayout);
-            chain.callback(function() {
-                    activeCard.setDisabled(false);
-                    nextCard.filter().clear();
-                    app.mainView.navigatorView().commitNextCard();
-                    // We are safely hidden, revert the tap listener to the previous state.
-                    self.once("tap", self._onTap, self);
-                    self._effect.cleanup(self, self._filterView, nextCard);
-                    app.endTransition(self);
-                });
+            var chain = this._effect.commit(commitDuration, this, this._filterView, nextCard, this._verticalLayout);
+            promiseList.push(chain.promise());
+            
+            $.when.apply(null, promiseList).then(function() {
+                activeCard.setDisabled(false);
+                nextCard.filter().clear();
+                app.mainView.navigatorView().commitNextCard();
+                // We are safely hidden, revert the tap listener to the previous state.
+                self.once("tap", self._onTap, self);
+                self._effect.cleanup(self, self._filterView, nextCard);
+                app.endTransition(self);
+            });
         },
 
         _revert: function() {
             var self = this,
                 nextCard = app.mainView.navigatorView().nextCard();
-            var chain = this._effect.revert(this, this._filterView, nextCard, this._verticalLayout);
+            var chain = this._effect.revert(revertDuration, this, this._filterView, nextCard, this._verticalLayout);
             chain.callback(function() {
                 app.mainView.navigatorView().revertNextCard();
                 self._effect.cleanup(self, self._filterView, nextCard);

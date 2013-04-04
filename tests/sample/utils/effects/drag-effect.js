@@ -19,9 +19,6 @@ define(["utils/effects/base-effect",
         "mobileui/utils/filter"],
     function(BaseEffect, Transform, Filter) {
 
-    var commitDuration = 300,
-        revertDuration = 100;
-
     function DragEffect(useGrayscale) {
         BaseEffect.call(this);
         this._useGrayscale = useGrayscale;
@@ -68,7 +65,7 @@ define(["utils/effects/base-effect",
                 (!verticalLayout && ((value > - containerView.bounds().height()) || (direction < 0))));
         },
 
-        commit: function(containerView, filterView, nextCard, verticalLayout) {
+        commit: function(commitDuration, containerView, filterView, nextCard, verticalLayout) {
             var chain = containerView.animation().start().get("slide-transform").chain(),
                 transform = new Transform();
 
@@ -76,11 +73,9 @@ define(["utils/effects/base-effect",
                 transform.translate(-containerView.bounds().width(), 0);
             else
                 transform.translate(0, -containerView.bounds().height());
-            chain = chain.transform(commitDuration, transform);
-
-            containerView.animation().get("slide")
-                .chain()
-                .opacity(commitDuration, 0);
+            chain = chain
+                .transform(commitDuration, transform)
+                .setTimingFunction("easeOut");
 
             if (this._useGrayscale) {
                 nextCard.animation().start().get("slide-filter")
@@ -94,13 +89,12 @@ define(["utils/effects/base-effect",
             return chain;
         },
 
-        revert: function(containerView, filterView, nextCard) {
+        revert: function(revertDuration, containerView, filterView, nextCard) {
             var chain = containerView.animation().start().get("slide-transform").chain();
-            chain = chain.transform(revertDuration, new Transform());
+            chain = chain
+                .transform(revertDuration, new Transform())
+                .setTimingFunction("easeOut");
 
-            containerView.animation().get("slide")
-                .chain()
-                .opacity(revertDuration, 1);
             if (this._useGrayscale) {
                 nextCard.animation().start().get("slide-filter")
                     .chain()

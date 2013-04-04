@@ -21,9 +21,7 @@ define(["mobileui/views/layer-view",
         "utils/fold"],
     function(LayerView, BaseEffect, Filter, Transform, Fold) {
 
-    var commitDuration = 300,
-        revertDuration = 100,
-        shadowSize = 40;
+    var shadowSize = 40;
 
     function FoldEffect(useShadow, useGrayscale) {
         BaseEffect.call(this);
@@ -64,7 +62,7 @@ define(["mobileui/views/layer-view",
             var itemHeight = filterView.bounds().height(),
                 segmentsY = Math.ceil(itemHeight / shadowSize) + 2,
                 marginHeight = (segmentsY * shadowSize - itemHeight) / 2;
-            
+
             var filterMargins = this._ensureMarginLayer(filterView);
             filterMargins.bounds()
                 .setY(-marginHeight)
@@ -127,7 +125,7 @@ define(["mobileui/views/layer-view",
             return (value > - containerView.bounds().width()) || (direction < 0);
         },
 
-        commit: function(containerView, filterView, nextCard) {
+        commit: function(commitDuration, containerView, filterView, nextCard) {
             var chain = containerView.animation().start().get("slide-opacity").chain();
 
             if (this._useShadow) {
@@ -139,16 +137,20 @@ define(["mobileui/views/layer-view",
                 chain = chain.wait(commitDuration);
             }
 
+            var startPosition = filterView.filter().get("fold").startPosition();
             filterView.animation().start().get("slide-transform")
                 .chain()
-                .transform(commitDuration, 
-                    new Transform().translate(-containerView.bounds().width() / 2, 0));
+                .transform(commitDuration,
+                    new Transform().translate(startPosition - 1.5 * containerView.bounds().width(), 0))
+                .setTimingFunction("easeOut");
 
             var filter = filterView.filter().clone();
             filter.get("fold")
                 .setCurrentPosition(0);
             filterView.animation().start().get("slide-filter")
-                .chain().filter(commitDuration, filter);
+                .chain()
+                .filter(commitDuration, filter)
+                .setTimingFunction("easeOut");
 
             if (this._useGrayscale) {
                 nextCard.animation().start().get("slide-filter")
@@ -162,7 +164,7 @@ define(["mobileui/views/layer-view",
             return chain;
         },
 
-        revert: function(containerView, filterView, nextCard) {
+        revert: function(revertDuration, containerView, filterView, nextCard) {
             var chain = containerView.animation().start().get("slide-opacity").chain();
 
             if (this._useShadow) {
@@ -178,15 +180,18 @@ define(["mobileui/views/layer-view",
 
             filterView.animation().start().get("slide-transform")
                 .chain()
-                .transform(commitDuration, 
-                    new Transform().translate(0, 0));
+                .transform(revertDuration,
+                    new Transform().translate(0, 0))
+                .setTimingFunction("easeOut");
 
             var filter = filterView.filter().clone();
             filter.get("fold")
                 .setCurrentPosition(filterView.filter().get("fold").startPosition());
 
-            filterView.animation().start().get("slide-filter").
-                chain().filter(revertDuration, filter);
+            filterView.animation().start().get("slide-filter")
+                .chain()
+                .filter(revertDuration, filter)
+                .setTimingFunction("easeOut");
 
             containerView.animation().get("slide")
                 .chain()

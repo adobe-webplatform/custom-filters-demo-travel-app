@@ -34,11 +34,11 @@ define(function() {
             return false;
         },
 
-        commit: function(containerView, filterView, nextCard) {
+        commit: function(duration, containerView, filterView, nextCard) {
             return null;
         },
 
-        revert: function(containerView, filterView, nextCard) {
+        revert: function(duration, containerView, filterView, nextCard) {
             return null;
         },
 

@@ -19,9 +19,6 @@ define(["utils/effects/base-effect",
         "utils/warp"],
     function(BaseEffect, Filter, Warp) {
 
-    var commitDuration = 300,
-        revertDuration = 100;
-
     function WarpEffect(useShadow, useGrayscale) {
         BaseEffect.call(this);
         this._useShadow = useShadow;
@@ -76,7 +73,7 @@ define(["utils/effects/base-effect",
             return (value > - 1.4) || (direction < 0);
         },
 
-        commit: function(containerView, filterView, nextCard) {
+        commit: function(commitDuration, containerView, filterView, nextCard) {
             var chain = containerView.animation().start().get("slide-transform").chain();
 
             if (this._useShadow) {
@@ -95,7 +92,9 @@ define(["utils/effects/base-effect",
                 .setY(0)
                 .setShadow(this._computeShadow(1));
             filterView.animation().start().get("slide-filter")
-                .chain().filter(commitDuration, filter);
+                .chain()
+                .filter(commitDuration, filter)
+                .setTimingFunction("easeOut");
 
             if (this._useGrayscale) {
                 nextCard.animation().start().get("slide-filter")
@@ -109,7 +108,7 @@ define(["utils/effects/base-effect",
             return chain;
         },
 
-        revert: function(containerView, filterView, nextCard) {
+        revert: function(revertDuration, containerView, filterView, nextCard) {
             var chain = containerView.animation().start().get("slide-transform").chain();
 
             if (this._useShadow) {
@@ -130,8 +129,10 @@ define(["utils/effects/base-effect",
                 .setY(1)
                 .setShadow(this._computeShadow(0));
 
-            filterView.animation().start().get("slide-filter").
-                chain().filter(revertDuration, filter);
+            filterView.animation().start().get("slide-filter")
+                .chain()
+                .filter(revertDuration, filter)
+                .setTimingFunction("easeOut");
 
             containerView.animation().get("slide")
                 .chain()

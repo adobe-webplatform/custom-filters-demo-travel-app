@@ -51,14 +51,14 @@ define(["views/app-card-view",
                 .on("selected", this._onItemSelected, this);
         },
 
-        _onItemSelected: function(selectedView) {
-            var self = this;
-            var selectedViewIndex = this._listView.indexOfView(selectedView);
+        _onItemSelected: function(selectedView, promiseList) {
+            var self = this,
+                selectedViewIndex = this._listView.indexOfView(selectedView);
             this.model.each(function(model, index) {
                 var view = self._listView.itemView(model);
                 if (!view || view == selectedView)
                     return;
-                view.animateViewDeactived(Math.abs(selectedViewIndex - index));
+                view.animateViewDeactived(promiseList, self._listView, selectedView, index - selectedViewIndex);
             });
         },
 

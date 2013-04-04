@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* Module based on requirejs.text to provide ahead of time base64 encoding. */
-define(['mobileui/utils/underscore', 'mobileui/utils/text_module', 'mobileui/utils/base64'], function (_, text, base64) {
 
-    var base64_text = _.extend({}, text, {
-        encodeContent: base64.encode
-    });
-
-    return base64_text;
-
-});
+/* Workaround module for cases when underscore is preloaded in the environment. */
+(function() {
+    var global = this;
+    if (global._)
+        define(function() { return global._; });
+    else
+        define(["third-party/underscore"], function() { return global._; });
+}).call(this);

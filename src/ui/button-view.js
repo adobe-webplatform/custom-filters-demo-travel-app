@@ -21,7 +21,7 @@ define(["mobileui/views/gesture-view"], function(GestureView) {
             ButtonView.__super__.initialize.call(this);
             this.matchLineHeight()
                 .forceLayer();
-            this._label = "Button";
+            this._label = null;
             this.bounds().setSize(70, 40);
             this.on("tapstart", this._onTapStart, this);
             this.on("tapend", this._onTapEnd, this);
@@ -36,6 +36,18 @@ define(["mobileui/views/gesture-view"], function(GestureView) {
             return this;
         },
 
+        _readLabelAttribute: function() {
+            var labelAttribute = this.$el.attr("data-label");
+            if (!labelAttribute)
+                return;
+            this.setLabel(labelAttribute);
+        },
+
+        readViewAttributes: function() {
+            ButtonView.__super__.readViewAttributes.call(this);
+            this._readLabelAttribute();
+        },
+
         render: function() {
             ButtonView.__super__.render.call(this);
             this.$el.addClass("js-button-view")
@@ -46,7 +58,8 @@ define(["mobileui/views/gesture-view"], function(GestureView) {
         },
 
         _validateLabel: function() {
-            this.$labelEl.text(this._label);
+            if (this._label)
+                this.$labelEl.text(this._label);
         },
 
         _validateState: function() {

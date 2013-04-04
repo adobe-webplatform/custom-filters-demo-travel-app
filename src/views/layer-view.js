@@ -644,7 +644,6 @@ define(["mobileui/utils/rect",
                 return;
             var params = this.ensureParams();
             _.each(paramsAttributes.split(","), function(value) {
-                console.log(value);
                 params[value].call(params, true);
             });
         },

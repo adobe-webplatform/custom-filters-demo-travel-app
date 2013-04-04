@@ -22,6 +22,11 @@ body {
     position: absolute;
 }
 
+.js-static-view {
+    position: static;
+    display: inline-block;
+}
+
 .js-layer-view-invisible {
     visibility: hidden;
 }

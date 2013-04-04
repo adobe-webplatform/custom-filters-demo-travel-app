@@ -15,7 +15,8 @@
  */
 
 define(function() {
-    
-    return _.extend({}, Backbone.Events);
+
+    var Bus = Backbone.Model.extend({});
+    return new Bus();
 
 });

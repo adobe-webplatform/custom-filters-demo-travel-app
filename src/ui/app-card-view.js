@@ -5,7 +5,7 @@ define(["mobileui/ui/navigator-card-view",
         "mobileui/utils/momentum",
         "mobileui/views/gesture-detector",
         "mobileui/utils/lock"],
-    function(NavigatorCardView, LayerView, Transform, Filter, Momentum, GestureDetector, app) {
+    function(NavigatorCardView, LayerView, Transform, Filter, Momentum, GestureDetector, lock) {
 
     var AppCardView = NavigatorCardView.extend({
         initialize: function() {
@@ -25,7 +25,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         respondsToTouchGesture: function(gesture) {
-            if (!app.canStartTransition() || gesture.type != GestureDetector.GestureType.DRAG)
+            if (!lock.canStartTransition() || gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
             return (gesture.scrollX && gesture.distanceX < 0 &&
                 this.navigatorView().activeCard() === this &&
@@ -46,7 +46,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _onDragStart: function() {
-            app.startTransition(this);
+            lock.startTransition(this);
             var nextCard = this.navigatorView().prepareHistoryCard().nextCard();
             this._ensureGrayscaleOverlay();
             nextCard.parent().after(this._grayscaleOverlay, nextCard);
@@ -99,7 +99,7 @@ define(["mobileui/ui/navigator-card-view",
                     this.setDisabled(false)
                         ._removeGrayscaleOverlay();
                     nextCard.filter().clear();
-                    app.endTransition(this);
+                    lock.endTransition(this);
                     this.navigatorView().commitNextCard();
                 }, this);
             this.animation().get("slide")
@@ -137,7 +137,7 @@ define(["mobileui/ui/navigator-card-view",
                 .transform(100, transform)
                 .callback(function() {
                     this._removeGrayscaleOverlay();
-                    app.endTransition(this);
+                    lock.endTransition(this);
                     this.navigatorView().revertNextCard();
                 }, this);
             this.animation().get("slide")
@@ -176,7 +176,7 @@ define(["mobileui/ui/navigator-card-view",
 
         _onActivate: function(options) {
             AppCardView.__super__._onActivate.call(this, options);
-            if (!options.goingBack || !app.canStartTransition())
+            if (!options.goingBack || !lock.canStartTransition())
                 return;
             var prevCard = options.previousCard;
             if (!prevCard || !prevCard._animateBackButton)
@@ -186,7 +186,7 @@ define(["mobileui/ui/navigator-card-view",
 
         _animateBackButton: function(nextCard, options) {
             var self = this;
-            app.startTransition();
+            lock.startTransition();
             this._ensureGrayscaleOverlay();
             nextCard.parent().after(this._grayscaleOverlay, nextCard);
             var transform = new Transform().translate(this.bounds().width(), 0);
@@ -196,7 +196,7 @@ define(["mobileui/ui/navigator-card-view",
                 .callback(function() {
                     self._removeGrayscaleOverlay();
                     nextCard.filter().clear();
-                    app.endTransition(self);
+                    lock.endTransition(self);
                 });
             this.animation().get("slide")
                 .chain()

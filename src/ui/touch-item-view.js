@@ -24,7 +24,7 @@ define(["mobileui/views/gesture-detector",
         "mobileui/utils/effects/fold-effect",
         "mobileui/utils/effects/warp-effect",
         "mobileui/utils/lock"],
-    function(GestureDetector, LayerView, LayoutParams, GestureView, Momentum, Transform, DragEffect, FoldEffect, WarpEffect, app) {
+    function(GestureDetector, LayerView, LayoutParams, GestureView, Momentum, Transform, DragEffect, FoldEffect, WarpEffect, lock) {
 
     var Effects = {
         "drag": new DragEffect(/* use grayscale*/ true),
@@ -129,7 +129,7 @@ define(["mobileui/views/gesture-detector",
         },
 
         _onDragStart: function(touch) {
-            app.startTransition(this);
+            lock.startTransition(this);
             this.navigatorView().revertNextCard();
             this._onTapStart();
             var nextCard = this.navigatorView().nextCard();
@@ -167,7 +167,7 @@ define(["mobileui/views/gesture-detector",
                 // We are safely hidden, revert the tap listener to the previous state.
                 self.once("tap", self._onTap, self);
                 self._effect.cleanup(self, self._filterView, nextCard);
-                app.endTransition(self);
+                lock.endTransition(self);
             });
         },
 
@@ -177,7 +177,7 @@ define(["mobileui/views/gesture-detector",
             chain.callback(function() {
                 this.navigatorView().revertNextCard();
                 this._effect.cleanup(this, this._filterView, nextCard);
-                app.endTransition(this);
+                lock.endTransition(this);
             }, this);
         },
 
@@ -189,9 +189,9 @@ define(["mobileui/views/gesture-detector",
         },
 
         _onTap: function(touch) {
-            if (!app.canStartTransition())
+            if (!lock.canStartTransition())
                 return;
-            app.startTransition(this);
+            lock.startTransition(this);
             this.navigatorView().revertNextCard();
             this.trigger("animation:start");
             this._onTapStart();
@@ -201,7 +201,7 @@ define(["mobileui/views/gesture-detector",
         },
 
         respondsToTouchGesture: function(gesture) {
-            if (!app.canStartTransition() || gesture.type != GestureDetector.GestureType.DRAG)
+            if (!lock.canStartTransition() || gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
             return (this._verticalLayout && gesture.scrollX && gesture.distanceX > 0) ||
                 (!this._verticalLayout && gesture.scrollY);

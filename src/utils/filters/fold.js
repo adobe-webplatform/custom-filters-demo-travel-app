@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-define(["mobileui/utils/filter"], function(Filter) {
+define(["mobileui/utils/filter",
+        "mobileui/utils/base64",
+        "third-party/text!mobileui/utils/filters/shaders/fold.vert",
+        "third-party/text!mobileui/utils/filters/shaders/fold.frag"], function(Filter, base64, vert, frag) {
 
-    // FIXME: bundle the shaders.
+    var header;
+    function initHeader() {
+        if (header)
+            return;
+        header = "custom(url(" + base64.url(vert) + ") mix(url(" + base64.url(frag) + ") overlay source-atop)";
+    }
+
     return Filter.registerCustomFilter("fold", "width height startPosition currentPosition paddingHeight marginHeight segmentsY",
         function(fn) {
+            initHeader();
             var distance = Math.min(0, fn._currentPosition - fn._startPosition),
                 segYPixelRatio =  1 / fn._segmentsY / fn._paddingHeight;
-            var result = "custom(url(../../style/shaders/fold.vert) " +
-             "mix(url(../../style/shaders/fold.frag) overlay source-atop), " +
+            var result = header + ", " +
              "11 " + fn._segmentsY + " detached" +
              ", drag_distance " + (distance / fn._width).toFixed(6) +
              ", light_intensity 0.5" +

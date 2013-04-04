@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
- define(["mobileui/utils/filter"], function(Filter) {
+ define(["mobileui/utils/filter",
+         "mobileui/utils/base64",
+         "third-party/text!mobileui/utils/filters/shaders/warp.vert",
+         "third-party/text!mobileui/utils/filters/shaders/warp.frag"], function(Filter, base64, vert, frag) {
 
-    // FIXME: bundle the shaders.
+    var header;
+    function initHeader() {
+        if (header)
+            return;
+        header = "custom(url(" + base64.url(vert) + ") mix(url(" + base64.url(frag) + ") multiply source-atop)";
+    }
+
     return Filter.registerCustomFilter("warp", "shadow x y",
         function(fn) {
-            return "custom(url(../../style/shaders/warp.vert) " +
-             "mix(url(../../style/shaders/warp.frag) multiply source-atop), " +
+            initHeader();
+            return header + ", " +
              "30 2, x " + fn._x.toFixed(6) + ", y " + fn._y.toFixed(6) + ", " +
              "transform perspective(1000), stretch 0.1, touchSize 2)";
     });

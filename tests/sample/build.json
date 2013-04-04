@@ -1,7 +1,8 @@
 {
     "baseUrl": ".",
     "paths": {
-        "mobileui": "../../src/"
+        "mobileui": "../../src/",
+        "third-party": "../../third-party/dev/"
     },
     "name": "main",
     "out": "dist/main.min.js"

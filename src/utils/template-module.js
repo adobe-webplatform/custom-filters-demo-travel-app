@@ -19,7 +19,7 @@ define(["mobileui/utils/underscore",
         "require"],
     function(_, text, require) {
 
-    var templateModule = _.extend({}, text, {
+    var TemplateModule = _.extend({}, text, {
         defaultOptions: {
             base: "mobileui/views/layer-view",
             label: ""
@@ -29,10 +29,9 @@ define(["mobileui/utils/underscore",
 
         create: function(content, BaseView, options) {
             var TemplateView = BaseView.extend({
+                _template: content,
                 render: function() {
-                    this.$el
-                        .addClass("js-template-view")
-                        .html(content);
+                    this.$el.addClass("js-template-view");
                     return TemplateView.__super__.render.call(this);
                 }
             }, {
@@ -42,7 +41,7 @@ define(["mobileui/utils/underscore",
         },
 
         encodeContentAsync: function(content, moduleName, parsedName, callback) {
-            var options = _.extend(this.defaultOptions, parsedName.options),
+            var options = _.extend({}, this.defaultOptions, parsedName.options),
                 self = this;
             require([options.base], function(BaseView) {
                 callback(self.create(content, BaseView, options));
@@ -50,15 +49,14 @@ define(["mobileui/utils/underscore",
         },
 
         createModule: function(content, moduleName, parsedName) {
-            var options = _.extend(this.defaultOptions, parsedName.options);
-            var code = "define(" + JSON.stringify([options.base, this.modulePath]) + ", " + 
-                    "function(BaseView, TemplateView) { return TemplateView.create(" +
+            var options = _.extend({}, this.defaultOptions, parsedName.options);
+            var code = "define(" + JSON.stringify([options.base, this.modulePath]) + ", " +
+                    "function(BaseView, TemplateModule) { return TemplateModule.create(" +
                                JSON.stringify(content) + ", BaseView, " + JSON.stringify(options) +
                                "); });\n";
-            console.log(code);
             return code;
         }
     });
 
-    return templateModule;
+    return TemplateModule;
 });

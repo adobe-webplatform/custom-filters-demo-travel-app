@@ -136,7 +136,7 @@ define(["mobileui/utils/rect",
         },
 
         matchParentSize: function() {
-            this.ensureParams().matchParent();
+            this.ensureParams().matchParentSize();
             return this;
         },
 
@@ -636,6 +636,34 @@ define(["mobileui/utils/rect",
 
         _onMarginChanged: function() {
             this.invalidate("margin");
+        },
+
+        _readParamsAttribute: function() {
+            var paramsAttributes = this.$el.attr("data-params");
+            if (!paramsAttributes)
+                return;
+            var params = this.ensureParams();
+            _.each(paramsAttributes.split(","), function(value) {
+                console.log(value);
+                params[value].call(params, true);
+            });
+        },
+
+        _readBoundsAttribute: function() {
+            var boundsAttributes = this.$el.attr("data-bounds");
+            if (!boundsAttributes)
+                return;
+            boundsAttributes = _.map(boundsAttributes.split(","), parseFloat);
+            this.bounds()
+                .setX(boundsAttributes[0])
+                .setY(boundsAttributes[1])
+                .setWidth(boundsAttributes[2])
+                .setHeight(boundsAttributes[3]);
+        },
+
+        readViewAttributes: function() {
+            this._readParamsAttribute();
+            this._readBoundsAttribute();
         }
     });
 

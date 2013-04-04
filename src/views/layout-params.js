@@ -85,7 +85,7 @@ define(function() {
             return this.setHeight(parentView);
         },
 
-        matchParent: function() {
+        matchParentSize: function() {
             return this
                 .setWidth(LayoutParams.MATCH_PARENT)
                 .setHeight(LayoutParams.MATCH_PARENT);

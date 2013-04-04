@@ -65,6 +65,18 @@ define(["mobileui/views/layer-view",
             return this;
         },
 
+        _readLayoutAttribute: function() {
+            var layoutAttribute = this.$el.attr("data-layout");
+            if (!layoutAttribute)
+                return;
+            this.setLayout(layoutAttribute);
+        },
+
+        readViewAttributes: function() {
+            LayoutView.__super__.readViewAttributes.call(this);
+            this._readLayoutAttribute();
+        },
+
         setLayoutWithAnimation: function(layout) {
             layout = this._internalComputeLayout(layout);
             if (this._layout === layout)

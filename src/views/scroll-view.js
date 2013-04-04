@@ -94,6 +94,18 @@ function(GestureView, LayerView, GestureDetector, boilerplate, Momentum,
             return this;
         },
 
+        _readScrollDirectionAttribute: function() {
+            var scrollDirectionAttribute = this.$el.attr("data-scroll-direction");
+            if (!scrollDirectionAttribute)
+                return;
+            this.setScrollDirection(scrollDirectionAttribute);
+        },
+
+        readViewAttributes: function() {
+            ScrollView.__super__.readViewAttributes.call(this);
+            this._readScrollDirectionAttribute();
+        },
+
         selectedView: function() {
             return this._selectedView;
         },

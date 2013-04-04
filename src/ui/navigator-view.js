@@ -82,6 +82,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 this.contentView().before(this._nextCard, this._topBarView);
             this._nextCard._setNavigatorView(this);
             this._nextCard.trigger("card:next");
+            this.trigger("card:next", this._nextCard);
             return this;
         },
 
@@ -95,6 +96,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             if (!this._nextCard)
                 return this;
             this._nextCard.trigger("card:revert");
+            this.trigger("card:revert", this._nextCard);
             this._nextCard._setNavigatorView(null);
             // If this was a history card, we just put it back and detach.
             if (this._isLastHistoryCard(this._nextCard))
@@ -119,6 +121,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             this._activeCard = this._nextCard;
             this._nextCard = null;
             this._activeCard.trigger("card:precommit");
+            this.trigger("card:precommit", this._activeCard);
             return this;
         },
 
@@ -136,7 +139,9 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             if (this._activeCard.displaysOnTop())
                 this._contentView.append(this._activeCard);
             this._activeCard.trigger("card:commit");
+            this.trigger("card:commit", this._activeCard);
             this._activeCard.trigger("activate", { goingBack: false });
+            this.trigger("activate", this._activeCard, { goingBack: false });
             return this;
         },
 
@@ -145,6 +150,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             var previousActiveCard = this._activeCard;
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");
+                this.trigger("deactivate", this._activeCard);
                 this._activeCard = null;
             }
             var options = {
@@ -155,6 +161,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 this._activeCard = card;
                 this._activeCard._setNavigatorView(this);
                 this._activeCard.trigger("activate", options);
+                this.trigger("activate", this._activeCard, options);
                 if (card.displaysOnTop())
                     this._contentView.append(card);
                 else
@@ -175,6 +182,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             var previousActiveCard = this._activeCard;
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");
+                this.trigger("deactivate", this._activeCard);
                 this._historyCards.push(this._activeCard);
                 this._activeCard = null;
             }
@@ -186,6 +194,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 this._activeCard = card;
                 this._activeCard._setNavigatorView(this);
                 this._activeCard.trigger("activate", options);
+                this.trigger("activate", this._activeCard, options);
                 if (card.displaysOnTop())
                     this._contentView.append(card);
                 else
@@ -207,6 +216,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                 self = this;
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");
+                this.trigger("deactivate", this._activeCard);
                 this._activeCard = null;
             }
             if (this._historyCards.length) {
@@ -222,6 +232,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
                     this._contentView.before(this._activeCard, this._topBarView);
                 this._activeCard._setNavigatorView(this);
                 this._activeCard.trigger("activate", options);
+                this.trigger("activate", this._activeCard);
                 if (previousActiveCard) {
                     if (!options.promise) {
                         previousActiveCard._setNavigatorView(null).remove();

@@ -2,6 +2,7 @@ define(["app"],
     function(app) {
 
     var UrlCardViewMixin = {
+
         updateRouterLocation: function() {
             var url = this.url();
             if (!url)

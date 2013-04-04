@@ -19,7 +19,8 @@ define(['mobileui/ui/navigator-view',
         'mobileui/ui/button-view',
         'mobileui/ui/settings-dialog-view',
         'mobileui/utils/settings',
-        'mobileui/utils/lock'], function(NavigatorView, ContentView, ButtonView, SettingsDialogView, settings, app) {
+        'mobileui/utils/lock',
+        'app'], function(NavigatorView, ContentView, ButtonView, SettingsDialogView, settings, lock, app) {
 
     var AppNavigatorView = NavigatorView.extend({
 
@@ -27,6 +28,9 @@ define(['mobileui/ui/navigator-view',
             AppNavigatorView.__super__.initialize.call(this);
             this.topBarView().addClass("dark-header-bar");
             this.addTopBarButtons();
+
+            this.on("card:precommit", this._updateBackButton, this);
+            this.on("activate", this._updateBackButton, this);
         },
 
         render: function() {
@@ -35,7 +39,6 @@ define(['mobileui/ui/navigator-view',
             return AppNavigatorView.__super__.render.call(this);
         },
 
-        // FIXME: this is application specific
         addTopBarButtons: function() {
             var topBar = this.topBarView();
 
@@ -73,7 +76,7 @@ define(['mobileui/ui/navigator-view',
             return this._homeButton;
         },
 
-        updateBackButton: function() {
+        _updateBackButton: function() {
             if (this.canGoBack()) {
                 this._backButton.show();
                 this._homeButton.hide();
@@ -88,7 +91,7 @@ define(['mobileui/ui/navigator-view',
         },
 
         _onBackButtonTap: function() {
-            if (!app.canStartTransition())
+            if (!lock.canStartTransition())
                 return;
             if (!this.popCard())
                 this.pushCard(app.router.lookupCard(app.defaultCard));

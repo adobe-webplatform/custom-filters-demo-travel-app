@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-define(['views/dialog-view',
+define(['mobileui/ui/dialog-view',
         'mobileui/views/layout-view',
         'mobileui/views/content-view',
         'mobileui/ui/button-view',
-        'ui/app-checkbox-view',
+        'mobileui/ui/app-checkbox-view',
         'mobileui/views/layout-params',
-        'utils/cache',
-        'utils/settings'],
+        'mobileui/utils/cache',
+        'mobileui/utils/settings'],
     function(DialogView, LayoutView, ContentView, ButtonView, AppCheckboxView, LayoutParams, cache, settings) {
 
     var SettingsDialogView = DialogView.extend({
@@ -29,6 +29,7 @@ define(['views/dialog-view',
         initialize: function() {
             SettingsDialogView.__super__.initialize.call(this);
 
+            // FIXME: this is application specific. Consider moving back to a subclass.
             this._addSettingsLine("Preview touch events", "touch.preview");
 
             var contentView = this.contentView();

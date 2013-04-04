@@ -19,12 +19,12 @@ define(['app',
         'mobileui/ui/window-view',
         'mobileui/views/touch',
         'mobileui/utils/filter',
-        'views/app-navigator-view',
-        'views/confirm-dialog-view',
-        'utils/cache',
-        'utils/fold',
-        'utils/warp',
-        'utils/settings'],
+        'mobileui/ui/app-navigator-view',
+        'mobileui/ui/confirm-dialog-view',
+        'mobileui/utils/cache',
+        'mobileui/utils/fold',
+        'mobileui/utils/warp',
+        'mobileui/utils/settings'],
     function(app,
              LayerView,
              WindowView,
@@ -68,6 +68,10 @@ define(['app',
         },
 
         navigatorView: function() {
+            return this._navigatorView;
+        },
+
+        contentView: function() {
             return this._navigatorView;
         },
 

@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-define(["views/app-card-view",
-        "mobileui/ui/list-view",
-        "mobileui/views/layout-params",
-        "app"],
-    function(AppCardView, ListView, LayoutParams, app) {
+define(["mobileui/ui/app-card-view",
+        "mobileui/ui/list-view"],
+    function(AppCardView, ListView) {
 
     var TouchListView = AppCardView.extend({
 
@@ -48,6 +46,7 @@ define(["views/app-card-view",
 
         _onItemRendererFactory: function(model) {
             return this._createTouchListItemView(model).render()
+                .setListView(this)
                 .on("selected", this._onItemSelected, this);
         },
 

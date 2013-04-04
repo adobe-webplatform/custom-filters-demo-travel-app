@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define(["views/app-card-view",
+define(["mobileui/ui/app-card-view",
         "mobileui/views/layer-view",
         "mobileui/utils/transform",
         "app"],

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-define(["utils/effects/base-effect",
+define(["mobileui/utils/effects/base-effect",
         "mobileui/utils/filter",
-        "utils/warp"],
+        "mobileui/utils/warp"],
     function(BaseEffect, Filter, Warp) {
 
     function WarpEffect(useShadow, useGrayscale) {
@@ -29,7 +29,7 @@ define(["utils/effects/base-effect",
         isSupported: function() {
             return Filter.supportsCustomFilters;
         },
-        
+
         onDragStart: function(containerView, filterView, nextCard, verticalLayout, touch) {
             containerView.animation().removeAll();
             var warp = filterView.forceLayer().filter()

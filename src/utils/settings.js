@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define(['mobileui/utils/boilerplate', 'utils/default-settings'], 
+define(['mobileui/utils/boilerplate', 'mobileui/utils/default-settings'],
     function(boilerplate, defaultSettings) {
 
     var localStorage = boilerplate.lookupPrefix(window, "localStorage"),

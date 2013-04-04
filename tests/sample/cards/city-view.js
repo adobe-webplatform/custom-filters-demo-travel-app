@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-define(["views/touch-item-view",
-        "views/touch-list-view",
+define(["mobileui/ui/touch-item-view",
+        "mobileui/ui/touch-list-view",
         "app"],
     function(TouchItemView,
             TouchListView,

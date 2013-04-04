@@ -16,7 +16,7 @@
 
 define([
     'app',
-    'utils/settings',
+    'mobileui/utils/settings',
     'router',
     'views/main-view'
 ],

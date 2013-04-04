@@ -41,6 +41,10 @@ function(LayerView, LayoutParams) {
             return this;
         },
 
+        navigatorView: function() {
+            return this._navigatorView;
+        },
+
         needsTopBar: function() {
             return true;
         },

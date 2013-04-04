@@ -4,7 +4,7 @@ define(["mobileui/ui/navigator-card-view",
         "mobileui/utils/filter",
         "mobileui/utils/momentum",
         "mobileui/views/gesture-detector",
-        "app"],
+        "mobileui/utils/lock"],
     function(NavigatorCardView, LayerView, Transform, Filter, Momentum, GestureDetector, app) {
 
     var AppCardView = NavigatorCardView.extend({
@@ -22,7 +22,7 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _updateBackButton: function() {
-            app.mainView.navigatorView().updateBackButton();
+            this.navigatorView().updateBackButton();
         },
 
         render: function() {
@@ -34,8 +34,8 @@ define(["mobileui/ui/navigator-card-view",
             if (!app.canStartTransition() || gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
             return (gesture.scrollX && gesture.distanceX < 0 &&
-                app.mainView.navigatorView().activeCard() === this &&
-                app.mainView.navigatorView().canGoBack());
+                this.navigatorView().activeCard() === this &&
+                this.navigatorView().canGoBack());
         },
 
         _backgroundViewOpacity: 0.7,
@@ -53,7 +53,7 @@ define(["mobileui/ui/navigator-card-view",
 
         _onDragStart: function() {
             app.startTransition(this);
-            var nextCard = app.mainView.navigatorView().prepareHistoryCard().nextCard();
+            var nextCard = this.navigatorView().prepareHistoryCard().nextCard();
             this._ensureGrayscaleOverlay();
             nextCard.parent().after(this._grayscaleOverlay, nextCard);
             nextCard.transform().get("scale")
@@ -69,7 +69,7 @@ define(["mobileui/ui/navigator-card-view",
             var translate = this.transform().get("translate"),
                 value = Math.max(0, this._dragStartValue + transform.dragX);
             translate.setX(value);
-            var nextCard = app.mainView.navigatorView().nextCard(),
+            var nextCard = this.navigatorView().nextCard(),
                 percentCovered = value / this.bounds().width();
             nextCard.filter().get("grayscale").setIntensity(100 - percentCovered * 100);
             this._grayscaleOverlay.setOpacity(this._backgroundViewOpacity - percentCovered * this._backgroundViewOpacity);
@@ -94,21 +94,20 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _commit: function() {
-            var self = this,
-                nextCard = app.mainView.navigatorView().nextCard();
-            app.mainView.navigatorView().precommitNextCard();
+            var nextCard = this.navigatorView().nextCard();
+            this.navigatorView().precommitNextCard();
             var transform = new Transform().translate(this.bounds().width(), 0);
             this.setDisabled(true)
                 .animation().start().get("slide-transform")
                 .chain()
                 .transform(300, transform)
                 .callback(function() {
-                    self.setDisabled(false)
+                    this.setDisabled(false)
                         ._removeGrayscaleOverlay();
                     nextCard.filter().clear();
-                    app.endTransition(self);
-                    app.mainView.navigatorView().commitNextCard();
-                });
+                    app.endTransition(this);
+                    this.navigatorView().commitNextCard();
+                }, this);
             this.animation().get("slide")
                 .chain()
                 .opacity(300, 100);
@@ -138,16 +137,15 @@ define(["mobileui/ui/navigator-card-view",
         },
 
         _revert: function() {
-            var self = this,
-                nextCard = app.mainView.navigatorView().nextCard(),
+            var nextCard = this.navigatorView().nextCard(),
                 transform = new Transform();
             this.animation().start().get("slide-transform").chain()
                 .transform(100, transform)
                 .callback(function() {
-                    self._removeGrayscaleOverlay();
-                    app.endTransition(self);
-                    app.mainView.navigatorView().revertNextCard();
-                });
+                    this._removeGrayscaleOverlay();
+                    app.endTransition(this);
+                    this.navigatorView().revertNextCard();
+                }, this);
             this.animation().get("slide")
                 .chain()
                 .opacity(100, 1);
@@ -242,11 +240,12 @@ define(["mobileui/ui/navigator-card-view",
             return null;
         },
 
+        // FIXME: move this to application specific subclass.
         updateRouterLocation: function() {
             var url = this.url();
             if (!url)
                 return;
-            app.router.navigate(url, { trigger: false });
+            // app.router.navigate(url, { trigger: false });
         }
     });
 

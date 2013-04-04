@@ -17,9 +17,10 @@
 define(['mobileui/views/layout-view',
         'mobileui/views/layer-view',
         'mobileui/views/layout-params',
+        'mobileui/ui/window-view',
         'mobileui/utils/transform',
-        'app'],
-    function(LayoutView, LayerView, LayoutParams, Transform, app) {
+        'mobileui/utils/lock'],
+    function(LayoutView, LayerView, LayoutParams, WindowView, Transform, app) {
 
     var activeDialogView = null;
 
@@ -138,9 +139,10 @@ define(['mobileui/views/layout-view',
                 this._canShow = false;
             }
             activeDialogView = this;
-            app.mainView.append(this);
-            this._attachedView = app.mainView.navigatorView();
-            this._attachedView.setDisabled(true);
+            WindowView.instance.append(this);
+            this._attachedView = WindowView.instance.contentView();
+            if (this._attachedView)
+                this._attachedView.setDisabled(true);
             this.trigger("show");
             this.invalidate("showAnimation");
             return this;

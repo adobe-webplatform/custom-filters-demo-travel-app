@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-define(["mobileui/views/layout-view",
-        "mobileui/views/layout-params"],
-function(LayoutView, LayoutParams) {
+define(function() {
 
-    var LayoutFillerView = LayoutView.extend({
+    return _.extend({}, Backbone.Events, {
+        _inTransition: false,
 
-        initialize: function() {
-            LayoutFillerView.__super__.initialize.call(this);
-            this.matchParentSize();
-            this.setLayout("vertical");
+        startTransition: function(view) {
+            this._inTransition = true;
         },
 
-        render: function() {
-            this.$el.addClass("js-layout-filler-view");
-            return LayoutFillerView.__super__.render.call(this);
-        }
+        endTransition: function(view) {
+            this._inTransition = false;
+        },
 
+        canStartTransition: function() {
+            return !this._inTransition;
+        }
     });
 
-    return LayoutFillerView;
 });

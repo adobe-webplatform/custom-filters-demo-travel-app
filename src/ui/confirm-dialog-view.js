@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define(['views/dialog-view',
+define(['mobileui/ui/dialog-view',
         'mobileui/views/layout-view',
         'mobileui/views/measured-view',
         'mobileui/ui/button-view',

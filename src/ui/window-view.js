@@ -15,10 +15,12 @@
  */
 
 define(["mobileui/views/layout-view"], function(LayoutView) {
-    
+
     var WindowView = LayoutView.extend({
         initialize: function() {
             WindowView.__super__.initialize.call(this);
+            // Keep a reference to the main view so that DialogView can attach itself to the window.
+            WindowView.instance = this;
             $(window).on("resize", this._onWindowResize.bind(this));
             this._onWindowResize();
             // Make sure we eat all the events before reaching the browser,
@@ -31,12 +33,20 @@ define(["mobileui/views/layout-view"], function(LayoutView) {
             return WindowView.__super__.render.call(this);
         },
 
+        // Overwrite this function to return the main element of the WindowView.
+        // It's used in DialogView to apply effects when a new Dialog is shown.
+        contentView: function() {
+            return null;
+        },
+
         _onWindowResize: function() {
             this.bounds()
                 .setSize(window.innerWidth, window.innerHeight);
             this.setNeedsLayout(true);
         }
     });
+
+    WindowView.instance = null;
 
     return WindowView;
 });

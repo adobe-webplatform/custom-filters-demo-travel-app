@@ -20,10 +20,10 @@ define(["mobileui/views/gesture-detector",
         "mobileui/views/gesture-view",
         "mobileui/utils/momentum",
         "mobileui/utils/transform",
-        "utils/effects/drag-effect",
-        "utils/effects/fold-effect",
-        "utils/effects/warp-effect",
-        "app"],
+        "mobileui/utils/effects/drag-effect",
+        "mobileui/utils/effects/fold-effect",
+        "mobileui/utils/effects/warp-effect",
+        "mobileui/utils/lock"],
     function(GestureDetector, LayerView, LayoutParams, GestureView, Momentum, Transform, DragEffect, FoldEffect, WarpEffect, app) {
 
     var Effects = {
@@ -36,8 +36,9 @@ define(["mobileui/views/gesture-detector",
         revertDuration = 100;
 
     var ItemView = GestureView.extend({
-        initialize: function() {
+        initialize: function(listView) {
             ItemView.__super__.initialize.call(this);
+            this._listView = null;
             this.once("tap", this._onTap, this)
                 .on("touchdragstart", this._onDragStart, this)
                 .on("touchdragmove", this._onDragMove, this)
@@ -55,6 +56,15 @@ define(["mobileui/views/gesture-detector",
             this.setEffect("drag");
             this.setHorizontalLayout();
             this.forceLayer();
+        },
+
+        listView: function() {
+            return this._listView;
+        },
+
+        setListView: function(listView) {
+            this._listView = listView;
+            return this;
         },
 
         setEffect: function(effectOrName) {
@@ -114,17 +124,21 @@ define(["mobileui/views/gesture-detector",
             this.animation().removeAll();
         },
 
+        navigatorView: function() {
+            return this._listView.navigatorView();
+        },
+
         _onDragStart: function(touch) {
             app.startTransition(this);
-            app.mainView.navigatorView().revertNextCard();
+            this.navigatorView().revertNextCard();
             this._onTapStart();
-            var nextCard = app.mainView.navigatorView().nextCard();
+            var nextCard = this.navigatorView().nextCard();
             this._dragStartValue = this._effect.onDragStart(this, this._filterView, nextCard, this._verticalLayout, touch);
             this._momentum.reset(this._dragStartValue);
         },
 
         _onDragMove: function(transform) {
-            var nextCard = app.mainView.navigatorView().nextCard(),
+            var nextCard = this.navigatorView().nextCard(),
                 value = this._effect.onDragMove(this, this._filterView, nextCard, transform, this._dragStartValue,
                     this._verticalLayout);
             this._momentum.injectValue(value);
@@ -132,12 +146,12 @@ define(["mobileui/views/gesture-detector",
 
         _commit: function() {
             var self = this,
-                activeCard = app.mainView.navigatorView().activeCard(),
-                nextCard = app.mainView.navigatorView().nextCard();
+                activeCard = this.navigatorView().activeCard(),
+                nextCard = this.navigatorView().nextCard();
 
             activeCard.setDisabled(true);
 
-            app.mainView.navigatorView().precommitNextCard();
+            this.navigatorView().precommitNextCard();
 
             // Start animating the rest of the items in the list.
             var promiseList = [];
@@ -149,7 +163,7 @@ define(["mobileui/views/gesture-detector",
             $.when.apply(null, promiseList).then(function() {
                 activeCard.setDisabled(false);
                 nextCard.filter().clear();
-                app.mainView.navigatorView().commitNextCard();
+                self.navigatorView().commitNextCard();
                 // We are safely hidden, revert the tap listener to the previous state.
                 self.once("tap", self._onTap, self);
                 self._effect.cleanup(self, self._filterView, nextCard);
@@ -158,14 +172,13 @@ define(["mobileui/views/gesture-detector",
         },
 
         _revert: function() {
-            var self = this,
-                nextCard = app.mainView.navigatorView().nextCard();
+            var nextCard = this.navigatorView().nextCard();
             var chain = this._effect.revert(revertDuration, this, this._filterView, nextCard, this._verticalLayout);
             chain.callback(function() {
-                app.mainView.navigatorView().revertNextCard();
-                self._effect.cleanup(self, self._filterView, nextCard);
-                app.endTransition(self);
-            });
+                this.navigatorView().revertNextCard();
+                this._effect.cleanup(this, this._filterView, nextCard);
+                app.endTransition(this);
+            }, this);
         },
 
         _onDragEnd: function(transform) {
@@ -179,10 +192,10 @@ define(["mobileui/views/gesture-detector",
             if (!app.canStartTransition())
                 return;
             app.startTransition(this);
-            app.mainView.navigatorView().revertNextCard();
+            this.navigatorView().revertNextCard();
             this.trigger("animation:start");
             this._onTapStart();
-            var nextCard = app.mainView.navigatorView().nextCard();
+            var nextCard = this.navigatorView().nextCard();
             this._effect.onDragStart(this, this._filterView, nextCard, this._verticalLayout, touch);
             this._commit();
         },

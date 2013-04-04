@@ -17,9 +17,9 @@
 define(['mobileui/ui/navigator-view',
         'mobileui/views/content-view',
         'mobileui/ui/button-view',
-        'views/settings-dialog-view',
-        'utils/settings',
-        'app'], function(NavigatorView, ContentView, ButtonView, SettingsDialogView, settings, app) {
+        'mobileui/ui/settings-dialog-view',
+        'mobileui/utils/settings',
+        'mobileui/utils/lock'], function(NavigatorView, ContentView, ButtonView, SettingsDialogView, settings, app) {
 
     var AppNavigatorView = NavigatorView.extend({
 
@@ -35,6 +35,7 @@ define(['mobileui/ui/navigator-view',
             return AppNavigatorView.__super__.render.call(this);
         },
 
+        // FIXME: this is application specific
         addTopBarButtons: function() {
             var topBar = this.topBarView();
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-define(["utils/effects/base-effect",
+define(["mobileui/utils/effects/base-effect",
         "mobileui/utils/transform",
         "mobileui/utils/filter"],
     function(BaseEffect, Transform, Filter) {

@@ -14,67 +14,9 @@
  * limitations under the License.
  */
 
-html, body, .js-window-view { overflow: hidden; margin: 0; }
-body {
-    background-color: black;
-    font-family: "source", verdana;
-}
-
-/* topcoat fixes */
-.dark-button, .light-button {
-    padding: 0;
-}
-
-.slide-switch-container {
-    margin: 0;
-}
-
-.js-checkbox-on-label, .js-checkbox-off-label {
-    border-radius: 4px;
-    font-size: 16px;
-    text-align: center;
-}
-
-.dark-slide-switch .js-checkbox-on-label {
-    background-color: #404141;
-    box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-    color: #5DC1FF;
-}
-
-.dark-slide-switch .js-checkbox-off-label {
-    background-color: #404141;
-    box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-    color: #909090;
-}
-
-.slide-switch-container > .dark-slide-switch > .switch {
-    transition: none;
-}
-
-/* end topcoat fixes */
-
-.center {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    text-align: center;
-}
 
 .js-index-view, .js-old-test-view {
     background-color: white;
-}
-
-.js-dialog-background-view, .js-app-card-grayscale-overlay {
-    background: black;
-}
-
-.js-dialog-content-view {
-    background-color: white;
-}
-
-.js-app-navigator-content-view {
-    overflow: hidden;
 }
 
 .js-item-view {
@@ -286,30 +228,6 @@ body {
 .js-location-view-paragraph {
     padding-bottom: 10px;
     text-align: justify;
-}
-
-.js-touch-item-view-filter, .js-touch-item-view-fold-filter {
-    z-index: 1;
-}
-
-.js-touch-item-view-filter > .js-touch-item-view:before {
-    position: absolute;
-    top: -40px;
-    bottom: -40px;
-    left: 0px;
-    right: 0px;
-    content: "";
-}
-
-.js-fold-effect-filter-margin-shadow {
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-.js-setting-line-label-content-view {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-weight: bold;
 }
 
 .js-picture-view {

@@ -211,8 +211,10 @@ define(["mobileui/views/gesture-detector",
         respondsToTouchGesture: function(gesture) {
             if (!lock.canStartTransition() || gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
-            if (!(this._verticalLayout && gesture.scrollX && gesture.distanceX > 0) ||
-                (!this._verticalLayout && gesture.scrollY))
+            var canStartTransition =
+                (this._verticalLayout && gesture.scrollX && gesture.distanceX > 0) ||
+                (!this._verticalLayout && gesture.scrollY);
+            if (!canStartTransition)
                 return false;
             this._onTapStart();
             return !!this.navigatorView().nextCard();

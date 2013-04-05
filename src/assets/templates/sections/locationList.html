@@ -1,0 +1,18 @@
+<div id="location-list" class="section">
+    <div id="location-search">
+        <div class="icon"></div>
+        <input type="text" class="search" placeholder="{{search-default}}">
+        <div class="amount"><span></span>{{amount}}</div>
+    </div>
+    <div class="scroll-wrapper">
+        <div class="move-container">
+            {{#items}}
+            <div class="location-list-item" data-mood="{{mood}}" data-district="{{district}}"  data-id="{{id}}">
+                <div class="text">{{name}}</div>
+                <div class="arrow"></div>
+            </div>
+            {{/items}}
+        </div>
+        <div class="indicator"></div>
+    </div>
+</div>

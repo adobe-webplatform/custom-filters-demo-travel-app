@@ -1,0 +1,80 @@
+#location-list{
+    top: 55px;
+
+    z-index: 30;
+    @include cache;
+
+    .scroll-wrapper {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .move-container {
+        position: absolute;
+        width: 100%;
+    }
+
+    .indicator {
+        position: absolute;
+        width: 4px;
+        top: 0;
+        right: 0;
+        background-color: #f00;
+    }
+
+    &.search {
+         .scroll-wrapper {
+            top: 80px;
+         }
+         .location-search {
+            display: block;
+         }
+
+    }
+}
+
+ .location-search {
+    display: none;
+    position: relative;
+    
+ }
+
+.location-list-item {
+    display: none;
+    float: left;
+    position: relative;
+    width: 100%;
+    height: 80px;
+
+    .text {
+        margin-left: 47px;
+        width: 100%;
+
+        font-size: 42px;
+        font-style: italic;
+        letter-spacing: -2px;
+        line-height: 80px;
+
+        @media all and (max-width : 1050px) {
+            font-size: 24px;
+            letter-spacing: -1px;
+        }
+    }
+
+    .arrow {
+        position: absolute;
+        top: 50%;
+        right: 30px;
+        width: 15px;
+        height: 23px;
+        margin-top: -12px;
+
+        @include ui-asset(20, 0);
+    }
+
+    &.show {
+        display: block;
+    }
+}

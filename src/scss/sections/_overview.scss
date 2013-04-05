@@ -1,0 +1,243 @@
+#overview{
+    top: 55px;
+    z-index: 10;
+
+    @include cache;
+
+    .bg-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center center;
+        @include cache;
+    }
+
+    .wrapper {
+        display: none;
+
+        position: relative;
+        width: 75%;
+        max-width: 600px;
+        height: 100%;
+        margin-left: auto;
+        margin-right: auto;
+
+        text-align: center;
+
+        opacity: 0;
+
+        .logo {
+            display: inline-block;
+            width: 161px;
+            height: 64px;
+
+            @include ui-asset(0, 136)
+        }
+
+        .title {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+
+            font-size: 36px;
+            font-style: italic;
+            color: #d14543;
+        }
+
+        .description {
+            font-size: 16px;
+            line-height: 22px;
+            padding-bottom: 80px;
+            p {
+                margin-bottom: 20px;
+            }
+        }
+
+
+        @include transition(opacity .3s linear);
+        &.appear {
+            display: table;
+            opacity: 0;
+        }
+        &.show{
+            opacity: 1;
+        }
+        &.hide {
+            opacity: 0;
+        }
+    }
+
+
+
+    .bottom {
+        display: none;
+        
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 130px;
+
+        text-align: center;
+
+        .line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 100px;
+            height: 2px;
+            margin-left: -50px;
+            background-color: #7e6f85;
+        }
+
+        .item {
+            display: inline-block;
+            position: relative;
+            width: 120px;
+            height: 120px;
+
+
+            .icon {
+                position: relative;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 30px;
+                margin-bottom: 13px;
+            }
+
+            .text {
+                font-family: 'league-gothic-condensed', 'Arial Narrow', sans-serif;
+                text-transform: uppercase;
+                font-size: 22px;
+                letter-spacing: 1px;
+                color: #e7e5e1;
+            }
+        }
+
+        .favorites {
+            .icon {
+                width: 41px;
+                height: 36px;
+
+                @include ui-asset(50, 30);
+            }
+
+            .count {
+                position: absolute;
+                left: 28px;
+                top: -10px;
+                width: 22px;
+                height: 22px;
+                font-weight: 700;
+                font-size: 12px;
+                font-style: italic;
+                line-height: 22px;
+                color: #d14443;
+
+                @include ui-asset(100, 0);
+            }
+        }
+
+        .schedule {
+            .icon {
+                width: 37px;
+                height: 37px;
+
+                @include ui-asset(100, 30);
+            }
+        }
+
+
+        @include transition(opacity .3s linear);
+        &.appear {
+            display: table;
+            opacity: 0;
+        }
+        &.show{
+            opacity: 1;
+        }
+        &.hide {
+            opacity: 0;
+        }
+
+    }
+
+    .arrow {
+        position: absolute;
+        top: 50%;
+        left: 20px;
+        width: 80px;
+        height: 80px;
+        margin-top: -40px;
+
+        cursor: pointer;
+
+        @include transformTransition(.3s ease-in-out);
+        @include transform(translate3d(-100px,0,0));
+
+        &:before {
+            position: absolute;
+            left: 0;
+            top: 29px;
+            display: block;
+            content: '';
+            width: 15px;
+            height: 23px;
+
+            @include ui-asset(0, 0);
+        }
+
+        &.right {
+            left: auto;
+            right: 20px;
+            @include transform(translate3d(100px,0,0));
+
+            &:before {
+                left: auto;
+                right: 0;
+                background-position: -20px 0;
+            }
+        }
+
+        &.show {
+            @include transform(translate3d(0,0,0));
+        }
+    }
+
+
+
+
+
+    .spinner-container {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,.8);
+        z-index: 10px;
+        opacity: 0;
+
+        @include cache;
+        @include transition(opacity .3s linear);
+
+        .spinner {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 25px;
+            height: 25px;
+            margin-left: -13px;
+            margin-top: -13px;
+            @include ui-asset(130, 0);
+            @include simple-spin(.4s);
+        }
+
+        &.show {
+            opacity: 1;
+        }
+    }
+
+
+}

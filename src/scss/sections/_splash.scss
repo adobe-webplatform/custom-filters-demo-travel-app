@@ -1,0 +1,119 @@
+#splash {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    z-index: 80;
+    @include cache;
+}
+
+.splash-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    background-image: url(../assets/images/main_bg.jpg);
+    background-size: cover;
+    background-position: center center;
+
+    &.show {
+        -webkit-transition: -webkit-filter 1s linear;
+    }
+}
+
+.splash-headline {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    width: 300px;
+    margin-left: -150px;
+    margin-bottom: 90px;
+
+    font-size: 42px;
+    font-weight: 100;
+    font-style: italic;
+    text-align: center;
+    letter-spacing: -1px;
+
+    overflow: hidden;
+
+    @include cache;
+
+    .text {
+        @include transformTransition(.4s ease-in-out);
+        @include transform(translate3d(0, 50px, 0));
+
+        #splash.show & {
+            @include transform(translate3d(0,0,0));
+        }
+    }
+}
+
+.splash-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 520px;
+    height: 158px;
+    margin-left: -260px;
+    margin-top: -79px;
+    box-sizing: border-box;
+    border: 10px solid #fff;
+
+    font-family: 'league-gothic-condensed', 'Arial Narrow', sans-serif;
+    font-weight: 400;
+    font-size: 140px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    line-height: 142px;
+    overflow: hidden;
+}
+
+.splash-btn {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 200px;
+    height: 44px;
+    margin-left: -100px;
+
+    font-family: 'league-gothic-condensed', 'Arial Narrow', sans-serif;
+    font-weight: 400;
+    font-size: 26px;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 3px;
+
+    opacity: 0;
+
+    @include transformTransition(.3s ease-in-out, opacity .3s linear);
+    @include transform(translate3d(0,-20px,0));
+
+    &:before {
+        position: absolute;
+        display: block;
+        content: '';
+        left: 50%;
+        top: -40px;
+        width: 23px;
+        height: 15px;
+        margin-left: -12px;
+
+        opacity: 0;
+
+        @include ui-asset(40, 0);
+        @include transformTransition(.4s ease-in-out, opacity .4s linear);
+        @include transform(translate3d(0,-20px,0));
+    }
+
+    #splash.show & {
+        opacity: 1;
+        @include transform(translate3d(0,0,0));
+        
+        &:before {
+            opacity: 1;
+            @include transform(translate3d(0,0,0));
+        }
+    }
+}

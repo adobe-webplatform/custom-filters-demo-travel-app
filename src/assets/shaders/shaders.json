@@ -1,0 +1,10 @@
+{
+    "shaders" : {
+        "plain" : {
+            "default_seg_x" : 50,
+            "default_seg_y" : 50,
+            "vs" : "plain/shader.vs",
+            "fs" : "plain/shader.fs"
+        }
+    }
+}

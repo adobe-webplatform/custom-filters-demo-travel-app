@@ -1,0 +1,94 @@
+#mood{
+    top: 55px;
+
+    z-index: 40;
+    @include cache;
+}
+
+.mood-item {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: 25%;
+
+    @include cache;
+
+    &:last-child {
+        padding-bottom: 2px;
+    }
+
+    .text {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        margin-top: -60px;
+
+        font-family: 'league-gothic-condensed', 'Arial Narrow', sans-serif;
+        font-weight: 400;
+        font-size: 120px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        line-height: 120px;
+
+        @media all and (max-height : 600px) {
+            font-size: 100px;
+        }
+    }
+
+    .arrow {
+        position: absolute;
+        top: 50%;
+        right: 30px;
+        width: 15px;
+        height: 23px;
+        margin-top: -12px;
+
+        @include ui-asset(20, 0);
+    }
+
+    .shader-shadow {
+        display: none;
+        position: absolute;
+        content : '';
+        left: 0;
+        right: 0;
+
+        // border
+        border-top-width: 40px;
+        border-top-color: transparent;
+        border-top-style: solid;
+        border-bottom-width: 40px;
+        border-bottom-color: rgba(0,0,0,.3);
+        border-bottom-style: solid;
+
+    }
+
+    .num {
+        position: absolute;
+        font-size: 24px;
+        font-style: italic;
+
+        right: 70px;
+        top: 50%;
+        width: 50px;
+        height: 50px;
+        margin-top: -25px;
+        text-align: center;
+        line-height: 50px;
+
+        background-color: rgba(0,0,0,.2);
+        border-radius: 25px;
+
+        @media all and (max-width : 1050px) {
+            right: 60px;
+            width: 40px;
+            height: 40px;
+            margin-top: -20px;
+            font-size: 18px;
+            letter-spacing: -1px;
+            line-height: 40px;
+        }
+
+    }
+}

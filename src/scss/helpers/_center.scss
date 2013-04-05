@@ -1,0 +1,36 @@
+/* -- centering -- */
+/* shameless clone from [https://github.com/millermedeiros/basis.css/blob/master/css/bss/rapid/center.css] */
+/* vertical centering technique [http://www.jakpsatweb.cz/css/css-vertical-center-solution.html] */
+.bss-vcenter {
+    /* height of .bss-vcenter element is required */
+    overflow: hidden;
+    *position: relative;
+    display: table;
+    *display: block;
+    
+    .bss-outer {
+        display: table-cell;
+        vertical-align: middle;
+        width: 100%;
+        *position: absolute;
+        *top: 50%;
+    }
+
+    .bss-inner {
+        *position: relative;
+        *top: -50%;
+    }
+}
+
+
+.bss-hcenter {
+    /* width of .bss-hcenter element is required */
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.bss-absmid {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+}

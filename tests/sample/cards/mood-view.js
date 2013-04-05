@@ -54,7 +54,7 @@ define(["mobileui/ui/touch-item-view",
     var ItemView = TouchItemView.extend({
         initialize: function() {
             ItemView.__super__.initialize.call(this);
-            this.$labelEl.addClass("js-mood-item-view-label");
+            this.addModelLabel().addClass("js-mood-item-view-label");
             this.setEffect("fold");
         },
 

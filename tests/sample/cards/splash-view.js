@@ -51,7 +51,7 @@ define(["mobileui/ui/touch-item-view",
             this._layoutView.append(this._travelGuideView.render());
 
             this._labelView = new ContentView();
-            this._labelView.$el.append(this.$labelEl.addClass("js-splash-item-view-label"));
+            this._labelView.$el.append(this.addModelLabel().addClass("js-splash-item-view-label"));
             this._labelView.ensureParams().matchParentWidth().fillParentHeight();
             this._layoutView.append(this._labelView.render());
 

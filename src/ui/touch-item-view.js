@@ -39,18 +39,20 @@ define(["mobileui/views/gesture-detector",
         initialize: function(listView) {
             ItemView.__super__.initialize.call(this);
             this._listView = null;
-            this.once("tap", this._onTap, this)
+            this.on("tap", this._onTap, this)
                 .on("touchdragstart", this._onDragStart, this)
                 .on("touchdragmove", this._onDragMove, this)
                 .on("touchdragend", this._onDragEnd, this);
-            this.listenTo(this.model, "change:label", this._onLabelChanged);
             this._filterView = new LayerView();
             this.append(this._filterView
                     .matchParentSize()
-                    .render()
                     .addClass("js-touch-item-view")
-                    .addClass(this.model.get("className")));
-            this.$labelEl = $("<div />").addClass("js-touch-item-view-label").appendTo(this._filterView.$el);
+                    .render());
+            if (this.model) {
+                var modelClassName = this.model.get("className");
+                if (modelClassName)
+                    this._filterView.addClass(modelClassName);
+            }
             this._dragStartValue = 0;
             this._momentum = new Momentum().setDuration(commitDuration).setFriction(0.000005);
             this.setEffect("drag");
@@ -86,8 +88,17 @@ define(["mobileui/views/gesture-detector",
             return this;
         },
 
+        addModelLabel: function() {
+            if (!this.$labelEl) {
+                this.listenTo(this.model, "change:label", this._onLabelChanged);
+                this.$labelEl = $("<div />").addClass("js-touch-item-view-label").appendTo(this._filterView.$el);
+            }
+            return this.$labelEl;
+        },
+
         _onLabelChanged: function() {
-            this.$labelEl.text(this.model.get("label"));
+            if (this.$labelEl && this.model)
+                this.$labelEl.text(this.model.get("label"));
         },
 
         animateViewDeactived: function(promiseList, scrollView, selectedView, index) {
@@ -130,8 +141,6 @@ define(["mobileui/views/gesture-detector",
 
         _onDragStart: function(touch) {
             lock.startTransition(this);
-            this.navigatorView().revertNextCard();
-            this._onTapStart();
             var nextCard = this.navigatorView().nextCard();
             this._dragStartValue = this._effect.onDragStart(this, this._filterView, nextCard, this._verticalLayout, touch);
             this._momentum.reset(this._dragStartValue);
@@ -159,13 +168,10 @@ define(["mobileui/views/gesture-detector",
 
             var chain = this._effect.commit(commitDuration, this, this._filterView, nextCard, this._verticalLayout);
             promiseList.push(chain.promise());
-            
             $.when.apply(null, promiseList).then(function() {
                 activeCard.setDisabled(false);
                 nextCard.filter().clear();
                 self.navigatorView().commitNextCard();
-                // We are safely hidden, revert the tap listener to the previous state.
-                self.once("tap", self._onTap, self);
                 self._effect.cleanup(self, self._filterView, nextCard);
                 lock.endTransition(self);
             });
@@ -191,11 +197,13 @@ define(["mobileui/views/gesture-detector",
         _onTap: function(touch) {
             if (!lock.canStartTransition())
                 return;
-            lock.startTransition(this);
             this.navigatorView().revertNextCard();
-            this.trigger("animation:start");
             this._onTapStart();
             var nextCard = this.navigatorView().nextCard();
+            if (!nextCard)
+                return;
+            lock.startTransition(this);
+            this.trigger("animation:start");
             this._effect.onDragStart(this, this._filterView, nextCard, this._verticalLayout, touch);
             this._commit();
         },
@@ -203,20 +211,25 @@ define(["mobileui/views/gesture-detector",
         respondsToTouchGesture: function(gesture) {
             if (!lock.canStartTransition() || gesture.type != GestureDetector.GestureType.DRAG)
                 return false;
-            return (this._verticalLayout && gesture.scrollX && gesture.distanceX > 0) ||
-                (!this._verticalLayout && gesture.scrollY);
+            if (!(this._verticalLayout && gesture.scrollX && gesture.distanceX > 0) ||
+                (!this._verticalLayout && gesture.scrollY))
+                return false;
+            this._onTapStart();
+            return !!this.navigatorView().nextCard();
         },
 
         setVerticalLayout: function() {
             this._filterView.$el.toggleClass("js-vertical-item-view", true);
             this._verticalLayout = true;
             this.setParams(new LayoutParams().fillParentHeight().matchParentWidth());
+            return this;
         },
 
         setHorizontalLayout: function() {
             this._filterView.$el.toggleClass("js-vertical-item-view", false);
             this._verticalLayout = false;
             this.setParams(new LayoutParams().fillParentWidth().matchParentHeight());
+            return this;
         }
     });
 

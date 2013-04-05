@@ -85,9 +85,11 @@ define(["require"], function(require) {
             return wait;
         },
 
-        convert: function(view) {
-            var state = new InjectorState(view);
-            return this.convertViews(state, view.$el.children()) || $.Deferred().resolve().promise();
+        convert: function(globalStateView, startingView) {
+            if (!startingView)
+                startingView = globalStateView;
+            var state = new InjectorState(globalStateView, startingView);
+            return this.convertViews(state, startingView.$el.children()) || $.Deferred().resolve().promise();
         }
     });
 

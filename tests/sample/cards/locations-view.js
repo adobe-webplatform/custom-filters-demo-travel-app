@@ -31,7 +31,7 @@ define(["mobileui/ui/touch-item-view",
         initialize: function(options) {
             _.extend(this, options);
             ItemView.__super__.initialize.call(this);
-            this.$labelEl.addClass("js-location-item-view-label");
+            this.addModelLabel().addClass("js-location-item-view-label");
             this.setEffect("fold");
         },
 

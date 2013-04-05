@@ -80,12 +80,18 @@ function(LayerView, LayoutParams) {
             // override this method.
         },
 
-        navigatorView: function() {
-            return this._navigatorView;
-        },
-
         topBarView: function() {
             return this._navigatorView ? this._navigatorView.topBarView() : null;
+        },
+
+        // Overwrite this to provide better history support, when the previous
+        // slides are not in the history if the navigator.
+        previousCard: function() {
+            return null;
+        },
+
+        hasPreviousCard: function() {
+            return false;
         }
 
     });

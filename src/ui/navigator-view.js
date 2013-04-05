@@ -37,12 +37,18 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             this._activeCard = null;
             this._nextCard = null;
             this._precommitCard = null;
-            this._wasLastHistoryCard = false;
+            this._usesHistory = true;
+            this._removeCardAfterCommit = false;
         },
 
         render: function() {
             this.$el.addClass("js-navigator-view");
             return NavigatorView.__super__.render.call(this);
+        },
+
+        setUsesHistory: function(value) {
+            this._usesHistory = value;
+            return this;
         },
 
         topBarView: function() {
@@ -62,11 +68,19 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
         },
 
         canGoBack: function() {
-            return this._historyCards.length > 0;
+            return this._historyCards.length > 0 ||
+                (this._activeCard && this._activeCard.hasPreviousCard());
+        },
+
+        previousCard: function() {
+            var card = _.last(this._historyCards);
+            if (!card && this._activeCard)
+                card = this._activeCard.previousCard();
+            return card;
         },
 
         prepareHistoryCard: function() {
-            var card = _.last(this._historyCards);
+            var card = this.previousCard();
             return this.prepareNextCard(card);
         },
 
@@ -74,7 +88,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             // Animation started, add a new card in the back.
             if (this._nextCard)
                 this.revertNextCard();
-            this._wasLastHistoryCard = false;
+            this._removeCardAfterCommit = false;
             this._nextCard = card;
             if (this._activeCard && !this._activeCard.displaysOnTop())
                 this.contentView().before(this._nextCard, this._activeCard);
@@ -104,7 +118,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             else
                 this._nextCard.remove();
             this._nextCard = null;
-            this._wasLastHistoryCard = false;
+            this._removeCardAfterCommit = false;
             return this;
         },
 
@@ -112,11 +126,13 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             if (!this._nextCard)
                 return this;
             // Figure out if we are going forward or backwards.
-            this._wasLastHistoryCard = this._isLastHistoryCard(this._nextCard);
-            if (this._wasLastHistoryCard)
-                this._historyCards.pop();
-            else
-                this._historyCards.push(this._activeCard);
+            this._removeCardAfterCommit = !this._usesHistory || this._isLastHistoryCard(this._nextCard);
+            if (this._usesHistory) {
+                if (this._removeCardAfterCommit)
+                    this._historyCards.pop();
+                else
+                    this._historyCards.push(this._activeCard);
+            }
             this._precommitCard = this._activeCard;
             this._activeCard = this._nextCard;
             this._nextCard = null;
@@ -130,7 +146,7 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             if (this._precommitCard) {
                 this._precommitCard.trigger("deactivate");
                 this._precommitCard._setNavigatorView(null);
-                if (this._wasLastHistoryCard)
+                if (this._removeCardAfterCommit)
                     this._precommitCard.remove();
                 else
                     this._precommitCard.detach();
@@ -183,7 +199,8 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");
                 this.trigger("deactivate", this._activeCard);
-                this._historyCards.push(this._activeCard);
+                if (this._usesHistory)
+                    this._historyCards.push(this._activeCard);
                 this._activeCard = null;
             }
             var options = _.extend({
@@ -214,18 +231,19 @@ function(LayerView, LayoutParams, NavigatorTopBarView, NavigatorContentView) {
             this.revertNextCard();
             var previousActiveCard = this._activeCard,
                 self = this;
+            var nextCard = this.previousCard();
             if (this._activeCard) {
                 this._activeCard.trigger("deactivate");
                 this.trigger("deactivate", this._activeCard);
                 this._activeCard = null;
             }
-            if (this._historyCards.length) {
+            if (nextCard) {
                 var options = {
                     goingBack: true,
                     promise: null,
                     previousCard: previousActiveCard
                 };
-                this._activeCard = this._historyCards.pop();
+                this._activeCard = nextCard;
                 if (previousActiveCard)
                     this._contentView.before(this._activeCard, previousActiveCard);
                 else

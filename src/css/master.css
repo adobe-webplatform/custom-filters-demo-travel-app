@@ -883,8 +883,9 @@ html.is-first-route #header .tab:after {
   border-bottom-width: 40px;
   border-bottom-color: rgba(0, 0, 0, 0.3);
   border-bottom-style: solid;
+  pointer-events: none;
 }
-/* line 67, ../scss/sections/_mood.scss */
+/* line 68, ../scss/sections/_mood.scss */
 .mood-item .num {
   position: absolute;
   font-size: 24px;
@@ -900,7 +901,7 @@ html.is-first-route #header .tab:after {
   border-radius: 25px;
 }
 @media all and (max-width: 1050px) {
-  /* line 67, ../scss/sections/_mood.scss */
+  /* line 68, ../scss/sections/_mood.scss */
   .mood-item .num {
     right: 60px;
     width: 40px;

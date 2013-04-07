@@ -60,9 +60,9 @@ define([
         }
 
         function _setRender(){
-            if(indexOf(needRenderItems, this) > -1) return;
-            var params = this.fold.params;
             var shaderStyle = this.shaderShadowStyle;
+            if(indexOf(needRenderItems, this) > -1 && shaderStyle.display == 'block') return;
+            var params = this.fold.params;
             shaderStyle.display = 'block';
             shaderStyle.top = shaderStyle.bottom =  '-' + params.margin_height + 'px';
             this.elemStyle.zIndex = 500;
@@ -111,12 +111,12 @@ define([
             var params = this.foldParams;
             if(this.renderToggle ^= 1) {
                 this.elemStyle[_filterStyle] = this.fold.getStyle();
+                if(params.distance === 0) {
+                    this.resetShader();
+                    this.onUnPeekCallback();
+                }
             } else {
                 this.elemStyle[_transform3DStyle] = 'translate3d(' + (params.distance / 2).toFixed(6) + 'px, 0, 0)';
-            }
-            if(params.distance === 0) {
-                this.resetShader();
-                this.onUnPeekCallback();
             }
         }
 

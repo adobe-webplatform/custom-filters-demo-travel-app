@@ -146,8 +146,8 @@ define([
             this.previousBg.css('backgroundImage', 'none');
             this.wrapper.removeClass('display show hide');
             this.bottom.removeClass('display show hide');
+            this.arrows.removeClass('show');
             this._hideSpinner();
-            this._updateArrows(false, false);
             this.useAnimation = false;
             this._isShow = false;
         }

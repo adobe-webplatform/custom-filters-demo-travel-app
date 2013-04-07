@@ -5,13 +5,16 @@
         <div class="result">{{result}}<span class="num"></span></div>
     </div>
     <div class="scroll-wrapper">
-        <div class="move-container">
+        <div class="scroll-move-container">
+            <div class="top move-container"></div>
             {{#items}}
             <div class="location-list-item" data-mood="{{mood}}" data-district="{{district}}"  data-id="{{id}}">
                 <div class="text">{{name}}</div>
                 <div class="arrow"></div>
+                <div class="shader-shadow"></div>
             </div>
             {{/items}}
+            <div class="bottom move-container"></div>
         </div>
         <div class="indicator"></div>
     </div>

@@ -8,8 +8,9 @@ define([
         'locationController',
         'widgets/FoldListItem',
         'mout/function/bind',
-        'stageReference'
-    ], function(config, $, AbstractSection, template, inputController, sectionController, locationController, FoldListItem, bind, stageReference){
+        'stageReference',
+        'EKTweener'
+    ], function(config, $, AbstractSection, template, inputController, sectionController, locationController, FoldListItem, bind, stageReference, EKTweener){
 
         function MoodSection(){
             _super.constructor.call(this, 'mood', template);
@@ -25,7 +26,6 @@ define([
         _p.constructor = MoodSection;
 
         var _transform3DStyle = config.transform3DStyle;
-        var _filterStyle = config.filterStyle;
 
         var SHADER_PADDING = 40;
 
@@ -46,7 +46,7 @@ define([
 
             this.items = this.container.find('.mood-item');
             this.items.each(function(){
-                this.foldListItem = new FoldListItem(this, _onItemPeek, _onItemOpen, SHADER_PADDING);
+                this.foldListItem = new FoldListItem(this, _onItemPeek, _onItemUnPeek, _onItemOpen, SHADER_PADDING);
                 inputController.add(this, 'click', bind(_onItemOpen, this.foldListItem));
                 $(this).find('.num').html(locationController.getMatched('mood', $(this).data('id')).length);
             });
@@ -57,6 +57,12 @@ define([
 
         function _onItemPeek(){
             sectionController.appearTarget(this.$elem.data('link'));
+        }
+
+        function _onItemUnPeek(){
+            if(!sectionController.isAnimating() && FoldListItem.needRenderItems.length === 0) {
+                sectionController.sections['location-list'].disappear();
+            }
         }
 
         function _onItemOpen(){
@@ -81,16 +87,21 @@ define([
             this.topContainer.after(this.items);
         }
 
+        function appear(){
+            this.container.show();
+            this.items.each(function(i){
+                this.foldListItem.resetShader();
+            });
+        }
+
         function show(currentNodes, previousSection, previousNodes){
             var self = this;
             this.container.show();
             stageReference.onResize.add(_onResize, this);
             this._onResize();
             if(previousNodes.length < 2) {
+                this.appear();
                 self._setShown();
-                this.items.each(function(i){
-                    this.foldListItem.resetShader();
-                });
             } else {
                 var foundTarget;
                 var nextNode = previousNodes[2];
@@ -131,7 +142,9 @@ define([
                 EKTweener.to(this.bottomContainer, .5, {delay: .3, transform3d: 'translate3d(0,' + moveDistance +  'px,0)', ease: 'easeInSine'});
                 setTimeout(function(){
                     self._removeFromMoveContainers();
-                    //TODO add reset here
+                    self.items.each(function(i){
+                        this.foldListItem.resetShader();
+                    });
                     self._setHidden();
                 }, 800);
             }
@@ -147,6 +160,7 @@ define([
 
         _p._initVariables = _initVariables;
         _p._initEvents = _initEvents;
+        _p.appear = appear;
         _p.show = show;
         _p.hide = hide;
         _p.getNodeName = getNodeName;

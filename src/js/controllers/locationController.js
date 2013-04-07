@@ -46,6 +46,8 @@ define(
             var keyCache = _blurryMatchedKeyCaches[key] || (_blurryMatchedKeyCaches[key] = {});
             if(keyCache[value]) return keyCache[value];
 
+
+            // TODO - use a better algorithm for better results
             var i, j, valueLen, listLen, location, str;
             var arr = keyCache[value] = [];
             var values = unique(value.split('-'));

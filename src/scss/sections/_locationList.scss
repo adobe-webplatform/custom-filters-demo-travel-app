@@ -11,10 +11,19 @@
         width: 100%;
     }
 
-    .move-container {
+    .scroll-move-container {
         position: absolute;
         width: 100%;
     }
+
+    .move-container {
+        position: relative;
+        float: left;
+        width: 100%;
+
+        @include cache;
+    }
+
 
     .indicator {
         position: absolute;
@@ -132,6 +141,23 @@
         margin-top: -12px;
 
         @include ui-asset(20, 0);
+    }
+
+    .shader-shadow {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+
+        // border
+        border-top-width: 40px;
+        border-top-color: transparent;
+        border-top-style: solid;
+        border-bottom-width: 40px;
+        border-bottom-color: rgba(0,0,0,.3);
+        border-bottom-style: solid;
+
+        pointer-events: none;
     }
 
     &.show {

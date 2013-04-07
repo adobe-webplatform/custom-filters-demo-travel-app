@@ -3,14 +3,14 @@
 
     z-index: 40;
     @include cache;
-}
 
-.move-container {
-    position: relative;
-    float: left;
-    width: 100%;
+    .move-container {
+        position: relative;
+        float: left;
+        width: 100%;
 
-    @include cache;
+        @include cache;
+    }
 }
 
 .mood-item {
@@ -53,7 +53,6 @@
     .shader-shadow {
         display: none;
         position: absolute;
-        content : '';
         left: 0;
         right: 0;
 

@@ -12,9 +12,10 @@ define([
 
         var undef;
 
-        function FoldListItem(elem, onPeekCallback, onOpenCallback, shaderPadding){
+        function FoldListItem(elem, onPeekCallback, onUnPeekCallback, onOpenCallback, shaderPadding){
             this.elem = elem;
             this.onPeekCallback = onPeekCallback;
+            this.onUnPeekCallback = onUnPeekCallback;
             this.onOpenCallback = onOpenCallback;
             this.shaderPadding = shaderPadding;
 
@@ -23,8 +24,9 @@ define([
 
         var _p = FoldListItem.prototype;
 
+        var needRenderItems = FoldListItem.needRenderItems = [];
+
         var _isDownItems = [];
-        var _needRenderItems = [];
         var _isInitialized = false;
 
         var _transform3DStyle = config.transform3DStyle;
@@ -55,11 +57,10 @@ define([
             _isDownItems.push(this);
             this.updateSize();
             this.foldParams.down_x = e.x - this.foldParams.distance;
-            this.onPeekCallback();
         }
 
         function _setRender(){
-            if(indexOf(_needRenderItems, this) > -1) return;
+            if(indexOf(needRenderItems, this) > -1) return;
             var params = this.fold.params;
             var shaderStyle = this.shaderShadowStyle;
             shaderStyle.display = 'block';
@@ -67,17 +68,18 @@ define([
             this.elemStyle.zIndex = 500;
             this.render();
             this.render();
-            _needRenderItems.push(this);
+            needRenderItems.push(this);
         }
 
         function resetShader(){
-            var index = indexOf(_needRenderItems, this);
-            if(index > -1) _needRenderItems.splice(index, 1);
+            var index = indexOf(needRenderItems, this);
+            if(index > -1) needRenderItems.splice(index, 1);
             this.shaderShadowStyle.display = 'none';
             this.foldParams.distance = 0;
             this.elemStyle[_transform3DStyle] = 'translateZ(0)';
             this.elemStyle[_filterStyle] = 'none';
             this.elemStyle.zIndex = 'auto';
+            this.hasPeeked = false;
         }
 
         function setTo(distance, downX){
@@ -112,7 +114,10 @@ define([
             } else {
                 this.elemStyle[_transform3DStyle] = 'translate3d(' + (params.distance / 2).toFixed(6) + 'px, 0, 0)';
             }
-            if(params.distance === 0) this.resetShader();
+            if(params.distance === 0) {
+                this.resetShader();
+                this.onUnPeekCallback();
+            }
         }
 
 /**
@@ -126,6 +131,10 @@ define([
             var target;
             while(i--) {
                 target = _isDownItems[i];
+                if(!target.hasPeeked) {
+                    target.onPeekCallback();
+                    target.hasPeeked = true;
+                }
                 params = target.foldParams;
                 params.distance += e.deltaX;
                 if(params.distance > 0) params.distance = 0;
@@ -146,8 +155,8 @@ define([
 
         function _renderAll(){
             var params, target;
-            var i = _needRenderItems.length;
-            while(i--) _needRenderItems[i].render();
+            var i = needRenderItems.length;
+            while(i--) needRenderItems[i].render();
         }
 
         _p._init = _init;

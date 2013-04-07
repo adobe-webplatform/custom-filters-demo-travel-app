@@ -5,10 +5,6 @@
         "btn_text" : "Explore Content"
     },
 
-    "header" : {
-        "home" : "Los Angeles"
-    },
-
     "routes" : [
         {
             "route" : "^\\/?$",
@@ -36,6 +32,10 @@
         },
         {
             "route" : "^home\\/search\\/[A-Za-z-_!0-9]+\\/?$",
+            "section" : "location-list"
+        },
+        {
+            "route" : "^home\\/search\\/[A-Za-z-_!0-9]+\\/[A-Za-z-_!0-9]+\\/?$",
             "section" : "overview"
         },
         {
@@ -43,6 +43,17 @@
             "section" : "overview"
         }
     ],
+
+    "header" : {
+        "home" : "Los Angeles"
+    },
+
+    "schedule_prompt" : {
+        "title" : "Schedule it",
+        "default_note" : "Type your note here",
+        "save" : "Save to Calendar",
+        "cancel" : "Cancel"
+    },
 
     "sections" : {
         "splash" : {
@@ -155,12 +166,6 @@
             ]
         },
         "overview" : {
-            "schedule_prompt" : {
-                "title" : "Schedule it",
-                "default_note" : "Type your note here",
-                "save" : "Save to Calendar",
-                "cancel" : "Cancel"
-            }
         }
     },
 

@@ -8,8 +8,9 @@ define([
         'sectionController',
         'locationController',
         'mout/function/bind',
+        'mout/string/properCase',
         'stageReference'
-    ], function(config, $, AbstractSection, template, SimpleScrollPane, inputController, sectionController, locationController, bind, stageReference){
+    ], function(config, $, AbstractSection, template, SimpleScrollPane, inputController, sectionController, locationController, bind, properCase, stageReference){
 
         var undef;
 
@@ -19,7 +20,8 @@ define([
             // map the location data to the section data for the template
             this.data.items = config.data.locations;
             this.init();
-            
+            this.urlPrefix = '';
+
             this._initVariables();
             this._initEvents();
 
@@ -36,6 +38,8 @@ define([
             this.scrollPane = this.container.find('.scroll-pane');
             this.items = this.container.find('.location-list-item');
             this.searchContainer = $('#location-search');
+            this.searchInput = this.searchContainer.find('.search');
+            this.searchNum = this.searchContainer.find('.num');
             this.scrollPane = new SimpleScrollPane(
                 this.container.find('.scroll-wrapper'),
                 this.container.find('.move-container'),
@@ -59,12 +63,16 @@ define([
         }
 
         function _initEvents(){
+            var self = this;
             stageReference.onResize.add(_onResize, this);
             inputController.add(this.items, 'click', bind(_onItemClick, this));
+            this.searchInput.on('keyup change', function(){
+                self.appear(sectionController.currentNodes, true);
+            });
         }
 
         function _onItemClick(e){
-            sectionController.goTo(e.currentTarget.__url);
+            sectionController.goTo(this.urlPrefix + e.currentTarget.__id);
         }
 
         function _getColorList(method, filter){
@@ -77,13 +85,11 @@ define([
            return colors[i].list;
         }
 
-        function _getItemsByData(key, value) {
+        function _getItemsFromFilteredList(filteredList) {
             var filteredItems = $();
-            this.items.each(function(){
-                if($(this).data(key) === value) {
-                    filteredItems = filteredItems.add(this);
-                }
-            });
+            for(var i = 0, len = filteredList.length; i < len; i++) {
+                filteredItems = filteredItems.add(this.items[filteredList[i].index]);
+            }
             return filteredItems;
         }
 
@@ -91,23 +97,31 @@ define([
             this.scrollPane.onResize();
         }
 
-        function appear(nodes, opts){
+        function appear(nodes, isOnSearchUpdate){
             this.container.show();
             this.items.removeClass('show');
-            var filteredItems;
+            var searchText, filteredList, filteredItems;
             var colorList = this._getColorList(nodes[1], nodes[2]);
             var colorListLength = colorList.length;
             if(nodes[1] === 'search') {
-                this.container.addClass('search');
-                filteredItems = this.items;
+                if(isOnSearchUpdate) {
+                    searchText = locationController.slugifyText(this.searchInput.val());
+                } else {
+                    this.container.addClass('search');
+                    searchText = locationController.slugifyText(nodes[2]);
+                    this.searchInput.val(properCase(searchText.replace('-', ' ')));
+                }
+                filteredList = locationController.getBlurryMatched('keywords', searchText);
+                this.urlPrefix = nodes[0] + '/search/' + (searchText.length > 0 ? searchText : '_') + '/';
+                this.searchNum.html(filteredList.length);
             } else {
                 this.container.removeClass('search');
-                filteredItems = this._getItemsByData(nodes[1], nodes[2]);
+                this.urlPrefix = nodes.join('/')+'/';
+                filteredList = locationController.getMatched(nodes[1], nodes[2]);
             }
-            var urlPrefix = sectionController.currentNodes.join('/')+'/';
+            filteredItems = this._getItemsFromFilteredList(filteredList);
             filteredItems.each(function(i){
                 this.style.backgroundColor = colorList[i%colorListLength];
-                this.__url = urlPrefix + this.__id;
             });
             filteredItems.addClass('show');
             this.scrollPane.onResize();
@@ -124,7 +138,13 @@ define([
         }
 
         function getNodeName(nodeId){
-            return locationController.locations[nodeId].name;
+            var location = locationController.locations[nodeId];
+            if(location) {
+                return location.name;
+            } else {
+                var searchText = locationController.slugifyText(nodeId);
+                return searchText.length > 0 ? 'Search: ' + properCase(searchText) : 'All';
+            }
         }
 
 
@@ -132,7 +152,7 @@ define([
         _p._initEvents = _initEvents;
 
         _p._getColorList = _getColorList;
-        _p._getItemsByData = _getItemsByData;
+        _p._getItemsFromFilteredList = _getItemsFromFilteredList;
         _p._onResize = _onResize;
         _p.appear = appear;
         _p.show = show;

@@ -26,7 +26,9 @@ define([
         }
 
         function disappear(){
-            this.container.hide();
+            if(sectionController.currentSection !== this) {
+                this.container.hide();
+            }
         }
 
         // override this

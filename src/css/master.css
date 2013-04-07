@@ -406,7 +406,7 @@ i {
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 100;
+  z-index: 500;
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);
   -ms-transform: translateZ(0);
@@ -600,6 +600,157 @@ html.is-first-route #header .tab:after {
 /* line 115, ../scss/ui/_header.scss */
 #header .setting a, #header .setting a:hover, #header .setting a:visited, #header .setting a:active {
   color: #fff;
+}
+
+/* line 1, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 55px;
+  bottom: 0;
+  width: 100%;
+  font-family: "league-gothic-condensed", "Arial Narrow", sans-serif;
+  text-transform: uppercase;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 250;
+}
+/* line 15, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 300px;
+  height: 300px;
+  margin-left: -150px;
+  margin-top: -150px;
+}
+/* line 26, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .triangle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 150px solid transparent;
+  border-right: 150px solid transparent;
+}
+/* line 34, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .top {
+  width: 100%;
+  height: 41px;
+  background-color: #d14443;
+  text-align: center;
+}
+/* line 40, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .top .triangle {
+  top: -50.5px;
+  border-bottom: 51px solid #d14443;
+}
+/* line 45, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .top .title {
+  font-size: 36px;
+  line-height: 36px;
+  color: #e7e5e1;
+  letter-spacing: 1px;
+}
+/* line 51, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .top .title:before, #schedule-prompt .top .title:after {
+  content: '';
+  display: inline-block;
+  width: 51px;
+  height: 2px;
+  margin: 13px 9px;
+  background-color: #da8482;
+}
+/* line 62, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .content {
+  width: 100%;
+  height: 190px;
+  background-color: #fff;
+  border-bottom: 1px solid #d9d9d9;
+}
+/* line 70, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .content input {
+  width: 240px;
+  height: 40px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  padding: 0 0;
+  padding-left: 40px;
+  margin: 0 0;
+  margin-left: 30px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  font-family: "league-gothic-condensed", "Arial Narrow", sans-serif;
+  font-size: 24px;
+  line-height: 42px;
+  text-transform: uppercase;
+  color: #d14443;
+  outline: none;
+  background-color: #eaeae9;
+  background-image: url(../assets/images/ui.png);
+  background-position: -192px 5px;
+  background-repeat: no-repeat;
+}
+@media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+  /* line 70, ../scss/ui/_schedulePrompt.scss */
+  #schedule-prompt .content input {
+    background-image: url(../assets/images/ui_x2.png);
+    background-size: 225px 200px;
+  }
+}
+/* line 95, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .content input.location {
+  margin-top: 25px;
+}
+/* line 98, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .content input.date {
+  background-position: -192px -32px;
+}
+/* line 101, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .content input.note {
+  background-position: -192px -67px;
+}
+/* line 107, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .bottom {
+  position: relative;
+  width: 100%;
+  height: 139px;
+  background-color: #eee;
+}
+/* line 113, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .bottom input {
+  width: 240px;
+  height: 40px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  padding: 0 0;
+  margin: 0 0;
+  margin-left: 30px;
+  font-family: "league-gothic-condensed", "Arial Narrow", sans-serif;
+  font-size: 24px;
+  line-height: 42px;
+  text-transform: uppercase;
+  color: #fff;
+  outline: none;
+}
+/* line 133, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .bottom input.save {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  background-color: #d14443;
+}
+/* line 139, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .bottom input.cancel {
+  background-color: #839194;
+}
+/* line 144, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .bottom .triangle {
+  bottom: -50.5px;
+  border-top: 51px solid #eeeeee;
 }
 
 /* line 1, ../scss/sections/_base.scss */
@@ -1304,157 +1455,6 @@ html.is-first-route #header .tab:after {
 /* line 235, ../scss/sections/_overview.scss */
 .overview-bottom.hide {
   opacity: 0;
-}
-
-/* line 241, ../scss/sections/_overview.scss */
-.schedule-prompt {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  font-family: "league-gothic-condensed", "Arial Narrow", sans-serif;
-  text-transform: uppercase;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 50px;
-}
-/* line 255, ../scss/sections/_overview.scss */
-.schedule-prompt .schedule-prompt-wrapper {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 300px;
-  height: 300px;
-  margin-left: -150px;
-  margin-top: -150px;
-}
-/* line 266, ../scss/sections/_overview.scss */
-.schedule-prompt .triangle {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-left: 150px solid transparent;
-  border-right: 150px solid transparent;
-}
-/* line 274, ../scss/sections/_overview.scss */
-.schedule-prompt .top {
-  width: 100%;
-  height: 41px;
-  background-color: #d14443;
-  text-align: center;
-}
-/* line 280, ../scss/sections/_overview.scss */
-.schedule-prompt .top .triangle {
-  top: -50.5px;
-  border-bottom: 51px solid #d14443;
-}
-/* line 285, ../scss/sections/_overview.scss */
-.schedule-prompt .top .title {
-  font-size: 36px;
-  line-height: 36px;
-  color: #e7e5e1;
-  letter-spacing: 1px;
-}
-/* line 291, ../scss/sections/_overview.scss */
-.schedule-prompt .top .title:before, .schedule-prompt .top .title:after {
-  content: '';
-  display: inline-block;
-  width: 51px;
-  height: 2px;
-  margin: 13px 9px;
-  background-color: #da8482;
-}
-/* line 302, ../scss/sections/_overview.scss */
-.schedule-prompt .content {
-  width: 100%;
-  height: 190px;
-  background-color: #fff;
-  border-bottom: 1px solid #d9d9d9;
-}
-/* line 310, ../scss/sections/_overview.scss */
-.schedule-prompt .content input {
-  width: 240px;
-  height: 40px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border: none;
-  padding: 0 0;
-  padding-left: 40px;
-  margin: 0 0;
-  margin-left: 30px;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-  font-family: "league-gothic-condensed", "Arial Narrow", sans-serif;
-  font-size: 24px;
-  line-height: 42px;
-  text-transform: uppercase;
-  color: #d14443;
-  outline: none;
-  background-color: #eaeae9;
-  background-image: url(../assets/images/ui.png);
-  background-position: -192px 5px;
-  background-repeat: no-repeat;
-}
-@media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 310, ../scss/sections/_overview.scss */
-  .schedule-prompt .content input {
-    background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
-  }
-}
-/* line 335, ../scss/sections/_overview.scss */
-.schedule-prompt .content input.location {
-  margin-top: 25px;
-}
-/* line 338, ../scss/sections/_overview.scss */
-.schedule-prompt .content input.date {
-  background-position: -192px -32px;
-}
-/* line 341, ../scss/sections/_overview.scss */
-.schedule-prompt .content input.note {
-  background-position: -192px -67px;
-}
-/* line 347, ../scss/sections/_overview.scss */
-.schedule-prompt .bottom {
-  position: relative;
-  width: 100%;
-  height: 139px;
-  background-color: #eee;
-}
-/* line 353, ../scss/sections/_overview.scss */
-.schedule-prompt .bottom input {
-  width: 240px;
-  height: 40px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border: none;
-  padding: 0 0;
-  margin: 0 0;
-  margin-left: 30px;
-  font-family: "league-gothic-condensed", "Arial Narrow", sans-serif;
-  font-size: 24px;
-  line-height: 42px;
-  text-transform: uppercase;
-  color: #fff;
-  outline: none;
-}
-/* line 373, ../scss/sections/_overview.scss */
-.schedule-prompt .bottom input.save {
-  margin-top: 25px;
-  margin-bottom: 10px;
-  background-color: #d14443;
-}
-/* line 379, ../scss/sections/_overview.scss */
-.schedule-prompt .bottom input.cancel {
-  background-color: #839194;
-}
-/* line 384, ../scss/sections/_overview.scss */
-.schedule-prompt .bottom .triangle {
-  bottom: -50.5px;
-  border-top: 51px solid #eeeeee;
 }
 
 /* line 1, ../scss/sections/_splash.scss */

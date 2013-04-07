@@ -21,6 +21,8 @@ define(
             locationList = locationController.locationList = config.data.locations;
             for(var i = 0, len = locationList.length; i < len; i++) {
                 location = locationList[i];
+                location.index = i;
+                location.keywords = location.name.toLowerCase();
                 locations[location.id] = location;
             }
         }
@@ -38,17 +40,20 @@ define(
         }
 
         function getBlurryMatched(key, value) {
-            value = trim(value);
+            value = slugifyText(value);
+            if(value.length === 0) return locationList;
+
             var keyCache = _blurryMatchedKeyCaches[key] || (_blurryMatchedKeyCaches[key] = {});
             if(keyCache[value]) return keyCache[value];
+
             var i, j, valueLen, listLen, location, str;
             var arr = keyCache[value] = [];
-            var values = unique(slugify(value).replace('--','-').split('-'));
+            var values = unique(value.split('-'));
             for(i = 0, listLen = locationList.length; i < listLen; i++) {
                 location = locationList[i];
                 str = location[key];
                 for(j = 0, valueLen = values.length; j < valueLen; j ++ ) {
-                    if(str.indexOf(values[i]) > -1){
+                    if(str.indexOf(values[j]) > -1){
                         arr.push(location);
                         break;
                     }
@@ -57,9 +62,14 @@ define(
             return arr;
         }
 
+        function slugifyText(value) {
+            return slugify(value).replace('--','-');
+        }
+
         locationController.init = init;
         locationController.getMatched = getMatched;
         locationController.getBlurryMatched = getBlurryMatched;
+        locationController.slugifyText = slugifyText;
 
         return locationController;
 

@@ -2,12 +2,13 @@ define([
         'config',
         'jquery',
         'inputController',
+        'sectionController',
         'stageReference',
         'effects/Fold',
         'mout/function/bind',
         'mout/array/indexOf',
         'EKTweener'
-    ], function(config, $, inputController, stageReference, Fold, bind, indexOf, EKTweener){
+    ], function(config, $, inputController, sectionController, stageReference, Fold, bind, indexOf, EKTweener){
 
         var undef;
 
@@ -47,6 +48,7 @@ define([
         }
 
         function _onItemDown(e){
+            if(sectionController.isAnimating()) return;
             var index = indexOf(_isDownItems, this);
             if(index > -1) return;
 
@@ -132,6 +134,7 @@ define([
         }
 
         function _onItemUp(e){
+            if(sectionController.isAnimating()) return;
             var i = _isDownItems.length;
             if(e.distanceX < -150) {
                 while(i--) _isDownItems[i].onOpenCallback();

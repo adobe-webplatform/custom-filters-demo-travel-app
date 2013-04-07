@@ -71,14 +71,14 @@ void main()
         if(bottomSide) {
             pos.x -=  coord < down_col ? (mod(coord, 2.0)  * padding_height * ratio) * .1 : .0;
             pos.y -=  margin_height + ( coord < down_col ? (mod(coord, 2.0)  * padding_height * ratio) * 2.0 : .0);
-            pos.z = 1.0;
-            v_lighting = .0;
         } else {
             pos.y -= margin_height - padding_height;
-            pos.z = 1.0;
-            v_lighting = .0;
         }
+        v_lighting = .0;
+        pos.z = 1.0;
     }
+
+    pos.z += a_position.z;
 
     gl_Position = u_projectionMatrix * transform * pos;
 

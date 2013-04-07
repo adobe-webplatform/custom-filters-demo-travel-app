@@ -9,6 +9,8 @@ define([
         'EKTweener'
     ], function(config, $, inputController, stageReference, Fold, bind, indexOf, EKTweener){
 
+        var undef;
+
         function FoldListItem(elem, onPeekCallback, onOpenCallback, shaderPadding){
             this.elem = elem;
             this.onPeekCallback = onPeekCallback;
@@ -23,7 +25,6 @@ define([
         var _isDownItems = [];
         var _needRenderItems = [];
         var _isInitialized = false;
-        var _renderToggle = 0;
 
         var _transform3DStyle = config.transform3DStyle;
         var _filterStyle = config.filterStyle;
@@ -36,6 +37,7 @@ define([
             this.foldParams = this.fold.params;
 
             inputController.add(this.elem, 'down', bind(_onItemDown, this));
+
             if(!_isInitialized) {
                 inputController.onMove.add(_onItemMove);
                 inputController.onUp.add(_onItemUp);
@@ -61,15 +63,17 @@ define([
             shaderStyle.display = 'block';
             shaderStyle.top = shaderStyle.bottom =  '-' + params.margin_height + 'px';
             this.elemStyle.zIndex = 500;
-            this.elemStyle[_filterStyle] = this.fold.getStyle();
+            this.render();
+            this.render();
             _needRenderItems.push(this);
         }
 
         function resetShader(){
             var index = indexOf(_needRenderItems, this);
-            _needRenderItems.splice(index, 1);
+            if(index > -1) _needRenderItems.splice(index, 1);
             this.shaderShadowStyle.display = 'none';
             this.foldParams.distance = 0;
+            this.elemStyle[_transform3DStyle] = 'translateZ(0)';
             this.elemStyle[_filterStyle] = 'none';
             this.elemStyle.zIndex = 'auto';
         }
@@ -77,14 +81,14 @@ define([
         function setTo(distance, downX){
             EKTweener.killTweensOf(this.foldParams);
             this.foldParams.distance = distance;
+            if(downX !== undef) this.foldParams.down_x = downX;
             this._setRender();
-            this.render();
         }
 
         function easeTo(distance, downX, duration){
-            EKTweener.to(this.foldParams, duration, {distance: distance});
+            if(this.foldParams.distance == 0) this.foldParams.distance = .1;
+            EKTweener.to(this.foldParams, duration, {distance: distance, down_x: downX, ease: 'easeInOutSine'});
             this._setRender();
-            this.render();
         }
 
         function updateSize() {
@@ -101,7 +105,7 @@ define([
 
         function render(){
             var params = this.foldParams;
-            if(_renderToggle ^= 1) {
+            if(this.renderToggle ^= 1) {
                 this.elemStyle[_filterStyle] = this.fold.getStyle();
             } else {
                 this.elemStyle[_transform3DStyle] = 'translate3d(' + (params.distance / 2).toFixed(6) + 'px, 0, 0)';

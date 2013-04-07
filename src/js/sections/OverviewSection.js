@@ -24,17 +24,19 @@ define([
         _p.constructor = OverviewSection;
 
         function _initVariables(){
-            this.wrapper = this.container.find('.wrapper');
+            this.wrapper = this.container.find('.overview-wrapper');
             this.title = this.wrapper.find('.title');
             this.description = this.wrapper.find('.description');
+            this.bottom = this.container.find('.overview-bottom');
+            this.line = this.bottom.find('.line');
+            this.likeBtn = this.bottom.find('.favorites');
+            this.likeCount = this.likeBtn.find('.count');
+            this.scheduleBtn = this.bottom.find('.schedule');
+
             this.bgContainers = this.container.find('.bg-container');
             this.currentBg = this.bgContainers.filter('.current');
             this.previousBg = this.bgContainers.filter('.previous');
-            this.bottom = this.container.find('.bottom');
-            this.line = this.container.find('.line');
-            this.likeBtn = this.container.find('.favorites');
-            this.likeCount = this.likeBtn.find('.count');
-            this.scheduleBtn = this.container.find('.schedule');
+
             this.spinnerContainer = this.container.find('.spinner-container');
 
             this.arrows = this.container.find('.arrow');

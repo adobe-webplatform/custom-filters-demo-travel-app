@@ -129,8 +129,8 @@
             ]
         },
         "location-list" : {
-            "search-default" : "Enter the keywords to search.",
-            "amount" : " found",
+            "search-default" : "Type here what you are looking for",
+            "result" : " Results",
             "colors" : [
                 {
                     "id" : "home/mood/do",
@@ -150,12 +150,17 @@
                 },
                 {
                     "id" : "default",
-                    "hue" : 20
+                    "hue" : 170
                 }
             ]
         },
         "overview" : {
-
+            "schedule_prompt" : {
+                "title" : "Schedule it",
+                "default_note" : "Type your note here",
+                "save" : "Save to Calendar",
+                "cancel" : "Cancel"
+            }
         }
     },
 
@@ -736,7 +741,7 @@
             "image": "assets/images/locations/0.jpg",
             "like": 94
         }
-    ] 
+    ]
 
 
 }

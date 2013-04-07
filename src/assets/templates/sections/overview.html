@@ -1,7 +1,7 @@
 <div id="overview" class="section">
     <div class="bg-container previous"></div>
     <div class="bg-container current"></div>
-    <div class="wrapper bss-vcenter">
+    <div class="overview-wrapper bss-vcenter">
         <div class="bss-outer">
             <div class="bss-inner">
                 <div class="logo"></div>
@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div class="bottom">
+    <div class="overview-bottom">
         <div class="line"></div>
         <div class="favorites item">
             <div class="icon">
@@ -25,6 +25,31 @@
     </div>
     <div class="arrow left"></div>
     <div class="arrow right"></div>
+
+    {{#schedule_prompt}}
+    <div class="schedule-prompt">
+        <div class="schedule-prompt-wrapper">
+            <form class="schedule-form">
+                <div class="top">
+                    <div class="triangle"></div>
+                    <span class="title">{{title}}</span>
+                </div>
+                <div class="content">
+                    <input type="text" class="location" value="Walt Disney Concert Hall" readonly>
+                    <input type="text" class="date" value="2013-05-17" readonly>
+                    <!--<input type="date" class="date" value="2013-05-17">-->
+                    <input type="text" class="note" placeholder="{{default_note}}">
+                </div>
+                <div class="bottom">
+                    <input type="submit" class="save" value="{{save}}">
+                    <input type="button" class="cancel" value="{{cancel}}">
+                    <div class="triangle"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {{/schedule_prompt}}
+
     <div class="spinner-container">
         <div class="spinner"></div>
     </div>

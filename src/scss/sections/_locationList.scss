@@ -28,17 +28,77 @@
          .scroll-wrapper {
             top: 80px;
          }
-         .location-search {
+         #location-search {
             display: block;
          }
 
     }
 }
 
- .location-search {
+ #location-search {
     display: none;
     position: relative;
-    
+    width: 100%;
+    float: left;
+    height: 80px;
+    background-color: #fff;
+    z-index: 500;
+    @include cache;
+
+    input {
+        width: 100%;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+
+        border: none;
+        padding: 0 0;
+        padding-left: 55px;
+        margin: 0 0;
+        margin-left: 40px;
+        box-sizing: border-box;
+
+        font-family: 'league-gothic', 'Arial Narrow', sans-serif;
+        font-weight: 400;
+        font-size: 48px;
+        line-height: 80px;
+        color: #605b72;
+        outline: none;
+
+        @include ui-asset(184, 138);
+    }
+
+    .result {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 170px;
+        height: 100%;
+        padding-left: 32px;
+
+        font-size: 24px;
+        font-style: italic;
+        line-height: 80px;
+        color: #c7c7c7;
+
+        background-color: #fff;
+        pointer-events: none;
+
+        .num {
+            position: absolute;
+            right: 28px;
+            top: 15px;
+            width: 50px;
+            height: 50px;
+            border-radius: 30px;
+
+            line-height: 50px;
+            text-align: center;
+            color: #fff;
+
+            background-color: #c7c7c7;
+        }
+    }
  }
 
 .location-list-item {

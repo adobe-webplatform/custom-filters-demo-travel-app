@@ -145,27 +145,35 @@
             "colors" : [
                 {
                     "id" : "home/mood/do",
-                    "hue" : 180
+                    "hue_from" : 209,
+                    "hue_to" : 180
                 },
                 {
                     "id" : "home/mood/see",
-                    "hue" : 284
+                    "hue_from" : 357,
+                    "hue_to" : 331
                 },
                 {
                     "id" : "home/mood/buy",
-                    "hue" : 6
+                    "hue_from" : 6,
+                    "hue_to" : 40
                 },
                 {
                     "id" : "home/mood/eat",
-                    "hue" : 53
+                    "hue_from" : 82,
+                    "hue_to" : 62
                 },
                 {
                     "id" : "default",
-                    "hue" : 170
+                    "hue_from" : 285,
+                    "hue_to" : 170
                 }
             ]
         },
         "overview" : {
+            "logo-text" : "Los Angeles",
+            "favorites" : "Favorites",
+            "schedule" : "Schedule it"
         }
     },
 

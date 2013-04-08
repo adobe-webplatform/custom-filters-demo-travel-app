@@ -27,10 +27,12 @@
 
     .indicator {
         position: absolute;
-        width: 4px;
+        width: 8px;
         top: 0;
         right: 0;
-        background-color: #f00;
+        background-color: rgba(0, 0, 0, .4);
+        border-left: 1px solid rgba(255,255,255,.2);
+        border-top: 1px solid rgba(255,255,255,.2);
     }
 
     &.search {

@@ -8,11 +8,12 @@ define([
         'sectionController',
         'locationController',
         'widgets/FoldListItem',
+        'helpers/colorHelper',
         'mout/function/bind',
         'mout/string/properCase',
         'stageReference',
         'EKTweener'
-    ], function(config, $, AbstractSection, template, SimpleScrollPane, inputController, sectionController, locationController, FoldListItem, bind, properCase, stageReference, EKTweener){
+    ], function(config, $, AbstractSection, template, SimpleScrollPane, inputController, sectionController, locationController, FoldListItem, colorHelper, bind, properCase, stageReference, EKTweener){
 
         var undef;
 
@@ -65,14 +66,10 @@ define([
             });
 
             // generate the color list
-            var i, j, len, color, list;
+            var i, j, len, color;
             var colors = this.data.colors;
             for(i = 0, len = colors.length; i < len; i++) {
-                color = colors[i];
-                list = color.list = [];
-                for(j = 0; j < NUM_OF_SHADES * 2; j++) {
-                    list[j] = 'hsl(' + color.hue + ',20%,' + (20 + (j > NUM_OF_SHADES ? 2 * NUM_OF_SHADES - j : j) * 2) + '%)';
-                }
+                colors[i].list = colorHelper.generateShadeList(colors[i].hue_from, colors[i].hue_to, 20, 40, 20, 40, 10);
             }
         }
 

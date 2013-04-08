@@ -4,3 +4,18 @@
     height: 100%;
     overflow: hidden;
 }
+
+.logo-text {
+    display: inline-block;
+    height: 56px;
+    padding: 0 23px;
+
+
+    font-family: 'league-gothic-condensed', 'Arial Narrow', sans-serif;
+    font-weight: 400;
+    font-size: 36px;
+    letter-spacing: 2px;
+    line-height: 58px;
+    text-transform: uppercase;
+    border: 2px solid #fff;
+}

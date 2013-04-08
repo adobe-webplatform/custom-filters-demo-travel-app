@@ -13,6 +13,8 @@ uniform float downX;
 uniform float downY;
 uniform float toX;
 uniform float toY;
+uniform float oX;
+uniform float oY;
 
 varying float v_lighting;
 
@@ -24,18 +26,17 @@ void main() {
     float y = pos.y + .5;
 
     float diffX = toX - x;
+    float downOffsetY = toY - downY;
     float distanceDownTo = distance(toX - downX, toY - downY);
+    float rangeRatio = (cos( clamp( diffX * (10.0 + 8.0 *  downOffsetY), -PI, PI ) ) + 1.0 ) / 2.0;
+    float yRatio = sin(max(a_position.y - downY + .5, .0));
 
+    pos.y = pos.y + max(0.0, y - downY) * rangeRatio * .5 + min(0.0, toY - y) * rangeRatio;
+    pos.y = pos.y + (oY - toY) * rangeRatio * yRatio;
+    pos.x = pos.x + (oX - toX) * abs(cos(diffX)) * yRatio;
+    pos.y += sin(pos.y - a_position.y) * rangeRatio * sin(a_position.x * u_meshSize.x * PI / 2.0) * .05;
 
-    float offsetY = (cos( clamp( diffX * 10.0, -PI, PI ) ) + 1.0 ) / 2.0;
-
-    pos.y = pos.y + max(0.0, y - downY) * offsetY * .5 + min(0.0, toY - y) * offsetY;
-
-
-
-
-
-    v_lighting = .5;
+    v_lighting = .5 - sin(pos.y - a_position.y) * 1.0 - sin(pos.y - a_position.y) * diffX  * 20.0;
 
     gl_Position = u_projectionMatrix * transform * pos;
 

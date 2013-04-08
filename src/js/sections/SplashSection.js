@@ -47,14 +47,20 @@ define([
 
         function _onDown(e){
             if(this.isDown) return; // ignore multitouch
+            e.preventDefault();
             var params = this.cloth.params;
-            params.downX = params.midX = params.tMidX = params.toX = e.x / this.width;
-            params.downY = params.midY = params.tMidY = params.toX = e.y / this.height;
+            EKTweener.killTweensOf(params);
+            params.downX =  params.toX = e.x / this.width;
+            params.downY = params.toY = e.y / this.height;
+            params.vX = 0;
+            params.vY = 0;
             this.isDown = true;
+            sectionController.appearTarget('home');
         }
 
         function _onMove(e){
-            if(!this.isDown || !inputController.isScrollV) return;
+            if(!this.isDown || sectionController.isAnimating()) return;
+            e.preventDefault();
             this.needRender = true;
 
             var params = this.cloth.params;
@@ -68,8 +74,14 @@ define([
         }
 
         function _onUp(e){
-            if(!this.isDown) return;
+            if(!this.isDown || sectionController.isAnimating()) return;
             this.isDown = false;
+            if(e.distanceY < -100) {
+                sectionController.goTo('home');
+            } else {
+                var params = this.cloth.params;
+                EKTweener.to(params, .5, {toX: params.downX, toY: 1, downY: 1, ease: 'easeOutElastic'});
+            }
         }
 
         function _render(){
@@ -110,10 +122,12 @@ define([
 
         function hide(currentSection, currentNodes){
             var self = this;
-            stageReference.onRender.remove(_render, this);
             inputController.onMove.remove(_onMove, this);
             inputController.onUp.remove(_onUp, this);
+            var params = this.cloth.params;
+            EKTweener.to(params, .8, {toY: -1, downY: 1});
             EKTweener.to(this.container, .8, {transform3d: 'translate3d(0,-' + stageReference.stageHeight + 'px,0)', onComplete: function(){
+                stageReference.onRender.remove(_render, self);
                 self._setHidden();
             }});
         }

@@ -25,12 +25,18 @@ define([
             downY: 0,
             toX: 0,
             toY: 0,
-            midEaseRatio: .1,
-            gravity: .1
+            vX: 0,
+            oX: 0,
+            vY: 0,
+            oY: 0
         };
 
         function render(){
             var params = this.params;
+            params.vX += (params.toX - params.oX);
+            params.oX = (params.oX + params.vX) * .4;
+            params.vY += (params.toY - params.oY);
+            params.oY = (params.oY + params.vY) * .6;
         }
 
         function getStyle(opts) {
@@ -40,6 +46,8 @@ define([
             ', downY ' + params.downY.toFixed(6) +
             ', toX ' + params.toX.toFixed(6) +
             ', toY ' + params.toY.toFixed(6) +
+            ', oX ' + params.oX.toFixed(6) +
+            ', oY ' + params.oY.toFixed(6) +
 
             // move half of the distance with shader and move the other half with csstransform3d
             ', transform translate3d(0, 0, 0) '+

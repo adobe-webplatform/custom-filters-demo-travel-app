@@ -146,9 +146,22 @@ define(
             return _mixInputEvent.call(this, e, function(e) {inputController.onUp.dispatch(e);});
         }
 
+        function _preventDefaultFunc(e){
+            return function(){
+                if(e.preventDefault){
+                    e.preventDefault();
+                }else{
+                    e.returnValue = false;
+                }
+            };
+        }
+
         function _mixInputEvent(e, func){
             e = e || window.event;
-            var fakedEvent = {originalEvent: e};
+            var fakedEvent = {
+                originalEvent: e,
+                preventDefault: _preventDefaultFunc(e)
+            };
             var i, elem, x, y, touchEvent, bubbleHistory, target;
             var type = e.type;
             var time = (new Date()).getTime();

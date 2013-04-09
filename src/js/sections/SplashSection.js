@@ -27,6 +27,7 @@ define([
 
         var _transform3DStyle = config.transform3DStyle;
         var _filterStyle = config.filterStyle;
+        var _renderToggle = 0;
 
         function _initVariables(){
             this.containerStyle = this.container[0].style;
@@ -87,7 +88,11 @@ define([
         function _render(){
             if(this.needRender) {
                 this.cloth.render();
-                this.containerStyle[_filterStyle] = this.cloth.getStyle();
+                if((sectionController.isAnimating() && (_renderToggle ^= 1)) || !sectionController.isAnimating()) {
+                    this.containerStyle[_filterStyle] = this.cloth.getStyle();
+                } else {
+                    this.containerStyle[_transform3DStyle] = 'translate3d(0,-' + (this.cloth.params.translateY / 2) + 'px,0)';
+                }
             }
         }
 
@@ -101,7 +106,6 @@ define([
             this.height = stageReference.stageHeight;
         }
 
-
         function show(currentNodes, previousSection, previousNodes){
             this.container.removeClass('show');
             this.container.show();
@@ -111,12 +115,20 @@ define([
             if(!previousSection || previousNodes.length < 0) {
                 setTimeout(bind(_setShown, this));
             } else {
-                EKTweener.fromTo(this.container, .8, {transform3d: 'translate3d(0,-' + stageReference.stageHeight + 'px,0)'}, {transform3d: 'translate3d(0,0%,0)', onComplete: bind(_setShown, this)});
+                var params = this.cloth.params;
+                params.toY = 0;
+                params.downY = 1;
+                params.translateY = -stageReference.stageHeight;
+                this.needRender = true;
+                this._renderToggle = 0;
+                this._render();
+                EKTweener.to(params, .8, {toY: 1, translateY: 0, onComplete: bind(_setShown, this)});
             }
         }
 
         function _setShown(){
             this.container.addClass('show');
+            this.needRender = false;
             _super._setShown.call(this);
         }
 
@@ -125,9 +137,10 @@ define([
             inputController.onMove.remove(_onMove, this);
             inputController.onUp.remove(_onUp, this);
             var params = this.cloth.params;
-            EKTweener.to(params, .8, {toY: -1, downY: 1});
-            EKTweener.to(this.container, .8, {transform3d: 'translate3d(0,-' + stageReference.stageHeight + 'px,0)', onComplete: function(){
+            this.needRender = true;
+            EKTweener.to(params, .8, {toY: 0, downY: 1, translateY: -stageReference.stageHeight, onComplete: function(){
                 stageReference.onRender.remove(_render, self);
+                this.needRender = false;
                 self._setHidden();
             }});
         }

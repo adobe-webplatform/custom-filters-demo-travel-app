@@ -28,7 +28,7 @@ void main() {
     float diffX = toX - x;
     float downOffsetY = toY - downY;
     float distanceDownTo = distance(toX - downX, toY - downY);
-    float rangeRatio = (cos( clamp( diffX * (10.0 + 8.0 *  downOffsetY), -PI, PI ) ) + 1.0 ) / 2.0;
+    float rangeRatio = (cos( clamp( diffX * (10.0 + 9.0 *  downOffsetY), -PI, PI ) ) + 1.0 ) / 2.0;
     float yRatio = sin(max(a_position.y - downY + .5, .0));
 
     pos.y = pos.y + max(0.0, y - downY) * rangeRatio * .5 + min(0.0, toY - y) * rangeRatio;

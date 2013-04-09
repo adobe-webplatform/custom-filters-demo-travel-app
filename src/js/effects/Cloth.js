@@ -21,14 +21,15 @@ define([
         };
 
         var DEFAULT_PARAMS = {
-            downX: 0,
+            downX: .5,
             downY: 0,
-            toX: 0,
+            toX: .5,
             toY: 0,
             vX: 0,
             oX: 0,
             vY: 0,
-            oY: 0
+            oY: 0,
+            translateY: 0
         };
 
         function render(){
@@ -50,7 +51,7 @@ define([
             ', oY ' + params.oY.toFixed(6) +
 
             // move half of the distance with shader and move the other half with csstransform3d
-            ', transform translate3d(0, 0, 0) '+
+            ', transform translate3d(0, ' + (params.translateY / 2) + 'px, 0) '+
             ')';
         }
 

@@ -47,7 +47,7 @@ define([
         }
 
         function _onDown(e){
-            if(this.isDown) return; // ignore multitouch
+            if(this.isDown || sectionController.isAnimating()) return; // ignore multitouch
             e.preventDefault();
             var params = this.cloth.params;
             EKTweener.killTweensOf(params);

@@ -70,9 +70,9 @@
                     "color" : "#df8052"
                 },
                 {
-                    "id" : "location",
-                    "name" : "Location",
-                    "link" : "home/district",
+                    "id" : "schedule",
+                    "name" : "Schedule",
+                    "link" : "home/schedule",
                     "color" : "#7dac94"
                 },
                 {

@@ -60,60 +60,60 @@ table {
 }
 
 @-webkit-keyframes simple-spin {
-  /* line 98, ../scss/core/_functions.scss */
+  /* line 97, ../scss/core/_functions.scss */
   from {
     -webkit-transform: rotate(0deg);
   }
 
-  /* line 99, ../scss/core/_functions.scss */
+  /* line 98, ../scss/core/_functions.scss */
   to {
     -webkit-transform: rotate(360deg);
   }
 }
 
 @-moz-keyframes simple-spin {
-  /* line 102, ../scss/core/_functions.scss */
+  /* line 101, ../scss/core/_functions.scss */
   from {
     -moz-transform: rotate(0deg);
   }
 
-  /* line 103, ../scss/core/_functions.scss */
+  /* line 102, ../scss/core/_functions.scss */
   to {
     -moz-transform: rotate(360deg);
   }
 }
 
 @-ms-keyframes simple-spin {
-  /* line 106, ../scss/core/_functions.scss */
+  /* line 105, ../scss/core/_functions.scss */
   from {
     -ms-transform: rotate(0deg);
   }
 
-  /* line 107, ../scss/core/_functions.scss */
+  /* line 106, ../scss/core/_functions.scss */
   to {
     -ms-transform: rotate(360deg);
   }
 }
 
 @-o-keyframes simple-spin {
-  /* line 110, ../scss/core/_functions.scss */
+  /* line 109, ../scss/core/_functions.scss */
   from {
     -o-transform: rotate(0deg);
   }
 
-  /* line 111, ../scss/core/_functions.scss */
+  /* line 110, ../scss/core/_functions.scss */
   to {
     -o-transform: rotate(360deg);
   }
 }
 
 @keyframes simple-spin {
-  /* line 114, ../scss/core/_functions.scss */
+  /* line 113, ../scss/core/_functions.scss */
   from {
     transform: rotate(0deg);
   }
 
-  /* line 115, ../scss/core/_functions.scss */
+  /* line 114, ../scss/core/_functions.scss */
   to {
     transform: rotate(360deg);
   }
@@ -521,7 +521,7 @@ html.is-first-route #header .tab {
   /* line 39, ../scss/ui/_header.scss */
   #header .tab.tab-0:before {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 49, ../scss/ui/_header.scss */
@@ -550,7 +550,7 @@ html.is-first-route #header .tab {
   /* line 49, ../scss/ui/_header.scss */
   #header .tab:after {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 61, ../scss/ui/_header.scss */
@@ -711,7 +711,7 @@ html.is-first-route #header .tab:after {
   /* line 70, ../scss/ui/_schedulePrompt.scss */
   #schedule-prompt .content input {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 95, ../scss/ui/_schedulePrompt.scss */
@@ -860,7 +860,7 @@ html.is-first-route #header .tab:after {
   /* line 43, ../scss/sections/_home.scss */
   .home-item .arrow {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 53, ../scss/sections/_home.scss */
@@ -873,23 +873,72 @@ html.is-first-route #header .tab:after {
   margin-top: 100px;
   background-position: -56px -191px;
 }
-@media only screen and (orientation: portrait) {
+/* line 66, ../scss/sections/_home.scss */
+.home-item .shader-shadow {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top-width: 100px;
+  border-top-color: transparent;
+  border-top-style: solid;
+  border-bottom-width: 100px;
+  border-bottom-color: red;
+  border-bottom-style: solid;
+  pointer-events: none;
+}
+@media (min-width: 901px) and (max-width: 1050px) {
+  /* line 85, ../scss/sections/_home.scss */
+  .home-item .text {
+    font-size: 140px;
+  }
+  /* line 88, ../scss/sections/_home.scss */
+  .home-item .text:before {
+    font-size: 24px;
+    margin-left: -26px;
+    margin-top: -52px;
+  }
+  /* line 95, ../scss/sections/_home.scss */
+  .home-item .arrow.front {
+    margin-top: -130px;
+  }
+  /* line 99, ../scss/sections/_home.scss */
+  .home-item .arrow.end {
+    margin-top: 80px;
+  }
+}
+@media (min-width: 0px) and (max-width: 900px) {
   /* line 8, ../scss/sections/_home.scss */
   .home-item {
     width: 100%;
     height: 33.33%;
   }
-  /* line 70, ../scss/sections/_home.scss */
+  /* line 111, ../scss/sections/_home.scss */
   .home-item .arrow.front {
     margin-left: -240px;
     margin-top: -25px;
     background-position: 0 -242px;
   }
-  /* line 76, ../scss/sections/_home.scss */
+  /* line 117, ../scss/sections/_home.scss */
   .home-item .arrow.end {
     margin-left: 190px;
     margin-top: -25px;
     background-position: -56px -242px;
+  }
+  /* line 124, ../scss/sections/_home.scss */
+  .home-item .shader-shadow {
+    left: auto;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    border-top: none;
+    border-bottom: none;
+    border-left-width: 100px;
+    border-left-color: transparent;
+    border-left-style: solid;
+    border-right-width: 100px;
+    border-right-color: red;
+    border-right-style: solid;
   }
 }
 
@@ -986,7 +1035,7 @@ html.is-first-route #header .tab:after {
   /* line 59, ../scss/sections/_locationList.scss */
   #location-search input {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 82, ../scss/sections/_locationList.scss */
@@ -1058,7 +1107,7 @@ html.is-first-route #header .tab:after {
   /* line 137, ../scss/sections/_locationList.scss */
   .location-list-item .arrow {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 148, ../scss/sections/_locationList.scss */
@@ -1149,7 +1198,7 @@ html.is-first-route #header .tab:after {
   /* line 42, ../scss/sections/_mood.scss */
   .mood-item .arrow {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 53, ../scss/sections/_mood.scss */
@@ -1254,7 +1303,7 @@ html.is-first-route #header .tab:after {
   /* line 29, ../scss/sections/_overview.scss */
   #overview .arrow:before {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 41, ../scss/sections/_overview.scss */
@@ -1325,7 +1374,7 @@ html.is-first-route #header .tab:after {
   /* line 72, ../scss/sections/_overview.scss */
   #overview .spinner-container .spinner {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 84, ../scss/sections/_overview.scss */
@@ -1363,7 +1412,7 @@ html.is-first-route #header .tab:after {
   /* line 106, ../scss/sections/_overview.scss */
   .overview-wrapper .logo {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 114, ../scss/sections/_overview.scss */
@@ -1458,7 +1507,7 @@ html.is-first-route #header .tab:after {
   /* line 194, ../scss/sections/_overview.scss */
   .overview-bottom .favorites .icon {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 201, ../scss/sections/_overview.scss */
@@ -1481,7 +1530,7 @@ html.is-first-route #header .tab:after {
   /* line 201, ../scss/sections/_overview.scss */
   .overview-bottom .favorites .count {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 218, ../scss/sections/_overview.scss */
@@ -1496,7 +1545,7 @@ html.is-first-route #header .tab:after {
   /* line 218, ../scss/sections/_overview.scss */
   .overview-bottom .schedule .icon {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 228, ../scss/sections/_overview.scss */
@@ -1658,7 +1707,7 @@ html.is-first-route #header .tab:after {
   /* line 93, ../scss/sections/_splash.scss */
   .splash-btn:before {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 200px;
+    background-size: 225px 300px;
   }
 }
 /* line 110, ../scss/sections/_splash.scss */

@@ -5,9 +5,10 @@ define([
         'hbs!templates/sections/home',
         'inputController',
         'sectionController',
+        'widgets/TearItem',
         'mout/function/bind',
         'stageReference'
-    ], function(config, $, AbstractSection, template, inputController, sectionController, bind, stageReference){
+    ], function(config, $, AbstractSection, template, inputController, sectionController, TearItem, bind, stageReference){
 
         function HomeSection(){
             _super.constructor.call(this, 'home', template);
@@ -28,8 +29,16 @@ define([
         var _transform3DStyle = config.transform3DStyle;
         var _filterStyle = config.filterStyle;
 
+        var WIDE_THRESHOLD = 900;
+        var SHADER_PADDING = 100;
+
         function _initVariables(){
             this.items = this.container.find('.home-item');
+
+            this.items.each(function(){
+                this.tearItem = new TearItem(this, _onItemPeek, _onItemUnPeek, _onItemOpen, SHADER_PADDING);
+                //inputController.add(this, 'click', bind();
+            });
 
             // create a map table for nodeId = nodeName
             var itemData = this.data.items;
@@ -40,41 +49,35 @@ define([
         }
 
         function _initEvents(){
-            inputController.add(this.items, 'down', bind(_onItemDown, this));
-            inputController.add(this.items, 'move', bind(_onItemMove, this));
-            inputController.add(this.items, 'up', bind(_onItemUp, this));
+            // inputController.add(this.items, 'down', bind(_onItemDown, this));
+            // inputController.add(this.items, 'move', bind(_onItemMove, this));
+            // inputController.add(this.items, 'up', bind(_onItemUp, this));
 
-            stageReference.onResize.add(_onResize, this);
-            this._onResize();
         }
 
-        function _onItemDown(e){
-            this.isDown = true;
+        function _onItemPeek(){
+            
         }
 
-        function _onItemMove(e){
-            if(!this.isDown) return;
-            if(!this.isWide && !inputController.isScrollH) return;
-            if(this.isWide && !inputController.isScrollV) return;
-            this.draggedTarget = e.currentTarget;
-
-            // for temporary
-            sectionController.goTo($(this.draggedTarget).data('link'));
-            this.draggedTarget = null;
-            this.isDown = false;
+        function _onItemUnPeek(){
+            
         }
 
-        function _onItemUp(e){
-            target = e.currentTarget;
-            this.isDown = false;
+        function _onItemOpen(){
+            
         }
 
-        function _onResize(e){
-            this.isWide = this.container.width() > 1050;
+        function _onResize(){
+            var isWide = this.isWide = this.container.width() > WIDE_THRESHOLD;
+            this.items.each(function(){
+                this.tearItem.tearParams.isVertical = isWide ? 1 : 0;
+            });
         }
 
         function show(currentNodes, previousSection, previousNodes){
             this.container.show();
+            stageReference.onResize.add(_onResize, this);
+            this._onResize();
             var transformTo = 'translate3d(0,0,0)';
             if(previousNodes.length < 0 || sectionController.isFirstRoute) {
                 this.items.each(function(){
@@ -115,6 +118,7 @@ define([
                     }
                 });
                 setTimeout(function(){
+                    stageReference.onResize.remove(_onResize, self);
                     self._setHidden();
                 }, 1100);
             }

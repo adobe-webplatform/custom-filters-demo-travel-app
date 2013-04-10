@@ -48,7 +48,7 @@ define(
                     }
                 }
                 _tabs[i - 1].__url = path + nodes[i - 1];
-                //_tabs[0].__url = sectionController.DEFAULT_PATH;
+                _tabs[0].__url = sectionController.DEFAULT_PATH;
 
                 var sum = 0;
                 for(; i < 4; i++ ) {

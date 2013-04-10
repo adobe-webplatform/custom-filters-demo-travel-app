@@ -10,7 +10,7 @@ define(
         'sections/SplashSection',
         'sections/HomeSection',
         'sections/MoodSection',
-        'sections/DistrictSection',
+        'sections/ScheduleSection',
         'sections/LocationListSection',
         'sections/OverviewSection',
 
@@ -19,7 +19,7 @@ define(
         'mout/function/bind'
     ],
 
-    function(sectionController, config, $, hasher, uiController, SplashSection, HomeSection, MoodSection, DistrictSection, LocationListSection, OverviewSection, stageReference, map, bind) {
+    function(sectionController, config, $, hasher, uiController, SplashSection, HomeSection, MoodSection, ScheduleSection, LocationListSection, OverviewSection, stageReference, map, bind) {
 
         sectionController.currentSection = null;
         sectionController.previousSection = null;
@@ -44,7 +44,7 @@ define(
         var _isShown = true;
 
         var _transform3DStyle = config.transform3DStyle;
-        var SECTION_CLASSES = [SplashSection, HomeSection, MoodSection, DistrictSection, LocationListSection, OverviewSection];
+        var SECTION_CLASSES = [SplashSection, HomeSection, MoodSection, ScheduleSection, LocationListSection, OverviewSection];
 
 
         function preInit(){
@@ -142,13 +142,14 @@ define(
 
         function appearTarget(path, opts){
             var route = getRoute(path);
-            if(sectionController.appearedSection) sectionController.appearedSection.disappear(currentNodes);
+            if(sectionController.appearedSection) sectionController.appearedSection.disappear();
+            sectionController.appearedSection = route.section;
             route.section.appear.apply(route.section, [route.nodes, opts]);
         }
 
         function disappearTarget(path, opts){
             var route = getRoute(path);
-            route.section.disappear.apply(currentNodes);
+            route.section.disappear();
         }
 
         function _parsePath(path){

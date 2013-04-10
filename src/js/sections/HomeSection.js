@@ -56,15 +56,15 @@ define([
         }
 
         function _onItemPeek(){
-
+            sectionController.appearTarget(this.$elem.data('link'));
         }
 
         function _onItemUnPeek(){
-
+            sectionController.disappearTarget(this.$elem.data('link'));
         }
 
         function _onItemOpen(){
-
+            sectionController.goTo(this.$elem.data('link'));
         }
 
         function _onResize(){
@@ -75,26 +75,41 @@ define([
             });
         }
 
+        function appear(nodes){
+            this.container.show();
+            this.items.each(function(){
+                this.tearItem.resetShader();
+                this.style[_transform3DStyle] = 'translateZ(0)';
+            });
+        }
+
         function show(currentNodes, previousSection, previousNodes){
             this.container.show();
             stageReference.onResize.add(_onResize, this);
             this._onResize();
-            var transformTo = 'translate3d(0,0,0)';
-            if(previousNodes.length < 0 || sectionController.isFirstRoute) {
-                this.items.each(function(){
-                    EKTweener.to(this, 0, {transform3d: transformTo});
-                });
+            if(previousNodes.length < 1 || sectionController.isFirstRoute) {
+                this.appear();
                 this._setShown();
             } else {
                 var self = this;
                 var targetItem;
                 var previousNode = previousNodes[1];
-                var transformTo = 'translate3d(0,0,0)';
-                this.items.each(function(){
-                    if($(this).data('link').split('/')[1] === previousNode) {
-                        EKTweener.to(this, .8, {delay: .3, transform3d: transformTo});
+                var foundId = this.items.length;
+                var direction;
+                while(foundId--) if($(this.items[foundId]).data('link').split('/')[1] === previousNode) break;
+                this.items.each(function(i){
+                    if(i === foundId) {
+                        var tearItem = this.tearItem;
+                        var params = tearItem.tearParams;
+                        tearItem.updateSize();
+                        tearItem.setTo(params.isVertical ? params.height : params.width);
+                        setTimeout(function(){
+                            tearItem.easeTo(0, .5);
+                        }, 300);
+
                     } else {
-                        EKTweener.to(this, .8, {transform3d: transformTo});
+                        direction = i < foundId ? -1 : 1;
+                        EKTweener.fromTo(this, .8, { transform3d: self.isWide ? 'translate3d(' + (stageReference.stageWidth * direction / 3 * 2) + 'px,0,0)' : 'translate3d(0,' + (stageReference.stageHeight * direction  / 3 * 2) + 'px,0)'}, {transform3d: 'translateZ(0)'});
                     }
                 });
                 setTimeout(function(){
@@ -108,14 +123,19 @@ define([
             if(currentNodes.length < 1) {
                 self._setHidden();
             } else {
-                var targetItem;
                 var nextNode = currentNodes[1];
-                var transformTo = this.isWide ? 'translate3d(0,-' + stageReference.stageHeight + 'px,0)' : 'translate3d(-' + stageReference.stageWidth + 'px,0,0)';
-                this.items.each(function(){
-                    if($(this).data('link').split('/')[1] === nextNode) {
-                        EKTweener.to(this, .8, {transform3d: transformTo});
+                var foundId = this.items.length;
+                var direction;
+                while(foundId--) if($(this.items[foundId]).data('link').split('/')[1] === nextNode) break;
+                this.items.each(function(i){
+                    if(i === foundId) {
+                        var tearItem = this.tearItem;
+                        var params = tearItem.tearParams;
+                        tearItem.updateSize();
+                        tearItem.easeTo(params.isVertical ? params.height : params.width, .8);
                     } else {
-                        EKTweener.to(this, .8, {delay: .3, transform3d: transformTo});
+                        direction = i < foundId ? -1 : 1;
+                        EKTweener.to(this, .8, {delay: .3, transform3d: self.isWide ? 'translate3d(' + (stageReference.stageWidth * direction / 3 * 2) + 'px,0,0)' : 'translate3d(0,' + (stageReference.stageHeight * direction  / 3 * 2) + 'px,0)'});
                     }
                 });
                 setTimeout(function(){
@@ -132,6 +152,7 @@ define([
         _p._initVariables = _initVariables;
         _p._initEvents = _initEvents;
         _p._onResize = _onResize;
+        _p.appear = appear;
         _p.show = show;
         _p.hide = hide;
         _p.getNodeName = getNodeName;

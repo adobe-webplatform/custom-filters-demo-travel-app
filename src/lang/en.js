@@ -19,8 +19,8 @@
             "section" : "mood"
         },
         {
-            "route" : "^home\\/location\\/?$",
-            "section" : "district"
+            "route" : "^home\\/schedule\\/?$",
+            "section" : "schedule"
         },
         {
             "route" : "^home\\/search\\/?$",

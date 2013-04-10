@@ -6,7 +6,7 @@ define([
     ], function(config, $, AbstractSection, template){
 
         function DistrictSection(){
-            _super.constructor.call(this, 'district', template);
+            _super.constructor.call(this, 'schedule', template);
 
             this.init();
         }

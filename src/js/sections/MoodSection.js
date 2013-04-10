@@ -92,17 +92,18 @@ define([
             this.items.each(function(i){
                 this.foldListItem.resetShader();
             });
+            this._onResize();
         }
 
         function show(currentNodes, previousSection, previousNodes){
             var self = this;
             this.container.show();
             stageReference.onResize.add(_onResize, this);
-            this._onResize();
             if(previousNodes.length < 2) {
                 this.appear();
                 self._setShown();
             } else {
+                this._onResize();
                 var foundTarget;
                 var nextNode = previousNodes[2];
                 var foundId = this.items.length;

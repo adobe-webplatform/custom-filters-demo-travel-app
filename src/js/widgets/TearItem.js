@@ -64,7 +64,6 @@ define([
                 length = e.x;
                 this.isUsingFront = (length - this.$elem.offset().left) < this.$elem.width() / 2;
             }
-            this.tearParams.down = (this.isUsingFront ? -length : length) - this.tearParams.distance;
         }
 
         function _setRender(){
@@ -92,16 +91,15 @@ define([
             this.hasPeeked = false;
         }
 
-        function setTo(distance, down){
+        function setTo(distance){
             EKTweener.killTweensOf(this.tearParams);
             this.tearParams.distance = distance;
-            if(down !== undef) this.tearParams.down = down;
             this._setRender();
         }
 
-        function easeTo(distance, down, duration){
+        function easeTo(distance, duration){
             if(this.tearParams.distance === 0) this.tearParams.distance = 0.1;
-            EKTweener.to(this.tearParams, duration, {distance: distance, down: down, ease: 'easeInOutSine'});
+            EKTweener.to(this.tearParams, duration, {distance: distance, ease: 'easeInOutSine'});
             this._setRender();
         }
 
@@ -124,8 +122,8 @@ define([
             var params = this.tearParams;
             this.elemStyle[_filterStyle] = this.tear.getStyle();
             if(params.distance === 0) {
+                if(this.hasPeeked) this.onUnPeekCallback();
                 this.resetShader();
-                this.onUnPeekCallback();
             }
         }
 
@@ -141,14 +139,14 @@ define([
                 target = _isDownItems[i];
                 isVertical = target.tearParams.isVertical;
                 if(isVertical == isScrollV){
-                    if(!target.hasPeeked) {
-                        target.onPeekCallback();
-                        target.hasPeeked = true;
-                    }
                     params = target.tearParams;
                     delta = isVertical ? e.deltaY : e.deltaX;
                     if(isUsingFront = target.isUsingFront) delta *= -1;
                     params.distance += delta;
+                    if(!target.hasPeeked && params.distance > 0) {
+                        target.onPeekCallback();
+                        target.hasPeeked = true;
+                    }
                     if(params.distance < 0) params.distance = 0;
                     target._setRender();
                 }
@@ -164,7 +162,7 @@ define([
                 if(target.tearParams.distance > 100) {
                     target.onOpenCallback();
                 } else {
-                    target.easeTo(0, .5, .3);
+                    target.easeTo(0, .3);
                 }
             }
             _isDownItems.length = 0;

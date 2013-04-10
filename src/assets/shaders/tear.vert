@@ -12,7 +12,6 @@ uniform float distance;
 uniform float lightIntensity;
 uniform float padding;
 uniform float margin;
-uniform float down_x;
 uniform bool isVertical;
 
 varying float v_lighting;

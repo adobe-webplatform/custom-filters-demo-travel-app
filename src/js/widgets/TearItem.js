@@ -50,7 +50,8 @@ define([
         }
 
         function _onItemDown(e){
-            if(sectionController.isAnimating()) return;
+            if(sectionController.isAnimating() || this.isDown) return;
+            this.isDown = true;
             var index = indexOf(_isDownItems, this);
             if(index > -1) return;
 
@@ -89,6 +90,7 @@ define([
             this.elemStyle[_filterStyle] = 'none';
             this.elemStyle.zIndex = 'auto';
             this.hasPeeked = false;
+            this.isDown = false;
         }
 
         function setTo(distance){
@@ -121,6 +123,7 @@ define([
         function render(){
             var params = this.tearParams;
             this.elemStyle[_filterStyle] = this.tear.getStyle();
+            this.bounce *= .95;
             if(params.distance === 0) {
                 if(this.hasPeeked) this.onUnPeekCallback();
                 this.resetShader();
@@ -154,7 +157,7 @@ define([
         }
 
         function _onItemUp(e){
-            if(sectionController.isAnimating()) return;
+            if(sectionController.isAnimating() || (e.isTouch && e.originalEvent.touches.length > 0)) return;
             var i = _isDownItems.length;
             var target;
             while(i--) {
@@ -163,6 +166,7 @@ define([
                     target.onOpenCallback();
                 } else {
                     target.easeTo(0, .3);
+                    target.isDown = false;
                 }
             }
             _isDownItems.length = 0;

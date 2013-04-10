@@ -32,7 +32,7 @@ define([
             var params = this.params;
             var segYPixelRatio =  1 / this._opts.segY / params.padding_height;
             return this.header +
-            ', distance ' + (params.distance / params.width).toFixed(6) +
+            ', t ' + (params.distance / params.width).toFixed(6) +
             ', light_intensity ' + params.light_intensity.toFixed(6) +
             ', padding_height ' + (params.padding_height * segYPixelRatio).toFixed(6) +
             ', margin_height ' + (params.margin_height * segYPixelRatio).toFixed(6) +

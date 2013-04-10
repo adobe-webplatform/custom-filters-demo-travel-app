@@ -49,9 +49,9 @@ define([
         }
 
         function _initEvents(){
-            // inputController.add(this.items, 'down', bind(_onItemDown, this));
-            // inputController.add(this.items, 'move', bind(_onItemMove, this));
-            // inputController.add(this.items, 'up', bind(_onItemUp, this));
+            this.items.each(function(){
+                inputController.add(this, 'click', bind(_onItemOpen, this.tearItem));
+            });
 
         }
 

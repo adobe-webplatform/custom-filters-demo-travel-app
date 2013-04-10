@@ -118,7 +118,7 @@ define([
                 var params = this.cloth.params;
                 params.toY = 0;
                 params.downY = 1;
-                params.translateY = -stageReference.stageHeight;
+                params.translateY = -stageReference.stageHeight / 4;
                 this.needRender = true;
                 this._renderToggle = 0;
                 this._render();
@@ -138,7 +138,7 @@ define([
             inputController.onUp.remove(_onUp, this);
             var params = this.cloth.params;
             this.needRender = true;
-            EKTweener.to(params, .8, {toY: 0, downY: 1, translateY: -stageReference.stageHeight, onComplete: function(){
+            EKTweener.to(params, .4, {toY: 0, downY: 1, translateY: -stageReference.stageHeight / 4, onComplete: function(){
                 stageReference.onRender.remove(_render, self);
                 this.needRender = false;
                 self._setHidden();

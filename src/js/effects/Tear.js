@@ -26,6 +26,8 @@ define([
             padding: 20,
             margin: 20,
             down: 0,
+            threshold: .15,
+            bounce: 0,
             isVertical: 0
         };
 
@@ -33,10 +35,12 @@ define([
             var params = this.params;
             var segRatio =  1 / (params.isVertical ? this._opts.segY : this._opts.segX) / params.padding;
             return this.header +
-            ', distance ' + (params.distance / (params.isVertical ? params.height : params.width)).toFixed(6) +
+            ', t ' + (params.distance / (params.isVertical ? params.height : params.width)).toFixed(6) +
             ', lightIntensity ' + params.lightIntensity.toFixed(6) +
             ', padding ' + (params.padding * segRatio).toFixed(6) +
             ', margin ' + (params.margin * segRatio).toFixed(6) +
+            ', threshold ' + params.threshold +
+            ', bounce ' + params.bounce.toFixed(6) +
             ', isVertical ' + (params.isVertical ? 1 : 0) +
             ')';
         }

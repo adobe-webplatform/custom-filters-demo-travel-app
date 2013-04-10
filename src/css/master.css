@@ -877,8 +877,8 @@ html.is-first-route #header .tab:after {
 .home-item .shader-shadow {
   display: none;
   position: absolute;
-  left: 0;
-  right: 0;
+  left: -40px;
+  right: -40px;
   border-top-width: 100px;
   border-top-color: transparent;
   border-top-style: solid;
@@ -929,8 +929,8 @@ html.is-first-route #header .tab:after {
   .home-item .shader-shadow {
     left: auto;
     right: auto;
-    top: 0;
-    bottom: 0;
+    top: -40px;
+    bottom: -40px;
     border-top: none;
     border-bottom: none;
     border-left-width: 100px;

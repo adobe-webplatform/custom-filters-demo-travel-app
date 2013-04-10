@@ -56,21 +56,22 @@ define([
         }
 
         function _onItemPeek(){
-            
+
         }
 
         function _onItemUnPeek(){
-            
+
         }
 
         function _onItemOpen(){
-            
+
         }
 
         function _onResize(){
             var isWide = this.isWide = this.container.width() > WIDE_THRESHOLD;
             this.items.each(function(){
                 this.tearItem.tearParams.isVertical = isWide ? 1 : 0;
+                this.tearItem.updateSize();
             });
         }
 

@@ -105,16 +105,13 @@ define([
         }
 
         function easeTo(distance, duration){
-            if(this.tearParams.distance === 0) this.tearParams.distance = 0.1;
+            if(this.tearParams.distance === 0) this.tearParams.distance = 0.0001;
             EKTweener.to(this.tearParams, duration, {distance: distance, ease: 'easeInOutSine'});
             this._setRender();
         }
 
         function updateSize(isVertical) {
-            var itemWidth = this.$elem.width();
-            var itemHeight = this.$elem.height();
             var params = this.tearParams;
-
             if(isVertical !== undef) {
                 params.isVertical = isVertical;
                 if(isVertical) {
@@ -133,21 +130,23 @@ define([
                     });
                 }
             }
-
-            var seg = Math.ceil((params.isVertical ? itemHeight: itemWidth) / this.shaderPadding / 2) * 2 + 2;
             if(params.isVertical) {
-                this.tear.updateHeader({segX: 6, segY: seg});
+                this.length = this.$elem.height();
+                this.tear.updateHeader({segX: 6, segY: 8});
             } else {
-                this.tear.updateHeader({segX: seg, segY: 6});
+                this.length = this.$elem.width();
+                this.tear.updateHeader({segX: 8, segY: 6});
             }
-            params.width = itemWidth;
-            params.height = itemHeight;
         }
 
         function render(){
             var params = this.tearParams;
+            if((params.distance > params.threshold) && (params.prevDistance < params.threshold)) {
+                params.bounce = 1.0;
+            }
             this.elemStyle[_filterStyle] = this.tear.getStyle();
-            this.bounce *= .95;
+            params.bounce *= -.75;
+            params.prevDistance = params.distance;
             if(params.distance === 0) {
                 if(this.hasPeeked) this.onUnPeekCallback();
                 this.resetShader();
@@ -167,7 +166,7 @@ define([
                 isVertical = target.tearParams.isVertical;
                 if(isVertical == isScrollV){
                     params = target.tearParams;
-                    delta = isVertical ? e.deltaY : e.deltaX;
+                    delta = (isVertical ? e.deltaY : e.deltaX) / target.length;
                     if(isUsingFront = target.isUsingFront) delta *= -1;
                     params.distance += delta;
                     if(!target.hasPeeked && params.distance > 0) {
@@ -186,7 +185,7 @@ define([
             var target;
             while(i--) {
                 target = _isDownItems[i];
-                if(target.tearParams.distance > 100) {
+                if(target.tearParams.distance > target.tearParams.threshold) {
                     target.onOpenCallback();
                 } else {
                     target.easeTo(0, .3);

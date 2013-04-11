@@ -101,11 +101,10 @@ define([
                         var tearItem = this.tearItem;
                         var params = tearItem.tearParams;
                         tearItem.updateSize();
-                        tearItem.setTo(params.isVertical ? params.height : params.width);
+                        tearItem.setTo(1);
                         setTimeout(function(){
                             tearItem.easeTo(0, .5);
                         }, 300);
-
                     } else {
                         direction = i < foundId ? -1 : 1;
                         EKTweener.fromTo(this, .8, { transform3d: self.isWide ? 'translate3d(' + (stageReference.stageWidth * direction / 3 * 2) + 'px,0,0)' : 'translate3d(0,' + (stageReference.stageHeight * direction  / 3 * 2) + 'px,0)'}, {transform3d: 'translateZ(0)'});
@@ -131,7 +130,7 @@ define([
                         var tearItem = this.tearItem;
                         var params = tearItem.tearParams;
                         tearItem.updateSize();
-                        tearItem.easeTo(params.isVertical ? params.height : params.width, .8);
+                        tearItem.easeTo(1, .8);
                     } else {
                         direction = i < foundId ? -1 : 1;
                         EKTweener.to(this, .8, {delay: .3, transform3d: self.isWide ? 'translate3d(' + (stageReference.stageWidth * direction / 3 * 2) + 'px,0,0)' : 'translate3d(0,' + (stageReference.stageHeight * direction  / 3 * 2) + 'px,0)'});

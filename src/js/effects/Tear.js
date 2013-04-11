@@ -21,6 +21,7 @@ define([
         };
 
         var DEFAULT_PARAMS = {
+            prevDistance: 0,
             distance: 0,
             down: 0,
             threshold: .15,
@@ -30,9 +31,9 @@ define([
 
         function getStyle(opts) {
             var params = this.params;
-            var segRatio =  1 / (params.isVertical ? this._opts.segY : this._opts.segX) / params.padding;
+            //var segRatio =  1 / (params.isVertical ? this._opts.segY : this._opts.segX) / params.padding;
             return this.header +
-            ', t ' + (params.distance / (params.isVertical ? params.height : params.width)).toFixed(6) +
+            ', t ' + (params.distance).toFixed(6) +
             ', threshold ' + params.threshold +
             ', bounce ' + params.bounce.toFixed(6) +
             ', isVertical ' + (params.isVertical ? 1 : 0) +

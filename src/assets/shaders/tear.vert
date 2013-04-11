@@ -28,15 +28,15 @@ void main() {
     float forceRange = max(0.0, cos(p0 * PI * 5.0)) * cos(p1 * PI) * t;
     float force0 = cos(p1 * PI) * direction * forceRange * .15 + sin((p1 + .5) * PI * 2.0) * forceRange * .01;
     float force1 = (1.0 + cos((p0 *direction* 2.0 + .25) * PI)) * p1 * forceRange * .2;
-    p0 = p0 + t * direction / 2.0;
+    p0 = p0 + t * direction;
 
     if(t < threshold) {
-        force0 = (oriP0 - p0) + t * sin(oriP0 * PI * 2.0) * threshold;
-        force1 = -force1 * .5;
+        force0 = (oriP0 - p0) + t * sin(oriP0 * PI * 2.0) * .3;
+        force1 = -force1;
         v_lighting = .5;
     } else {
-        p0 -= direction *.05 - sin(bounce * PI) * .1;
-        v_lighting = .5 - force0 * 3.5 - force1 * 3.5;
+        p0 -= direction *.05 - direction * bounce * force0;
+        v_lighting = .5 - force0 * 2.5 - force1 * 2.5;
     }
 
     if(isVertical > .5) {

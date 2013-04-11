@@ -83,8 +83,13 @@ define([
             var params = this.tear.params;
             shaderStyle.display = 'block';
             this.elemStyle.zIndex = this.$elem.siblings().length + 100;
-            this.render();
+            if(params.distance === 0.0) {
+                params.distance = 0.00001;
+            } else if(params.distance ===1.0) {
+                params.distance = 0.99999;
+            }
             needRenderItems.push(this);
+            this.render();
         }
 
         function resetShader(){
@@ -105,7 +110,6 @@ define([
         }
 
         function easeTo(distance, duration){
-            if(this.tearParams.distance === 0) this.tearParams.distance = 0.0001;
             EKTweener.to(this.tearParams, duration, {distance: distance, ease: 'easeInOutSine'});
             this._setRender();
         }
@@ -147,9 +151,13 @@ define([
             this.elemStyle[_filterStyle] = this.tear.getStyle();
             params.bounce *= -.75;
             params.prevDistance = params.distance;
+
             if(params.distance === 0) {
                 if(this.hasPeeked) this.onUnPeekCallback();
                 this.resetShader();
+            } else if(params.distance === 1) {
+                var index = indexOf(needRenderItems, this);
+                if(index > -1) needRenderItems.splice(index, 1);
             }
         }
 

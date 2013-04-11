@@ -86,7 +86,6 @@ define([
             if(this.needRender) {
                 this.cloth.render();
                 if((sectionController.isAnimating() && (_renderToggle ^= 1)) || !sectionController.isAnimating()) {
-                    console.log(this.cloth.getStyle());
                     this.containerStyle[_filterStyle] = this.cloth.getStyle();
                 } else {
                     this.containerStyle[_transform3DStyle] = 'translate3d(0,-' + (this.cloth.params.translateY / 2) + '%,0)';

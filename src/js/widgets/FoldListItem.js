@@ -68,7 +68,7 @@ define([
             if(sectionController.isAnimating() || indexOf(_isDownItems, this) > -1) return;
             _isDownItems.push(this);
             this.updateSize();
-            this.foldParams.down_x = e.x - this.foldParams.distance;
+            this.foldParams.down_x = e.x / this.foldParams.width - this.foldParams.distance;
         }
 
         function _setRender(){
@@ -77,7 +77,12 @@ define([
             var params = this.fold.params;
             shaderStyle.display = 'block';
             shaderStyle.top = shaderStyle.bottom =  '-' + params.margin_height + 'px';
-            this.elemStyle.zIndex = 500;
+            this.elemStyle.zIndex = this.$elem.siblings().length + 100;
+            if(params.distance === 0.0) {
+                params.distance = 0.00001;
+            } else if(params.distance ===1.0) {
+                params.distance = 0.99999;
+            }
             this.render();
             this.render();
             needRenderItems.push(this);
@@ -102,33 +107,36 @@ define([
         }
 
         function easeTo(distance, downX, duration){
-            if(this.foldParams.distance == 0) this.foldParams.distance = .1;
             EKTweener.to(this.foldParams, duration, {distance: distance, down_x: downX, ease: 'easeInOutSine'});
             this._setRender();
         }
 
         function updateSize() {
+            var params = this.foldParams;
             var itemWidth = this.$elem.width();
             var itemHeight = this.$elem.height();
             var segY = Math.ceil(itemHeight / this.shaderPadding) + 2;
-            var params = this.foldParams;
             this.fold.updateHeader({segY: segY});
             params.width = itemWidth;
             params.height = itemHeight;
-            params.padding_height = this.shaderPadding;
-            params.margin_height = (segY * this.shaderPadding - itemHeight) / 2;
+            params.padding_height = 1 / segY;
+            params.margin_height = (segY * this.shaderPadding - itemHeight) / 2 / segY / params.padding_height;
         }
 
         function render(){
             var params = this.foldParams;
             if(this.renderToggle ^= 1) {
                 this.elemStyle[_filterStyle] = this.fold.getStyle();
-                if(params.distance === 0) {
-                    this.resetShader();
-                    if(this.onUnPeekCallback) this.onUnPeekCallback();
-                }
             } else {
-                this.elemStyle[_transform3DStyle] = 'translate3d(' + (params.distance / 2).toFixed(6) + 'px, 0, 0)';
+                this.elemStyle[_transform3DStyle] = 'translate3d(' + (params.distance * 50) + '%, 0, 0)';
+            }
+
+            if(params.distance === 0) {
+                this.resetShader();
+                if(this.onUnPeekCallback) this.onUnPeekCallback();
+            } else if(params.distance === 1) {
+                var index = indexOf(needRenderItems, this);
+                if(index > -1) needRenderItems.splice(index, 1);
             }
         }
 
@@ -148,7 +156,7 @@ define([
                     target.hasPeeked = true;
                 }
                 params = target.foldParams;
-                params.distance += e.deltaX;
+                params.distance += e.deltaX / params.width;
                 if(params.distance > 0) params.distance = 0;
                 target._setRender();
             }

@@ -111,9 +111,9 @@ define([
                 var moveDistance = (this.items.length / 2 + Math.abs(this.items.length / 2 - (foundId+ 1))) * this.items.height();
                 this._addToMoveContainers(foundId);
                 foundTarget.foldListItem.updateSize();
-                foundTarget.foldListItem.setTo(-stageReference.stageWidth * 1.2, stageReference.stageWidth);
+                foundTarget.foldListItem.setTo(-1.2, 1);
                 setTimeout(function(){
-                    foundTarget.foldListItem.easeTo(0, stageReference.stageWidth, .5);
+                    foundTarget.foldListItem.easeTo(0, 1, .5);
                 }, 300);
                 this.topContainer[0].style[_transform3DStyle] = 'translate3d(0,' + (- moveDistance) +  'px,0)';
                 this.bottomContainer[0].style[_transform3DStyle] = 'translate3d(0,' + moveDistance +  'px,0)';
@@ -138,7 +138,7 @@ define([
                 var moveDistance = (this.items.length / 2 + Math.abs(this.items.length / 2 - (foundId+ 1))) * this.items.height();
                 this._addToMoveContainers(foundId);
                 foundTarget.foldListItem.updateSize();
-                foundTarget.foldListItem.easeTo(-stageReference.stageWidth * 1.2, stageReference.stageWidth, .5);
+                foundTarget.foldListItem.easeTo(- 1.2, 1, .5);
                 EKTweener.to(this.topContainer, .5, {delay: .3, transform3d: 'translate3d(0,' + (- moveDistance) +  'px,0)', ease: 'easeInSine'});
                 EKTweener.to(this.bottomContainer, .5, {delay: .3, transform3d: 'translate3d(0,' + moveDistance +  'px,0)', ease: 'easeInSine'});
                 setTimeout(function(){

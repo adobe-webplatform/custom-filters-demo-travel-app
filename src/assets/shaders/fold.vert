@@ -11,8 +11,6 @@ uniform mat4 u_projectionMatrix;
 uniform vec2 u_meshSize;
 
 // Uniforms passed-in from CSS
-
-uniform mat4 transform;
 uniform float t;
 uniform float light_intensity;
 uniform float padding_height;
@@ -61,7 +59,7 @@ void main()
     }
 
     pos.z += a_position.z;
-
-    gl_Position = u_projectionMatrix * transform * pos;
+    pos.x += t / 2.0;
+    gl_Position = u_projectionMatrix * pos;
 
 }

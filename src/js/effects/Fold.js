@@ -30,13 +30,13 @@ define([
 
         function getStyle(opts) {
             var params = this.params;
-            var segYPixelRatio =  1 / this._opts.segY / params.padding_height;
+            //var segYPixelRatio =  1 / this._opts.segY / params.padding_height;
             return this.header +
-            ', t ' + (params.distance / params.width).toFixed(6) +
+            ', t ' + params.distance.toFixed(6) +
             ', light_intensity ' + params.light_intensity.toFixed(6) +
-            ', padding_height ' + (params.padding_height * segYPixelRatio).toFixed(6) +
-            ', margin_height ' + (params.margin_height * segYPixelRatio).toFixed(6) +
-            ', down_x ' + (params.down_x / params.width).toFixed(6) +
+            ', padding_height ' + params.padding_height.toFixed(6) +
+            ', margin_height ' + params.margin_height.toFixed(6) +
+            ', down_x ' + params.down_x.toFixed(6) +
 
             // move half of the distance with shader and move the other half with csstransform3d
             ', transform translate3d(' + (params.distance / 2).toFixed(6) + 'px, 0, 0) '+

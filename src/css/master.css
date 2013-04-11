@@ -134,6 +134,15 @@ textarea {
 }
 
 /* line 15, ../scss/core/_base.scss */
+* {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* line 23, ../scss/core/_base.scss */
 html, body {
   width: 100%;
   height: 100%;
@@ -142,19 +151,9 @@ html, body {
   border: none;
 }
 
-/* line 24, ../scss/core/_base.scss */
+/* line 32, ../scss/core/_base.scss */
 body {
   font-size: 1em;
-}
-
-/* line 28, ../scss/core/_base.scss */
-::-moz-selection {
-  background-color: transparent;
-}
-
-/* line 32, ../scss/core/_base.scss */
-::selection {
-  background-color: transparent;
 }
 
 /* line 35, ../scss/core/_base.scss */
@@ -1021,36 +1020,22 @@ html.is-first-route #header .tab:after {
   margin-top: 100px;
   background-position: -56px -191px;
 }
-/* line 66, ../scss/sections/_home.scss */
-.home-item .shader-shadow {
-  display: none;
-  position: absolute;
-  left: -40px;
-  right: -40px;
-  border-top-width: 100px;
-  border-top-color: transparent;
-  border-top-style: solid;
-  border-bottom-width: 100px;
-  border-bottom-color: red;
-  border-bottom-style: solid;
-  pointer-events: none;
-}
 @media (min-width: 901px) and (max-width: 1050px) {
-  /* line 85, ../scss/sections/_home.scss */
+  /* line 66, ../scss/sections/_home.scss */
   .home-item .text {
     font-size: 140px;
   }
-  /* line 88, ../scss/sections/_home.scss */
+  /* line 69, ../scss/sections/_home.scss */
   .home-item .text:before {
     font-size: 24px;
     margin-left: -26px;
     margin-top: -52px;
   }
-  /* line 95, ../scss/sections/_home.scss */
+  /* line 76, ../scss/sections/_home.scss */
   .home-item .arrow.front {
     margin-top: -130px;
   }
-  /* line 99, ../scss/sections/_home.scss */
+  /* line 80, ../scss/sections/_home.scss */
   .home-item .arrow.end {
     margin-top: 80px;
   }
@@ -1061,32 +1046,17 @@ html.is-first-route #header .tab:after {
     width: 100%;
     height: 33.33%;
   }
-  /* line 111, ../scss/sections/_home.scss */
+  /* line 92, ../scss/sections/_home.scss */
   .home-item .arrow.front {
     margin-left: -240px;
     margin-top: -25px;
     background-position: 0 -242px;
   }
-  /* line 117, ../scss/sections/_home.scss */
+  /* line 98, ../scss/sections/_home.scss */
   .home-item .arrow.end {
     margin-left: 190px;
     margin-top: -25px;
     background-position: -56px -242px;
-  }
-  /* line 124, ../scss/sections/_home.scss */
-  .home-item .shader-shadow {
-    left: auto;
-    right: auto;
-    top: -40px;
-    bottom: -40px;
-    border-top: none;
-    border-bottom: none;
-    border-left-width: 100px;
-    border-left-color: transparent;
-    border-left-style: solid;
-    border-right-width: 100px;
-    border-right-color: red;
-    border-right-style: solid;
   }
 }
 

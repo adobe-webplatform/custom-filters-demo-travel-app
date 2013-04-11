@@ -9,9 +9,6 @@ uniform mat4 u_projectionMatrix;
 uniform vec2 u_meshSize;
 
 uniform float t;
-uniform float lightIntensity;
-uniform float padding;
-uniform float margin;
 uniform float threshold;
 uniform float bounce;
 uniform float isVertical;
@@ -28,7 +25,7 @@ void main() {
     float p1 = isVertical > .5 ? pos.x : pos.y;
     float coord = isVertical > .5 ? a_triangleCoord.y : a_triangleCoord.x;
     float direction = coord >= (isVertical > .5 ? u_meshSize.y : u_meshSize.x) * .5 ? 1.0 : -1.0;
-    float forceRange = max(0.0, cos(p0 * PI * 5.0)) * t;
+    float forceRange = max(0.0, cos(p0 * PI * 5.0)) * cos(p1 * PI) * t;
     float force0 = cos(p1 * PI) * direction * forceRange * .15 + sin((p1 + .5) * PI * 2.0) * forceRange * .01;
     float force1 = (1.0 + cos((p0 *direction* 2.0 + .25) * PI)) * p1 * forceRange * .2;
     p0 = p0 + t * direction / 2.0;

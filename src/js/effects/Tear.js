@@ -22,9 +22,6 @@ define([
 
         var DEFAULT_PARAMS = {
             distance: 0,
-            lightIntensity: .5,
-            padding: 20,
-            margin: 20,
             down: 0,
             threshold: .15,
             bounce: 0,
@@ -36,9 +33,6 @@ define([
             var segRatio =  1 / (params.isVertical ? this._opts.segY : this._opts.segX) / params.padding;
             return this.header +
             ', t ' + (params.distance / (params.isVertical ? params.height : params.width)).toFixed(6) +
-            ', lightIntensity ' + params.lightIntensity.toFixed(6) +
-            ', padding ' + (params.padding * segRatio).toFixed(6) +
-            ', margin ' + (params.margin * segRatio).toFixed(6) +
             ', threshold ' + params.threshold +
             ', bounce ' + params.bounce.toFixed(6) +
             ', isVertical ' + (params.isVertical ? 1 : 0) +

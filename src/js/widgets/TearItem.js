@@ -34,7 +34,17 @@ define([
         function _init(){
             this.elemStyle = this.elem.style;
             this.$elem = $(this.elem);
-            this.shaderShadowStyle = this.$elem.find('.shader-shadow')[0].style;
+
+            // Create the shadow div
+            var shadow = this.$shadow = $('<div>').css({
+                display: 'none',
+                position: 'absolute',
+                pointerEvents: 'none',
+                zIndex: this.$elem.children().length + 100
+            });
+            this.$elem.append(shadow);
+
+            this.shadowStyle = shadow[0].style;
             this.tear = new Tear({padding : this.shaderPadding});
             this.tearParams = this.tear.params;
             this.isUsingFront = false;
@@ -68,16 +78,11 @@ define([
         }
 
         function _setRender(){
-            var shaderStyle = this.shaderShadowStyle;
+            var shaderStyle = this.shadowStyle;
             if(indexOf(needRenderItems, this) > -1 && shaderStyle.display == 'block') return;
             var params = this.tear.params;
             shaderStyle.display = 'block';
-            if(params.isVertical) {
-                shaderStyle.top = shaderStyle.bottom =  '-' + params.margin + 'px';
-            } else {
-                shaderStyle.left = shaderStyle.right =  '-' + params.margin + 'px';
-            }
-            this.elemStyle.zIndex = 500;
+            this.elemStyle.zIndex = this.$elem.siblings().length + 100;
             this.render();
             needRenderItems.push(this);
         }
@@ -85,7 +90,7 @@ define([
         function resetShader(){
             var index = indexOf(needRenderItems, this);
             if(index > -1) needRenderItems.splice(index, 1);
-            this.shaderShadowStyle.display = 'none';
+            this.shadowStyle.display = 'none';
             this.tearParams.distance = 0;
             this.elemStyle[_filterStyle] = 'none';
             this.elemStyle.zIndex = 'auto';
@@ -105,10 +110,30 @@ define([
             this._setRender();
         }
 
-        function updateSize() {
+        function updateSize(isVertical) {
             var itemWidth = this.$elem.width();
             var itemHeight = this.$elem.height();
             var params = this.tearParams;
+
+            if(isVertical !== undef) {
+                params.isVertical = isVertical;
+                if(isVertical) {
+                    this.$shadow.css({
+                        top: 0,
+                        bottom: 0,
+                        left: -this.shaderPadding + 'px',
+                        right: -this.shaderPadding + 'px'
+                    });
+                } else {
+                    this.$shadow.css({
+                        top: -this.shaderPadding + 'px',
+                        bottom: -this.shaderPadding + 'px',
+                        left: 0,
+                        right: 0
+                    });
+                }
+            }
+
             var seg = Math.ceil((params.isVertical ? itemHeight: itemWidth) / this.shaderPadding / 2) * 2 + 2;
             if(params.isVertical) {
                 this.tear.updateHeader({segX: 6, segY: seg});
@@ -117,7 +142,6 @@ define([
             }
             params.width = itemWidth;
             params.height = itemHeight;
-            params.margin = (seg * this.shaderPadding - itemHeight) / 2;
         }
 
         function render(){

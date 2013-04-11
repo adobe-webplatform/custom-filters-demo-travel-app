@@ -49,9 +49,9 @@ define([
             ', toY ' + params.toY.toFixed(6) +
             ', oX ' + params.oX.toFixed(6) +
             ', oY ' + params.oY.toFixed(6) +
-
+            
             // move half of the distance with shader and move the other half with csstransform3d
-            ', transform translate3d(0, ' + (params.translateY / 2) + 'px, 0) '+
+            ',translateY ' + (params.translateY / 2).toFixed(6) +
             ')';
         }
 

@@ -62,25 +62,6 @@
     }
 
 
-
-    .shader-shadow {
-        display: none;
-        position: absolute;
-        left: -40px;
-        right: -40px;
-
-        // border
-        border-top-width: 100px;
-        border-top-color: transparent;
-        border-top-style: solid;
-        border-bottom-width: 100px;
-        border-bottom-color: rgba(255,0,0,1);
-        border-bottom-style: solid;
-
-        pointer-events: none;
-    }
-
-
     @include mqWidth(901, 1050) {
         .text {
             font-size: 140px;
@@ -120,23 +101,5 @@
                 background-position: -56px -242px;
             }
         }
-
-        .shader-shadow {
-            left: auto;
-            right: auto;
-            top: -40px;
-            bottom: -40px;
-
-            // border
-            border-top: none;
-            border-bottom: none;
-            border-left-width: 100px;
-            border-left-color: transparent;
-            border-left-style: solid;
-            border-right-width: 100px;
-            border-right-color: rgba(255,0,0,1);
-            border-right-style: solid;
-        }
-
     }
 }

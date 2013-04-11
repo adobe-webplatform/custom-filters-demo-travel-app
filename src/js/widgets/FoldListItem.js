@@ -35,7 +35,22 @@ define([
         function _init(){
             this.elemStyle = this.elem.style;
             this.$elem = $(this.elem);
-            this.shaderShadowStyle = this.$elem.find('.shader-shadow')[0].style;
+
+            // Create the shadow div
+            var shadow = $('<div>').css({
+                display: 'none',
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                borderTop: this.shaderPadding + 'px solid transparent',
+                borderBottom: this.shaderPadding + 'px solid rgba(0,0,0,.3)',
+                pointerEvents: 'none',
+                zIndex: this.$elem.children().length + 100
+            });
+
+            this.$elem.append(shadow);
+
+            this.shadowStyle = shadow[0].style;
             this.fold = new Fold({padding_height : this.shaderPadding});
             this.foldParams = this.fold.params;
 
@@ -50,17 +65,14 @@ define([
         }
 
         function _onItemDown(e){
-            if(sectionController.isAnimating()) return;
-            var index = indexOf(_isDownItems, this);
-            if(index > -1) return;
-
+            if(sectionController.isAnimating() || indexOf(_isDownItems, this) > -1) return;
             _isDownItems.push(this);
             this.updateSize();
             this.foldParams.down_x = e.x - this.foldParams.distance;
         }
 
         function _setRender(){
-            var shaderStyle = this.shaderShadowStyle;
+            var shaderStyle = this.shadowStyle;
             if(indexOf(needRenderItems, this) > -1 && shaderStyle.display == 'block') return;
             var params = this.fold.params;
             shaderStyle.display = 'block';
@@ -74,7 +86,7 @@ define([
         function resetShader(){
             var index = indexOf(needRenderItems, this);
             if(index > -1) needRenderItems.splice(index, 1);
-            this.shaderShadowStyle.display = 'none';
+            this.shadowStyle.display = 'none';
             this.foldParams.distance = 0;
             this.elemStyle[_transform3DStyle] = 'translateZ(0)';
             this.elemStyle[_filterStyle] = 'none';
@@ -113,7 +125,7 @@ define([
                 this.elemStyle[_filterStyle] = this.fold.getStyle();
                 if(params.distance === 0) {
                     this.resetShader();
-                    this.onUnPeekCallback();
+                    if(this.onUnPeekCallback) this.onUnPeekCallback();
                 }
             } else {
                 this.elemStyle[_transform3DStyle] = 'translate3d(' + (params.distance / 2).toFixed(6) + 'px, 0, 0)';
@@ -132,7 +144,7 @@ define([
             while(i--) {
                 target = _isDownItems[i];
                 if(!target.hasPeeked) {
-                    target.onPeekCallback();
+                    if(target.onPeekCallback) target.onPeekCallback();
                     target.hasPeeked = true;
                 }
                 params = target.foldParams;
@@ -146,7 +158,7 @@ define([
             if(sectionController.isAnimating()) return;
             var i = _isDownItems.length;
             if(e.distanceX < -150) {
-                while(i--) _isDownItems[i].onOpenCallback();
+                while(i--) if(_isDownItems[i].onOpenCallback) _isDownItems[i].onOpenCallback();
             } else {
                 while(i--) _isDownItems[i].easeTo(0, .5, .3);
             }

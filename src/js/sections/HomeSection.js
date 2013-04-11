@@ -70,8 +70,7 @@ define([
         function _onResize(){
             var isWide = this.isWide = this.container.width() > WIDE_THRESHOLD;
             this.items.each(function(){
-                this.tearItem.tearParams.isVertical = isWide ? 1 : 0;
-                this.tearItem.updateSize();
+                this.tearItem.updateSize(isWide ? 1 : 0);
             });
         }
 

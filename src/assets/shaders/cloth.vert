@@ -8,13 +8,14 @@ attribute vec3 a_triangleCoord;
 uniform mat4 u_projectionMatrix;
 uniform vec2 u_meshSize;
 
-uniform mat4 transform;
+//uniform mat4 transform;
 uniform float downX;
 uniform float downY;
 uniform float toX;
 uniform float toY;
 uniform float oX;
 uniform float oY;
+uniform float translateY;
 
 varying float v_lighting;
 
@@ -38,6 +39,7 @@ void main() {
 
     v_lighting = .5 - sin(pos.y - a_position.y) * 1.0 - sin(pos.y - a_position.y) * diffX  * 20.0;
 
-    gl_Position = u_projectionMatrix * transform * pos;
+    pos.y += translateY;
+    gl_Position = u_projectionMatrix * pos;
 
 }

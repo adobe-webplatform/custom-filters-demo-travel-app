@@ -16,7 +16,7 @@ define([
             fragUrl: 'assets/shaders/cloth.frag',
             vertUrl: 'assets/shaders/cloth.vert',
             detached: true,
-            segX: 20,
+            segX: 40,
             segY: 20
         };
 

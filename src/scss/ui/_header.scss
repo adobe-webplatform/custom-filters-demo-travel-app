@@ -11,6 +11,25 @@
         width: 2000px;
     }
 
+    .home {
+        position: relative;
+        float: left;
+        height: 55px;
+        padding-left: 20px;
+        background-color: #37303a;
+
+        cursor: pointer;
+
+        &:before {
+            float: left;
+            content : '';
+            width: 32px;
+            height: 32px;
+            margin-top: 11px;
+            @include ui-asset(0, 70);
+        }
+    }
+
     .tab {
         position: relative;
         float: left;
@@ -34,16 +53,6 @@
 
         html.is-first-route & {
             @include transition(none);
-        }
-
-        &.tab-0:before {
-            float: left;
-            content : '';
-            width: 32px;
-            height: 32px;
-            margin-top: 11px;
-            margin-right: 7px;
-            @include ui-asset(0, 70);
         }
 
         &:after {

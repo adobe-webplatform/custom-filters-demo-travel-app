@@ -23,6 +23,12 @@
     }
 }
 
+@mixin mqHeight($minHeight: 0, $maxHeight: 900) {
+    @media (min-height: #{$minHeight}px) and (max-height: #{$maxHeight}px) {
+        @content;
+    }
+}
+
 @mixin offsetXY($x, $y, $fallbackPrefix: 'margin-') {
 
     html.csstransforms3d &{

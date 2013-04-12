@@ -78,11 +78,6 @@ define([
             shaderStyle.display = 'block';
             shaderStyle.top = shaderStyle.bottom =  '-' + params.margin_height + 'px';
             this.elemStyle.zIndex = this.$elem.siblings().length + 100;
-            if(params.distance === 0.0) {
-                params.distance = 0.00001;
-            } else if(params.distance ===1.0) {
-                params.distance = 0.99999;
-            }
             this.render();
             this.render();
             needRenderItems.push(this);
@@ -107,6 +102,12 @@ define([
         }
 
         function easeTo(distance, downX, duration){
+            var params = this.foldParams;
+            if(params.distance === 0.0) {
+                params.distance = 0.00001;
+            } else if(params.distance ===1.0) {
+                params.distance = 0.99999;
+            }
             EKTweener.to(this.foldParams, duration, {distance: distance, down_x: downX, ease: 'easeInOutSine'});
             this._setRender();
         }

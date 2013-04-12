@@ -83,11 +83,6 @@ define([
             var params = this.tear.params;
             shaderStyle.display = 'block';
             this.elemStyle.zIndex = this.$elem.siblings().length + 100;
-            if(params.distance === 0.0) {
-                params.distance = 0.00001;
-            } else if(params.distance ===1.0) {
-                params.distance = 0.99999;
-            }
             needRenderItems.push(this);
             this.render();
         }
@@ -110,6 +105,12 @@ define([
         }
 
         function easeTo(distance, duration){
+            var params = this.tearParams;
+            if(params.distance === 0.0) {
+                params.distance = 0.00001;
+            } else if(params.distance ===1.0) {
+                params.distance = 0.99999;
+            }
             EKTweener.to(this.tearParams, duration, {distance: distance, ease: 'easeInOutSine'});
             this._setRender();
         }

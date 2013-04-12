@@ -13,48 +13,6 @@
         @include cache;
     }
 
-    .arrow {
-        position: absolute;
-        top: 50%;
-        left: 20px;
-        width: 80px;
-        height: 80px;
-        margin-top: -40px;
-
-        cursor: pointer;
-
-        @include transformTransition(.3s ease-in-out);
-        @include transform(translate3d(-100px,0,0));
-
-        &:before {
-            position: absolute;
-            left: 0;
-            top: 15px;
-            display: block;
-            content: '';
-            width: 50px;
-            height: 50px;
-
-            @include ui-asset(0, 139);
-        }
-
-        &.right {
-            left: auto;
-            right: 20px;
-            @include transform(translate3d(100px,0,0));
-
-            &:before {
-                left: auto;
-                right: 0;
-                background-position: -56px -139px;
-            }
-        }
-
-        &.show {
-            @include transform(translate3d(0,0,0));
-        }
-    }
-
     .spinner-container {
         display: none;
         position: absolute;

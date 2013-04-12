@@ -38,29 +38,10 @@ define([
             this.previousBg = this.bgContainers.filter('.previous');
 
             this.spinnerContainer = this.container.find('.spinner-container');
-
-            this.arrows = this.container.find('.arrow');
         }
 
         function _initEvents(){
-            inputController.add(this.arrows, 'click', bind(_onArrowClick, this));
             //this.wrapper[0].addEventListener(config.transitionStyle + 'End', )
-        }
-
-        function _updateArrows(){
-            var index = 0;
-            var locationId = this.locationId;
-            var locationList = this.currentLocationList;
-            var i = locationList.length;
-            var urlPrefix = sectionController.currentNodes.slice(0, sectionController.currentNodes.length - 1).join('/') +'/';
-            while(i--) if(locationList[i].id === locationId) break;
-            this.arrows.filter('.left').toggleClass('show', i > 0)[0].__url = i > 0 ? urlPrefix + locationList[i-1].id: null;
-            this.arrows.filter('.right').toggleClass('show', i < locationList.length - 1)[0].__url = i < locationList.length - 1 ? urlPrefix + locationList[i+1].id: null;
-        }
-
-        function _onArrowClick(e){
-            var target = e.currentTarget;
-            if(target.__url) sectionController.goTo(target.__url);
         }
 
         function _showSpinner(){
@@ -127,7 +108,6 @@ define([
             this.title.html(location.name);
             this.description.html(location.description);
             this.likeCount.html(location.like);
-            this._updateArrows();
             this.wrapper.addClass('appear');
             this.bottom.addClass('appear');
             setTimeout(function(){
@@ -146,7 +126,6 @@ define([
             this.previousBg.css('backgroundImage', 'none');
             this.wrapper.removeClass('display show hide');
             this.bottom.removeClass('display show hide');
-            this.arrows.removeClass('show');
             this._hideSpinner();
             this.useAnimation = false;
             this._isShow = false;
@@ -173,7 +152,6 @@ define([
 
         _p._initVariables = _initVariables;
         _p._initEvents = _initEvents;
-        _p._updateArrows = _updateArrows;
         _p._updateLocation = _updateLocation;
         _p._onImageReady = _onImageReady;
         _p._reset = _reset;

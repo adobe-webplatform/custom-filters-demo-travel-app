@@ -35,7 +35,7 @@ void main() {
     pos.y = pos.y + max(0.0, y - downY) * rangeRatio * .5 + min(0.0, toY - y) * rangeRatio;
     pos.y = pos.y + (oY - toY) * rangeRatio * yRatio;
     pos.x = pos.x + (oX - toX) * abs(cos(diffX)) * yRatio;
-    pos.y += sin(pos.y - a_position.y) * rangeRatio * sin(a_position.x * u_meshSize.x * PI / 2.0) * .05;
+    //pos.y += sin(pos.y - a_position.y) * rangeRatio * sin(a_position.x * u_meshSize.x * PI / 2.0) * .01;
 
     v_lighting = .5 - sin(pos.y - a_position.y) * 1.0 - sin(pos.y - a_position.y) * diffX  * 20.0;
 

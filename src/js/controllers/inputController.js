@@ -172,7 +172,7 @@ define(
                 touchEvent = e.touches.length ? e.touches[0] : e.changedTouches[0];
                 fakedEvent.x = x = touchEvent.pageX;
                 fakedEvent.y = y = touchEvent.pageY;
-                target =touchEvent.target;
+                fakedEvent.target = target =touchEvent.target;
 
                 var isSkipPreventDefault = false;
                 bubbleHistory = inputController.currentBubbleHistory = fakedEvent.bubbleHistory = [];
@@ -187,7 +187,7 @@ define(
             } else{
                 fakedEvent.x = x = _hasEventListener? e.pageX: e.clientX + _documentElement.scrollLeft;
                 fakedEvent.y = y = _hasEventListener? e.pageY: e.clientY + _documentElement.scrollTop;
-                target = target = e.target ? e.target: e.srcElement;
+                fakedEvent.target = target = e.target ? e.target: e.srcElement;
                 bubbleHistory = inputController.currentBubbleHistory = fakedEvent.bubbleHistory = [];
                 while(target) {
                     bubbleHistory.unshift(target);

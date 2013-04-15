@@ -24,7 +24,7 @@ define([
             this.eventData = this.data.events;
             this.myPlanData = this.data.my_plans;
 
-            this.currentTabName = '';
+            this.currentTabId = '';
 
             handlebarsHelper.define('__schedule_view__', this.eventData.prompt_btn);
             handlebarsHelper.define('__schedule_edit__', this.myPlanData.prompt_btn);
@@ -77,17 +77,24 @@ define([
                 tabListData = tabData[i];
                 sectionData = tabListData.sectionData;
                 tabListData.colors = colorHelper.generateShadeList(sectionData.hue_from, sectionData.hue_to, 33, 58, 50, 70, 10);
+                tabListData.tab[0].__tabId = i;
                 this._initItemList(tabListData);
             }
 
             this.events.items.find('.edit').remove();
             this.myPlans.items.find('.view').remove();
-
-            this.topContainer.after(this.items);
         }
 
         function _initEvents(){
             var self = this;
+            inputController.add(this.events.tab.add(this.myPlans.tab), 'click', bind(_onTabClick, this));
+        }
+
+        function _onTabClick(e){
+            var tabId = e.currentTarget.__tabId;
+            if(tabId !== this.currentTabId) {
+                sectionController.goTo('home/schedule/' + tabId);
+            }
         }
 
         function _onMyPlansOrderChanged(){
@@ -134,6 +141,7 @@ define([
             inputController.add(item, 'click', bind(_onItemClick, this, item));
             item.__data = itemData;
             itemData.item = item;
+            this.items = this.items.add(item);
         }
 
 
@@ -144,7 +152,7 @@ define([
         }
 
         function _onItemClick(item, e){
-            if($(e.currentTarget).hasClass('prompt-btn')) {
+            if($(e.target).hasClass('prompt-btn')) {
 
             } else {
                 _onItemOpen.call(this, item);
@@ -159,10 +167,22 @@ define([
             this.scrollPane.onResize();
         }
 
+        function _getTabIdByNodes(nodes){
+            return nodes[2] ? nodes[2] : DEFAULT_TAB_NAME;
+        }
+
+        function appear(nodes, isFromShow, isOnSearchUpdate){
+            var tabId = this._getTabIdByNodes(nodes);
+            this.items.hide();
+            var tabData = this.tabData[tabId];
+            tabData.items.show();
+            this.container.show();
+        }
+
         function show(currentNodes, previousSection, previousNodes){
             var self = this;
-            var tabName = currentNodes[2] ? currentNodes[2] : DEFAULT_TAB_NAME;
-            if(tabName === this.currentTabName) {
+            var tabId = this._getTabIdByNodes(currentNodes);
+            if(tabId === this.currentTabId) {
                 self._setShown();
                 return;
             }
@@ -175,8 +195,8 @@ define([
 
         function hide(currentSection, currentNodes){
             var self = this;
-            var tabName = currentNodes[2] ? currentNodes[2] : DEFAULT_TAB_NAME;
-            if(currentSection === this && tabName === this.currentTabName) {
+            var tabId = this._getTabIdByNodes(currentNodes);
+            if(currentSection === this && tabId === this.currentTabId) {
                 self._setHidden();
                 return;
             }
@@ -184,11 +204,16 @@ define([
             stageReference.onResize.remove(_onResize, this);
 
             if(currentSection !== this) {
-                this.currentTabName = '';
+                this.currentTabId = '';
             }
             self._setHidden();
         }
 
+
+        function getNodeName(nodeId){
+            nodeId = nodeId.replace('-', '_');
+            return this.data[nodeId] ? this.data[nodeId].title : '';
+        }
 
         _p._initVariables = _initVariables;
         _p._initEvents = _initEvents;
@@ -198,8 +223,12 @@ define([
         _p._sortItems = _sortItems;
         _p._onResize = _onResize;
 
+        _p._getTabIdByNodes = _getTabIdByNodes;
+
+        _p.appear = appear;
         _p.show = show;
         _p.hide = hide;
+        _p.getNodeName = getNodeName;
 
         return ScheduleSection;
     }

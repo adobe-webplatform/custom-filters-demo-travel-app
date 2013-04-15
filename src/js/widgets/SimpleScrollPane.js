@@ -92,7 +92,6 @@ define([
         function render(){
             this._pos += (this._tPos - this._pos) * this._easeRatio;
             this._ratio = this._pos / this.movableHeight;
-            this._moveToPos();
 
             if(!this.isDown) {
                 if(this._ratio > 0) {
@@ -106,10 +105,12 @@ define([
             if(!this.isRendering && Math.abs(this._tPos - this._pos) > 1){
                 this.isRendering = true;
                 stageReference.onRender.add(render, this);
-            } else if(Math.abs(this._tPos - this._pos) < 1) {
+            } else if(Math.abs(this._tPos - this._pos) < 1 && this._tRatio < 0 && this._tRatio > -1 ) {
+                this._pos = ~~this._tPos;
                 this.isRendering = false;
                 stageReference.onRender.remove(render, this);
             }
+            this._moveToPos();
         }
 
         function moveToRatio(value, easeRatio) {

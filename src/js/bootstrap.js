@@ -28,6 +28,7 @@
             'sectionController' : 'controllers/sectionController',
             'locationController' : 'controllers/locationController',
             'uiController' : 'controllers/uiController',
+            'scheduleController' : 'controllers/scheduleController',
             'trackingController' : 'controllers/trackingController',
 
             'config' : 'core/config',

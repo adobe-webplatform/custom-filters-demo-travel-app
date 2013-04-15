@@ -1,12 +1,163 @@
-#district{
+#schedule{
     top: 55px;
 
     z-index: 40;
     @include cache;
+
+    .tabs {
+        width: 100%;
+        height: 90px;
+
+        .tab {
+            position: relative;
+            float: left;
+            width: 50%;
+            height: 90px;
+            background-color: #c7c7c7;
+
+            font-style: italic;
+
+            color: #fff;
+
+
+            .text {
+                margin-left: 30px;
+                font-size: 42px;
+                font-weight: 100;
+                line-height: 90px;
+
+                color: #fff;
+            }
+
+            .num {
+                position: absolute;
+                font-size: 24px;
+                font-weight: 300;
+
+                right: 30px;
+                top: 50%;
+                width: 50px;
+                height: 50px;
+                margin-top: -25px;
+                text-align: center;
+                line-height: 50px;
+                color: #c7c7c7;
+
+                background-color: #fff;
+                border-radius: 25px;
+
+            }
+
+            &.selected {
+                background-color: #fff;
+
+                .text {
+                    color: #c7c7c7;
+                }
+
+                .num {
+                    background-color: #c7c7c7;
+                    color: #fff;
+                }
+
+            }
+
+        }
+
+    }
+
 }
-.district-item {
+
+.schedule-item {
     float: left;
     position: relative;
     width: 100%;
-    height: 25%;
+    height: 80px;
+
+    .text {
+        margin-left: 47px;
+        margin-right: 70px;
+
+        font-size: 42px;
+        font-style: italic;
+        letter-spacing: -2px;
+        line-height: 80px;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        @media all and (max-width : 1050px) {
+            font-size: 24px;
+            letter-spacing: -1px;
+        }
+    }
+
+    .prompt-btn {
+        position: absolute;
+        top: 0;
+        right: 120px;
+        width: 75px;
+
+        font-size: 24px;
+        font-style: italic;
+        letter-spacing: -1px;
+        line-height: 80px;
+        color: rgba(255,255,255,.7);
+
+        @media all and (max-width : 1050px) {
+            font-size: 16px;
+            letter-spacing: 0px;
+        }
+    }
+
+    .date {
+        position: absolute;
+        top: 0;
+        right: 60px;
+        width: 75px;
+
+        font-size: 24px;
+        font-style: italic;
+        letter-spacing: -1px;
+        line-height: 80px;
+        color: rgba(0,0,0,.3);
+
+        @media all and (max-width : 1050px) {
+            font-size: 16px;
+            letter-spacing: 0px;
+        }
+    }
+
+    .arrow {
+        position: absolute;
+        top: 50%;
+        right: 30px;
+        width: 15px;
+        height: 23px;
+        margin-top: -12px;
+
+        @include ui-asset(20, 0);
+    }
+
+    .shader-shadow {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+
+        // border
+        border-top-width: 40px;
+        border-top-color: transparent;
+        border-top-style: solid;
+        border-bottom-width: 40px;
+        border-bottom-color: rgba(0,0,0,.3);
+        border-bottom-style: solid;
+
+        pointer-events: none;
+    }
+
+    &.show {
+        display: block;
+    }
 }

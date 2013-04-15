@@ -37,12 +37,10 @@ define([
 
         var _transform3DStyle = config.transform3DStyle;
 
-        var NUM_OF_SHADES = 10;
         var SHADER_PADDING = 40;
 
         function _initVariables(){
             var self = this;
-            this.scrollPane = this.container.find('.scroll-pane');
             this.items = this.container.find('.location-list-item');
 
             this.moveContainers = this.container.find('.move-container');
@@ -51,7 +49,7 @@ define([
 
             this.scrollPane = new SimpleScrollPane(
                 this.container.find('.scroll-wrapper'),
-                this.container.find('.scroll-move-container'),
+                this.moveContainers,
                 this.container.find('.indicator')
             );
 

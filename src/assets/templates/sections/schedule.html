@@ -1,8 +1,19 @@
-<div id="district" class="section">
-    {{#items}}
-    <div class="district-item" style="background-color:{{color}}">
-        <div class="text">{{name}}</div>
-        <div class="arrow"></div>
+<div id="schedule" class="section">
+    <div class="tabs">
+        <div class="events tab selected">
+            <div class="text">{{events.title}}</div>
+            <div class="num"></div>
+        </div>
+        <div class="my-plans tab">
+            <div class="text">{{my_plans.title}}</div>
+            <div class="num"></div>
+        </div>
     </div>
-    {{/items}}
+    <div class="wrapper scroll-wrapper">
+        <div class="scroll-move-container">
+            <div class="top move-container"></div>
+            <div class="bottom move-container"></div>
+        </div>
+        <div class="indicator"></div>
+    </div>
 </div>

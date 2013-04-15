@@ -5,12 +5,13 @@ define([
         'jquery',
         'inputController',
         'uiController',
+        'scheduleController',
         'sectionController',
         'locationController',
         'preloaderController',
         'stageReference'
     ],
-    function(app, config, $, inputController, uiController, sectionController, locationController, preloaderController, stageReference) {
+    function(app, config, $, inputController, uiController, scheduleController, sectionController, locationController, preloaderController, stageReference) {
 
         app.container = null;
 
@@ -27,9 +28,10 @@ define([
             inputController.init();
             uiController.init();
             locationController.init();
+            scheduleController.init();
             sectionController.preInit();
             sectionController.init();
-            
+
             //preloaderController.init();
             //preloaderController.add($('#app'));
 

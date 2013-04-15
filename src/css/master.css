@@ -634,19 +634,24 @@ html.is-first-route #header .tab:after {
   font-family: "league-gothic-condensed", "Arial Narrow", sans-serif;
   text-transform: uppercase;
   background-color: rgba(0, 0, 0, 0.4);
-  z-index: 250;
+  z-index: 68;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
 }
-/* line 15, ../scss/ui/_schedulePrompt.scss */
+/* line 17, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .wrapper {
   position: absolute;
   left: 50%;
   top: 50%;
   width: 300px;
-  height: 300px;
+  height: 368px;
   margin-left: -150px;
-  margin-top: -150px;
+  margin-top: -184px;
 }
-/* line 26, ../scss/ui/_schedulePrompt.scss */
+/* line 28, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .triangle {
   position: absolute;
   width: 0;
@@ -654,26 +659,26 @@ html.is-first-route #header .tab:after {
   border-left: 150px solid transparent;
   border-right: 150px solid transparent;
 }
-/* line 34, ../scss/ui/_schedulePrompt.scss */
+/* line 36, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .top {
   width: 100%;
   height: 41px;
   background-color: #d14443;
   text-align: center;
 }
-/* line 40, ../scss/ui/_schedulePrompt.scss */
+/* line 42, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .top .triangle {
   top: -50.5px;
   border-bottom: 51px solid #d14443;
 }
-/* line 45, ../scss/ui/_schedulePrompt.scss */
+/* line 47, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .top .title {
   font-size: 36px;
   line-height: 36px;
   color: #e7e5e1;
   letter-spacing: 1px;
 }
-/* line 51, ../scss/ui/_schedulePrompt.scss */
+/* line 53, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .top .title:before, #schedule-prompt .top .title:after {
   content: '';
   display: inline-block;
@@ -682,15 +687,15 @@ html.is-first-route #header .tab:after {
   margin: 13px 9px;
   background-color: #da8482;
 }
-/* line 62, ../scss/ui/_schedulePrompt.scss */
+/* line 64, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .content {
   width: 100%;
   height: 190px;
   background-color: #fff;
   border-bottom: 1px solid #d9d9d9;
 }
-/* line 70, ../scss/ui/_schedulePrompt.scss */
-#schedule-prompt .content input {
+/* line 72, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .content input, #schedule-prompt .content textarea {
   width: 240px;
   height: 40px;
   -webkit-appearance: none;
@@ -710,37 +715,39 @@ html.is-first-route #header .tab:after {
   color: #d14443;
   outline: none;
   background-color: #eaeae9;
+  resize: none;
   background-image: url(../assets/images/ui.png);
   background-position: -192px 5px;
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 70, ../scss/ui/_schedulePrompt.scss */
-  #schedule-prompt .content input {
+  /* line 72, ../scss/ui/_schedulePrompt.scss */
+  #schedule-prompt .content input, #schedule-prompt .content textarea {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 300px;
   }
 }
-/* line 95, ../scss/ui/_schedulePrompt.scss */
-#schedule-prompt .content input.location {
+/* line 98, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .content input.location, #schedule-prompt .content textarea.location {
   margin-top: 25px;
 }
-/* line 98, ../scss/ui/_schedulePrompt.scss */
-#schedule-prompt .content input.date {
+/* line 101, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .content input.date, #schedule-prompt .content textarea.date {
   background-position: -192px -32px;
 }
-/* line 101, ../scss/ui/_schedulePrompt.scss */
-#schedule-prompt .content input.note {
+/* line 104, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .content input.note, #schedule-prompt .content textarea.note {
   background-position: -192px -67px;
 }
-/* line 107, ../scss/ui/_schedulePrompt.scss */
+/* line 110, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .bottom {
   position: relative;
   width: 100%;
-  height: 139px;
+  height: 114px;
+  padding-top: 25px;
   background-color: #eee;
 }
-/* line 113, ../scss/ui/_schedulePrompt.scss */
+/* line 117, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .bottom input {
   width: 240px;
   height: 40px;
@@ -758,20 +765,52 @@ html.is-first-route #header .tab:after {
   color: #fff;
   outline: none;
 }
-/* line 133, ../scss/ui/_schedulePrompt.scss */
-#schedule-prompt .bottom input.save {
-  margin-top: 25px;
+/* line 137, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .bottom input.save, #schedule-prompt .bottom input.close {
   margin-bottom: 10px;
   background-color: #d14443;
 }
-/* line 139, ../scss/ui/_schedulePrompt.scss */
+/* line 142, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .bottom input.close {
+  display: none;
+}
+/* line 146, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .bottom input.cancel {
   background-color: #839194;
 }
-/* line 144, ../scss/ui/_schedulePrompt.scss */
+/* line 152, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .bottom .triangle {
   bottom: -50.5px;
   border-top: 51px solid #eeeeee;
+}
+/* line 159, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .events {
+  display: none;
+}
+/* line 165, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.is-event .wrapper {
+  height: 314px;
+  margin-top: -158px;
+}
+/* line 170, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.is-event .events {
+  display: block;
+}
+/* line 174, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.is-event .my-plans {
+  display: none;
+}
+/* line 178, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.is-event .bottom {
+  height: 64px;
+}
+/* line 181, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.is-event .bottom input.close {
+  display: block;
+}
+/* line 184, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.is-event .bottom input.save, #schedule-prompt.is-event .bottom input.cancel {
+  display: none;
 }
 
 /* line 1, ../scss/sections/_base.scss */
@@ -1101,7 +1140,7 @@ html.is-first-route #header .tab:after {
 }
 
 /* line 1, ../scss/sections/_schedule.scss */
-#district {
+#schedule {
   top: 55px;
   z-index: 40;
   -webkit-transform: translateZ(0);
@@ -1110,13 +1149,159 @@ html.is-first-route #header .tab:after {
   -o-transform: translateZ(0);
   transform: translateZ(0);
 }
-
 /* line 7, ../scss/sections/_schedule.scss */
-.district-item {
+#schedule .tabs {
+  width: 100%;
+  height: 90px;
+}
+/* line 11, ../scss/sections/_schedule.scss */
+#schedule .tabs .tab {
+  position: relative;
+  float: left;
+  width: 50%;
+  height: 90px;
+  background-color: #c7c7c7;
+  font-style: italic;
+  color: #fff;
+}
+/* line 23, ../scss/sections/_schedule.scss */
+#schedule .tabs .tab .text {
+  margin-left: 30px;
+  font-size: 42px;
+  font-weight: 100;
+  line-height: 90px;
+  color: #fff;
+}
+/* line 32, ../scss/sections/_schedule.scss */
+#schedule .tabs .tab .num {
+  position: absolute;
+  font-size: 24px;
+  font-weight: 300;
+  right: 30px;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  text-align: center;
+  line-height: 50px;
+  color: #c7c7c7;
+  background-color: #fff;
+  border-radius: 25px;
+}
+/* line 51, ../scss/sections/_schedule.scss */
+#schedule .tabs .tab.selected {
+  background-color: #fff;
+}
+/* line 54, ../scss/sections/_schedule.scss */
+#schedule .tabs .tab.selected .text {
+  color: #c7c7c7;
+}
+/* line 58, ../scss/sections/_schedule.scss */
+#schedule .tabs .tab.selected .num {
+  background-color: #c7c7c7;
+  color: #fff;
+}
+
+/* line 71, ../scss/sections/_schedule.scss */
+.schedule-item {
   float: left;
   position: relative;
   width: 100%;
-  height: 25%;
+  height: 80px;
+}
+/* line 77, ../scss/sections/_schedule.scss */
+.schedule-item .text {
+  margin-left: 47px;
+  margin-right: 70px;
+  font-size: 42px;
+  font-style: italic;
+  letter-spacing: -2px;
+  line-height: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media all and (max-width: 1050px) {
+  /* line 77, ../scss/sections/_schedule.scss */
+  .schedule-item .text {
+    font-size: 24px;
+    letter-spacing: -1px;
+  }
+}
+/* line 96, ../scss/sections/_schedule.scss */
+.schedule-item .prompt-btn {
+  position: absolute;
+  top: 0;
+  right: 120px;
+  width: 75px;
+  font-size: 24px;
+  font-style: italic;
+  letter-spacing: -1px;
+  line-height: 80px;
+  color: rgba(255, 255, 255, 0.7);
+}
+@media all and (max-width: 1050px) {
+  /* line 96, ../scss/sections/_schedule.scss */
+  .schedule-item .prompt-btn {
+    font-size: 16px;
+    letter-spacing: 0px;
+  }
+}
+/* line 114, ../scss/sections/_schedule.scss */
+.schedule-item .date {
+  position: absolute;
+  top: 0;
+  right: 60px;
+  width: 75px;
+  font-size: 24px;
+  font-style: italic;
+  letter-spacing: -1px;
+  line-height: 80px;
+  color: rgba(0, 0, 0, 0.3);
+}
+@media all and (max-width: 1050px) {
+  /* line 114, ../scss/sections/_schedule.scss */
+  .schedule-item .date {
+    font-size: 16px;
+    letter-spacing: 0px;
+  }
+}
+/* line 132, ../scss/sections/_schedule.scss */
+.schedule-item .arrow {
+  position: absolute;
+  top: 50%;
+  right: 30px;
+  width: 15px;
+  height: 23px;
+  margin-top: -12px;
+  background-image: url(../assets/images/ui.png);
+  background-position: -20px 0px;
+  background-repeat: no-repeat;
+}
+@media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+  /* line 132, ../scss/sections/_schedule.scss */
+  .schedule-item .arrow {
+    background-image: url(../assets/images/ui_x2.png);
+    background-size: 225px 300px;
+  }
+}
+/* line 143, ../scss/sections/_schedule.scss */
+.schedule-item .shader-shadow {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top-width: 40px;
+  border-top-color: transparent;
+  border-top-style: solid;
+  border-bottom-width: 40px;
+  border-bottom-color: rgba(0, 0, 0, 0.3);
+  border-bottom-style: solid;
+  pointer-events: none;
+}
+/* line 160, ../scss/sections/_schedule.scss */
+.schedule-item.show {
+  display: block;
 }
 
 /* line 1, ../scss/sections/_mood.scss */
@@ -1369,11 +1554,14 @@ html.is-first-route #header .tab:after {
 /* line 122, ../scss/sections/_locationList.scss */
 .location-list-item .text {
   margin-left: 47px;
-  width: 100%;
+  margin-right: 70px;
   font-size: 42px;
   font-style: italic;
   letter-spacing: -2px;
   line-height: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 @media all and (max-width: 1050px) {
   /* line 122, ../scss/sections/_locationList.scss */
@@ -1382,7 +1570,7 @@ html.is-first-route #header .tab:after {
     letter-spacing: -1px;
   }
 }
-/* line 137, ../scss/sections/_locationList.scss */
+/* line 141, ../scss/sections/_locationList.scss */
 .location-list-item .arrow {
   position: absolute;
   top: 50%;
@@ -1395,13 +1583,13 @@ html.is-first-route #header .tab:after {
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 137, ../scss/sections/_locationList.scss */
+  /* line 141, ../scss/sections/_locationList.scss */
   .location-list-item .arrow {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 300px;
   }
 }
-/* line 148, ../scss/sections/_locationList.scss */
+/* line 152, ../scss/sections/_locationList.scss */
 .location-list-item .shader-shadow {
   display: none;
   position: absolute;
@@ -1415,7 +1603,7 @@ html.is-first-route #header .tab:after {
   border-bottom-style: solid;
   pointer-events: none;
 }
-/* line 165, ../scss/sections/_locationList.scss */
+/* line 169, ../scss/sections/_locationList.scss */
 .location-list-item.show {
   display: block;
 }

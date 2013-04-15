@@ -19,15 +19,27 @@
             "section" : "mood"
         },
         {
+            "route" : "^home\\/(mood|location)\\/[A-Za-z-_!0-9]+\\/?$",
+            "section" : "location-list"
+        },
+        {
+            "route" : "^home\\/(mood|location)\\/[A-Za-z-_!0-9]+\\/[A-Za-z-_!0-9]+\\/?$",
+            "section" : "overview"
+        },
+        {
             "route" : "^home\\/schedule\\/?$",
             "section" : "schedule"
         },
         {
-            "route" : "^home\\/search\\/?$",
-            "section" : "location-list"
+            "route" : "^home\\/schedule\\/(events|my-plans)\\/?$",
+            "section" : "schedule"
         },
         {
-            "route" : "^home\\/(mood|location)\\/[A-Za-z-_!0-9]+\\/?$",
+            "route" : "^home\\/schedule\\/(events|my-plans)\\/[A-Za-z-_!0-9]+\\/?$",
+            "section" : "overview"
+        },
+        {
+            "route" : "^home\\/search\\/?$",
             "section" : "location-list"
         },
         {
@@ -37,10 +49,6 @@
         {
             "route" : "^home\\/search\\/[A-Za-z-_!0-9]+\\/[A-Za-z-_!0-9]+\\/?$",
             "section" : "overview"
-        },
-        {
-            "route" : "^home\\/(mood|location)\\/[A-Za-z-_!0-9]+\\/[A-Za-z-_!0-9]+\\/?$",
-            "section" : "overview"
         }
     ],
 
@@ -49,8 +57,10 @@
     },
 
     "schedule_prompt" : {
-        "title" : "Schedule it",
+        "events_title" : "Events",
+        "my_plans_title" : "Schedule it",
         "default_note" : "Type your note here",
+        "close" : "Close",
         "save" : "Save to Calendar",
         "cancel" : "Cancel"
     },
@@ -115,30 +125,23 @@
                 }
             ]
         },
-        "district" : {
-            "items" : [
-                {
-                    "id" : "downtown",
-                    "name" : "DownTown",
-                    "color" : "#f00"
-                },
-                {
-                    "id" : "eastside",
-                    "name" : "Eastside",
-                    "color" : "#f00"
-                },
-                {
-                    "id" : "south-central",
-                    "name" : "South Central",
-                    "color" : "#f00"
-                },
-                {
-                    "id" : "westside",
-                    "name" : "Westside",
-                    "color" : "#f00"
-                }
-            ]
+        "schedule" : {
+            "events" : {
+                "title" : "Events",
+                "prompt_btn" : "View",
+                "link" : "schedule/events",
+                "hue_from" : 142,
+                "hue_to" : 55
+            },
+            "my_plans" : {
+                "title" : "My Plans",
+                "prompt_btn" : "Edit",
+                "link" : "schedule/my-plans",
+                "hue_from" : 18,
+                "hue_to" : 62
+            }
         },
+
         "location-list" : {
             "search-default" : "Type here what you are looking for",
             "result" : " Results",
@@ -175,6 +178,83 @@
             "favorites" : "Favorites",
             "schedule" : "Schedule it"
         }
+    },
+
+    "schedules" : {
+        "events" : [
+            {
+                "location_id" : "chinatown",
+                "datetime" : "2013-04-10T12:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "geffencontemporary",
+                "datetime" : "2013-04-11T12:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "engineco-no-28",
+                "datetime" : "2013-04-12T12:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "japaneseamerican-national-museum",
+                "datetime" : "2013-04-13T12:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "littletokyo",
+                "datetime" : "2013-04-14T12:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "grammymuseum",
+                "datetime" : "2013-04-14T13:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "thebradbury-building",
+                "datetime" : "2013-05-17T12:00",
+                "note" : "foobar"
+            }
+        ],
+        "my_plans" : [
+            {
+                "location_id" : "chinatown",
+                "datetime" : "2013-04-10T12:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "geffencontemporary",
+                "datetime" : "2013-04-11T12:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "engineco-no-28",
+                "datetime" : "2013-04-12T12:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "japaneseamerican-national-museum",
+                "datetime" : "2013-04-13T12:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "littletokyo",
+                "datetime" : "2013-04-14T12:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "grammymuseum",
+                "datetime" : "2013-04-14T13:00",
+                "note" : "foobar"
+            },
+            {
+                "location_id" : "thebradbury-building",
+                "datetime" : "2013-05-17T12:00",
+                "note" : "foobar"
+            }
+        ]
     },
 
     "locations" : [

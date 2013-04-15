@@ -76,7 +76,6 @@ define([
             if(indexOf(needRenderItems, this) > -1 && shaderStyle.display == 'block') return;
             var params = this.fold.params;
             shaderStyle.display = 'block';
-            shaderStyle.top = shaderStyle.bottom =  '-' + params.margin_height + 'px';
             this.elemStyle.zIndex = this.$elem.siblings().length + 100;
             this.render();
             this.render();
@@ -121,7 +120,9 @@ define([
             params.width = itemWidth;
             params.height = itemHeight;
             params.padding_height = 1 / segY;
-            params.margin_height = (segY * this.shaderPadding - itemHeight) / 2 / segY / params.padding_height;
+            params.margin_height = (segY * this.shaderPadding - itemHeight) / 2 / segY / this.shaderPadding;
+            this.shadowStyle.top = this.shadowStyle.bottom =  '-' + (itemHeight / (segY - 2) * segY * params.margin_height) + 'px';
+
         }
 
         function render(){

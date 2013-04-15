@@ -28,6 +28,10 @@
             margin-top: 11px;
             @include ui-asset(0, 70);
         }
+
+        @media all and (max-width : 603px) {
+            padding-left: 10px;
+        }
     }
 
     .tab {
@@ -47,7 +51,7 @@
         @include cache;
         @include transformTransition(.3s ease-in-out, opacity .3s linear, background-color .3s linear);
 
-        @media all and (max-width : 1050px) {
+        @media all and (max-width : 603px) {
             font-size: 14px;
         }
 

@@ -49,7 +49,7 @@ define([
 
             this.scrollPane = new SimpleScrollPane(
                 this.container.find('.scroll-wrapper'),
-                this.moveContainers,
+                this.container.find('.scroll-move-container'),
                 this.container.find('.indicator')
             );
 

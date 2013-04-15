@@ -4,9 +4,44 @@
     z-index: 40;
     @include cache;
 
+    .scroll-wrapper {
+        position: absolute;
+        top: 90px;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .scroll-move-container {
+        position: absolute;
+        width: 100%;
+    }
+
+    .move-container {
+        position: relative;
+        float: left;
+        width: 100%;
+
+        @include cache;
+    }
+
+
+    .indicator {
+        position: absolute;
+        width: 8px;
+        top: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, .4);
+        border-left: 1px solid rgba(255,255,255,.2);
+        border-top: 1px solid rgba(255,255,255,.2);
+    }
+
     .tabs {
+        position: absolute;
         width: 100%;
         height: 90px;
+
+        @include cache;
+        z-index: 10;
 
         .tab {
             position: relative;
@@ -21,12 +56,17 @@
 
 
             .text {
-                margin-left: 30px;
+                margin-left: 47px;
                 font-size: 42px;
-                font-weight: 100;
+                font-weight: 300;
                 line-height: 90px;
 
                 color: #fff;
+
+                @media all and (max-width : 603px) {
+                    margin-left: 20px;
+                    font-size: 22px;
+                }
             }
 
             .num {
@@ -45,6 +85,15 @@
 
                 background-color: #fff;
                 border-radius: 25px;
+
+                @media all and (max-width : 603px) {
+                    right: 10px;
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px;
+                    margin-top: -15px;
+                    font-size: 16px;
+                }
 
             }
 
@@ -76,7 +125,7 @@
 
     .text {
         margin-left: 47px;
-        margin-right: 70px;
+        margin-right: 195px;
 
         font-size: 42px;
         font-style: italic;
@@ -87,8 +136,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
 
-        @media all and (max-width : 1050px) {
-            font-size: 24px;
+        @media all and (max-width : 603px) {
+            margin-left: 20px;
+            margin-right: 125px;
+            font-size: 22px;
             letter-spacing: -1px;
         }
     }
@@ -105,9 +156,12 @@
         line-height: 80px;
         color: rgba(255,255,255,.7);
 
-        @media all and (max-width : 1050px) {
+        @media all and (max-width : 603px) {
+            width: 50px;
+            right: 82px;
             font-size: 16px;
             letter-spacing: 0px;
+            text-align: center;
         }
     }
 
@@ -123,7 +177,9 @@
         line-height: 80px;
         color: rgba(0,0,0,.3);
 
-        @media all and (max-width : 1050px) {
+        @media all and (max-width : 603px) {
+            width: 60px;
+            right: 24px;
             font-size: 16px;
             letter-spacing: 0px;
         }
@@ -138,6 +194,10 @@
         margin-top: -12px;
 
         @include ui-asset(20, 0);
+
+        @media all and (max-width : 603px) {
+            right: 15px;
+        }
     }
 
     .shader-shadow {

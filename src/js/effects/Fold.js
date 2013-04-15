@@ -30,7 +30,6 @@ define([
 
         function getStyle(opts) {
             var params = this.params;
-            //var segYPixelRatio =  1 / this._opts.segY / params.padding_height;
             return this.header +
             ', t ' + params.distance.toFixed(6) +
             ', light_intensity ' + params.light_intensity.toFixed(6) +

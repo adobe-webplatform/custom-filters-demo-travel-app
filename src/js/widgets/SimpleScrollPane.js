@@ -43,7 +43,6 @@ define([
             inputController.add(this.wrapper, 'down', bind(_onDown, this));
             inputController.onMove.add(_onMove, this);
             inputController.onUp.add(_onUp, this);
-            window.test = this;
         }
 
         function _onDown(e){

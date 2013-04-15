@@ -12,6 +12,7 @@ define(
     function(header, config, $, template, inputController, sectionController, stageReference) {
 
         var _container;
+        var _homeIcon;
         var _tabs;
         var _currentNodes = [];
 
@@ -19,10 +20,12 @@ define(
 
         function init(){
             _container = $(template(config.data.header));
+            _homeIcon = _container.find('.home');
             _tabs = _container.find('.tab');
             $('#app').append(_container);
 
-
+            _homeIcon[0].__url = sectionController.DEFAULT_PATH;
+            inputController.add(_homeIcon, 'click', _onClick);
             inputController.add(_tabs, 'click', _onClick);
         }
 
@@ -48,7 +51,6 @@ define(
                     }
                 }
                 _tabs[i - 1].__url = path + nodes[i - 1];
-                _tabs[0].__url = sectionController.DEFAULT_PATH;
 
                 var sum = 0;
                 for(; i < 4; i++ ) {

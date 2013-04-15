@@ -123,6 +123,10 @@
     width: 100%;
     height: 80px;
 
+    &.animate {
+        @include transformTransition(.3s ease-out);
+    }
+
     .text {
         margin-left: 47px;
         margin-right: 195px;

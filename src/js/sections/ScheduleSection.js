@@ -25,6 +25,7 @@ define([
             this.myPlanData = this.data.my_plans;
 
             this.currentTabId = '';
+            this.intervalId = null;
 
             handlebarsHelper.define('__schedule_view__', this.eventData.prompt_btn);
             handlebarsHelper.define('__schedule_edit__', this.myPlanData.prompt_btn);
@@ -146,6 +147,7 @@ define([
 
 
         function _onItemPeek(target){
+            $(target).removeClass('animate');
         }
 
         function _onItemUnPeek(){
@@ -177,20 +179,41 @@ define([
             var tabData = this.tabData[tabId];
             tabData.items.show();
             this.container.show();
+
+            this.scrollPane.onResize();
+            this.scrollPane.moveToPos(0,1);
+            this.currentTabId = tabId;
         }
 
         function show(currentNodes, previousSection, previousNodes){
             var self = this;
             var tabId = this._getTabIdByNodes(currentNodes);
-            if(tabId === this.currentTabId) {
+            if(previousSection === this && tabId === this.currentTabId) {
                 self._setShown();
                 return;
             }
+            var tabData = this.tabData[tabId];
 
+            if(tabId !== this.currentTabId) {
+                tabData.items.removeClass('animate').each(function(){
+                    this.style[_transform3DStyle] = 'perspective(500px) scale3d(.7,.7,1) rotateX(-90deg)';
+                });
+            }
             this.appear.apply(this, [currentNodes, true]);
+            this._flipAll(tabData.items);
             stageReference.onResize.add(_onResize, this);
             this._onResize();
             self._setShown();
+        }
+
+        function _flipAll(items){
+            var self = this;
+            var showId = 0;
+            clearInterval(this.intervalId);
+            this.intervalId = setInterval(function(){
+                $(items[showId]).addClass('animate')[0].style[_transform3DStyle] = 'perspective(500px) rotateX(0deg)';
+                if(++showId == items.length) clearInterval(self.intervalId);
+            }, 100);
         }
 
         function hide(currentSection, currentNodes){
@@ -228,6 +251,7 @@ define([
         _p.appear = appear;
         _p.show = show;
         _p.hide = hide;
+        _p._flipAll = _flipAll;
         _p.getNodeName = getNodeName;
 
         return ScheduleSection;

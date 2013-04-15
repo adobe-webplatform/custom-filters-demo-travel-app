@@ -25,6 +25,8 @@ define([
             this.myPlanData = this.data.my_plans;
 
             this.currentTabId = '';
+            this.currentTabData = null;
+            this.currentTriangleColor = '';
             this.intervalId = null;
 
             handlebarsHelper.define('__schedule_view__', this.eventData.prompt_btn);
@@ -56,11 +58,16 @@ define([
             this.topContainer = this.moveContainers.filter('.top');
             this.bottomContainer = this.moveContainers.filter('.bottom');
 
+            this.tabs = this.container.find('.tab');
+            this.triangles = this.tabs.find('.triangle');
+
             this.scrollPane = new SimpleScrollPane(
                 this.container.find('.scroll-wrapper'),
                 this.container.find('.scroll-move-container'),
                 this.container.find('.indicator')
             );
+            //this.scrollPane.isBound = true;
+            this.scrollPane.onUpdateCallback = bind(_onScroll, this);
 
             this.items = $();
             this.events = scheduleController.events;
@@ -84,6 +91,20 @@ define([
 
             this.events.items.find('.edit').remove();
             this.myPlans.items.find('.view').remove();
+        }
+
+        function _onScroll(pos, ratio){
+            var index = Math.floor(-pos / 80);
+            if(index > -1 && index < this.currentTabData.items.length) {
+                var newColor = this.currentTabData.items[index].style.backgroundColor;
+                if(newColor !== this.currentTriangleColor) {
+                    this.currentTriangleColor = newColor;
+                    this.triangles.css('borderBottomColor', newColor);
+                }
+            } else if(this.currentTriangleColor !== 'transparent') {
+                this.currentTriangleColor = 'transparent';
+                this.triangles.css('borderBottomColor', 'transparent');
+            }
         }
 
         function _initEvents(){
@@ -176,8 +197,9 @@ define([
         function appear(nodes, isFromShow, isOnSearchUpdate){
             var tabId = this._getTabIdByNodes(nodes);
             this.items.hide();
-            var tabData = this.tabData[tabId];
+            var tabData = this.currentTabData = this.tabData[tabId];
             tabData.items.show();
+            this.tabs.removeClass('selected').filter('.' + tabId).addClass('selected');
             this.container.show();
 
             this.scrollPane.onResize();

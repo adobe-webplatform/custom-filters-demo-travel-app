@@ -25,7 +25,9 @@ define([
             this._easeRatio = 1;
             this._boundEaseRatio = .4;
             this._momentumEaseRatio = .08;
-            this.isRendering = false;
+            this._isRendering = false;
+
+            this.isBound = false;
             this.onUpdateCallback = null;
 
             this.deltaYLog = [];
@@ -93,7 +95,7 @@ define([
             this._pos += (this._tPos - this._pos) * this._easeRatio;
             this._ratio = this._pos / this.movableHeight;
 
-            if(!this.isDown) {
+            if(!this.isDown && !this.isBound) {
                 if(this._ratio > 0) {
                     this._tRatio -= this._tRatio * this._boundEaseRatio;
                     this._tPos = this._tRatio * this.movableHeight;
@@ -102,15 +104,29 @@ define([
                     this._tPos = this._tRatio * this.movableHeight;
                 }
             }
-            if(!this.isRendering && Math.abs(this._tPos - this._pos) > 1){
-                this.isRendering = true;
+
+            if(this.isBound) this._bound();
+
+            if(!this._isRendering && Math.abs(this._tPos - this._pos) > 1){
+                this._isRendering = true;
                 stageReference.onRender.add(render, this);
-            } else if(Math.abs(this._tPos - this._pos) < 1 && this._tRatio < 0 && this._tRatio > -1 ) {
+            } else if(~~Math.abs(this._tPos - this._pos) < 1) {
+                if(!this.isDown) this._bound();
                 this._pos = ~~this._tPos;
-                this.isRendering = false;
+                this._isRendering = false;
                 stageReference.onRender.remove(render, this);
             }
             this._moveToPos();
+            if(this.onUpdateCallback) this.onUpdateCallback(this._pos, this._ratio);
+        }
+
+        function _bound(){
+            if(this._ratio > 0) {
+                this._pos = this._tPos = this._ratio = this._tRatio = 0;
+            } else if(this._ratio < -1) {
+                this._ratio = this._tRatio = -1;
+                this._pos = this._tPos = this._tRatio * this.movableHeight;
+            }
         }
 
         function moveToRatio(value, easeRatio) {
@@ -121,7 +137,7 @@ define([
             this._easeRatio = easeRatio === undef ? 1 : easeRatio;
             this._tPos = value;
             this._tRatio = this._tPos / (this.movableHeight > 0 ? this.movableHeight : 1);
-            if(!this.isRendering) {
+            if(!this._isRendering) {
                 this.render();
             }
         }
@@ -148,6 +164,7 @@ define([
         _p._onDown = _onDown;
         _p._onUp = _onUp;
         _p.onResize = onResize;
+        _p._bound = _bound;
         _p.render = render;
         _p.moveToRatio = moveToRatio;
         _p.moveToPos = moveToPos;

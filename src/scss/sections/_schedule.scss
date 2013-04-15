@@ -54,6 +54,8 @@
 
             color: #fff;
 
+            @include transition(background-color .5s linear);
+
 
             .text {
                 margin-left: 47px;
@@ -66,6 +68,26 @@
                 @media all and (max-width : 603px) {
                     margin-left: 20px;
                     font-size: 22px;
+                }
+            }
+
+            .triangle {
+                display: none;
+                position: absolute;
+                left: 48px;
+                bottom: 0;
+                width: 0;
+                height: 0;
+                border-left: 12px solid transparent;
+                border-right: 12px solid transparent;
+                border-bottom: 12px solid black;
+                @include transition(color .5s linear);
+
+                @media all and (max-width : 603px) {
+                    left: 20px;
+                    border-left-width: 8px;
+                    border-right-width: 8px;
+                    border-bottom-width: 8px;
                 }
             }
 
@@ -85,6 +107,8 @@
 
                 background-color: #fff;
                 border-radius: 25px;
+                
+                @include transition(background-color .5s linear, color .5s linear);
 
                 @media all and (max-width : 603px) {
                     right: 10px;
@@ -99,6 +123,10 @@
 
             &.selected {
                 background-color: #fff;
+
+                .triangle {
+                    display: block;
+                }
 
                 .text {
                     color: #c7c7c7;

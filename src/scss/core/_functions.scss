@@ -60,7 +60,7 @@
     transform: $transform;
 }
 
-@mixin transition($rest) {
+@mixin transition($rest...) {
     -webkit-transition: $rest;
     -moz-transition: $rest;
     -ms-transition: $rest;

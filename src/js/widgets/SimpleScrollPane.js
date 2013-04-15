@@ -31,6 +31,8 @@ define([
             this.deltaYLog = [];
             this.deltaTimeLog = [];
             this.deltaIndex = 0;
+
+            this._isActive = true;
         }
 
         var _p = SimpleScrollPane.prototype;
@@ -45,12 +47,12 @@ define([
         }
 
         function _onDown(e){
-            if(this.movableHeight < 1) return;
+            if(!this._isActive || this.movableHeight < 1) return;
             this.isDown = true;
         }
 
         function _onMove(e){
-            if(!this.isDown || !inputController.isScrollV || this.movableHeight < 1) return;
+            if(!this._isActive || !this.isDown || !inputController.isScrollV || this.movableHeight < 1) return;
             if(!this.hasMoved) {
                 this.deltaYLog = [];
                 this.deltaTimeLog = [];
@@ -64,7 +66,7 @@ define([
         }
 
         function _onUp(e){
-            if(!this.hasMoved || this.movableHeight < 1) return;
+            if(!this._isActive || !this.hasMoved || this.movableHeight < 1) return;
             this.isDown = false;
             this.hasMoved = false;
             var deltaY = e.deltaY;
@@ -136,6 +138,11 @@ define([
         }: function(elementStyle, value) {
             elementStyle.top = 'translate(0,' + value + 'px)';
         };
+
+        function setActive(bool){
+            this._isActive = bool;
+            this.isDown = false;
+        }
 
         _p.init = init;
         _p._onDown = _onDown;

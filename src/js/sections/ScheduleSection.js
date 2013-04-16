@@ -7,6 +7,7 @@ define([
         'widgets/SimpleScrollPane',
         'inputController',
         'sectionController',
+        'locationController',
         'scheduleController',
         'widgets/FoldListItem',
         'helpers/colorHelper',
@@ -14,7 +15,7 @@ define([
         'mout/function/bind',
         'stageReference',
         'EKTweener'
-    ], function(config, $, AbstractSection, sectionTemplate, itemTemplate, SimpleScrollPane, inputController, sectionController, scheduleController, FoldListItem, colorHelper, handlebarsHelper, bind, stageReference, EKTweener){
+    ], function(config, $, AbstractSection, sectionTemplate, itemTemplate, SimpleScrollPane, inputController, sectionController, locationController, scheduleController, FoldListItem, colorHelper, handlebarsHelper, bind, stageReference, EKTweener){
 
         function ScheduleSection(){
             _super.constructor.call(this, 'schedule', sectionTemplate);
@@ -58,6 +59,7 @@ define([
             this.topContainer = this.moveContainers.filter('.top');
             this.bottomContainer = this.moveContainers.filter('.bottom');
 
+            this.tabsContainer = this.container.find('.tabs');
             this.tabs = this.container.find('.tab');
             this.triangles = this.tabs.find('.triangle');
 
@@ -162,6 +164,7 @@ define([
             item.foldListItem = new FoldListItem(item, bind(_onItemPeek, this, item), _onItemUnPeek, bind(_onItemOpen, this, item), SHADER_PADDING);
             inputController.add(item, 'click', bind(_onItemClick, this, item));
             item.__data = itemData;
+            item.__id = itemData.location_id;
             itemData.item = item;
             this.items = this.items.add(item);
         }
@@ -169,9 +172,14 @@ define([
 
         function _onItemPeek(target){
             $(target).removeClass('animate');
+            var nodes = sectionController.currentNodes;
+            sectionController.appearTarget(sectionController.currentNodes.join('/') + (nodes.length <3 ? '/' + DEFAULT_TAB_NAME : '') + '/' + target.__id);
         }
 
         function _onItemUnPeek(){
+            if(!sectionController.isAnimating() && FoldListItem.needRenderItems.length === 0) {
+                sectionController.sections.overview.disappear();
+            }
         }
 
         function _onItemClick(item, e){
@@ -183,7 +191,8 @@ define([
         }
 
         function _onItemOpen(target){
-
+            var nodes = sectionController.currentNodes;
+            sectionController.goTo(sectionController.currentNodes.join('/') + (nodes.length <3 ? '/' + DEFAULT_TAB_NAME : '') + '/' + target.__id);
         }
 
         function _onResize(e){
@@ -207,6 +216,25 @@ define([
             this.currentTabId = tabId;
         }
 
+        function _addToMoveContainers(index){
+            var items = this.currentTabData.items;
+            for(var i = 0, len = items.length; i < len; i++) {
+                if(i < index) {
+                    // add to the top container;
+                    this.topContainer.append(items[i]);
+                } else if(i > index) {
+                    // add to the bottom container;
+                    this.bottomContainer.append(items[i]);
+                }
+            }
+        }
+
+        function _removeFromMoveContainers(index){
+            var items = this.currentTabData.items;
+            items.detach();
+            this.topContainer.after(items);
+        }
+
         function show(currentNodes, previousSection, previousNodes){
             var self = this;
             var tabId = this._getTabIdByNodes(currentNodes);
@@ -215,17 +243,40 @@ define([
                 return;
             }
             var tabData = this.tabData[tabId];
-
-            if(tabId !== this.currentTabId) {
+            this.appear.apply(this, [currentNodes, true]);
+            stageReference.onResize.add(_onResize, this);
+            this._onResize();
+            if(previousSection == this) {
                 tabData.items.removeClass('animate').each(function(){
                     this.style[_transform3DStyle] = 'perspective(500px) scale3d(.7,.7,1) rotateX(-90deg)';
                 });
+                this._flipAll(tabData.items);
+                this.tabsContainer[0].style[_transform3DStyle] = 'translateZ(0)';
+                this._setShown();
+            } else if(previousNodes.length < 3) {
+                this.tabsContainer[0].style[_transform3DStyle] = 'translateZ(0)';
+                this._setShown();
+            } else {
+                var foundTarget;
+                var locationId = previousNodes[3];
+                var items = this.currentTabData.items;
+                var foundId = items.length;
+                while(foundId--) if($(foundTarget = items[foundId]).data('locationId') === locationId) break;
+                var moveDistance = stageReference.stageHeight;
+                this._addToMoveContainers(foundId);
+                foundTarget.foldListItem.updateSize();
+                foundTarget.foldListItem.setTo(-1.2, 1);
+                setTimeout(function(){
+                    foundTarget.foldListItem.easeTo(0, 1, .5);
+                }, 300);
+                this.topContainer[0].style[_transform3DStyle] =this.tabsContainer[0].style[_transform3DStyle] = 'translate3d(0,' + (- moveDistance) +  'px,0)';
+                this.bottomContainer[0].style[_transform3DStyle] = 'translate3d(0,' + moveDistance +  'px,0)';
+                EKTweener.to(this.moveContainers.add(this.tabsContainer), .5, {transform3d: 'translate3d(0,0,0)', ease: 'easeOutSine'});
+                setTimeout(function(){
+                    self._removeFromMoveContainers();
+                    self._setShown();
+                }, 800);
             }
-            this.appear.apply(this, [currentNodes, true]);
-            this._flipAll(tabData.items);
-            stageReference.onResize.add(_onResize, this);
-            this._onResize();
-            self._setShown();
         }
 
         function _flipAll(items){
@@ -241,23 +292,46 @@ define([
         function hide(currentSection, currentNodes){
             var self = this;
             var tabId = this._getTabIdByNodes(currentNodes);
-            if(currentSection === this && tabId === this.currentTabId) {
-                self._setHidden();
-                return;
-            }
 
             stageReference.onResize.remove(_onResize, this);
-
             if(currentSection !== this) {
                 this.currentTabId = '';
             }
-            self._setHidden();
+            
+            if(currentNodes.length < 3 || currentSection === this) {
+                self._setHidden();
+            } else {
+                var foundTarget;
+                var locationId = currentNodes[3];
+                var items = this.currentTabData.items;
+                var foundId = items.length;
+                while(foundId--) if($(foundTarget = items[foundId]).data('locationId') === locationId) break;
+                var moveDistance = stageReference.stageHeight;
+                this._addToMoveContainers(foundId);
+                foundTarget.foldListItem.updateSize();
+                foundTarget.foldListItem.easeTo(-1.2, 1, .5);
+                EKTweener.to(this.tabsContainer, .5, {delay: .3, transform3d: 'translate3d(0,' + (- moveDistance) +  'px,0)', ease: 'easeInSine'});
+                EKTweener.to(this.topContainer, .5, {delay: .3, transform3d: 'translate3d(0,' + (- moveDistance) +  'px,0)', ease: 'easeInSine'});
+                EKTweener.to(this.bottomContainer, .5, {delay: .3, transform3d: 'translate3d(0,' + moveDistance +  'px,0)', ease: 'easeInSine'});
+                setTimeout(function(){
+                    self._removeFromMoveContainers();
+                    self.items.each(function(i){
+                        this.foldListItem.resetShader();
+                    });
+                    self._setHidden();
+                }, 800);
+            }
         }
 
 
         function getNodeName(nodeId){
-            nodeId = nodeId.replace('-', '_');
-            return this.data[nodeId] ? this.data[nodeId].title : '';
+            var location = locationController.locations[nodeId];
+            if(location) {
+                return location.name;
+            } else {
+                nodeId = nodeId.replace('-', '_');
+                return this.data[nodeId] ? this.data[nodeId].title : '';
+            }
         }
 
         _p._initVariables = _initVariables;
@@ -271,6 +345,8 @@ define([
         _p._getTabIdByNodes = _getTabIdByNodes;
 
         _p.appear = appear;
+        _p._addToMoveContainers = _addToMoveContainers;
+        _p._removeFromMoveContainers = _removeFromMoveContainers;
         _p.show = show;
         _p.hide = hide;
         _p._flipAll = _flipAll;

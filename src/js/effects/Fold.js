@@ -5,7 +5,6 @@ define([
 
         function Fold(params){
             _super.constructor.call(this, DEFAULT_OPTS, mixIn({}, DEFAULT_PARAMS, params), getStyle);
-            this.ajaxShaders();
         }
 
         var _super = Shader.prototype;

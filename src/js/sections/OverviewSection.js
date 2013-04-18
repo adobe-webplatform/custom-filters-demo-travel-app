@@ -5,11 +5,12 @@ define([
         'hbs!templates/sections/overview',
         'sectionController',
         'locationController',
+        'scheduleController',
         'inputController',
         'edankwan/loader/imageLoader',
         'mout/function/bind',
         'stageReference'
-    ], function(config, $, AbstractSection, template, sectionController, locationController, inputController, imageLoader, bind, stageReference){
+    ], function(config, $, AbstractSection, template, sectionController, locationController, scheduleController, inputController, imageLoader, bind, stageReference){
 
         function OverviewSection(){
             _super.constructor.call(this, 'overview', template);
@@ -42,6 +43,11 @@ define([
 
         function _initEvents(){
             //this.wrapper[0].addEventListener(config.transitionStyle + 'End', )
+            inputController.add(this.scheduleBtn, 'click', bind(_onScheduleClick, this));
+        }
+
+        function _onScheduleClick(){
+            scheduleController.showPrompt(this.locationId);
         }
 
         function _showSpinner(){

@@ -33,6 +33,12 @@ define([
         var SHADER_PADDING = 100;
 
         function _initVariables(){
+            var self = this;
+
+            this.moveContainers = this.container.find('.move-container');
+            this.topContainer = this.moveContainers.filter('.top');
+            this.bottomContainer = this.moveContainers.filter('.bottom');
+
             this.items = this.container.find('.home-item');
 
             this.items.each(function(){
@@ -71,6 +77,9 @@ define([
             var isWide = this.isWide = this.container.width() > WIDE_THRESHOLD;
             this.items.each(function(){
                 this.tearItem.updateSize(isWide ? 1 : 0);
+            }).css({
+                width: (isWide ? .333 : 1) * stageReference.stageWidth,
+                height: (isWide ? 1 : .333) * stageReference.stageHeight
             });
         }
 
@@ -82,6 +91,26 @@ define([
             });
         }
 
+        function _addToMoveContainers(index){
+            var items = this.items;
+            for(var i = 0, len = items.length; i < len; i++) {
+                if(i < index) {
+                    // add to the top container;
+                    this.topContainer.append(items[i]);
+                } else if(i > index) {
+                    // add to the bottom container;
+                    this.bottomContainer.append(items[i]);
+                }
+            }
+        }
+
+        function _removeFromMoveContainers(index){
+            var items = this.items;
+            items.detach();
+            this.topContainer.after(items);
+        }
+
+
         function show(currentNodes, previousSection, previousNodes){
             this.container.show();
             stageReference.onResize.add(_onResize, this);
@@ -91,28 +120,25 @@ define([
                 this._setShown();
             } else {
                 var self = this;
-                var targetItem;
+                var foundTarget;
                 var previousNode = previousNodes[1];
                 var foundId = this.items.length;
                 var direction;
-                while(foundId--) if($(this.items[foundId]).data('link').split('/')[1] === previousNode) break;
-                this.items.each(function(i){
-                    if(i === foundId) {
-                        var tearItem = this.tearItem;
-                        var params = tearItem.tearParams;
-                        tearItem.updateSize();
-                        tearItem.setTo(1);
-                        setTimeout(function(){
-                            tearItem.easeTo(0, .5);
-                        }, 300);
-                    } else {
-                        direction = i < foundId ? -1 : 1;
-                        EKTweener.fromTo(this, .8, { transform3d: self.isWide ? 'translate3d(' + (stageReference.stageWidth * direction / 3 * 2) + 'px,0,0)' : 'translate3d(0,' + (stageReference.stageHeight * direction  / 3 * 2) + 'px,0)'}, {transform3d: 'translateZ(0)'});
-                    }
-                });
+                while(foundId--) if($(foundTarget = this.items[foundId]).data('link').split('/')[1] === previousNode) break;
+                var moveDistance = (this.isWide ? stageReference.stageWidth : stageReference.stageHeight) * 2 / 3;
+                this._addToMoveContainers(foundId);
+                foundTarget.tearItem.updateSize();
+                foundTarget.tearItem.setTo(1);
                 setTimeout(function(){
+                    foundTarget.tearItem.easeTo(0, .5);
+                }, 300);
+                this.topContainer[0].style[_transform3DStyle] = 'translate3d(' + (self.isWide ? (- moveDistance) + 'px,0' : '0,' + (- moveDistance) + 'px') + ',0)';
+                this.bottomContainer[0].style[_transform3DStyle] = 'translate3d(' + (self.isWide ? moveDistance + 'px,0' : '0,' + moveDistance + 'px') + ',0)';
+                EKTweener.to(this.moveContainers, .5, {transform3d: 'translate3d(0,0,0)', ease: 'easeOutSine'});
+                setTimeout(function(){
+                    self._removeFromMoveContainers();
                     self._setShown();
-                }, 1100);
+                }, 800);
             }
         }
 
@@ -121,25 +147,22 @@ define([
             if(currentNodes.length < 1) {
                 self._setHidden();
             } else {
+                var foundTarget;
                 var nextNode = currentNodes[1];
                 var foundId = this.items.length;
                 var direction;
-                while(foundId--) if($(this.items[foundId]).data('link').split('/')[1] === nextNode) break;
-                this.items.each(function(i){
-                    if(i === foundId) {
-                        var tearItem = this.tearItem;
-                        var params = tearItem.tearParams;
-                        tearItem.updateSize();
-                        tearItem.easeTo(1, .8);
-                    } else {
-                        direction = i < foundId ? -1 : 1;
-                        EKTweener.to(this, .8, {delay: .3, transform3d: self.isWide ? 'translate3d(' + (stageReference.stageWidth * direction / 3 * 2) + 'px,0,0)' : 'translate3d(0,' + (stageReference.stageHeight * direction  / 3 * 2) + 'px,0)'});
-                    }
-                });
+                while(foundId--) if($(foundTarget = this.items[foundId]).data('link').split('/')[1] === nextNode) break;
+                var moveDistance = (this.isWide ? stageReference.stageWidth : stageReference.stageHeight) * 2 / 3;
+                this._addToMoveContainers(foundId);
+                foundTarget.tearItem.updateSize();
+                foundTarget.tearItem.easeTo(1, .8);
+                EKTweener.to(this.topContainer, .5, {delay: .3, transform3d: 'translate3d(' + (self.isWide ? (- moveDistance) + 'px,0' : '0,' + (- moveDistance) + 'px') + ',0)', ease: 'easeInSine'});
+                EKTweener.to(this.bottomContainer, .5, {delay: .3, transform3d: 'translate3d(' + (self.isWide ? moveDistance + 'px,0' : '0,' + moveDistance + 'px') + ',0)', ease: 'easeInSine'});
                 setTimeout(function(){
+                    self._removeFromMoveContainers();
                     stageReference.onResize.remove(_onResize, self);
                     self._setHidden();
-                }, 1100);
+                }, 800);
             }
         }
 
@@ -151,6 +174,8 @@ define([
         _p._initEvents = _initEvents;
         _p._onResize = _onResize;
         _p.appear = appear;
+        _p._addToMoveContainers = _addToMoveContainers;
+        _p._removeFromMoveContainers = _removeFromMoveContainers;
         _p.show = show;
         _p.hide = hide;
         _p.getNodeName = getNodeName;

@@ -1,6 +1,7 @@
 define([
+        'jquery',
         'mout/object/mixIn'
-    ], function(mixIn){
+    ], function($, mixIn){
 
         function Shader(opts, params, getStyle){
             this._opts = mixIn({}, DEFAULT_OPTS, opts);
@@ -27,6 +28,11 @@ define([
             return this.header + ')';
         }
 
+        function ajaxShaders(){
+            $.ajax({url: _parseShaderUrl(this._opts.vertUrl)});
+            $.ajax({url: _parseShaderUrl(this._opts.fragUrl)});
+        }
+
         function _parseShaderUrl(url) {
             return url + (IS_DEV && url.indexOf('data:') !== 0 ? BUST : '');
         }
@@ -38,6 +44,7 @@ define([
 
         _p._defaultGetStyle = _defaultGetStyle;
         _p.updateHeader = updateHeader;
+        _p.ajaxShaders = ajaxShaders;
 
         return Shader;
 

@@ -121,8 +121,7 @@ define([
             params.height = itemHeight;
             params.padding_height = 1 / segY;
             params.margin_height = (segY * this.shaderPadding - itemHeight) / 2 / segY / this.shaderPadding;
-            this.shadowStyle.top = this.shadowStyle.bottom =  '-' + (itemHeight / (segY - 2) * segY * params.margin_height) + 'px';
-
+            this.shadowStyle.top = this.shadowStyle.bottom =  '-' + ((segY * this.shaderPadding - itemHeight) / 2) + 'px';
         }
 
         function render(){

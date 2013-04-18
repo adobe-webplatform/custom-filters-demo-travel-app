@@ -5,6 +5,7 @@ define([
 
         function Cloth(params){
             _super.constructor.call(this, DEFAULT_OPTS, mixIn({}, DEFAULT_PARAMS, params), getStyle);
+            this.ajaxShaders();
         }
 
         var _super = Shader.prototype;
@@ -49,7 +50,7 @@ define([
             ', toY ' + params.toY.toFixed(6) +
             ', oX ' + params.oX.toFixed(6) +
             ', oY ' + params.oY.toFixed(6) +
-            
+
             // move half of the distance with shader and move the other half with csstransform3d
             ',translateY ' + (params.translateY / 2).toFixed(6) +
             ')';

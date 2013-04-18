@@ -3,6 +3,18 @@
 
     z-index: 50;
     @include cache;
+
+    .move-container {
+        float: left;
+        position: relative;
+        height: 100%;
+
+        @include cache;
+
+        @include mqWidth(0, 900) {
+            width: 100%;
+        }
+    }
 }
 
 .home-item {

@@ -13,6 +13,7 @@
 
         @include mqWidth(0, 900) {
             width: 100%;
+            height: auto;
         }
     }
 }

@@ -195,7 +195,6 @@ define(
                 }
             }
 
-
             /* */
             if(isTouch){
                 i = bubbleHistory.length;
@@ -239,7 +238,6 @@ define(
             fakedEvent.deltaTime = time - _currentTime;
             fakedEvent.deltaX = x - _currentX;
             fakedEvent.deltaY = y - _currentY;
-            fakedEvent.target = target;
 
             _currentTime = time;
             _currentX = x;

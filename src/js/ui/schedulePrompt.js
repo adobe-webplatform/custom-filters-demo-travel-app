@@ -69,14 +69,9 @@ define(
         }
 
         function _onSave(e){
-            var datetime = _dateInput.val();
-            var dateChanged = false;
-            if(_item.datetime !== datetime){
-                _item.datetime = datetime;
-                dateChanged = true;
-            }
+            _item.datetime = _dateInput.val();
             _item.note = _noteInput.val();
-            scheduleController.save(_item, dateChanged);
+            scheduleController.save(_item, true);
             scheduleController.hidePrompt();
         }
 

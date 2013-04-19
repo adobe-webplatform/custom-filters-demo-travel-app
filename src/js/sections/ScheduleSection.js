@@ -121,15 +121,18 @@ define([
             }
         }
 
-        function _onMyPlansOrderChanged(){
+        function _onMyPlansOrderChanged(itemData){
             if(this.myPlans.items.length < this.myPlans.length) {
                 // added new item
-                this._createItem(this.myPlans[this.myPlans.length - 1]);
+                var $item = this._createItem(itemData);
+                $item.find('.view').remove();
                 this._sortItems(this.myPlans);
             } else {
                 // updated existed item
+                var $item = $(itemData.item);
+                $item.find('.date').html(itemData.shortdate);
                 this._sortItems(this.myPlans);
-                //TODO reanimate
+                this._flipAll(this.myPlans.items);
             }
         }
 
@@ -167,6 +170,7 @@ define([
             item.__id = itemData.location_id;
             itemData.item = item;
             this.items = this.items.add(item);
+            return $item;
         }
 
 
@@ -183,8 +187,9 @@ define([
         }
 
         function _onItemClick(item, e){
-            if($(e.target).hasClass('prompt-btn')) {
-
+            var target = $(e.target);
+            if(target.hasClass('prompt-btn')) {
+                scheduleController.showPrompt(item.__data, target.hasClass('view'));
             } else {
                 _onItemOpen.call(this, item);
             }
@@ -247,9 +252,6 @@ define([
             stageReference.onResize.add(_onResize, this);
             this._onResize();
             if(previousSection == this) {
-                tabData.items.removeClass('animate').each(function(){
-                    this.style[_transform3DStyle] = 'perspective(500px) scale3d(.7,.7,1) rotateX(-90deg)';
-                });
                 this._flipAll(tabData.items);
                 this.tabsContainer[0].style[_transform3DStyle] = 'translateZ(0)';
                 this._setShown();
@@ -282,6 +284,9 @@ define([
         function _flipAll(items){
             var self = this;
             var showId = 0;
+            items.removeClass('animate').each(function(){
+                this.style[_transform3DStyle] = 'perspective(500px) scale3d(.7,.7,1) rotateX(-90deg)';
+            });
             clearInterval(this.intervalId);
             this.intervalId = setInterval(function(){
                 $(items[showId]).addClass('animate')[0].style[_transform3DStyle] = 'perspective(500px) rotateX(0deg)';
@@ -297,7 +302,7 @@ define([
             if(currentSection !== this) {
                 this.currentTabId = '';
             }
-            
+
             if(currentNodes.length < 3 || currentSection === this) {
                 self._setHidden();
             } else {

@@ -6,11 +6,12 @@ define(
         'signals',
         'ui/schedulePrompt',
         'locationController',
+        'sectionController',
         'helpers/datetimeHelper',
         'stageReference'
     ],
 
-    function(scheduleController, config, $, signals, schedulePrompt, locationController, datetimeHelper, stageReference) {
+    function(scheduleController, config, $, signals, schedulePrompt, locationController, sectionController, datetimeHelper, stageReference) {
 
         var undef;
 
@@ -55,7 +56,8 @@ define(
                 item = {
                     location_id: arg,
                     datetime: datetimeHelper.timestampToDateString(+new Date + 86400000),
-                    note: ''
+                    note: '',
+                    is_new: true
                 };
                 _parseItem(item);
                 schedulePrompt.show(item);
@@ -69,15 +71,14 @@ define(
             schedulePrompt.hide();
         }
 
-        function save(item, dateChanged){
-            if(item.order === undef) {
+        function save(item){
+            if(item.is_new) {
                 myPlans.push(item);
             }
-            if(dateChanged) {
-                _parseItem(item);
-                _generateOrderList(myPlans);
-                onOrderChanged.dispatch();
-            }
+            _parseItem(item);
+            _generateOrderList(myPlans);
+            onOrderChanged.dispatch(item);
+            sectionController.goTo('home/schedule/my-plans');
         }
 
         scheduleController.init = init;

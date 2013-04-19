@@ -158,7 +158,7 @@ define([
                 }
                 params = target.foldParams;
                 params.distance += e.deltaX / params.width;
-                if(params.distance > 0) params.distance = 0;
+                if(params.distance > 0) params.distance = -0.0001;
                 target._setRender();
             }
             _hasMoved = true;

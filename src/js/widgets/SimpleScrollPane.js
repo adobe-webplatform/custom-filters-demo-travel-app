@@ -152,7 +152,7 @@ define([
         } :_transformStyle ? function (elementStyle, value) {
             elementStyle[_transformStyle] = 'translate(0,' + value + 'px)';
         }: function(elementStyle, value) {
-            elementStyle.top = 'translate(0,' + value + 'px)';
+            elementStyle.top = value + 'px';
         };
 
         function setActive(bool){

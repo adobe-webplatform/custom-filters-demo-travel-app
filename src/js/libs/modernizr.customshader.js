@@ -13,7 +13,7 @@
             Modernizr.testStyles('#modernizr { ' + prefixCSS[i] + ': ' + val + '; }', function (el, rule) {
                 computedStyle = window.getComputedStyle ? getComputedStyle(el, null).getPropertyValue(prefixCSS[i]) : '';
             });
-            if(computedStyle.indexOf('custom') === 0) {
+            if(computedStyle && computedStyle.indexOf('custom') === 0) {
                 Modernizr.__prefixedFilter = prefixedProp[i];
                 return true;
             }

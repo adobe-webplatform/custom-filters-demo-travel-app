@@ -38,6 +38,8 @@ define([
         var _transform3DStyle = config.transform3DStyle;
 
         var SHADER_PADDING = 40;
+        var ITEM_HEIGHT = 80;
+        var HEADER_HEIGHT = 55;
 
         function _initVariables(){
             var self = this;
@@ -116,7 +118,7 @@ define([
 
         function appear(nodes, isFromShow, isOnSearchUpdate){
             this.container.show();
-            this.items.removeClass('show');
+            this.items.hide();
             var searchText, filteredList, filteredItems;
             var colorList = this._getColorList(nodes[1], nodes[2]);
             var colorListLength = colorList.length;
@@ -136,11 +138,13 @@ define([
                 this.urlPrefix = nodes.join('/')+'/';
                 filteredList = locationController.getMatched(nodes[1], nodes[2]);
             }
-            filteredItems = this._getItemsFromFilteredList(filteredList);
+            this.filteredItems = filteredItems = this._getItemsFromFilteredList(filteredList);
             filteredItems.each(function(i){
                 this.style.backgroundColor = colorList[i%colorListLength];
+                this.style.top = (i * ITEM_HEIGHT) + 'px';
             });
-            filteredItems.addClass('show');
+            filteredItems.show();
+            this.scrollPane.moveContainerStyle.height = (filteredItems.length * ITEM_HEIGHT) + 'px';
             this.scrollPane.onResize();
             if(!isFromShow && !isOnSearchUpdate) {
                 this.scrollPane.moveToPos(0,1);
@@ -148,20 +152,29 @@ define([
         }
 
         function _addToMoveContainers(index){
+            var self = this;
             var items = this.items;
-            for(var i = 0, len = items.length; i < len; i++) {
+            var fromId =  Math.floor(- this.scrollPane._pos / ITEM_HEIGHT);
+            var toId = fromId + Math.ceil((stageReference.stageHeight - HEADER_HEIGHT) / ITEM_HEIGHT) + 1;
+            this.filteredItems.each(function(i){
+                this.style.display = i < fromId || i > toId ? 'none' : 'block';
                 if(i < index) {
                     // add to the top container;
-                    this.topContainer.append(items[i]);
+                    self.topContainer.append(this);
                 } else if(i > index) {
                     // add to the bottom container;
-                    this.bottomContainer.append(items[i]);
+                    self.bottomContainer.append(this);
+                    this.style.top = ((i- index -1) * ITEM_HEIGHT) + 'px';
                 }
-            }
+            });
+           this.bottomContainer[0].style.top = ((index + 1) * ITEM_HEIGHT) + 'px';
         }
 
         function _removeFromMoveContainers(index){
             this.items.detach();
+            this.filteredItems.each(function(i){
+                this.style.top = (i * ITEM_HEIGHT) + 'px';
+            }).show();
             this.topContainer.after(this.items);
         }
 
@@ -176,22 +189,22 @@ define([
             } else {
                 var foundTarget;
                 var locationId = previousNodes[3];
-                var foundId = this.items.length;
-                while(foundId--) if($(foundTarget = this.items[foundId]).data('id') === locationId) break;
+                var foundId = this.filteredItems.length;
+                while(foundId--) if($(foundTarget = this.filteredItems[foundId]).data('id') === locationId) break;
                 var moveDistance = stageReference.stageHeight;
                 this._addToMoveContainers(foundId);
                 foundTarget.foldListItem.updateSize();
                 foundTarget.foldListItem.setTo(-1.2, 1);
                 setTimeout(function(){
                     foundTarget.foldListItem.easeTo(0, 1, .5);
-                }, 300);
+                }, 500);
                 this.topContainer[0].style[_transform3DStyle] = this.searchContainer[0].style[_transform3DStyle] = 'translate3d(0,' + (- moveDistance) +  'px,0)';
                 this.bottomContainer[0].style[_transform3DStyle] = 'translate3d(0,' + moveDistance +  'px,0)';
                 EKTweener.to(this.moveContainers.add(this.searchContainer), .5, {transform3d: 'translate3d(0,0,0)', ease: 'easeOutSine'});
                 setTimeout(function(){
                     self._removeFromMoveContainers();
                     self._setShown();
-                }, 800);
+                }, 1000);
             }
         }
 
@@ -203,22 +216,22 @@ define([
             } else {
                 var foundTarget;
                 var locationId = currentNodes[3];
-                var foundId = this.items.length;
-                while(foundId--) if($(foundTarget = this.items[foundId]).data('id') === locationId) break;
+                var foundId = this.filteredItems.length;
+                while(foundId--) if($(foundTarget = this.filteredItems[foundId]).data('id') === locationId) break;
                 var moveDistance = stageReference.stageHeight;
                 this._addToMoveContainers(foundId);
                 foundTarget.foldListItem.updateSize();
                 foundTarget.foldListItem.easeTo(-1.2, 1, .5);
-                EKTweener.to(this.searchContainer, .5, {delay: .3, transform3d: 'translate3d(0,' + (- moveDistance) +  'px,0)', ease: 'easeInSine'});
-                EKTweener.to(this.topContainer, .5, {delay: .3, transform3d: 'translate3d(0,' + (- moveDistance) +  'px,0)', ease: 'easeInSine'});
-                EKTweener.to(this.bottomContainer, .5, {delay: .3, transform3d: 'translate3d(0,' + moveDistance +  'px,0)', ease: 'easeInSine'});
+                EKTweener.to(this.searchContainer, .5, {delay: .5, transform3d: 'translate3d(0,' + (- moveDistance) +  'px,0)', ease: 'easeInSine'});
+                EKTweener.to(this.topContainer, .5, {delay: .5, transform3d: 'translate3d(0,' + (- moveDistance) +  'px,0)', ease: 'easeInSine'});
+                EKTweener.to(this.bottomContainer, .5, {delay: .5, transform3d: 'translate3d(0,' + moveDistance +  'px,0)', ease: 'easeInSine'});
                 setTimeout(function(){
                     self._removeFromMoveContainers();
                     self.items.each(function(i){
                         this.foldListItem.resetShader();
                     });
                     self._setHidden();
-                }, 800);
+                }, 1000);
             }
         }
 

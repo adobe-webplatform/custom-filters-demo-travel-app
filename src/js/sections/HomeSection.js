@@ -31,6 +31,7 @@ define([
 
         var WIDE_THRESHOLD = 900;
         var SHADER_PADDING = 100;
+        var HEADER_HEIGHT = 55;
 
         function _initVariables(){
             var self = this;
@@ -79,7 +80,7 @@ define([
                 this.tearItem.updateSize(isWide ? 1 : 0);
             }).css({
                 width: (isWide ? .333 : 1) * stageReference.stageWidth,
-                height: (isWide ? 1 : .333) * stageReference.stageHeight
+                height: (isWide ? 1 : .333) * (stageReference.stageHeight - HEADER_HEIGHT)
             });
         }
 
@@ -125,20 +126,20 @@ define([
                 var foundId = this.items.length;
                 var direction;
                 while(foundId--) if($(foundTarget = this.items[foundId]).data('link').split('/')[1] === previousNode) break;
-                var moveDistance = (this.isWide ? stageReference.stageWidth : stageReference.stageHeight) * 2 / 3;
+                var moveDistance = (this.isWide ? stageReference.stageWidth : stageReference.stageHeight - HEADER_HEIGHT) * 2 / 3;
                 this._addToMoveContainers(foundId);
                 foundTarget.tearItem.updateSize();
                 foundTarget.tearItem.setTo(1);
                 setTimeout(function(){
                     foundTarget.tearItem.easeTo(0, .5);
-                }, 300);
+                }, 500);
                 this.topContainer[0].style[_transform3DStyle] = 'translate3d(' + (self.isWide ? (- moveDistance) + 'px,0' : '0,' + (- moveDistance) + 'px') + ',0)';
                 this.bottomContainer[0].style[_transform3DStyle] = 'translate3d(' + (self.isWide ? moveDistance + 'px,0' : '0,' + moveDistance + 'px') + ',0)';
                 EKTweener.to(this.moveContainers, .5, {transform3d: 'translate3d(0,0,0)', ease: 'easeOutSine'});
                 setTimeout(function(){
                     self._removeFromMoveContainers();
                     self._setShown();
-                }, 800);
+                }, 1000);
             }
         }
 
@@ -152,17 +153,17 @@ define([
                 var foundId = this.items.length;
                 var direction;
                 while(foundId--) if($(foundTarget = this.items[foundId]).data('link').split('/')[1] === nextNode) break;
-                var moveDistance = (this.isWide ? stageReference.stageWidth : stageReference.stageHeight) * 2 / 3;
+                var moveDistance = (this.isWide ? stageReference.stageWidth : stageReference.stageHeight - HEADER_HEIGHT) * 2 / 3;
                 this._addToMoveContainers(foundId);
                 foundTarget.tearItem.updateSize();
                 foundTarget.tearItem.easeTo(1, .8);
-                EKTweener.to(this.topContainer, .5, {delay: .3, transform3d: 'translate3d(' + (self.isWide ? (- moveDistance) + 'px,0' : '0,' + (- moveDistance) + 'px') + ',0)', ease: 'easeInSine'});
-                EKTweener.to(this.bottomContainer, .5, {delay: .3, transform3d: 'translate3d(' + (self.isWide ? moveDistance + 'px,0' : '0,' + moveDistance + 'px') + ',0)', ease: 'easeInSine'});
+                EKTweener.to(this.topContainer, .5, {delay: .8, transform3d: 'translate3d(' + (self.isWide ? (- moveDistance) + 'px,0' : '0,' + (- moveDistance) + 'px') + ',0)', ease: 'easeInSine'});
+                EKTweener.to(this.bottomContainer, .5, {delay: .8, transform3d: 'translate3d(' + (self.isWide ? moveDistance + 'px,0' : '0,' + moveDistance + 'px') + ',0)', ease: 'easeInSine'});
                 setTimeout(function(){
                     self._removeFromMoveContainers();
                     stageReference.onResize.remove(_onResize, self);
                     self._setHidden();
-                }, 800);
+                }, 1300);
             }
         }
 

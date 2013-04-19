@@ -28,6 +28,7 @@ define([
 
         var _isDownItems = [];
         var _isInitialized = false;
+        var _hasMoved = false;
 
         var _transform3DStyle = config.transform3DStyle;
         var _filterStyle = config.filterStyle;
@@ -131,7 +132,6 @@ define([
             } else {
                 this.elemStyle[_transform3DStyle] = 'translate3d(' + (params.distance * 50) + '%, 0, 0)';
             }
-
             if(params.distance === 0) {
                 this.resetShader();
                 if(this.onUnPeekCallback) this.onUnPeekCallback();
@@ -161,17 +161,21 @@ define([
                 if(params.distance > 0) params.distance = 0;
                 target._setRender();
             }
+            _hasMoved = true;
         }
 
         function _onItemUp(e){
             if(sectionController.isAnimating()) return;
-            var i = _isDownItems.length;
-            if(e.distanceX < -150) {
-                while(i--) if(_isDownItems[i].onOpenCallback) _isDownItems[i].onOpenCallback();
-            } else {
-                while(i--) _isDownItems[i].easeTo(0, .5, .3);
+            if(_hasMoved) {
+                var i = _isDownItems.length;
+                if(e.distanceX < -150) {
+                    while(i--) if(_isDownItems[i].onOpenCallback) _isDownItems[i].onOpenCallback();
+                } else {
+                    while(i--) _isDownItems[i].easeTo(0, .5, .3);
+                }
             }
             _isDownItems.length = 0;
+            _hasMoved = false;
         }
 
         function _renderAll(){

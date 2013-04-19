@@ -17,8 +17,9 @@
     }
 
     .move-container {
-        position: relative;
-        float: left;
+        position: absolute;
+        //position: relative;
+        //float: left;
         width: 100%;
 
         @include cache;
@@ -114,10 +115,13 @@
 
 .location-list-item {
     display: none;
-    float: left;
-    position: relative;
+    position: absolute;
+    //float: left;
+    //position: relative;
     width: 100%;
     height: 80px;
+
+    @include cache;
 
     .text {
         margin-left: 47px;
@@ -164,9 +168,5 @@
         border-bottom-style: solid;
 
         pointer-events: none;
-    }
-
-    &.show {
-        display: block;
     }
 }

@@ -28,6 +28,7 @@ define([
 
         var _isDownItems = [];
         var _isInitialized = false;
+        var _hasMoved = false;
 
         var _filterStyle = config.filterStyle;
 
@@ -177,15 +178,18 @@ define([
                     params = target.tearParams;
                     delta = (isVertical ? e.deltaY : e.deltaX) / target.length;
                     if(isUsingFront = target.isUsingFront) delta *= -1;
-                    params.distance += delta;
-                    if(!target.hasPeeked && params.distance > 0) {
-                        target.onPeekCallback();
-                        target.hasPeeked = true;
+                    if(!(params.distance == 0 && delta < 0)){
+                        params.distance += delta;
+                        if(!target.hasPeeked && params.distance > 0) {
+                            target.onPeekCallback();
+                            target.hasPeeked = true;
+                        }
+                        if(params.distance < 0) params.distance = 0;
+                        target._setRender();
                     }
-                    if(params.distance < 0) params.distance = 0;
-                    target._setRender();
                 }
             }
+            _hasMoved = true;
         }
 
         function _onItemUp(e){
@@ -196,12 +200,13 @@ define([
                 target = _isDownItems[i];
                 if(target.tearParams.distance > target.tearParams.threshold) {
                     target.onOpenCallback();
-                } else {
+                } else if(e.distance !== 0) {
                     target.easeTo(0, .3);
                     target.isDown = false;
                 }
             }
             _isDownItems.length = 0;
+            _hasMoved = false;
         }
 
         function _renderAll(){

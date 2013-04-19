@@ -13,7 +13,6 @@ define([
         function HomeSection(){
             _super.constructor.call(this, 'home', template);
 
-            this.isDown = false;
             this.draggedTarget = null;
 
             this.init();

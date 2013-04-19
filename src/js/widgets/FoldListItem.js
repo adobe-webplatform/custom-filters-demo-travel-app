@@ -148,18 +148,20 @@ define([
         function _onItemMove(e){
             if(!inputController.isScrollH) return;
             var i = _isDownItems.length;
-            var params;
-            var target;
+            var target, params, delta
             while(i--) {
                 target = _isDownItems[i];
-                if(!target.hasPeeked) {
-                    if(target.onPeekCallback) target.onPeekCallback();
-                    target.hasPeeked = true;
-                }
                 params = target.foldParams;
-                params.distance += e.deltaX / params.width;
-                if(params.distance > 0) params.distance = -0.0001;
-                target._setRender();
+                delta = e.deltaX / params.width;
+                if(!(params.distance == 0 && delta > 0)) {
+                    if(!target.hasPeeked) {
+                        if(target.onPeekCallback) target.onPeekCallback();
+                        target.hasPeeked = true;
+                    }
+                    params.distance += delta;
+                    if(params.distance > 0) params.distance = 0;
+                    target._setRender();
+                }
             }
             _hasMoved = true;
         }
@@ -170,7 +172,7 @@ define([
                 var i = _isDownItems.length;
                 if(e.distanceX < -150) {
                     while(i--) if(_isDownItems[i].onOpenCallback) _isDownItems[i].onOpenCallback();
-                } else {
+                } else if(e.distanceX !== 0) {
                     while(i--) _isDownItems[i].easeTo(0, .5, .3);
                 }
             }

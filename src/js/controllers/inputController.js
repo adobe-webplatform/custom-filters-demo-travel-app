@@ -318,9 +318,9 @@ define(
                     target.__click.call(target, e);
                 }
             }
+            inputController.isScrollH = false;
+            inputController.isScrollV = false;
         }
-        inputController.isScrollH = false;
-        inputController.isScrollV = false;
 
         inputController.init = init;
         inputController.add = add;

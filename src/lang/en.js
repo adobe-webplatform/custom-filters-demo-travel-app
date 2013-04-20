@@ -262,7 +262,7 @@
             "id": "chinatown",
             "name": "Chinatown",
             "mood": "see",
-            "description": "Primarilycentered around North Broadway; unlike Chinatowns in many other cities, it hasa wide, main, busy street filled with small shops and restaurants. At about themiddle point of N. Broadway in Chinatown is an open market much likethose found in <a href=\"http://wikitravel.org/en/Hong_Kong\">Hong Kong</a>. Besure to <a href=\"http://wikitravel.org/en/Haggle\">haggle</a>!",
+            "description": "Primarily centered around North Broadway; unlike Chinatowns in many other cities, it hasa wide, main, busy street filled with small shops and restaurants. At about themiddle point of N. Broadway in Chinatown is an open market much likethose found in Hong Kong. Besure to haggle!",
             "image": "assets/images/locations/1.jpg",
             "like": 44
         },
@@ -270,7 +270,7 @@
             "id": "littletokyo",
             "name": "Little Tokyo",
             "mood": "see",
-            "description": "Alsoknown as J-Town, the Japanese district features restaurants, museums, andshops. It sits in the area between Temple and about 5th and Spring throughAlameda.",
+            "description": "Also known as J-Town, the Japanese district features restaurants, museums, andshops. It sits in the area between Temple and about 5th and Spring throughAlameda.",
             "image": "assets/images/locations/1.jpg",
             "like": 80
         },
@@ -278,7 +278,7 @@
             "id": "olverastreet",
             "name": "Olvera Street",
             "mood": "see",
-            "description": "Thisis where LA was founded as El Pueblo de Los Angeles. You can take a tourof the city's oldest house to see what it looked like at that time. The plazais mostly filled with Mexican trinket stands and Mexican restaurants.",
+            "description": "This is where LA was founded as El Pueblo de Los Angeles. You can take a tourof the city's oldest house to see what it looked like at that time. The plazais mostly filled with Mexican trinket stands and Mexican restaurants.",
             "image": "assets/images/locations/1.jpg",
             "like": 89
         },
@@ -286,7 +286,7 @@
             "id": "museumof-contemporary-art-moca",
             "name": "Museumof Contemporary Art (MOCA)",
             "mood": "see",
-            "description": "250S. Grand Avenue, Los Angeles, CA, 90012, Tel: +1-213-626-6222. Th-M:11AM-5PM. The permanent collection is fairly interesting, but the changing exhibitionscan be more hit or miss. The museum has no 'traditional' art, so bring an openmind. The gift shop (free entrance) is fun for at least 20 minutes of wonderand awe. $12, $7 student (includes admission to Geffen Contemporary).",
+            "description": "250 S. Grand Avenue, Los Angeles, CA, 90012, Tel: +1-213-626-6222. Th-M:11AM-5PM. The permanent collection is fairly interesting, but the changing exhibitionscan be more hit or miss. The museum has no 'traditional' art, so bring an openmind. The gift shop (free entrance) is fun for at least 20 minutes of wonderand awe. $12, $7 student (includes admission to Geffen Contemporary).",
             "image": "assets/images/locations/1.jpg",
             "like": 23
         },
@@ -502,7 +502,7 @@
             "id": "leimertpark",
             "name": "Leimert Park",
             "mood": "see",
-            "description": "Afamous center for Los Angeles' African-American culture, this neighborhood(just south of Crenshaw/Martin Luther King- accessible by bus) is a must-see ifin the area. A quick sidetrip into nearby Baldwin Hills offers beautiful viewsof<a href=\"http://wikitravel.org/en/Los_Angeles/Downtown\">Downtown Los Angeles</a>as well as a nice peek at lifestyles in the &quot;Black Beverly Hills&quot;.",
+            "description": "Afamous center for Los Angeles' African-American culture, this neighborhood(just south of Crenshaw/Martin Luther King- accessible by bus) is a must-see ifin the area. A quick sidetrip into nearby Baldwin Hills offers beautiful viewsofDowntown Los Angelesas well as a nice peek at lifestyles in the &quot;Black Beverly Hills&quot;.",
             "image": "assets/images/locations/1.jpg",
             "like": 68
         },
@@ -534,7 +534,7 @@
             "id": "museumof-jurassic-technology",
             "name": "Museumof Jurassic Technology",
             "mood": "see",
-            "description": "in<a href=\"http://wikitravel.org/en/Culver_City\">Culver City</a> has weird displaysof fiction and fact.",
+            "description": "inCulver City has weird displaysof fiction and fact.",
             "image": "assets/images/locations/1.jpg",
             "like": 12
         },
@@ -622,7 +622,7 @@
             "id": "arroyoseco-historic-parkway",
             "name": "Arroyo Seco Historic Parkway",
             "mood": "do",
-            "description": "(110Freeway), (starts at the intersection of the CA-110 and the CA-101,heading north from that junction), <a href=\"http://byways.org/explore/byways/10246/\">[33]</a>. Drive the Parkway, aNational Scenic Byway that runs for 9.4 miles (15.1 km) between Downtown LosAngeles and Pasadena. The Parkway passes from the skyscrapers of Downtown,through Chinatown into the Arts-and-Crafts style neighborhoods of South Pasadenaand ends in Pasadena at Colorado Blvd., home to the famous Rose Parade.",
+            "description": "(110Freeway), (starts at the intersection of the CA-110 and the CA-101,heading north from that junction), [33]. Drive the Parkway, aNational Scenic Byway that runs for 9.4 miles (15.1 km) between Downtown LosAngeles and Pasadena. The Parkway passes from the skyscrapers of Downtown,through Chinatown into the Arts-and-Crafts style neighborhoods of South Pasadenaand ends in Pasadena at Colorado Blvd., home to the famous Rose Parade.",
             "image": "assets/images/locations/1.jpg",
             "like": 13
         },
@@ -630,7 +630,7 @@
             "id": "angelsflight",
             "name": "Angel'sFlight",
             "mood": "do",
-            "description": "351South Hill Street (on the north side of Grand Central Market), <a href=\"http://angelsflight.com/\">[34]</a>. 6:45am-10pm. Ride the world'sshortest railway - at only 298'(91m) long, Angel's Flight is functionally anelevator which takes you from Hill Street to California Plaza on Grand Ave. Foronly 50 cents! $0.50.",
+            "description": "351South Hill Street (on the north side of Grand Central Market), [34]. 6:45am-10pm. Ride the world'sshortest railway - at only 298'(91m) long, Angel's Flight is functionally anelevator which takes you from Hill Street to California Plaza on Grand Ave. Foronly 50 cents! $0.50.",
             "image": "assets/images/locations/1.jpg",
             "like": 37
         },
@@ -774,7 +774,7 @@
             "id": "hollywoodbowl",
             "name": "HollywoodBowl",
             "mood": "do",
-            "description": "2301North Highland Avenue, Tel: +1 323 426-2829. America's mostfamous outdoor theatre hosts the Los Angeles Philharmonic Orchestra as well asnumerous other concert events. Traffic and parking can be a nightmare, so the$5 round-trip public shuttles <a href=\"http://www.hollywoodbowl.com/getting/park_ride.cfm\">[14]</a> are highlyrecommended.",
+            "description": "2301North Highland Avenue, Tel: +1 323 426-2829. America's mostfamous outdoor theatre hosts the Los Angeles Philharmonic Orchestra as well asnumerous other concert events. Traffic and parking can be a nightmare, so the$5 round-trip public shuttles [14] are highlyrecommended.",
             "image": "assets/images/locations/1.jpg",
             "like": 48
         },
@@ -798,7 +798,7 @@
             "id": "studiotours",
             "name": "Studio Tours",
             "mood": "do",
-            "description": "WarnerBrothers, NBC and Disney studios are all headquartered in <a href=\"http://wikitravel.org/en/Burbank\">Burbank</a>, and all (except Disney)offer some kind of public tour. Universal Studios is in <a href=\"http://wikitravel.org/en/Universal_City\">Universal City</a>. CBS studiosis in <a href=\"http://wikitravel.org/en/Studio_City\">Studio City</a> but doesnot offer public tours.",
+            "description": "WarnerBrothers, NBC and Disney studios are all headquartered in Burbank, and all (except Disney)offer some kind of public tour. Universal Studios is in Universal City. CBS studiosis in Studio City but doesnot offer public tours.",
             "image": "assets/images/locations/1.jpg",
             "like": 76
         },
@@ -838,7 +838,7 @@
             "id": "thestrand",
             "name": "The Strand",
             "mood": "do",
-            "description": "Abike and skate path on the beach stretches from upper Santa Monica in the northall the way to <a href=\"http://wikitravel.org/en/Redondo_Beach\">Redondo Beach</a>in the <a href=\"http://wikitravel.org/en/South_Bay_(Los_Angeles_County)\">SouthBay</a> and ends at Torrance Beach. It passes by many interesting places, suchas the Marina del Rey waterfront area with it's boats and numerous restaurants,the Venice Beach shops, and Santa Monica pier.",
+            "description": "Abike and skate path on the beach stretches from upper Santa Monica in the northall the way to Redondo Beachin the SouthBay and ends at Torrance Beach. It passes by many interesting places, suchas the Marina del Rey waterfront area with it's boats and numerous restaurants,the Venice Beach shops, and Santa Monica pier.",
             "image": "assets/images/locations/1.jpg",
             "like": 13
         },
@@ -981,7 +981,7 @@
         {
             "name": "Amoeba Music",
             "mood": "buy",
-            "description": "6400Sunset Blvd, Tel: +1 323-245-6400. The country's largest independent musicstore, Amoeba has three locations including Hollywood, <a href=\"http://wikitravel.org/en/Berkeley_(California)\">Berkeley</a> and <a href=\"http://wikitravel.org/en/San_Francisco\">San Francisco</a>. Prices areslightly higher than at the discount stores, but the selection is enormous andjust about any obscure record you could imagine is to be found somewhere on theshelves.",
+            "description": "6400Sunset Blvd, Tel: +1 323-245-6400. The country's largest independent musicstore, Amoeba has three locations including Hollywood, Berkeley and San Francisco. Prices areslightly higher than at the discount stores, but the selection is enormous andjust about any obscure record you could imagine is to be found somewhere on theshelves.",
             "image": "assets/images/locations/1.jpg",
             "like": 96,
             "id": "amoebamusic"
@@ -1446,7 +1446,7 @@
             "id": "originaltommys",
             "name": "Original Tommy's",
             "mood": "eat",
-            "description": "2575W. Beverly Blvd (On the corner of Beverly and Rampart just west of DowntownLos Angeles), Tel: +1-213-389-9060, <a href=\"http://www.originaltommys.com/\">[14]</a>.Open 24 hours/7 days a week. A Los Angeles landmark since 1946, Tommy's is acan't-miss for any hamburger lover. Although they have 30 locations acrossSouther California, you cannot miss the atmosphere of the 1st Tommy's(especially late at night on weekends). Serving hamburgers, french fries, hotdogs, and tamales with their &quot;secret blend&quot; of chili you will alwaysfind a line for food at all hours, especially late night/early mornings.",
+            "description": "2575W. Beverly Blvd (On the corner of Beverly and Rampart just west of DowntownLos Angeles), Tel: +1-213-389-9060, [14].Open 24 hours/7 days a week. A Los Angeles landmark since 1946, Tommy's is acan't-miss for any hamburger lover. Although they have 30 locations acrossSouther California, you cannot miss the atmosphere of the 1st Tommy's(especially late at night on weekends). Serving hamburgers, french fries, hotdogs, and tamales with their &quot;secret blend&quot; of chili you will alwaysfind a line for food at all hours, especially late night/early mornings.",
             "image": "assets/images/locations/1.jpg",
             "like": 44
         },
@@ -1670,7 +1670,7 @@
             "id": "melsdrive-in",
             "name": "Mel's Drive-In",
             "mood": "eat",
-            "description": "1660N. Highland Ave, Tel: +1-323-465-3111. Su-Th 6:30AM-3AM, F-Sa 24 Hrs.. Comehere for traditional diner fare: cheeseburgers, french fries, and milkshakes.Part of the chain that opened in San Francisco in the late '40s. There isanother location on the Sunset Strip in <a href=\"http://wikitravel.org/en/West_Hollywood\">West Hollywood</a>.",
+            "description": "1660N. Highland Ave, Tel: +1-323-465-3111. Su-Th 6:30AM-3AM, F-Sa 24 Hrs.. Comehere for traditional diner fare: cheeseburgers, french fries, and milkshakes.Part of the chain that opened in San Francisco in the late '40s. There isanother location on the Sunset Strip in West Hollywood.",
             "image": "assets/images/locations/1.jpg",
             "like": 25
         },

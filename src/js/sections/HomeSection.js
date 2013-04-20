@@ -131,14 +131,14 @@ define([
                 foundTarget.tearItem.setTo(1);
                 setTimeout(function(){
                     foundTarget.tearItem.easeTo(0, .5);
-                }, 500);
+                }, 400);
                 this.topContainer[0].style[_transform3DStyle] = 'translate3d(' + (self.isWide ? (- moveDistance) + 'px,0' : '0,' + (- moveDistance) + 'px') + ',0)';
                 this.bottomContainer[0].style[_transform3DStyle] = 'translate3d(' + (self.isWide ? moveDistance + 'px,0' : '0,' + moveDistance + 'px') + ',0)';
                 EKTweener.to(this.moveContainers, .5, {transform3d: 'translate3d(0,0,0)', ease: 'easeOutSine'});
                 setTimeout(function(){
                     self._removeFromMoveContainers();
                     self._setShown();
-                }, 1000);
+                }, 900);
             }
         }
 
@@ -155,14 +155,14 @@ define([
                 var moveDistance = (this.isWide ? stageReference.stageWidth : stageReference.stageHeight - HEADER_HEIGHT) * 2 / 3;
                 this._addToMoveContainers(foundId);
                 foundTarget.tearItem.updateSize();
-                foundTarget.tearItem.easeTo(1, .8);
-                EKTweener.to(this.topContainer, .5, {delay: .8, transform3d: 'translate3d(' + (self.isWide ? (- moveDistance) + 'px,0' : '0,' + (- moveDistance) + 'px') + ',0)', ease: 'easeInSine'});
-                EKTweener.to(this.bottomContainer, .5, {delay: .8, transform3d: 'translate3d(' + (self.isWide ? moveDistance + 'px,0' : '0,' + moveDistance + 'px') + ',0)', ease: 'easeInSine'});
+                foundTarget.tearItem.easeTo(1, .5);
+                EKTweener.to(this.topContainer, .5, {delay: .4, transform3d: 'translate3d(' + (self.isWide ? (- moveDistance) + 'px,0' : '0,' + (- moveDistance) + 'px') + ',0)', ease: 'easeInSine'});
+                EKTweener.to(this.bottomContainer, .5, {delay: .4, transform3d: 'translate3d(' + (self.isWide ? moveDistance + 'px,0' : '0,' + moveDistance + 'px') + ',0)', ease: 'easeInSine'});
                 setTimeout(function(){
                     self._removeFromMoveContainers();
                     stageReference.onResize.remove(_onResize, self);
                     self._setHidden();
-                }, 1300);
+                }, 900);
             }
         }
 

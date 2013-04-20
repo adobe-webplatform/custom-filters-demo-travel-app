@@ -297,8 +297,6 @@ define(
         }
         function _onUp(e){
             inputController.isDown = false;
-            inputController.isScrollH = false;
-            inputController.isScrollV = false;
 
             inputController.distanceTime = e.distanceTime;
 
@@ -321,7 +319,8 @@ define(
                 }
             }
         }
-
+        inputController.isScrollH = false;
+        inputController.isScrollV = false;
 
         inputController.init = init;
         inputController.add = add;

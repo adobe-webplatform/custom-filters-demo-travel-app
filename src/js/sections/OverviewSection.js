@@ -42,8 +42,20 @@ define([
         }
 
         function _initEvents(){
-            //this.wrapper[0].addEventListener(config.transitionStyle + 'End', )
             inputController.add(this.scheduleBtn, 'click', bind(_onScheduleClick, this));
+            inputController.add(this.container, 'up', bind(_onUp, this));
+        }
+
+        function _onUp(e){
+            if(inputController.isScrollH) {
+                var index = this.locationIndex;
+                var locationList = this.currentLocationList;
+                if(e.distanceX > 50) {
+                    sectionController.goTo(this.urlPrefix + locationList[ index > 0 ? index - 1 : locationList.length - 1].id);
+                } else if(e.distanceX < -50) {
+                    sectionController.goTo(this.urlPrefix + locationList[i < locationList.length - 1 ? index + 1 : 0].id);
+                }
+            }
         }
 
         function _onScheduleClick(){
@@ -88,7 +100,6 @@ define([
                 this.currentBg.css('backgroundImage', 'url(' + this.location.image + ')');
                 this.wrapper.addClass('hide');
                 this.bottom.addClass('hide');
-                // TODO - will use transitionEnd event instead
                 setTimeout(function(){
                     self.wrapper.removeClass('appear hide');
                     self.bottom.removeClass('appear hide');
@@ -111,6 +122,13 @@ define([
         function _updateLocation() {
             var self = this;
             var location = this.location;
+            var locationId = this.locationId;
+            var locationList = this.currentLocationList;
+            var i = locationList.length;
+            this.urlPrefix = sectionController.currentNodes.slice(0, sectionController.currentNodes.length - 1).join('/') +'/';
+            while(i--) if(locationList[i].id === locationId) break;
+            this.locationIndex = i;
+
             this.title.html(location.name);
             this.description.html(location.description);
             this.likeCount.html(location.like);

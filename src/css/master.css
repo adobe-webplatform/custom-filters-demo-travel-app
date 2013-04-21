@@ -662,13 +662,13 @@ html.is-first-route #header .tab:after {
   z-index: 1;
 }
 /* line 97, ../scss/ui/_header.scss */
-#header .tab.selected {
+#header .tab.selected:not(:nth-child(2)) {
   background-color: transparent;
   background-color: rgba(126, 111, 133, 0);
   color: #fff;
 }
 /* line 102, ../scss/ui/_header.scss */
-#header .tab.selected:after {
+#header .tab.selected:not(:nth-child(2)):after {
   opacity: 0;
 }
 /* line 108, ../scss/ui/_header.scss */

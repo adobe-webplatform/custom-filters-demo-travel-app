@@ -94,7 +94,7 @@
             z-index: 1;
         }
 
-        &.selected {
+        &.selected:not(:nth-child(2)) {
             background-color: transparent;
             background-color: rgba(126,111,133,0);
             color: #fff;

@@ -29,6 +29,8 @@ define(
         sectionController.previousDepth = 0;
         sectionController.isFirstRoute = true;
 
+        sectionController.isWaitingForUIResponse = false;
+
         sectionController.sections = {};
         sectionController.sectionList = [];
         sectionController.DEFAULT_PATH = '';
@@ -37,8 +39,9 @@ define(
 
         var _pathStack = [];
 
-        var _currentPath = null;
-        var _previousPath = null;
+        var _nextParsedPath = null;
+        var _latestPath = null;
+        var _oldPath = null;
 
         var _isHidden = true;
         var _isShown = true;
@@ -74,7 +77,8 @@ define(
                     sectionController.previousSection.disappear();
                 }
                 if(_pathStack.length > 0) {
-                    _parsePath(_pathStack.shift());
+                    _nextParsedPath = _pathStack.shift();
+                    preparsePath();
                 }
             }
         }
@@ -107,9 +111,9 @@ define(
                 // TODO - replacing hasher with HTML5 history API
                 window.location.href = '#/' + sectionController.DEFAULT_PATH;
             }
-            if (newPath == _currentPath) return;
-            _previousPath = _currentPath;
-            _currentPath = newPath;
+            if (newPath == _latestPath) return;
+            _oldPath = _latestPath;
+            _latestPath = newPath;
 
             if(isAnimating()){
                 for(var i = 0; i < _pathStack.length; i++) {
@@ -121,7 +125,20 @@ define(
                     _pathStack.push(newPath);
                 }
             } else {
-                _parsePath(newPath);
+                _nextParsedPath = newPath;
+                preparsePath();
+            }
+        }
+
+        function preparsePath(){
+            _isShown = false;
+            if(!sectionController.isFirstRoute) _isHidden = false;
+            if(!uiController.isOccupied()) {
+                sectionController.isWaitingForUIResponse = false;
+                _parsePath(_nextParsedPath);
+            } else {
+                sectionController.isWaitingForUIResponse = true;
+                uiController.killTask();
             }
         }
 
@@ -153,8 +170,6 @@ define(
         }
 
         function _parsePath(path){
-            _isShown = false;
-            if(!sectionController.isFirstRoute) _isHidden = false;
             var route = getRoute(path);
             var section = route.section;
             var nodes = route.nodes;
@@ -192,6 +207,7 @@ define(
         sectionController.setHidden = setHidden;
         sectionController.isAnimating = isAnimating;
         sectionController.init = init;
+        sectionController.preparsePath = preparsePath;
         sectionController.goTo = goTo;
         sectionController.getRoute = getRoute;
 

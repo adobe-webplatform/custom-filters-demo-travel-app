@@ -6,10 +6,11 @@ define(
         'hbs!templates/ui/header',
         'inputController',
         'sectionController',
+        'uiController',
         'stageReference'
     ],
 
-    function(header, config, $, template, inputController, sectionController, stageReference) {
+    function(header, config, $, template, inputController, sectionController, uiController, stageReference) {
 
         var _container;
         var _homeIcon;
@@ -22,14 +23,36 @@ define(
             _container = $(template(config.data.header));
             _homeIcon = _container.find('.home');
             _tabs = _container.find('.tab');
+            _aboutBtn = _container.find('.about');
             $('#app').append(_container);
 
             _homeIcon[0].__url = sectionController.DEFAULT_PATH;
-            inputController.add(_homeIcon, 'click', _onClick);
-            inputController.add(_tabs, 'click', _onClick);
+            inputController.add(_homeIcon, 'click', _onItemClick);
+            inputController.add(_tabs, 'click', _onItemClick);
+            inputController.add(_aboutBtn, 'click', _onAboutBtnClick);
+
+            uiController.onAboutShow.add(_onAboutShow);
+            uiController.onAboutHide.add(_onAboutHide);
         }
 
-        function _onClick(e){
+        function _onAboutShow(){
+            _aboutBtn.addClass('selected');
+        }
+
+        function _onAboutHide(){
+            _aboutBtn.removeClass('selected');
+        }
+
+        function _onAboutBtnClick(e){
+            var target = $(this);
+            if(target.hasClass('selected')){
+                uiController.hideAbout();
+            } else {
+                uiController.showAbout();
+            }
+        }
+
+        function _onItemClick(e){
             sectionController.goTo(this.__url);
         }
 

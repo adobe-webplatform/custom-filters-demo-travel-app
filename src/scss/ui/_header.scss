@@ -105,28 +105,24 @@
         }
     }
 
-    .setting {
+    .about {
         position: absolute;
         right: 0;
-        width: 80px;
+        width: 62px;
         height: 55px;
-        padding-right: 10px;
-        text-align: right;
-        line-height: 55px;
-
+        border-left: 1px solid #1c181f;
+        background-color: #252026;
+        box-shadow: -1px 0 0 0 #473c4e;
         z-index: 10;
+
+        cursor: pointer;
+
         @include cache;
+        @include ui-asset(188, 100);
 
-        background: -moz-linear-gradient(left, rgba(49,43,52,0) 0%, rgba(49,43,52,1) 18%, rgba(49,43,52,1) 100%);
-        background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(49,43,52,0)), color-stop(18%,rgba(49,43,52,1)), color-stop(100%,rgba(49,43,52,1)));
-        background: -webkit-linear-gradient(left, rgba(49,43,52,0) 0%,rgba(49,43,52,1) 18%,rgba(49,43,52,1) 100%);
-        background: -o-linear-gradient(left, rgba(49,43,52,0) 0%,rgba(49,43,52,1) 18%,rgba(49,43,52,1) 100%);
-        background: -ms-linear-gradient(left, rgba(49,43,52,0) 0%,rgba(49,43,52,1) 18%,rgba(49,43,52,1) 100%);
-        background: linear-gradient(to right, rgba(49,43,52,0) 0%,rgba(49,43,52,1) 18%,rgba(49,43,52,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00312b34', endColorstr='#312b34',GradientType=1 );
-
-        a,a:hover,a:visited, a:active {
-            color: #fff;
+        &.selected {
+            background-position: -115px -190px;
+            background-color: #d14443;
         }
     }
 }

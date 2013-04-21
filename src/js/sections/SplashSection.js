@@ -31,7 +31,7 @@ define([
 
         function _initVariables(){
             this.containerStyle = this.container[0].style;
-            this.cloth = new Cloth({}); // hehe
+            this.cloth = new Cloth({});
             this.boundRender = bind(_render, this);
         }
 

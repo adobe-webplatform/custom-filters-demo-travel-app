@@ -561,7 +561,7 @@ i {
   /* line 23, ../scss/ui/_header.scss */
   #header .home:before {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 @media all and (max-width: 603px) {
@@ -633,7 +633,7 @@ html.is-first-route #header .tab {
   /* line 62, ../scss/ui/_header.scss */
   #header .tab:after {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 74, ../scss/ui/_header.scss */
@@ -672,31 +672,36 @@ html.is-first-route #header .tab:after {
   opacity: 0;
 }
 /* line 108, ../scss/ui/_header.scss */
-#header .setting {
+#header .about {
   position: absolute;
   right: 0;
-  width: 80px;
+  width: 62px;
   height: 55px;
-  padding-right: 10px;
-  text-align: right;
-  line-height: 55px;
+  border-left: 1px solid #1c181f;
+  background-color: #252026;
+  box-shadow: -1px 0 0 0 #473c4e;
   z-index: 10;
+  cursor: pointer;
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);
   -ms-transform: translateZ(0);
   -o-transform: translateZ(0);
   transform: translateZ(0);
-  background: -moz-linear-gradient(left, rgba(49, 43, 52, 0) 0%, #312b34 18%, #312b34 100%);
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(49, 43, 52, 0)), color-stop(18%, #312b34), color-stop(100%, #312b34));
-  background: -webkit-linear-gradient(left, rgba(49, 43, 52, 0) 0%, #312b34 18%, #312b34 100%);
-  background: -o-linear-gradient(left, rgba(49, 43, 52, 0) 0%, #312b34 18%, #312b34 100%);
-  background: -ms-linear-gradient(left, rgba(49, 43, 52, 0) 0%, #312b34 18%, #312b34 100%);
-  background: linear-gradient(to right, rgba(49, 43, 52, 0) 0%, #312b34 18%, #312b34 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00312b34', endColorstr='#312b34',GradientType=1 );
+  background-image: url(../assets/images/ui.png);
+  background-position: -188px -100px;
+  background-repeat: no-repeat;
 }
-/* line 128, ../scss/ui/_header.scss */
-#header .setting a, #header .setting a:hover, #header .setting a:visited, #header .setting a:active {
-  color: #fff;
+@media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+  /* line 108, ../scss/ui/_header.scss */
+  #header .about {
+    background-image: url(../assets/images/ui_x2.png);
+    background-size: 225px 400px;
+  }
+}
+/* line 123, ../scss/ui/_header.scss */
+#header .about.selected {
+  background-position: -115px -190px;
+  background-color: #d14443;
 }
 
 /* line 1, ../scss/ui/_schedulePrompt.scss */
@@ -800,7 +805,7 @@ html.is-first-route #header .tab:after {
   /* line 72, ../scss/ui/_schedulePrompt.scss */
   #schedule-prompt .content input, #schedule-prompt .content textarea {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 98, ../scss/ui/_schedulePrompt.scss */
@@ -887,6 +892,85 @@ html.is-first-route #header .tab:after {
 /* line 184, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt.is-event .bottom input.save, #schedule-prompt.is-event .bottom input.cancel {
   display: none;
+}
+
+/* line 1, ../scss/ui/_about.scss */
+#about {
+  display: none;
+  position: absolute;
+  width: 100%;
+  top: 54px;
+  bottom: 0;
+  background-color: #d14443;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  z-index: 999;
+}
+/* line 12, ../scss/ui/_about.scss */
+#about .wrapper {
+  position: absolute;
+  left: 50%;
+  top: 90px;
+  bottom: 0;
+  width: 480px;
+  margin-left: -240px;
+  text-align: center;
+}
+/* line 25, ../scss/ui/_about.scss */
+#about .copy {
+  margin-top: 30px;
+  font-size: 18px;
+  font-weight: 100;
+  font-style: italic;
+}
+/* line 32, ../scss/ui/_about.scss */
+#about .credits-title {
+  margin-top: 30px;
+  font-family: 'league-gothic';
+  font-size: 22px;
+  font-weight: 400;
+}
+/* line 39, ../scss/ui/_about.scss */
+#about .credits-copy {
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: 300;
+  color: #ffbfbf;
+}
+/* line 46, ../scss/ui/_about.scss */
+#about .icons-container {
+  position: absolute;
+  width: 100%;
+  height: 172px;
+  bottom: 0;
+}
+/* line 53, ../scss/ui/_about.scss */
+#about .icon {
+  display: inline-block;
+  width: 93px;
+  height: 93px;
+  background-image: url(../assets/images/ui.png);
+  background-position: 0px -300px;
+  background-repeat: no-repeat;
+  font-family: 'league-gothic';
+  font-size: 22px;
+  text-transform: uppercase;
+  line-height: 242px;
+}
+@media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+  /* line 53, ../scss/ui/_about.scss */
+  #about .icon {
+    background-image: url(../assets/images/ui_x2.png);
+    background-size: 225px 400px;
+  }
+}
+/* line 65, ../scss/ui/_about.scss */
+#about a, #about a:hover, #about a:active, #about a:visited {
+  color: #fff;
+  text-decoration: none;
 }
 
 /* line 1, ../scss/sections/_base.scss */
@@ -1048,7 +1132,7 @@ html.is-first-route #header .tab:after {
   /* line 93, ../scss/sections/_splash.scss */
   .splash-btn:before {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 110, ../scss/sections/_splash.scss */
@@ -1153,7 +1237,7 @@ html.is-first-route #header .tab:after {
   /* line 56, ../scss/sections/_home.scss */
   .home-item .arrow {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 66, ../scss/sections/_home.scss */
@@ -1494,7 +1578,7 @@ html.is-first-route #header .tab:after {
   /* line 220, ../scss/sections/_schedule.scss */
   .schedule-item .arrow {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 @media all and (max-width: 603px) {
@@ -1591,7 +1675,7 @@ html.is-first-route #header .tab:after {
   /* line 42, ../scss/sections/_mood.scss */
   .mood-item .arrow {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 53, ../scss/sections/_mood.scss */
@@ -1728,7 +1812,7 @@ html.is-first-route #header .tab:after {
   /* line 60, ../scss/sections/_locationList.scss */
   #location-search input {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 83, ../scss/sections/_locationList.scss */
@@ -1807,7 +1891,7 @@ html.is-first-route #header .tab:after {
   /* line 145, ../scss/sections/_locationList.scss */
   .location-list-item .arrow {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 156, ../scss/sections/_locationList.scss */
@@ -1892,7 +1976,7 @@ html.is-first-route #header .tab:after {
   /* line 30, ../scss/sections/_overview.scss */
   #overview .spinner-container .spinner {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 42, ../scss/sections/_overview.scss */
@@ -1930,7 +2014,7 @@ html.is-first-route #header .tab:after {
   /* line 64, ../scss/sections/_overview.scss */
   .overview-wrapper .logo {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 72, ../scss/sections/_overview.scss */
@@ -2025,7 +2109,7 @@ html.is-first-route #header .tab:after {
   /* line 152, ../scss/sections/_overview.scss */
   .overview-bottom .favorites .icon {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 159, ../scss/sections/_overview.scss */
@@ -2048,7 +2132,7 @@ html.is-first-route #header .tab:after {
   /* line 159, ../scss/sections/_overview.scss */
   .overview-bottom .favorites .count {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 176, ../scss/sections/_overview.scss */
@@ -2063,7 +2147,7 @@ html.is-first-route #header .tab:after {
   /* line 176, ../scss/sections/_overview.scss */
   .overview-bottom .schedule .icon {
     background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 300px;
+    background-size: 225px 400px;
   }
 }
 /* line 186, ../scss/sections/_overview.scss */

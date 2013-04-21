@@ -1,0 +1,70 @@
+#about {
+    display: none;
+    position: absolute;
+    width: 100%;
+    top: 54px;
+    bottom: 0;
+    background-color: #d14443;
+
+    @include cache;
+    z-index: 999;
+
+    .wrapper {
+
+        position: absolute;
+        left: 50%;
+        top: 90px;
+        bottom: 0;
+        width: 480px;
+        margin-left: -240px;
+
+        text-align: center;
+
+    }
+
+    .copy {
+        margin-top: 30px;
+        font-size: 18px;
+        font-weight: 100;
+        font-style: italic;
+    }
+
+    .credits-title {
+        margin-top: 30px;
+        font-family: 'league-gothic';
+        font-size: 22px;
+        font-weight: 400;
+    }
+
+    .credits-copy {
+        margin-top: 5px;
+        font-size: 18px;
+        font-weight: 300;
+        color: #ffbfbf;
+    }
+
+    .icons-container {
+        position: absolute;
+        width: 100%;
+        height: 172px;
+        bottom: 0;
+    }
+
+    .icon {
+        display: inline-block;
+        width: 93px;
+        height: 93px;
+        @include ui-asset(0, 300);
+
+        font-family: 'league-gothic';
+        font-size: 22px;
+        text-transform: uppercase;
+        line-height: 242px;
+    }
+
+    a,a:hover,a:active,a:visited {
+        color: #fff;
+        text-decoration: none;
+    };
+
+}

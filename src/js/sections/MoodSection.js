@@ -141,6 +141,8 @@ define([
                 this._addToMoveContainers(foundId);
                 foundTarget.foldListItem.updateSize();
                 foundTarget.foldListItem.easeTo(- 1.2, 1, .5);
+                
+                this.topContainer[0].style[_transform3DStyle] = this.bottomContainer[0].style[_transform3DStyle] = 'translate3d(0,0,0)';
                 tweenHelper.addDom(this.topContainer[0], {y: 0}).delay(300).to({y: - moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
                 tweenHelper.addDom(this.bottomContainer[0], {y: 0}).delay(300).to({y: moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
                 

@@ -161,6 +161,7 @@ define([
                 foundTarget.tearItem.updateSize();
                 foundTarget.tearItem.easeTo(1, .5);
 
+                this.topContainer[0].style[_transform3DStyle] = this.bottomContainer[0].style[_transform3DStyle] = 'translate3d(0,0,0)';
                 tweenHelper.addDom(this.topContainer[0], self.isWide ? {x: 0} : {y: 0}).delay(400).to(self.isWide ? {x: - moveDistance} : {y: - moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
                 tweenHelper.addDom(this.bottomContainer[0], self.isWide ? {x: 0} : {y: 0}).delay(400).to(self.isWide ? {x: moveDistance} : {y: moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
 

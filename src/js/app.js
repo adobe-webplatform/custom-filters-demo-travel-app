@@ -9,9 +9,10 @@ define([
         'sectionController',
         'locationController',
         'preloaderController',
-        'stageReference'
+        'stageReference',
+        'TWEEN'
     ],
-    function(app, config, $, inputController, uiController, scheduleController, sectionController, locationController, preloaderController, stageReference) {
+    function(app, config, $, inputController, uiController, scheduleController, sectionController, locationController, preloaderController, stageReference, TWEEN) {
 
         app.container = null;
 
@@ -21,6 +22,7 @@ define([
             app.container = $('#app');
 
             stageReference.init();
+            stageReference.onRender.add(_onTWEENUpdate, null, null, null, -9999);
             stageReference.startRender();
             stageReference.onResize.add(onResize);
             stageReference.onResize.dispatch();
@@ -37,6 +39,10 @@ define([
 
             // weird bug on iOS6 that the requestAnimationFrame has conflict and it doesnt work.
             //stageReference.onRender.add(startPreload);
+        }
+
+        function _onTWEENUpdate(){
+            TWEEN.update();
         }
 
         function startPreload(){

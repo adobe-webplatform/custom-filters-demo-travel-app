@@ -8,10 +8,10 @@ define(
         'uiController',
         'effects/Roll',
         'stageReference',
-        'EKTweener'
+        'helpers/tweenHelper'
     ],
 
-    function(about, config, $, template, inputController, uiController, Roll, stageReference, EKTweener) {
+    function(about, config, $, template, inputController, uiController, Roll, stageReference, tweenHelper) {
 
         var _container;
         var _containerStyle;
@@ -51,22 +51,25 @@ define(
             if(!_isRendering) stageReference.onRender.add(_render);
             _container.show();
             _isRendering = true;
-            EKTweener.fromTo(_roll.params, 1.2, {t: 0}, {t: 1, onComplete: function(){
+            tweenHelper.kill(_roll.params);
+            _roll.params.t = 0;
+            tweenHelper.add(_roll.params).to({t: 1}, 1200).easing( tweenHelper.Easing.Sinusoidal.Out).onComplete(function(){
                 _isRendering = false;
                 stageReference.onRender.remove(_render);
-            }, ease: 'easeOutSine'});
+            }).start();
         }
 
         function hide() {
             _updateShaderHeader();
             if(!_isRendering) stageReference.onRender.add(_render);
             _isRendering = true;
-            EKTweener.to(_roll.params, 1.2, {t: 0, onComplete: function(){
+
+            tweenHelper.add(_roll.params).to({t: 0}, 1200).easing( tweenHelper.Easing.Sinusoidal.Out).onComplete(function(){
                 _isRendering = false;
                 stageReference.onRender.remove(_render);
                 _container.hide();
                 uiController.onTaskKilled();
-            }, ease: 'easeOutSine'});
+            }).start();
         }
 
         about.init = init;

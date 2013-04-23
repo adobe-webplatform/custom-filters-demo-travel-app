@@ -7,8 +7,8 @@ define([
         'effects/Tear',
         'mout/function/bind',
         'mout/array/indexOf',
-        'EKTweener'
-    ], function(config, $, inputController, sectionController, stageReference, Tear, bind, indexOf, EKTweener){
+        'helpers/tweenHelper'
+    ], function(config, $, inputController, sectionController, stageReference, Tear, bind, indexOf, tweenHelper){
 
         var undef;
 
@@ -100,7 +100,7 @@ define([
         }
 
         function setTo(distance){
-            EKTweener.killTweensOf(this.tearParams);
+            tweenHelper.kill(this.tearParams);
             this.tearParams.distance = distance;
             this._setRender();
         }
@@ -112,7 +112,7 @@ define([
             } else if(params.distance ===1.0) {
                 params.distance = 0.99999;
             }
-            EKTweener.to(this.tearParams, duration, {distance: distance, ease: 'easeInOutSine'});
+            tweenHelper.add(this.tearParams).to({distance: distance}, duration * 1000).easing( tweenHelper.Easing.Sinusoidal.InOut).start();
             this._setRender();
         }
 

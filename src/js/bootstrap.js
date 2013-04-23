@@ -18,10 +18,10 @@
             'history' : 'libs/history',
             'hasher' : 'libs/hasher',
             'crossroads' : 'libs/crossroads',
+            'TWEEN' : 'libs/Tween',
 
             'imageLoader' : 'libs/edankwan/loader/imageLoader',
             'stageReference' : 'libs/edankwan/display/stageReference',
-            'EKTweener' : 'libs/edankwan/animation/EKTweener',
 
             'inputController' : 'controllers/inputController',
             'preloaderController' : 'controllers/preloaderController',
@@ -49,7 +49,7 @@
 
     function getShim(opts){
         return {
-            'EKTweener' : {exports: 'EKTweener'}
+            'TWEEN' : {exports: 'TWEEN'}
         };
     }
 

@@ -7,8 +7,8 @@ define([
         'effects/Fold',
         'mout/function/bind',
         'mout/array/indexOf',
-        'EKTweener'
-    ], function(config, $, inputController, sectionController, stageReference, Fold, bind, indexOf, EKTweener){
+        'helpers/tweenHelper'
+    ], function(config, $, inputController, sectionController, stageReference, Fold, bind, indexOf, tweenHelper){
 
         var undef;
 
@@ -95,7 +95,7 @@ define([
         }
 
         function setTo(distance, downX){
-            EKTweener.killTweensOf(this.foldParams);
+            tweenHelper.kill(this.foldParams);
             this.foldParams.distance = distance;
             if(downX !== undef) this.foldParams.down_x = downX;
             this._setRender();
@@ -108,7 +108,7 @@ define([
             } else if(params.distance ===1.0) {
                 params.distance = 0.99999;
             }
-            EKTweener.to(this.foldParams, duration, {distance: distance, down_x: downX, ease: 'easeInOutSine'});
+            tweenHelper.add(this.foldParams).to({distance: distance}, duration * 1000).easing( tweenHelper.Easing.Sinusoidal.InOut).start();
             this._setRender();
         }
 

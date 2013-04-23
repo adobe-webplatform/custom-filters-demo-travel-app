@@ -7,8 +7,9 @@ define([
         'sectionController',
         'effects/Cloth',
         'mout/function/bind',
-        'stageReference'
-    ], function(config, $, AbstractSection, template, inputController, sectionController, Cloth, bind, stageReference){
+        'stageReference',
+        'helpers/tweenHelper'
+    ], function(config, $, AbstractSection, template, inputController, sectionController, Cloth, bind, stageReference, tweenHelper){
 
         var undef;
 
@@ -50,7 +51,7 @@ define([
             if(this.isDown || sectionController.isAnimating()) return; // ignore multitouch
             e.preventDefault();
             var params = this.cloth.params;
-            EKTweener.killTweensOf(params);
+            tweenHelper.kill(params);
             params.downX =  params.toX = e.x / this.width;
             params.downY = params.toY = e.y / this.height;
             params.vX = 0;
@@ -78,7 +79,7 @@ define([
                 sectionController.goTo('home');
             } else {
                 var params = this.cloth.params;
-                EKTweener.to(params, .5, {toX: params.downX, toY: 1, downY: 1, ease: 'easeOutElastic'});
+                tweenHelper.add(params).to({toX: params.downX, toY: 1, downY: 1}, 500).easing( tweenHelper.Easing.Elastic.InOut).start();
             }
         }
 
@@ -119,7 +120,8 @@ define([
                 this.needRender = true;
                 this._renderToggle = 0;
                 this._render();
-                EKTweener.to(params, .8, {toY: 1, translateY: 0, onComplete: bind(_setShown, this)});
+
+                tweenHelper.add(params).to({toY: 1, translateY: 0}, 800).easing( tweenHelper.Easing.Cubic.Out).onComplete(bind(_setShown, this)).start();
             }
         }
 
@@ -135,11 +137,11 @@ define([
             inputController.onUp.remove(_onUp, this);
             var params = this.cloth.params;
             this.needRender = true;
-            EKTweener.to(params, .4, {toY: 0, downY: 1, translateY: -.25, onComplete: function(){
+            tweenHelper.add(params).to({toY: 0, downY: 1, translateY: -.25}, 400).easing( tweenHelper.Easing.Cubic.Out).onComplete(function(){
                 stageReference.onRender.remove(_render, self);
                 this.needRender = false;
                 self._setHidden();
-            }});
+            }).start();
         }
 
 

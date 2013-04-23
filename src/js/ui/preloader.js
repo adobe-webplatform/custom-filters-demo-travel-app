@@ -4,15 +4,16 @@ define(
         'config',
         'jquery',
         'hbs!templates/ui/preloader',
-        'EKTweener'
+        'helpers/tweenHelper'
     ],
 
-    function(preloader, config, $, template, EKTweener) {
+    function(preloader, config, $, template, tweenHelper) {
 
         var SKIP_ANIMATION = false;
 
         var _container;
         var _percentWrapper;
+        var _percentWrapperTweenObj = {};
         var _percent;
         var _callback;
         var _tweenObj = {percent: 0};
@@ -38,24 +39,20 @@ define(
 
         function show(onStart, onLoaded) {
             _callback = onLoaded;
-            EKTweener.fromTo(_percentWrapper, SKIP_ANIMATION ? 0 : .2, {opacity: 0, transform3d: 'translate3d(0,10px,0)'}, {opacity: 1, transform3d: 'translate3d(0,0,0)', onComplete: function(){
-                onStart();
-            }});
+            onStart();
         }
 
         function onLoading(percent){
-            EKTweener.to(_tweenObj, SKIP_ANIMATION ? 0 : 1, {percent: percent, onUpdate: _onAnimate});
+            tweenHelper.add(_tweenObj).to({percent: percent}, duration * 1000).easing( tweenHelper.Easing.Cubic.InOut).onUpdate(_onAnimate).start();
         }
 
         function _onAnimate(){
             var percent = _tweenObj.percent;
             _percent.html(percent * 100 | 0);
             if(percent == 1) {
-                EKTweener.to(_percent, SKIP_ANIMATION ? 0 : .3, {transform3d: 'translate3d(0,-20px,0)', ease: 'easeOutCubic', onComplete: function(){
-                    EKTweener.to(_percent, SKIP_ANIMATION ? 0 : .3, {transform3d: 'translate3d(0,50px,0)', ease: 'easeInCubic', onComplete: function(){
-                        _callback();
-                    }});
-                }});
+
+                //TODO: animation
+                _callback();
             }
         }
 

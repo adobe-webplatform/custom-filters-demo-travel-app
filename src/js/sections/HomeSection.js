@@ -7,8 +7,9 @@ define([
         'sectionController',
         'widgets/TearItem',
         'mout/function/bind',
-        'stageReference'
-    ], function(config, $, AbstractSection, template, inputController, sectionController, TearItem, bind, stageReference){
+        'stageReference',
+        'helpers/tweenHelper'
+    ], function(config, $, AbstractSection, template, inputController, sectionController, TearItem, bind, stageReference, tweenHelper){
 
         function HomeSection(){
             _super.constructor.call(this, 'home', template);
@@ -134,7 +135,10 @@ define([
                 }, 400);
                 this.topContainer[0].style[_transform3DStyle] = 'translate3d(' + (self.isWide ? (- moveDistance) + 'px,0' : '0,' + (- moveDistance) + 'px') + ',0)';
                 this.bottomContainer[0].style[_transform3DStyle] = 'translate3d(' + (self.isWide ? moveDistance + 'px,0' : '0,' + moveDistance + 'px') + ',0)';
-                EKTweener.to(this.moveContainers, .5, {transform3d: 'translate3d(0,0,0)', ease: 'easeOutSine'});
+
+                tweenHelper.addDom(this.topContainer[0], self.isWide ? {x: - moveDistance} : {y: - moveDistance}).to(self.isWide ? {x: 0} : {y: 0}, 500).easing( tweenHelper.Easing.Sinusoidal.Out).onUpdate(tweenHelper.translateXY3DCallback).start();
+                tweenHelper.addDom(this.bottomContainer[0], self.isWide ? {x: moveDistance} : {y: moveDistance}).to(self.isWide ? {x: 0} : {y: 0}, 500).easing( tweenHelper.Easing.Sinusoidal.Out).onUpdate(tweenHelper.translateXY3DCallback).start();
+                
                 setTimeout(function(){
                     self._removeFromMoveContainers();
                     self._setShown();
@@ -156,8 +160,10 @@ define([
                 this._addToMoveContainers(foundId);
                 foundTarget.tearItem.updateSize();
                 foundTarget.tearItem.easeTo(1, .5);
-                EKTweener.to(this.topContainer, .5, {delay: .4, transform3d: 'translate3d(' + (self.isWide ? (- moveDistance) + 'px,0' : '0,' + (- moveDistance) + 'px') + ',0)', ease: 'easeInSine'});
-                EKTweener.to(this.bottomContainer, .5, {delay: .4, transform3d: 'translate3d(' + (self.isWide ? moveDistance + 'px,0' : '0,' + moveDistance + 'px') + ',0)', ease: 'easeInSine'});
+
+                tweenHelper.addDom(this.topContainer[0], self.isWide ? {x: 0} : {y: 0}).delay(400).to(self.isWide ? {x: - moveDistance} : {y: - moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
+                tweenHelper.addDom(this.bottomContainer[0], self.isWide ? {x: 0} : {y: 0}).delay(400).to(self.isWide ? {x: moveDistance} : {y: moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
+
                 setTimeout(function(){
                     self._removeFromMoveContainers();
                     stageReference.onResize.remove(_onResize, self);

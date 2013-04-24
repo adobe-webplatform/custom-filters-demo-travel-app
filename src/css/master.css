@@ -724,6 +724,89 @@ html.is-first-route #header .tab:after {
   transform: translateZ(0);
 }
 /* line 17, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .title, #schedule-prompt input, #schedule-prompt textarea {
+  opacity: 0;
+}
+/* line 22, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.show .title, #schedule-prompt.show input, #schedule-prompt.show textarea {
+  opacity: 1;
+  -webkit-transition: 0.3s ease-in-out 0.8s;
+  -moz-transition: 0.3s ease-in-out 0.8s;
+  -ms-transition: 0.3s ease-in-out 0.8s;
+  -o-transition: 0.3s ease-in-out 0.8s;
+  transition: 0.3s ease-in-out 0.8s;
+}
+/* line 26, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.show .schedule-form {
+  opacity: 1;
+  -webkit-transition: -webkit-transform 0.4s ease-in-out, opacity 0.1s linear;
+  -moz-transition: -moz-transform 0.4s ease-in-out, opacity 0.1s linear;
+  -ms-transition: -ms-transform 0.4s ease-in-out, opacity 0.1s linear;
+  -o-transition: -o-transform 0.4s ease-in-out, opacity 0.1s linear;
+  transition: transform 0.4s ease-in-out, opacity 0.1s linear;
+}
+/* line 30, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.show .top {
+  -webkit-transition: -webkit-transform 0.4s ease-in-out 0.3s;
+  -moz-transition: -moz-transform 0.4s ease-in-out 0.3s;
+  -ms-transition: -ms-transform 0.4s ease-in-out 0.3s;
+  -o-transition: -o-transform 0.4s ease-in-out 0.3s;
+  transition: transform 0.4s ease-in-out 0.3s;
+}
+/* line 33, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.show .bottom {
+  -webkit-transition: -webkit-transform 0.4s ease-in-out 0.6s;
+  -moz-transition: -moz-transform 0.4s ease-in-out 0.6s;
+  -ms-transition: -ms-transform 0.4s ease-in-out 0.6s;
+  -o-transition: -o-transform 0.4s ease-in-out 0.6s;
+  transition: transform 0.4s ease-in-out 0.6s;
+}
+/* line 37, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.show .schedule-form, #schedule-prompt.show .top, #schedule-prompt.show .bottom {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+/* line 42, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.hide .title, #schedule-prompt.hide input, #schedule-prompt.hide textarea {
+  -webkit-transition: 0.3s ease-in-out;
+  -moz-transition: 0.3s ease-in-out;
+  -ms-transition: 0.3s ease-in-out;
+  -o-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+/* line 45, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.hide .schedule-form {
+  -webkit-transform: translate3d(0, -300px, 400px) rotateX(-60deg) rotateY(45deg);
+  -moz-transform: translate3d(0, -300px, 400px) rotateX(-60deg) rotateY(45deg);
+  -ms-transform: translate3d(0, -300px, 400px) rotateX(-60deg) rotateY(45deg);
+  -o-transform: translate3d(0, -300px, 400px) rotateX(-60deg) rotateY(45deg);
+  transform: translate3d(0, -300px, 400px) rotateX(-60deg) rotateY(45deg);
+  -webkit-transition: -webkit-transform 0.4s ease-in-out 0.6s, opacity 0.2s linear 0.8s;
+  -moz-transition: -moz-transform 0.4s ease-in-out 0.6s, opacity 0.2s linear 0.8s;
+  -ms-transition: -ms-transform 0.4s ease-in-out 0.6s, opacity 0.2s linear 0.8s;
+  -o-transition: -o-transform 0.4s ease-in-out 0.6s, opacity 0.2s linear 0.8s;
+  transition: transform 0.4s ease-in-out 0.6s, opacity 0.2s linear 0.8s;
+}
+/* line 49, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.hide .top {
+  -webkit-transition: -webkit-transform 0.4s ease-in-out 0.3s;
+  -moz-transition: -moz-transform 0.4s ease-in-out 0.3s;
+  -ms-transition: -ms-transform 0.4s ease-in-out 0.3s;
+  -o-transition: -o-transform 0.4s ease-in-out 0.3s;
+  transition: transform 0.4s ease-in-out 0.3s;
+}
+/* line 52, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt.hide .bottom {
+  -webkit-transition: -webkit-transform 0.4s ease-in-out;
+  -moz-transition: -moz-transform 0.4s ease-in-out;
+  -ms-transition: -ms-transform 0.4s ease-in-out;
+  -o-transition: -o-transform 0.4s ease-in-out;
+  transition: transform 0.4s ease-in-out;
+}
+/* line 57, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .wrapper {
   position: absolute;
   left: 50%;
@@ -732,8 +815,30 @@ html.is-first-route #header .tab:after {
   height: 368px;
   margin-left: -150px;
   margin-top: -184px;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-perspective: 800px;
+  -moz-perspective: 800px;
+  -ms-perspective: 800px;
+  perspective: 800px;
 }
-/* line 28, ../scss/ui/_schedulePrompt.scss */
+/* line 70, ../scss/ui/_schedulePrompt.scss */
+#schedule-prompt .schedule-form {
+  display: inline-block;
+  opacity: 0;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform: translate3d(0, 300px, -800px) rotateX(-60deg) rotateY(-15deg);
+  -moz-transform: translate3d(0, 300px, -800px) rotateX(-60deg) rotateY(-15deg);
+  -ms-transform: translate3d(0, 300px, -800px) rotateX(-60deg) rotateY(-15deg);
+  -o-transform: translate3d(0, 300px, -800px) rotateX(-60deg) rotateY(-15deg);
+  transform: translate3d(0, 300px, -800px) rotateX(-60deg) rotateY(-15deg);
+}
+/* line 77, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .triangle {
   position: absolute;
   width: 0;
@@ -741,26 +846,42 @@ html.is-first-route #header .tab:after {
   border-left: 150px solid transparent;
   border-right: 150px solid transparent;
 }
-/* line 36, ../scss/ui/_schedulePrompt.scss */
+/* line 86, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .top {
+  position: relative;
   width: 100%;
   height: 41px;
   background-color: #d14443;
   text-align: center;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-transform-origin: 50% 100%;
+  -moz-transform-origin: 50% 100%;
+  -ms-transform-origin: 50% 100%;
+  -o-transform-origin: 50% 100%;
+  transform-origin: 50% 100%;
+  -webkit-transform: translateZ(2px) rotateX(-180deg);
+  -moz-transform: translateZ(2px) rotateX(-180deg);
+  -ms-transform: translateZ(2px) rotateX(-180deg);
+  -o-transform: translateZ(2px) rotateX(-180deg);
+  transform: translateZ(2px) rotateX(-180deg);
 }
-/* line 42, ../scss/ui/_schedulePrompt.scss */
+/* line 97, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .top .triangle {
-  top: -50.5px;
+  bottom: 40px;
   border-bottom: 51px solid #d14443;
 }
-/* line 47, ../scss/ui/_schedulePrompt.scss */
+/* line 102, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .top .title {
   font-size: 36px;
   line-height: 36px;
   color: #e7e5e1;
   letter-spacing: 1px;
 }
-/* line 53, ../scss/ui/_schedulePrompt.scss */
+/* line 108, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .top .title:before, #schedule-prompt .top .title:after {
   content: '';
   display: inline-block;
@@ -769,14 +890,14 @@ html.is-first-route #header .tab:after {
   margin: 13px 9px;
   background-color: #da8482;
 }
-/* line 64, ../scss/ui/_schedulePrompt.scss */
+/* line 119, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .content {
   width: 100%;
   height: 190px;
   background-color: #fff;
   border-bottom: 1px solid #d9d9d9;
 }
-/* line 72, ../scss/ui/_schedulePrompt.scss */
+/* line 127, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .content input, #schedule-prompt .content textarea {
   width: 240px;
   height: 40px;
@@ -803,33 +924,48 @@ html.is-first-route #header .tab:after {
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 72, ../scss/ui/_schedulePrompt.scss */
+  /* line 127, ../scss/ui/_schedulePrompt.scss */
   #schedule-prompt .content input, #schedule-prompt .content textarea {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 400px;
   }
 }
-/* line 98, ../scss/ui/_schedulePrompt.scss */
+/* line 153, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .content input.location, #schedule-prompt .content textarea.location {
   margin-top: 25px;
 }
-/* line 101, ../scss/ui/_schedulePrompt.scss */
+/* line 156, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .content input.date, #schedule-prompt .content textarea.date {
   background-position: -192px -32px;
 }
-/* line 104, ../scss/ui/_schedulePrompt.scss */
+/* line 159, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .content input.note, #schedule-prompt .content textarea.note {
   background-position: -192px -67px;
 }
-/* line 110, ../scss/ui/_schedulePrompt.scss */
+/* line 165, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .bottom {
   position: relative;
   width: 100%;
   height: 114px;
   padding-top: 25px;
   background-color: #eee;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-transform-origin: 50% 0;
+  -moz-transform-origin: 50% 0;
+  -ms-transform-origin: 50% 0;
+  -o-transform-origin: 50% 0;
+  transform-origin: 50% 0;
+  -webkit-transform: translateZ(1px) rotateX(180deg);
+  -moz-transform: translateZ(1px) rotateX(180deg);
+  -ms-transform: translateZ(1px) rotateX(180deg);
+  -o-transform: translateZ(1px) rotateX(180deg);
+  transform: translateZ(1px) rotateX(180deg);
 }
-/* line 117, ../scss/ui/_schedulePrompt.scss */
+/* line 176, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .bottom input {
   width: 240px;
   height: 40px;
@@ -847,50 +983,51 @@ html.is-first-route #header .tab:after {
   color: #fff;
   outline: none;
 }
-/* line 137, ../scss/ui/_schedulePrompt.scss */
+/* line 196, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .bottom input.save, #schedule-prompt .bottom input.close {
   margin-bottom: 10px;
   background-color: #d14443;
 }
-/* line 142, ../scss/ui/_schedulePrompt.scss */
+/* line 201, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .bottom input.close {
   display: none;
 }
-/* line 146, ../scss/ui/_schedulePrompt.scss */
+/* line 205, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .bottom input.cancel {
   background-color: #839194;
 }
-/* line 152, ../scss/ui/_schedulePrompt.scss */
+/* line 211, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .bottom .triangle {
-  bottom: -50.5px;
+  top: 100%;
+  margin-top: -1px;
   border-top: 51px solid #eeeeee;
 }
-/* line 159, ../scss/ui/_schedulePrompt.scss */
+/* line 219, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt .events {
   display: none;
 }
-/* line 165, ../scss/ui/_schedulePrompt.scss */
+/* line 225, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt.is-event .wrapper {
   height: 314px;
   margin-top: -158px;
 }
-/* line 170, ../scss/ui/_schedulePrompt.scss */
+/* line 230, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt.is-event .events {
   display: block;
 }
-/* line 174, ../scss/ui/_schedulePrompt.scss */
+/* line 234, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt.is-event .my-plans {
   display: none;
 }
-/* line 178, ../scss/ui/_schedulePrompt.scss */
+/* line 238, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt.is-event .bottom {
   height: 64px;
 }
-/* line 181, ../scss/ui/_schedulePrompt.scss */
+/* line 241, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt.is-event .bottom input.close {
   display: block;
 }
-/* line 184, ../scss/ui/_schedulePrompt.scss */
+/* line 244, ../scss/ui/_schedulePrompt.scss */
 #schedule-prompt.is-event .bottom input.save, #schedule-prompt.is-event .bottom input.cancel {
   display: none;
 }
@@ -1460,7 +1597,7 @@ html.is-first-route #header .tab:after {
   float: left;
   width: 50%;
   height: 90px;
-  background-color: #c7c7c7;
+  background-color: #b6b6b6;
   font-style: italic;
   color: #fff;
   -webkit-transition: background-color 0.5s linear;
@@ -1513,7 +1650,7 @@ html.is-first-route #header .tab:after {
 /* line 94, ../scss/sections/_schedule.scss */
 #schedule .tabs .tab .num {
   position: absolute;
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 300;
   right: 30px;
   top: 50%;
@@ -1522,7 +1659,7 @@ html.is-first-route #header .tab:after {
   margin-top: -25px;
   text-align: center;
   line-height: 50px;
-  color: #c7c7c7;
+  color: #b6b6b6;
   background-color: #fff;
   border-radius: 25px;
   -webkit-transition: background-color 0.5s linear, color 0.5s linear;
@@ -1552,11 +1689,11 @@ html.is-first-route #header .tab:after {
 }
 /* line 131, ../scss/sections/_schedule.scss */
 #schedule .tabs .tab.selected .text {
-  color: #c7c7c7;
+  color: #b6b6b6;
 }
 /* line 135, ../scss/sections/_schedule.scss */
 #schedule .tabs .tab.selected .num {
-  background-color: #c7c7c7;
+  background-color: #b6b6b6;
   color: #fff;
 }
 

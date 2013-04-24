@@ -48,7 +48,7 @@
             float: left;
             width: 50%;
             height: 90px;
-            background-color: #c7c7c7;
+            background-color: #b6b6b6;
 
             font-style: italic;
 
@@ -93,7 +93,7 @@
 
             .num {
                 position: absolute;
-                font-size: 24px;
+                font-size: 26px;
                 font-weight: 300;
 
                 right: 30px;
@@ -103,11 +103,11 @@
                 margin-top: -25px;
                 text-align: center;
                 line-height: 50px;
-                color: #c7c7c7;
+                color: #b6b6b6;
 
                 background-color: #fff;
                 border-radius: 25px;
-                
+
                 @include transition(background-color .5s linear, color .5s linear);
 
                 @media all and (max-width : 603px) {
@@ -129,11 +129,11 @@
                 }
 
                 .text {
-                    color: #c7c7c7;
+                    color: #b6b6b6;
                 }
 
                 .num {
-                    background-color: #c7c7c7;
+                    background-color: #b6b6b6;
                     color: #fff;
                 }
 

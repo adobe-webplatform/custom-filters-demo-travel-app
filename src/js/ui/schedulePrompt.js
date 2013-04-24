@@ -22,6 +22,8 @@ define(
         var _cancelBtn;
         var _closeBtn;
 
+        var _timeout = null;
+
         var _transform3DStyle = config.transform3DStyle;
 
         var _item = null;
@@ -60,11 +62,20 @@ define(
             _noteInput.attr('readonly', isEvent);
             _container.toggleClass('is-event', isEvent);
             _container.show();
+            clearTimeout(_timeout);
+            _timeout = setTimeout(function(){
+                _container.addClass('show');
+            });
             schedulePrompt.isShown = true;
         }
 
         function hide(){
-            _container.hide();
+            _container.removeClass('show').addClass('hide');
+            clearTimeout(_timeout);
+            _timeout = setTimeout(function(){
+                _container.removeClass('hide');
+                _container.hide();
+            }, 1000);
             schedulePrompt.isShown = false;
         }
 

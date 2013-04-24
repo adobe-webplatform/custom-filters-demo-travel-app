@@ -78,7 +78,9 @@ define(
             _parseItem(item);
             _generateOrderList(myPlans);
             onOrderChanged.dispatch(item);
-            sectionController.goTo('home/schedule/my-plans');
+            setTimeout(function(){
+                sectionController.goTo('home/schedule/my-plans');
+            }, 800);
         }
 
         scheduleController.init = init;

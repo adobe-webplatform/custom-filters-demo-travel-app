@@ -20,6 +20,8 @@ define([
             this._initVariables();
             this._initEvents();
 
+            this.isFirstTime = true;
+
         }
 
         var _super = AbstractSection.prototype;
@@ -39,6 +41,8 @@ define([
             this.moveContainers = this.container.find('.move-container');
             this.topContainer = this.moveContainers.filter('.top');
             this.bottomContainer = this.moveContainers.filter('.bottom');
+
+            this.arrows = this.container.find('.arrow');
 
             this.items = this.container.find('.home-item');
 
@@ -113,14 +117,24 @@ define([
 
 
         function show(currentNodes, previousSection, previousNodes){
+            var self = this;
             this.container.show();
             stageReference.onResize.add(_onResize, this);
             this._onResize();
+
+            //arrow animation
+            if(this.isFirstTime) {
+                this.arrows.addClass('show animate');
+                setTimeout(function(){
+                    self.arrows.removeClass('animate');
+                }, 400);
+                this.isFirstTime = false;
+            }
+
             if(previousNodes.length < 1 || sectionController.isFirstRoute) {
                 this.appear();
                 this._setShown();
             } else {
-                var self = this;
                 var foundTarget;
                 var previousNode = previousNodes[1];
                 var foundId = this.items.length;
@@ -136,9 +150,9 @@ define([
                 this.topContainer[0].style[_transform3DStyle] = 'translate3d(' + (self.isWide ? (- moveDistance) + 'px,0' : '0,' + (- moveDistance) + 'px') + ',0)';
                 this.bottomContainer[0].style[_transform3DStyle] = 'translate3d(' + (self.isWide ? moveDistance + 'px,0' : '0,' + moveDistance + 'px') + ',0)';
 
-                tweenHelper.addDom(this.topContainer[0], self.isWide ? {x: - moveDistance} : {y: - moveDistance}).to(self.isWide ? {x: 0} : {y: 0}, 500).easing( tweenHelper.Easing.Sinusoidal.Out).onUpdate(tweenHelper.translateXY3DCallback).start();
-                tweenHelper.addDom(this.bottomContainer[0], self.isWide ? {x: moveDistance} : {y: moveDistance}).to(self.isWide ? {x: 0} : {y: 0}, 500).easing( tweenHelper.Easing.Sinusoidal.Out).onUpdate(tweenHelper.translateXY3DCallback).start();
-                
+                tweenHelper.addDom(this.topContainer[0], self.isWide ? {x: - moveDistance, y: 0} : {x: 0, y: - moveDistance}).to({x: 0, y: 0}, 500).easing( tweenHelper.Easing.Sinusoidal.Out).onUpdate(tweenHelper.translateXY3DCallback).start();
+                tweenHelper.addDom(this.bottomContainer[0], self.isWide ? {x: moveDistance, y: 0} : {x: 0, y: moveDistance}).to({x: 0, y: 0}, 500).easing( tweenHelper.Easing.Sinusoidal.Out).onUpdate(tweenHelper.translateXY3DCallback).start();
+
                 setTimeout(function(){
                     self._removeFromMoveContainers();
                     self._setShown();
@@ -162,8 +176,8 @@ define([
                 foundTarget.tearItem.easeTo(1, .5);
 
                 this.topContainer[0].style[_transform3DStyle] = this.bottomContainer[0].style[_transform3DStyle] = 'translate3d(0,0,0)';
-                tweenHelper.addDom(this.topContainer[0], self.isWide ? {x: 0} : {y: 0}).delay(400).to(self.isWide ? {x: - moveDistance} : {y: - moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
-                tweenHelper.addDom(this.bottomContainer[0], self.isWide ? {x: 0} : {y: 0}).delay(400).to(self.isWide ? {x: moveDistance} : {y: moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
+                tweenHelper.addDom(this.topContainer[0], {x: 0, y: 0}).delay(400).to(self.isWide ? {x: - moveDistance} : {y: - moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
+                tweenHelper.addDom(this.bottomContainer[0], {x: 0, y: 0}).delay(400).to(self.isWide ? {x: moveDistance} : {y: moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
 
                 setTimeout(function(){
                     self._removeFromMoveContainers();

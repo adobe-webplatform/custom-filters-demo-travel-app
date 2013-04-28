@@ -56,6 +56,7 @@ define([
             );
 
             this.searchContainer = $('#location-search');
+            this.searchForm = this.searchContainer.find('form');
             this.searchInput = this.searchContainer.find('.search');
             this.searchNum = this.searchContainer.find('.num');
 
@@ -75,9 +76,20 @@ define([
 
         function _initEvents(){
             var self = this;
+            inputController.add(this.container, 'down', bind(_onContainerDown, this));
             this.searchInput.on('keyup change', function(){
                 self.appear(sectionController.currentNodes, false, true);
             });
+            this.searchForm.submit(function(){
+                self.searchInput.blur();
+                return false;
+            });
+        }
+
+        function _onContainerDown(e){
+            if(e.target !== this.searchInput[0]) {
+                this.searchInput.blur();
+            }
         }
 
         function _onItemPeek(target){
@@ -105,11 +117,11 @@ define([
         }
 
         function _getItemsFromFilteredList(filteredList) {
-            var filteredItems = $();
+            var dummyContainer = $('<div>');
             for(var i = 0, len = filteredList.length; i < len; i++) {
-                filteredItems = filteredItems.add(this.items[filteredList[i].index]);
+                dummyContainer.append(this.items[filteredList[i].index]);
             }
-            return filteredItems;
+            return dummyContainer.find('> div');
         }
 
         function _onResize(e){
@@ -143,6 +155,7 @@ define([
                 this.style.backgroundColor = colorList[i%colorListLength];
                 this.style.top = (i * ITEM_HEIGHT) + 'px';
             });
+            this.topContainer.after(filteredItems);
             filteredItems.show();
             this.scrollPane.moveContainerStyle.height = (filteredItems.length * ITEM_HEIGHT) + 'px';
             this.scrollPane.onResize();

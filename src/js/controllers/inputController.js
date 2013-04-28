@@ -197,14 +197,19 @@ define(
 
             /* */
             if(isTouch){
+                var autoPreventDefault = false;
                 i = bubbleHistory.length;
                 while(i--) {
                     elem = bubbleHistory[i];
-                    if(elem.__hasInput) {
-                        e.preventDefault();
+                    if(elem.tagName === 'INPUT' || elem.tagName === 'VIDEO') {
+                        autoPreventDefault = false;
                         break;
                     }
+                    if(elem.__hasInput) {
+                        autoPreventDefault = true;
+                    }
                 }
+                if(autoPreventDefault) e.preventDefault();
             }
 
             if(isDown) {

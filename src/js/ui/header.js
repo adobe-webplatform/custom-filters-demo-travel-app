@@ -35,6 +35,10 @@ define(
             uiController.onAboutHide.add(_onAboutHide);
         }
 
+        function show(){
+            _container.show();
+        }
+
         function _onAboutShow(){
             _aboutBtn.addClass('selected');
         }
@@ -90,6 +94,7 @@ define(
         }
 
         header.init = init;
+        header.show = show;
         header.update = update;
 
         return header;

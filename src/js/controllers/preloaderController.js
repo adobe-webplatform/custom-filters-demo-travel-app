@@ -39,6 +39,7 @@ define(
         }
 
         function _onLoaded(){
+            console.log(1);
             preloader.hide();
         }
 

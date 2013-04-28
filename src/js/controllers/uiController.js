@@ -26,6 +26,10 @@ define(
             about.init();
         }
 
+        function showHeader(){
+            header.show();
+        }
+
         function updateHeader(nodes){
             header.update(nodes);
         }
@@ -64,6 +68,7 @@ define(
         uiController.killTask = killTask;
         uiController.onTaskKilled = onTaskKilled;
 
+        uiController.showHeader = showHeader;
         uiController.updateHeader = updateHeader;
         uiController.showAbout = showAbout;
         uiController.hideAbout = hideAbout;

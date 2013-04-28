@@ -32,22 +32,16 @@ define([
             locationController.init();
             scheduleController.init();
             sectionController.preInit();
-            sectionController.init();
+            //sectionController.init();
 
-            //preloaderController.init();
-            //preloaderController.add($('#app'));
+            preloaderController.init();
+            preloaderController.add($('#app'));
 
-            // weird bug on iOS6 that the requestAnimationFrame has conflict and it doesnt work.
-            //stageReference.onRender.add(startPreload);
+            preloaderController.start(start);
         }
 
         function _onTWEENUpdate(){
             TWEEN.update();
-        }
-
-        function startPreload(){
-            stageReference.onRender.remove(startPreload);
-            preloaderController.start(start);
         }
 
         function onResize(){
@@ -56,6 +50,7 @@ define([
         }
 
         function start(){
+            uiController.showHeader();
             sectionController.init();
         }
 

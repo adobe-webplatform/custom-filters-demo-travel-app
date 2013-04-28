@@ -6,28 +6,71 @@
     z-index: 500;
     @include cache;
 
-    .percent-wrapper {
+    .wrapper {
+        width: 100%;
+        height: 100%;
+    }
+
+    .block {
         position: absolute;
-        left: 50%;
+        width: 50%;
+        height: 100%;
+        background-color: #000;
+
+        &.left {
+            left: 0;
+            @include transformOrigin(100%, 50%);
+        }
+        &.right {
+            right: 0;
+            @include transformOrigin(0, 50%);
+        }
+    }
+
+    .year-mask {
+        position: absolute;
         top: 50%;
         width: 100px;
-        height: 80px;
-        margin-left: -50px;
-        margin-top: -55px;
+        height: 200px;
+        margin-top: -100px;
 
         overflow: hidden;
 
-        .percent {
+        .year-wrapper {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+        }
+
+        &.left {
+            left: 50%;
+            margin-left: -100px;
+
+            @include transform(translate3d(0,-10px,0));
+            .year-wrapper {
+                left: 0;
+            }
+        }
+
+        &.right {
+            right: 50%;
+            margin-right: -100px;
+            @include transform(translate3d(0,10px,0));
+            .year-wrapper {
+                right: 0;
+            }
+        }
+
+        .year {
             position: absolute;
             width: 100%;
-            height: 50px;
-            top: 30px;
+            height: 100%;
 
             font-family: 'league-gothic-condensed', 'Arial Narrow', sans-serif;
             font-weight: 400;
-            font-size: 48px;
+            font-size: 120px;
             text-align: center;
-            line-height: 50px;
+            line-height: 200px;
         }
     }
 }

@@ -12,12 +12,11 @@ define([
 
         var undef;
 
-        function TearItem(elem, onPeekCallback, onUnPeekCallback, onOpenCallback, shaderPadding){
+        function TearItem(elem, onPeekCallback, onUnPeekCallback, onOpenCallback){
             this.elem = elem;
             this.onPeekCallback = onPeekCallback;
             this.onUnPeekCallback = onUnPeekCallback;
             this.onOpenCallback = onOpenCallback;
-            this.shaderPadding = shaderPadding;
 
             this._init();
         }
@@ -36,17 +35,7 @@ define([
             this.elemStyle = this.elem.style;
             this.$elem = $(this.elem);
 
-            // Create the shadow div
-            var shadow = this.$shadow = $('<div>').css({
-                display: 'none',
-                position: 'absolute',
-                pointerEvents: 'none',
-                zIndex: this.$elem.children().length + 100
-            });
-            this.$elem.append(shadow);
-
-            this.shadowStyle = shadow[0].style;
-            this.tear = new Tear({padding : this.shaderPadding});
+            this.tear = new Tear({});
             this.tearParams = this.tear.params;
             this.isUsingFront = false;
 
@@ -79,10 +68,8 @@ define([
         }
 
         function _setRender(){
-            var shaderStyle = this.shadowStyle;
-            if(indexOf(needRenderItems, this) > -1 && shaderStyle.display == 'block') return;
+            if(indexOf(needRenderItems, this) > -1) return;
             var params = this.tear.params;
-            shaderStyle.display = 'block';
             this.elemStyle.zIndex = this.$elem.siblings().length + 100;
             needRenderItems.push(this);
             this.render();
@@ -91,7 +78,6 @@ define([
         function resetShader(){
             var index = indexOf(needRenderItems, this);
             if(index > -1) needRenderItems.splice(index, 1);
-            this.shadowStyle.display = 'none';
             this.tearParams.distance = 0;
             this.elemStyle[_filterStyle] = 'none';
             this.elemStyle.zIndex = 'auto';
@@ -120,21 +106,6 @@ define([
             var params = this.tearParams;
             if(isVertical !== undef) {
                 params.isVertical = isVertical;
-                if(isVertical) {
-                    this.$shadow.css({
-                        top: 0,
-                        bottom: 0,
-                        left: -this.shaderPadding + 'px',
-                        right: -this.shaderPadding + 'px'
-                    });
-                } else {
-                    this.$shadow.css({
-                        top: -this.shaderPadding + 'px',
-                        bottom: -this.shaderPadding + 'px',
-                        left: 0,
-                        right: 0
-                    });
-                }
             }
             if(params.isVertical) {
                 this.length = this.$elem.height();
@@ -155,7 +126,7 @@ define([
             params.prevDistance = params.distance;
 
             if(params.distance === 0) {
-                if(this.hasPeeked) this.onUnPeekCallback();
+                if(this.hasPeeked && this.onUnPeekCallback) this.onUnPeekCallback();
                 this.resetShader();
             } else if(params.distance === 1) {
                 var index = indexOf(needRenderItems, this);
@@ -181,7 +152,7 @@ define([
                     if(!(params.distance == 0 && delta < 0)){
                         params.distance += delta;
                         if(!target.hasPeeked && params.distance > 0) {
-                            target.onPeekCallback();
+                            if(target.onPeekCallback) target.onPeekCallback();
                             target.hasPeeked = true;
                         }
                         if(params.distance < 0) params.distance = 0;
@@ -198,7 +169,7 @@ define([
             var target;
             while(i--) {
                 target = _isDownItems[i];
-                if(target.tearParams.distance > target.tearParams.threshold) {
+                if(target.onOpenCallback && target.tearParams.distance > target.tearParams.threshold) {
                     target.onOpenCallback();
                 } else if(e.distance !== 0) {
                     target.easeTo(0, .3);

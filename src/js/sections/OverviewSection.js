@@ -14,10 +14,16 @@ define([
 
         function OverviewSection(){
             _super.constructor.call(this, 'overview', template);
-            this.bgs = {};
+
             this.init();
             this._initVariables();
             this._initEvents();
+
+            var images = this.images = this.data.images;
+            //preload all images
+            for(var mood in images) {
+                imageLoader.add(images[mood]);
+            }
         }
 
         var _super = AbstractSection.prototype;
@@ -79,25 +85,16 @@ define([
             var url = this.currentImageUrl = this.location.image;
             this.container.show();
 
-            if(imageLoader._loaded[this.location.image]) {
-                this._onImageReady();
-            } else {
-                this._showSpinner();
-                if(imageLoader._added[this.location.image]) return;
-                imageLoader.loadSingleImage(url, function(){
-                    if(this.__url__ != self.currentImageUrl) return;
-                    self._onImageReady();
-                });
-            }
-        }
-
-        function _onImageReady(){
-            var self = this;
-            this._hideSpinner();
             if(this.useAnimation){
-                this.previousBg.css('backgroundImage', this.currentBg.css('backgroundImage'));
+                this.previousBg.css({
+                    backgroundImage: this.currentBg.css('backgroundImage'),
+                    backgroundColor: this.currentBg.css('backgroundColor')
+                });
                 this.previousBg.addClass('hide');
-                this.currentBg.css('backgroundImage', 'url(' + this.location.image + ')');
+                this.currentBg.css({
+                    backgroundImage: 'url(' + this.images[this.location.mood] + ')',
+                    backgroundColor: this.location.bgColor
+                });
                 this.wrapper.addClass('hide');
                 this.bottom.addClass('hide');
                 setTimeout(function(){
@@ -115,9 +112,14 @@ define([
                         self._updateLocation();
                     });
                 }
-                this.currentBg.css('backgroundImage', 'url(' + this.location.image + ')');
+                this.currentBg.css({
+                    backgroundImage: 'url(' + this.images[this.location.mood] + ')',
+                    backgroundColor: this.location.bgColor
+                });
             }
+
         }
+
 
         function _updateLocation() {
             var self = this;
@@ -129,7 +131,7 @@ define([
             while(i--) if(locationList[i].id === locationId) break;
             this.locationIndex = i;
 
-            this.title.html(location.name);
+            this.title.html(location.name).css('color', location.color);
             this.description.html(location.description);
             this.likeCount.html(location.like);
             this.wrapper.addClass('appear');
@@ -177,7 +179,6 @@ define([
         _p._initVariables = _initVariables;
         _p._initEvents = _initEvents;
         _p._updateLocation = _updateLocation;
-        _p._onImageReady = _onImageReady;
         _p._reset = _reset;
         _p.show = show;
         _p.hide = hide;

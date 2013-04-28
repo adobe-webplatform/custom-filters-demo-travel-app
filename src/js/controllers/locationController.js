@@ -16,12 +16,16 @@ define(
         var _blurryMatchedKeyCaches = {};
 
         function init(){
-            var location;
+            var location, hue;
             locations = locationController.locations = {};
             locationList = locationController.locationList = config.data.locations;
             for(var i = 0, len = locationList.length; i < len; i++) {
                 location = locationList[i];
                 location.index = i;
+
+                hue = Math.random() * 360 | 0;
+                location.bgColor = 'hsla('+ hue +',100%,' + (25 + Math.random() * 15) +'%,1)';
+                location.color = 'hsla('+ hue +',100%,75%,1)';
                 location.keywords = location.name.toLowerCase();
                 locations[location.id] = location;
             }

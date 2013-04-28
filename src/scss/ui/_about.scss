@@ -13,8 +13,7 @@
 
         position: absolute;
         left: 50%;
-        top: 90px;
-        bottom: 0;
+        height: 100%;
         width: 480px;
         margin-left: -240px;
 
@@ -44,10 +43,9 @@
     }
 
     .icons-container {
-        position: absolute;
         width: 100%;
-        height: 172px;
-        bottom: 0;
+        height: 130px;
+        margin-top: 40px;
     }
 
     .icon {

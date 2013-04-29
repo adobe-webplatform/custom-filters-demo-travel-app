@@ -196,6 +196,7 @@
                 fakedEvent.x = x = touchEvent.pageX;
                 fakedEvent.y = y = touchEvent.pageY;
                 fakedEvent.target = target =touchEvent.target;
+                fakedEvent.isMainPointer = e.touches.length === 0 || e.touches[0].identifier === e.changedTouches[0].identifier;
 
                 var isSkipPreventDefault = false;
                 bubbleHistory = inputController.currentBubbleHistory = fakedEvent.bubbleHistory = [];
@@ -208,6 +209,7 @@
                 }
                 if(!isSkipPreventDefault) e.preventDefault();
             } else{
+                fakedEvent.isMainPointer = true;
                 fakedEvent.x = x = _hasEventListener? e.pageX: e.clientX + _documentElement.scrollLeft;
                 fakedEvent.y = y = _hasEventListener? e.pageY: e.clientY + _documentElement.scrollTop;
                 fakedEvent.target = target = e.target ? e.target: e.srcElement;

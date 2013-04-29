@@ -167,6 +167,7 @@
                 var direction;
                 this.items.each(function(){
                     this.tearItem.resetShader();
+                    this.tearItem.resetDown();
                 });
                 while(foundId--) if($(foundTarget = this.items[foundId]).data('link').split('/')[1] === previousNode) break;
                 var moveDistance = (this.isWide ? stageReference.stageWidth : stageReference.stageHeight - HEADER_HEIGHT) * 2 / 3;

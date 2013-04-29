@@ -73,7 +73,7 @@
         }
 
         function _onItemDown(e){
-            if(sectionController.isAnimating() || this.isDown) return;
+            if(!e.isMainPointer || sectionController.isAnimating() || this.isDown) return;
             this.isDown = true;
             var index = indexOf(_isDownItems, this);
             if(index > -1) return;
@@ -101,11 +101,16 @@
         function resetShader(){
             var index = indexOf(needRenderItems, this);
             if(index > -1) needRenderItems.splice(index, 1);
-            this.tearParams.distance = 0;
+            this.tearParams.distance = this.tearParams.prevDistance = this.tearParams.bounce = 0;
             this.elemStyle[_filterStyle] = 'none';
             this.elemStyle.zIndex = 'auto';
             this.hasPeeked = false;
             this.isDown = false;
+        }
+
+        function resetDown(){
+            var index = indexOf(_isDownItems, this);
+            if(index > -1) _isDownItems.splice(index, 1);
         }
 
         function setTo(distance){
@@ -162,6 +167,7 @@
  */
 
         function _onItemMove(e){
+            if(!e.isMainPointer) return;
             var isScrollV = inputController.isScrollV;
             var i = _isDownItems.length;
             var params, target, delta, isVertical, isUsingFront;
@@ -187,7 +193,7 @@
         }
 
         function _onItemUp(e){
-            if(sectionController.isAnimating() || (e.isTouch && e.originalEvent.touches.length > 0)) return;
+            if(sectionController.isAnimating() || !e.isMainPointer) return;
             var i = _isDownItems.length;
             var target;
             while(i--) {
@@ -213,6 +219,7 @@
         _p.resetShader = resetShader;
         _p._setRender = _setRender;
         _p.updateSize = updateSize;
+        _p.resetDown = resetDown;
         _p.setTo = setTo;
         _p.easeTo = easeTo;
         _p.render = render;

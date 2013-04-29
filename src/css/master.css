@@ -231,7 +231,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #191919;
+  background-color: #000;
   border: none;
 }
 
@@ -541,6 +541,16 @@ i {
   transform-origin: 0 50%;
 }
 /* line 30, ../scss/ui/_preloader.scss */
+#preloader .line {
+  position: absolute;
+  left: 100%;
+  bottom: 0%;
+  width: 2px;
+  height: 0;
+  margin-left: -1px;
+  background-color: #fff;
+}
+/* line 40, ../scss/ui/_preloader.scss */
 #preloader .year-mask {
   position: absolute;
   top: 50%;
@@ -549,41 +559,51 @@ i {
   margin-top: -100px;
   overflow: hidden;
 }
-/* line 39, ../scss/ui/_preloader.scss */
+/* line 49, ../scss/ui/_preloader.scss */
 #preloader .year-mask .year-wrapper {
   position: absolute;
   width: 200%;
   height: 100%;
 }
-/* line 45, ../scss/ui/_preloader.scss */
+/* line 55, ../scss/ui/_preloader.scss */
 #preloader .year-mask.left {
   left: 50%;
   margin-left: -100px;
+  -webkit-transform-origin: 100% 50%;
+  -moz-transform-origin: 100% 50%;
+  -ms-transform-origin: 100% 50%;
+  -o-transform-origin: 100% 50%;
+  transform-origin: 100% 50%;
   -webkit-transform: translate3d(0, -10px, 0);
   -moz-transform: translate3d(0, -10px, 0);
   -ms-transform: translate3d(0, -10px, 0);
   -o-transform: translate3d(0, -10px, 0);
   transform: translate3d(0, -10px, 0);
 }
-/* line 50, ../scss/ui/_preloader.scss */
+/* line 60, ../scss/ui/_preloader.scss */
 #preloader .year-mask.left .year-wrapper {
   left: 0;
 }
-/* line 55, ../scss/ui/_preloader.scss */
+/* line 65, ../scss/ui/_preloader.scss */
 #preloader .year-mask.right {
   right: 50%;
   margin-right: -100px;
+  -webkit-transform-origin: 0 50%;
+  -moz-transform-origin: 0 50%;
+  -ms-transform-origin: 0 50%;
+  -o-transform-origin: 0 50%;
+  transform-origin: 0 50%;
   -webkit-transform: translate3d(0, 10px, 0);
   -moz-transform: translate3d(0, 10px, 0);
   -ms-transform: translate3d(0, 10px, 0);
   -o-transform: translate3d(0, 10px, 0);
   transform: translate3d(0, 10px, 0);
 }
-/* line 59, ../scss/ui/_preloader.scss */
+/* line 70, ../scss/ui/_preloader.scss */
 #preloader .year-mask.right .year-wrapper {
   right: 0;
 }
-/* line 64, ../scss/ui/_preloader.scss */
+/* line 75, ../scss/ui/_preloader.scss */
 #preloader .year-mask .year {
   position: absolute;
   width: 100%;
@@ -1219,13 +1239,27 @@ html.is-first-route #header .tab:after {
   height: 100%;
   background-size: cover;
   background-position: center center;
+  -webkit-transform: scale3d(1, 1, 1);
+  -moz-transform: scale3d(1, 1, 1);
+  -ms-transform: scale3d(1, 1, 1);
+  -o-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  -webkit-transition: -webkit-transform 3s ease-in-out;
+  -moz-transition: -moz-transform 3s ease-in-out;
+  -ms-transition: -ms-transform 3s ease-in-out;
+  -o-transition: -o-transform 3s ease-in-out;
+  transition: transform 3s ease-in-out;
 }
-/* line 18, ../scss/sections/_splash.scss */
-.splash-bg.show {
-  -webkit-transition: -webkit-filter 1s linear;
+/* line 20, ../scss/sections/_splash.scss */
+#splash.intro .splash-bg {
+  -webkit-transform: scale3d(1.2, 1.2, 1);
+  -moz-transform: scale3d(1.2, 1.2, 1);
+  -ms-transform: scale3d(1.2, 1.2, 1);
+  -o-transform: scale3d(1.2, 1.2, 1);
+  transform: scale3d(1.2, 1.2, 1);
 }
 
-/* line 23, ../scss/sections/_splash.scss */
+/* line 25, ../scss/sections/_splash.scss */
 .splash-headline {
   position: absolute;
   left: 50%;
@@ -1245,7 +1279,7 @@ html.is-first-route #header .tab:after {
   -o-transform: translateZ(0);
   transform: translateZ(0);
 }
-/* line 41, ../scss/sections/_splash.scss */
+/* line 43, ../scss/sections/_splash.scss */
 .splash-headline .text {
   -webkit-transition: -webkit-transform 0.4s ease-in-out;
   -moz-transition: -moz-transform 0.4s ease-in-out;
@@ -1258,7 +1292,7 @@ html.is-first-route #header .tab:after {
   -o-transform: translate3d(0, 50px, 0);
   transform: translate3d(0, 50px, 0);
 }
-/* line 45, ../scss/sections/_splash.scss */
+/* line 47, ../scss/sections/_splash.scss */
 #splash.show .splash-headline .text {
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
@@ -1267,7 +1301,7 @@ html.is-first-route #header .tab:after {
   transform: translate3d(0, 0, 0);
 }
 
-/* line 51, ../scss/sections/_splash.scss */
+/* line 53, ../scss/sections/_splash.scss */
 .splash-container {
   position: absolute;
   left: 50%;
@@ -1286,9 +1320,27 @@ html.is-first-route #header .tab:after {
   letter-spacing: 4px;
   line-height: 142px;
   overflow: hidden;
+  -webkit-transform: scale3d(1, 1, 1);
+  -moz-transform: scale3d(1, 1, 1);
+  -ms-transform: scale3d(1, 1, 1);
+  -o-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  -webkit-transition: -webkit-transform 3s ease-in-out;
+  -moz-transition: -moz-transform 3s ease-in-out;
+  -ms-transition: -ms-transform 3s ease-in-out;
+  -o-transition: -o-transform 3s ease-in-out;
+  transition: transform 3s ease-in-out;
+}
+/* line 76, ../scss/sections/_splash.scss */
+#splash.intro .splash-container {
+  -webkit-transform: scale3d(1.1, 1.1, 1);
+  -moz-transform: scale3d(1.1, 1.1, 1);
+  -ms-transform: scale3d(1.1, 1.1, 1);
+  -o-transform: scale3d(1.1, 1.1, 1);
+  transform: scale3d(1.1, 1.1, 1);
 }
 
-/* line 72, ../scss/sections/_splash.scss */
+/* line 81, ../scss/sections/_splash.scss */
 .splash-btn {
   position: absolute;
   left: 50%;
@@ -1314,7 +1366,7 @@ html.is-first-route #header .tab:after {
   -o-transform: translate3d(0, -20px, 0);
   transform: translate3d(0, -20px, 0);
 }
-/* line 92, ../scss/sections/_splash.scss */
+/* line 101, ../scss/sections/_splash.scss */
 .splash-btn:before {
   position: absolute;
   display: block;
@@ -1340,13 +1392,13 @@ html.is-first-route #header .tab:after {
   transform: translate3d(0, -20px, 0);
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 92, ../scss/sections/_splash.scss */
+  /* line 101, ../scss/sections/_splash.scss */
   .splash-btn:before {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 400px;
   }
 }
-/* line 109, ../scss/sections/_splash.scss */
+/* line 118, ../scss/sections/_splash.scss */
 #splash.show .splash-btn {
   opacity: 1;
   -webkit-transform: translate3d(0, 0, 0);
@@ -1355,7 +1407,7 @@ html.is-first-route #header .tab:after {
   -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
-/* line 113, ../scss/sections/_splash.scss */
+/* line 122, ../scss/sections/_splash.scss */
 #splash.show .splash-btn:before {
   opacity: 1;
   -webkit-transform: translate3d(0, 0, 0);

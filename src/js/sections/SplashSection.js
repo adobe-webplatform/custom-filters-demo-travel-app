@@ -111,7 +111,15 @@ define([
             inputController.onMove.add(_onMove, this);
             inputController.onUp.add(_onUp, this);
             if(!previousSection || previousNodes.length < 0) {
-                setTimeout(bind(_setShown, this));
+                if(sectionController.isFirstRoute) {
+                    this.container.addClass('intro');
+                    setTimeout(bind(function(){
+                        this.container.removeClass('intro');
+                        setTimeout(bind(_setShown, this), 3000);
+                    }, this));
+                } else {
+                    setTimeout(bind(_setShown, sethislf));
+                }
             } else {
                 var params = this.cloth.params;
                 params.toY = 0;
@@ -139,7 +147,8 @@ define([
             this.needRender = true;
             tweenHelper.add(params).to({toY: 0, downY: 1, translateY: -.25}, 400).easing( tweenHelper.Easing.Cubic.Out).onComplete(function(){
                 stageReference.onRender.remove(_render, self);
-                this.needRender = false;
+                self.needRender = false;
+                self.container.removeClass('show');
                 self._setHidden();
             }).start();
         }

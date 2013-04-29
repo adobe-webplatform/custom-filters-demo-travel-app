@@ -27,6 +27,16 @@
         }
     }
 
+    .line {
+        position: absolute;
+        left: 100%;
+        bottom: 0%;
+        width: 2px;
+        height: 0;
+        margin-left: -1px;
+        background-color: #fff;
+    }
+
     .year-mask {
         position: absolute;
         top: 50%;
@@ -45,7 +55,7 @@
         &.left {
             left: 50%;
             margin-left: -100px;
-
+            @include transformOrigin(100%, 50%);
             @include transform(translate3d(0,-10px,0));
             .year-wrapper {
                 left: 0;
@@ -55,6 +65,7 @@
         &.right {
             right: 50%;
             margin-right: -100px;
+            @include transformOrigin(0, 50%);
             @include transform(translate3d(0,10px,0));
             .year-wrapper {
                 right: 0;

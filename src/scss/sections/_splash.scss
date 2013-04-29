@@ -14,9 +14,11 @@
 
     background-size: cover;
     background-position: center center;
+    @include transform(scale3d(1,1,1));
+    @include transformTransition(3s ease-in-out);
 
-    &.show {
-        -webkit-transition: -webkit-filter 1s linear;
+    #splash.intro & {
+        @include transform(scale3d(1.2,1.2,1));
     }
 }
 
@@ -67,6 +69,13 @@
     letter-spacing: 4px;
     line-height: 142px;
     overflow: hidden;
+
+    @include transform(scale3d(1,1,1));
+    @include transformTransition(3s ease-in-out);
+
+    #splash.intro & {
+        @include transform(scale3d(1.1,1.1,1));
+    }
 }
 
 .splash-btn {

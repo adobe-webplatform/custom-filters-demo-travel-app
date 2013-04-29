@@ -10,14 +10,14 @@ define(
 
     function(preloader, config, $, template, tweenHelper, stageReference) {
 
-        var SKIP_ANIMATION = false;
-
         var _container;
         var _wrapper;
         var _wrapperStyle;
         var _blocks;
         var _leftBlockStyle;
         var _rightBlockStyle;
+        var _line;
+        var _lineStyle;
         var _yearMarks;
         var _yearMarkStyles;
         var _yearWrappers;
@@ -30,6 +30,8 @@ define(
 
         var _tearItem;
         var _isHiding = false;
+
+        var SKIP_ANIMATION = false;
 
         var YEAR = (new Date()).getFullYear();
 
@@ -50,6 +52,8 @@ define(
             _blocks = _wrapper.find('.block');
             _leftBlockStyle = _blocks[0].style;
             _rightBlockStyle = _blocks[1].style;
+            _line = _blocks.find('.line');
+            _lineStyle = _line[0].style;
             _yearMarks = _container.find('.year-mask');
             _yearWrappers = _yearMarks.find('.year-wrapper');
             _years = _yearWrappers.find('.year');
@@ -76,16 +80,22 @@ define(
         }
 
         function onLoading(percent){
-            tweenHelper.add(_tweenObj).to({percent: percent}, 1500).easing( tweenHelper.Easing.Cubic.InOut).onUpdate(_onAnimate).start();
+            tweenHelper.add(_tweenObj).to({percent: percent}, SKIP_ANIMATION ? 0 : 1500).easing( tweenHelper.Easing.Cubic.InOut).onUpdate(_onAnimate).start();
         }
 
         function _onAnimate(){
             var percent = _tweenObj.percent;
-            _yearMarks[0].style[_transform3DStyle] = 'translate3d(0,' + ((1 - percent) * -10) + 'px,0) scale3d(' + (.8 + percent * .2) + ',' + (.8 + percent * .2) + ',0)';
-            _yearMarks[1].style[_transform3DStyle] = 'translate3d(0,' + ((1 - percent) * 10) + 'px,0) scale3d(' + (1.2 - percent * .2) + ',' + (1.2 - percent * .2) + ',0)';
+            _yearMarks[0].style[_transform3DStyle] = 'translate3d(0,' + ((1 - percent) * -100) + 'px,0) scale3d(' + (.7 + percent * .3) + ',' + (.7 + percent * .3) + ',0)';
+            _yearMarks[1].style[_transform3DStyle] = 'translate3d(0,' + ((1 - percent) * 100) + 'px,0) scale3d(' + (1.3 - percent * .3) + ',' + (1.3 - percent * .3) + ',0)';
+            _lineStyle.height = (percent * 100) + '%';
             _years.html(percent * YEAR | 0);
             if(percent == 1) {
-                tweenHelper.add({}).to({}, 1500).easing( tweenHelper.Easing.Cubic.InOut).onUpdate(_onHiding).start();
+                _lineStyle.bottom = 'auto';
+                _lineStyle.top = 0;
+                tweenHelper.add({}).to({}, SKIP_ANIMATION ? 0 :500).easing( tweenHelper.Easing.Cubic.InOut).onUpdate(function(t){
+                    _lineStyle.height = ((1 - t) * 100) + '%';
+                }).start();
+                tweenHelper.add({}).delay(SKIP_ANIMATION ? 0 : 500).to({}, SKIP_ANIMATION ? 0 :1500).easing( tweenHelper.Easing.Cubic.InOut).onUpdate(_onHiding).start();
                 _callback();
             }
         }

@@ -1,12 +1,31 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 Adobe System Incorporated
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 precision mediump float;
 
 attribute vec4 a_position;
-attribute vec2 a_texCoord;
-attribute vec2 a_meshCoord;
-attribute vec3 a_triangleCoord;
 
 uniform mat4 u_projectionMatrix;
-uniform vec2 u_meshSize;
 
 //uniform mat4 transform;
 uniform float downX;
@@ -35,7 +54,6 @@ void main() {
     pos.y = pos.y + max(0.0, y - downY) * rangeRatio * .5 + min(0.0, toY - y) * rangeRatio;
     pos.y = pos.y + (oY - toY) * rangeRatio * yRatio;
     pos.x = pos.x + (oX - toX) * abs(cos(diffX)) * yRatio;
-    //pos.y += sin(pos.y - a_position.y) * rangeRatio * sin(a_position.x * u_meshSize.x * PI / 2.0) * .01;
 
     v_lighting = .5 - sin(pos.y - a_position.y) * 1.0 - sin(pos.y - a_position.y) * diffX  * 20.0;
 

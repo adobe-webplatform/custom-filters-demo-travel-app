@@ -179,7 +179,7 @@
             inputController.onUp.remove(_onUp, this);
             var params = this.cloth.params;
             this.needRender = true;
-            tweenHelper.add(params).to({toY: 0, downY: 1, translateY: -.25}, 400).easing( tweenHelper.Easing.Cubic.Out).onComplete(function(){
+            tweenHelper.add(params).to({toY: 0, downY: 1, translateY: -.25}, 800).easing( tweenHelper.Easing.Cubic.Out).onComplete(function(){
                 stageReference.onRender.remove(_render, self);
                 self.container.hide();
                 self.needRender = false;

@@ -1,5 +1,4 @@
 /* -- centering -- */
-/* shameless clone from [https://github.com/millermedeiros/basis.css/blob/master/css/bss/rapid/center.css] */
 /* vertical centering technique [http://www.jakpsatweb.cz/css/css-vertical-center-solution.html] */
 .bss-vcenter {
     /* height of .bss-vcenter element is required */
@@ -7,7 +6,7 @@
     *position: relative;
     display: table;
     *display: block;
-    
+
     .bss-outer {
         display: table-cell;
         vertical-align: middle;

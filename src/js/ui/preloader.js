@@ -31,7 +31,7 @@ define(
         var _tearItem;
         var _isHiding = false;
 
-        var SKIP_ANIMATION = false;
+        var SKIP_ANIMATION = true;
 
         var YEAR = (new Date()).getFullYear();
 

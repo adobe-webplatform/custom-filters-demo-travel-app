@@ -77,7 +77,7 @@ define([
         }
 
         function appear(nodes, opts){
-            this.currentLocationList = nodes[1] === 'search' ? locationController.locationList : locationController.getMatched(nodes[1], nodes[2]);
+            this.currentLocationList = nodes[1] == 'search' || nodes[1] == 'schedule' ? locationController.locationList : locationController.getMatched(nodes[1], nodes[2]);
             this.locationId = nodes[nodes.length - 1];
             this.location = locationController.locations[this.locationId];
 

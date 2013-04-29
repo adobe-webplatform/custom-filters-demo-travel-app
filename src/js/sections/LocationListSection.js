@@ -271,6 +271,7 @@
                 tweenHelper.addDom(this.bottomContainer[0], {y: 0}).delay(500).to({y: moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
 
                 setTimeout(function(){
+                    self.container.hide();
                     self._removeFromMoveContainers();
                     self.items.each(function(i){
                         this.foldListItem.resetShader();

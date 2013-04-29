@@ -188,11 +188,14 @@
         }
 
         function show(currentNodes, previousSection, previousNodes){
+            var self = this;
             if(!sectionController.isFirstRoute && this == previousSection) {
                 this.useAnimation = true;
             }
             this._isShow = true;
-            this.appear.apply(this, [currentNodes]);
+            setTimeout(function(){
+                self.appear.apply(self, [currentNodes]);
+            }, this.useAnimation ? 0 : 800);
         }
 
         function hide(currentSection, currentNodes){

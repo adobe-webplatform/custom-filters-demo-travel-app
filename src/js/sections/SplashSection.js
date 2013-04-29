@@ -181,6 +181,7 @@
             this.needRender = true;
             tweenHelper.add(params).to({toY: 0, downY: 1, translateY: -.25}, 400).easing( tweenHelper.Easing.Cubic.Out).onComplete(function(){
                 stageReference.onRender.remove(_render, self);
+                self.container.hide();
                 self.needRender = false;
                 self._setHidden();
             }).start();

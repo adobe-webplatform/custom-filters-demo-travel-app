@@ -209,6 +209,7 @@
                 tweenHelper.addDom(this.bottomContainer[0], {x: 0, y: 0}).delay(400).to(self.isWide ? {x: moveDistance} : {y: moveDistance}, 500).easing( tweenHelper.Easing.Sinusoidal.In).onUpdate(tweenHelper.translateXY3DCallback).start();
 
                 setTimeout(function(){
+                    self.container.hide();
                     self._removeFromMoveContainers();
                     stageReference.onResize.remove(_onResize, self);
                     self._setHidden();

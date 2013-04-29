@@ -59,7 +59,7 @@ define([
                 if(e.distanceX > 50) {
                     sectionController.goTo(this.urlPrefix + locationList[ index > 0 ? index - 1 : locationList.length - 1].id);
                 } else if(e.distanceX < -50) {
-                    sectionController.goTo(this.urlPrefix + locationList[i < locationList.length - 1 ? index + 1 : 0].id);
+                    sectionController.goTo(this.urlPrefix + locationList[index < locationList.length - 1 ? index + 1 : 0].id);
                 }
             }
         }
@@ -90,20 +90,20 @@ define([
                     backgroundImage: this.currentBg.css('backgroundImage'),
                     backgroundColor: this.currentBg.css('backgroundColor')
                 });
-                this.previousBg.addClass('hide');
                 this.currentBg.css({
                     backgroundImage: 'url(' + this.images[this.location.mood] + ')',
                     backgroundColor: this.location.bgColor
+                }).removeClass('show');
+                setTimeout(function(){
+                    self.currentBg.addClass('show');
                 });
-                this.wrapper.addClass('hide');
-                this.bottom.addClass('hide');
+                this.wrapper.removeClass('show').addClass('hide');
+                this.bottom.removeClass('show').addClass('hide');
                 setTimeout(function(){
                     self.wrapper.removeClass('appear hide');
                     self.bottom.removeClass('appear hide');
+                    setTimeout(bind(_updateLocation, self));
                 }, 499);
-                setTimeout(function(){
-                    self._updateLocation();
-                }, 500);
             } else {
                 if(this._isShow){
                     this.wrapper.removeClass('appear hide');
@@ -115,7 +115,7 @@ define([
                 this.currentBg.css({
                     backgroundImage: 'url(' + this.images[this.location.mood] + ')',
                     backgroundColor: this.location.bgColor
-                });
+                }).addClass('show');
             }
 
         }

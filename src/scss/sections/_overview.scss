@@ -11,36 +11,15 @@
         background-size: cover;
         background-position: center center;
         @include cache;
-    }
 
-    .spinner-container {
-        display: none;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,.8);
-        z-index: 100px;
-        opacity: 0;
-
-        @include cache;
-        @include transition(opacity .3s linear);
-
-        .spinner {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 25px;
-            height: 25px;
-            margin-left: -13px;
-            margin-top: -13px;
-            @include ui-asset(130, 0);
-            @include simple-spin(.4s);
-        }
-
-        &.show {
-            opacity: 1;
+        &.current {
+            @include transform(scale3d(1.15,1.15,1) rotateZ(3deg));
+            opacity: 0;
+            &.show {
+                @include transformTransition(1s ease-out, opacity 1s linear);
+                @include cache;
+                opacity: 1;
+            }
         }
     }
 
@@ -66,7 +45,7 @@
         width: 161px;
         height: 64px;
 
-        @include ui-asset(0, 136)
+        @include ui-asset(0, 136);
     }
 
     .title {
@@ -92,17 +71,43 @@
         text-shadow: 0 0 5px rgba(0,0,0,.8);
     }
 
-
-    @include transition(opacity .3s linear);
+    @include transition(opacity .5s linear);
     &.appear {
         display: table;
         opacity: 0;
+        .logo-text, .title, .description {
+            @include transform(translate3d(0, 20px, 0));
+        }
     }
     &.show{
         opacity: 1;
+        .logo-text {
+            @include transformTransition(.3s ease-out);
+        }
+        .title {
+            @include transformTransition(.3s ease-out .1s);
+        }
+        .description {
+            @include transformTransition(.3s ease-out .2s);
+        }
+        .logo-text, .title, .description {
+            @include cache;
+        }
     }
     &.hide {
         opacity: 0;
+        .logo-text, .title, .description {
+            @include transform(translate3d(0, -20px, 0));
+        }
+        .logo-text {
+            @include transformTransition(.3s ease-in);
+        }
+        .title {
+            @include transformTransition(.3s ease-in .1s);
+        }
+        .description {
+            @include transformTransition(.3s ease-in .2s);
+        }
     }
 }
 
@@ -186,7 +191,7 @@
     }
 
 
-    @include transition(opacity .3s linear);
+    @include transition(opacity .5s linear);
     &.appear {
         display: table;
         opacity: 0;

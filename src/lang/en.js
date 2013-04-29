@@ -934,10 +934,10 @@
             "like": 75
         },
         {
-            "id": "tomamp-toms-little-tokyo-333-s-alameda-st-ste-108-entranceon-4th-at-alameda-in-the-little-tokyo-shopping-center-7am-2am-thisplace-seems-to-have-been-built-for-the-kind-of-customer-who-brings-a-laptop-orbook-and-stays-all-day-there-are-plenty-of-tables-and-even-some-glass-walledbooths-to-have-meetings-in-tons-of-power-outlets-free-wifi-be-carefulgetting-here--its-right-on-the-edge-of-skid-row-2-6",
-            "name": "Tom& Tom's (Little Tokyo), 333 S Alameda St, Ste 108 (entranceon 4th at Alameda, in the Little Tokyo Shopping Center). 7am-2am. Thisplace seems to have been built for the kind of customer who brings a laptop orbook and stays all day. There are plenty of tables and even some glass-walledbooths to have meetings in. Tons of power outlets. Free wifi. (be carefulgetting here - it's right on the edge of Skid Row.) $2-$6.",
+            "id": "tomamp-toms",
+            "name": "Tom & Tom's",
             "mood": "eat",
-            "description": "LaCita. Curious mix of Latinos and hipsters.",
+            "description": "333 S Alameda St, Ste 108 (entrance on 4th at Alameda, in the Little Tokyo Shopping Center). 7am-2am. This place seems to have been built for the kind of customer who brings a laptop or book and stays all day. There are plenty of tables and even some glass-walled booths to have meetings in. Tons of power outlets. Free wifi. (be careful getting here - it's right on the edge of Skid Row.) $2-$6",
             "like": 13
         },
         {

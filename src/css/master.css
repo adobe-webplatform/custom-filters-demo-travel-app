@@ -2270,59 +2270,31 @@ html.is-first-route #header .tab:after {
   -o-transform: translateZ(0);
   transform: translateZ(0);
 }
-/* line 16, ../scss/sections/_overview.scss */
-#overview .spinner-container {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 100px;
+/* line 15, ../scss/sections/_overview.scss */
+#overview .bg-container.current {
+  -webkit-transform: scale3d(1.15, 1.15, 1) rotateZ(3deg);
+  -moz-transform: scale3d(1.15, 1.15, 1) rotateZ(3deg);
+  -ms-transform: scale3d(1.15, 1.15, 1) rotateZ(3deg);
+  -o-transform: scale3d(1.15, 1.15, 1) rotateZ(3deg);
+  transform: scale3d(1.15, 1.15, 1) rotateZ(3deg);
   opacity: 0;
+}
+/* line 18, ../scss/sections/_overview.scss */
+#overview .bg-container.current.show {
+  -webkit-transition: -webkit-transform 1s ease-out, opacity 1s linear;
+  -moz-transition: -moz-transform 1s ease-out, opacity 1s linear;
+  -ms-transition: -ms-transform 1s ease-out, opacity 1s linear;
+  -o-transition: -o-transform 1s ease-out, opacity 1s linear;
+  transition: transform 1s ease-out, opacity 1s linear;
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);
   -ms-transform: translateZ(0);
   -o-transform: translateZ(0);
   transform: translateZ(0);
-  -webkit-transition: opacity 0.3s linear;
-  -moz-transition: opacity 0.3s linear;
-  -ms-transition: opacity 0.3s linear;
-  -o-transition: opacity 0.3s linear;
-  transition: opacity 0.3s linear;
-}
-/* line 30, ../scss/sections/_overview.scss */
-#overview .spinner-container .spinner {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 25px;
-  height: 25px;
-  margin-left: -13px;
-  margin-top: -13px;
-  background-image: url(../assets/images/ui.png);
-  background-position: -130px 0px;
-  background-repeat: no-repeat;
-  -webkit-animation: simple-spin 0.4s infinite linear;
-  -moz-animation: simple-spin 0.4s infinite linear;
-  -ms-animation: simple-spin 0.4s infinite linear;
-  -o-animation: simple-spin 0.4s infinite linear;
-  animation: simple-spin 0.4s infinite linear;
-}
-@media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 30, ../scss/sections/_overview.scss */
-  #overview .spinner-container .spinner {
-    background-image: url(../assets/images/ui_x2.png);
-    background-size: 225px 400px;
-  }
-}
-/* line 42, ../scss/sections/_overview.scss */
-#overview .spinner-container.show {
   opacity: 1;
 }
 
-/* line 50, ../scss/sections/_overview.scss */
+/* line 29, ../scss/sections/_overview.scss */
 .overview-wrapper {
   display: none;
   position: relative;
@@ -2333,13 +2305,13 @@ html.is-first-route #header .tab:after {
   margin-right: auto;
   text-align: center;
   opacity: 0;
-  -webkit-transition: opacity 0.3s linear;
-  -moz-transition: opacity 0.3s linear;
-  -ms-transition: opacity 0.3s linear;
-  -o-transition: opacity 0.3s linear;
-  transition: opacity 0.3s linear;
+  -webkit-transition: opacity 0.5s linear;
+  -moz-transition: opacity 0.5s linear;
+  -ms-transition: opacity 0.5s linear;
+  -o-transition: opacity 0.5s linear;
+  transition: opacity 0.5s linear;
 }
-/* line 64, ../scss/sections/_overview.scss */
+/* line 43, ../scss/sections/_overview.scss */
 .overview-wrapper .logo {
   display: inline-block;
   width: 161px;
@@ -2349,13 +2321,13 @@ html.is-first-route #header .tab:after {
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 64, ../scss/sections/_overview.scss */
+  /* line 43, ../scss/sections/_overview.scss */
   .overview-wrapper .logo {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 400px;
   }
 }
-/* line 72, ../scss/sections/_overview.scss */
+/* line 51, ../scss/sections/_overview.scss */
 .overview-wrapper .title {
   width: 100%;
   margin-top: 10px;
@@ -2365,32 +2337,104 @@ html.is-first-route #header .tab:after {
   color: #d14543;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
 }
-/* line 84, ../scss/sections/_overview.scss */
+/* line 63, ../scss/sections/_overview.scss */
 .overview-wrapper .description {
   font-size: 16px;
   line-height: 22px;
   padding-bottom: 80px;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
 }
-/* line 88, ../scss/sections/_overview.scss */
+/* line 67, ../scss/sections/_overview.scss */
 .overview-wrapper .description p {
   margin-bottom: 20px;
 }
-/* line 97, ../scss/sections/_overview.scss */
+/* line 75, ../scss/sections/_overview.scss */
 .overview-wrapper.appear {
   display: table;
   opacity: 0;
 }
-/* line 101, ../scss/sections/_overview.scss */
+/* line 78, ../scss/sections/_overview.scss */
+.overview-wrapper.appear .logo-text, .overview-wrapper.appear .title, .overview-wrapper.appear .description {
+  -webkit-transform: translate3d(0, 20px, 0);
+  -moz-transform: translate3d(0, 20px, 0);
+  -ms-transform: translate3d(0, 20px, 0);
+  -o-transform: translate3d(0, 20px, 0);
+  transform: translate3d(0, 20px, 0);
+}
+/* line 82, ../scss/sections/_overview.scss */
 .overview-wrapper.show {
   opacity: 1;
 }
-/* line 104, ../scss/sections/_overview.scss */
+/* line 84, ../scss/sections/_overview.scss */
+.overview-wrapper.show .logo-text {
+  -webkit-transition: -webkit-transform 0.3s ease-out;
+  -moz-transition: -moz-transform 0.3s ease-out;
+  -ms-transition: -ms-transform 0.3s ease-out;
+  -o-transition: -o-transform 0.3s ease-out;
+  transition: transform 0.3s ease-out;
+}
+/* line 87, ../scss/sections/_overview.scss */
+.overview-wrapper.show .title {
+  -webkit-transition: -webkit-transform 0.3s ease-out 0.1s;
+  -moz-transition: -moz-transform 0.3s ease-out 0.1s;
+  -ms-transition: -ms-transform 0.3s ease-out 0.1s;
+  -o-transition: -o-transform 0.3s ease-out 0.1s;
+  transition: transform 0.3s ease-out 0.1s;
+}
+/* line 90, ../scss/sections/_overview.scss */
+.overview-wrapper.show .description {
+  -webkit-transition: -webkit-transform 0.3s ease-out 0.2s;
+  -moz-transition: -moz-transform 0.3s ease-out 0.2s;
+  -ms-transition: -ms-transform 0.3s ease-out 0.2s;
+  -o-transition: -o-transform 0.3s ease-out 0.2s;
+  transition: transform 0.3s ease-out 0.2s;
+}
+/* line 93, ../scss/sections/_overview.scss */
+.overview-wrapper.show .logo-text, .overview-wrapper.show .title, .overview-wrapper.show .description {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+/* line 97, ../scss/sections/_overview.scss */
 .overview-wrapper.hide {
   opacity: 0;
 }
+/* line 99, ../scss/sections/_overview.scss */
+.overview-wrapper.hide .logo-text, .overview-wrapper.hide .title, .overview-wrapper.hide .description {
+  -webkit-transform: translate3d(0, -20px, 0);
+  -moz-transform: translate3d(0, -20px, 0);
+  -ms-transform: translate3d(0, -20px, 0);
+  -o-transform: translate3d(0, -20px, 0);
+  transform: translate3d(0, -20px, 0);
+}
+/* line 102, ../scss/sections/_overview.scss */
+.overview-wrapper.hide .logo-text {
+  -webkit-transition: -webkit-transform 0.3s ease-in;
+  -moz-transition: -moz-transform 0.3s ease-in;
+  -ms-transition: -ms-transform 0.3s ease-in;
+  -o-transition: -o-transform 0.3s ease-in;
+  transition: transform 0.3s ease-in;
+}
+/* line 105, ../scss/sections/_overview.scss */
+.overview-wrapper.hide .title {
+  -webkit-transition: -webkit-transform 0.3s ease-in 0.1s;
+  -moz-transition: -moz-transform 0.3s ease-in 0.1s;
+  -ms-transition: -ms-transform 0.3s ease-in 0.1s;
+  -o-transition: -o-transform 0.3s ease-in 0.1s;
+  transition: transform 0.3s ease-in 0.1s;
+}
+/* line 108, ../scss/sections/_overview.scss */
+.overview-wrapper.hide .description {
+  -webkit-transition: -webkit-transform 0.3s ease-in 0.2s;
+  -moz-transition: -moz-transform 0.3s ease-in 0.2s;
+  -ms-transition: -ms-transform 0.3s ease-in 0.2s;
+  -o-transition: -o-transform 0.3s ease-in 0.2s;
+  transition: transform 0.3s ease-in 0.2s;
+}
 
-/* line 111, ../scss/sections/_overview.scss */
+/* line 116, ../scss/sections/_overview.scss */
 .overview-bottom {
   display: none;
   position: absolute;
@@ -2398,13 +2442,13 @@ html.is-first-route #header .tab:after {
   width: 100%;
   height: 130px;
   text-align: center;
-  -webkit-transition: opacity 0.3s linear;
-  -moz-transition: opacity 0.3s linear;
-  -ms-transition: opacity 0.3s linear;
-  -o-transition: opacity 0.3s linear;
-  transition: opacity 0.3s linear;
+  -webkit-transition: opacity 0.5s linear;
+  -moz-transition: opacity 0.5s linear;
+  -ms-transition: opacity 0.5s linear;
+  -o-transition: opacity 0.5s linear;
+  transition: opacity 0.5s linear;
 }
-/* line 121, ../scss/sections/_overview.scss */
+/* line 126, ../scss/sections/_overview.scss */
 .overview-bottom .line {
   position: absolute;
   top: 0;
@@ -2414,14 +2458,14 @@ html.is-first-route #header .tab:after {
   margin-left: -50px;
   background-color: #7e6f85;
 }
-/* line 131, ../scss/sections/_overview.scss */
+/* line 136, ../scss/sections/_overview.scss */
 .overview-bottom .item {
   display: inline-block;
   position: relative;
   width: 120px;
   height: 120px;
 }
-/* line 138, ../scss/sections/_overview.scss */
+/* line 143, ../scss/sections/_overview.scss */
 .overview-bottom .item .icon {
   position: relative;
   margin-left: auto;
@@ -2429,7 +2473,7 @@ html.is-first-route #header .tab:after {
   margin-top: 30px;
   margin-bottom: 13px;
 }
-/* line 146, ../scss/sections/_overview.scss */
+/* line 151, ../scss/sections/_overview.scss */
 .overview-bottom .item .text {
   font-family: "league-gothic-condensed", "Arial Narrow", sans-serif;
   text-transform: uppercase;
@@ -2437,7 +2481,7 @@ html.is-first-route #header .tab:after {
   letter-spacing: 1px;
   color: #e7e5e1;
 }
-/* line 156, ../scss/sections/_overview.scss */
+/* line 161, ../scss/sections/_overview.scss */
 .overview-bottom .favorites .icon {
   width: 41px;
   height: 36px;
@@ -2446,13 +2490,13 @@ html.is-first-route #header .tab:after {
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 156, ../scss/sections/_overview.scss */
+  /* line 161, ../scss/sections/_overview.scss */
   .overview-bottom .favorites .icon {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 400px;
   }
 }
-/* line 163, ../scss/sections/_overview.scss */
+/* line 168, ../scss/sections/_overview.scss */
 .overview-bottom .favorites .count {
   position: absolute;
   left: 28px;
@@ -2469,13 +2513,13 @@ html.is-first-route #header .tab:after {
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 163, ../scss/sections/_overview.scss */
+  /* line 168, ../scss/sections/_overview.scss */
   .overview-bottom .favorites .count {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 400px;
   }
 }
-/* line 180, ../scss/sections/_overview.scss */
+/* line 185, ../scss/sections/_overview.scss */
 .overview-bottom .schedule .icon {
   width: 37px;
   height: 37px;
@@ -2484,22 +2528,22 @@ html.is-first-route #header .tab:after {
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 180, ../scss/sections/_overview.scss */
+  /* line 185, ../scss/sections/_overview.scss */
   .overview-bottom .schedule .icon {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 400px;
   }
 }
-/* line 190, ../scss/sections/_overview.scss */
+/* line 195, ../scss/sections/_overview.scss */
 .overview-bottom.appear {
   display: table;
   opacity: 0;
 }
-/* line 194, ../scss/sections/_overview.scss */
+/* line 199, ../scss/sections/_overview.scss */
 .overview-bottom.show {
   opacity: 1;
 }
-/* line 197, ../scss/sections/_overview.scss */
+/* line 202, ../scss/sections/_overview.scss */
 .overview-bottom.hide {
   opacity: 0;
 }

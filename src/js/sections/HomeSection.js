@@ -127,6 +127,9 @@ define([
                 this.arrows.addClass('show animate');
                 setTimeout(function(){
                     self.arrows.removeClass('animate');
+
+                    // in Chrome Canary v28, the custom filter won't work probably on the children with transform 3d.
+                    self.arrows.css(_transform3DStyle, 'none');
                 }, 400);
                 this.isFirstTime = false;
             }

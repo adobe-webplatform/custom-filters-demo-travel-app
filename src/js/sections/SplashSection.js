@@ -32,6 +32,7 @@ define([
 
         function _initVariables(){
             this.containerStyle = this.container[0].style;
+            this.bg = this.container.find('.splash-bg');
             this.cloth = new Cloth({});
             this.boundRender = bind(_render, this);
         }
@@ -115,7 +116,11 @@ define([
                     this.container.addClass('intro');
                     setTimeout(bind(function(){
                         this.container.removeClass('intro');
-                        setTimeout(bind(_setShown, this), 3000);
+                        setTimeout(bind(function(){
+                            // in Chrome Canary v28, the custom filter won't work probably on the children with transform 3d.
+                            this.bg.css(_transform3DStyle, 'none');
+                            this._setShown();
+                        }, this), 3000);
                     }, this));
                 } else {
                     setTimeout(bind(_setShown, sethislf));

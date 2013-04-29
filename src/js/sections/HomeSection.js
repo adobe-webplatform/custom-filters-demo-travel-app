@@ -165,6 +165,9 @@
                 var previousNode = previousNodes[1];
                 var foundId = this.items.length;
                 var direction;
+                this.items.each(function(){
+                    this.tearItem.resetShader();
+                });
                 while(foundId--) if($(foundTarget = this.items[foundId]).data('link').split('/')[1] === previousNode) break;
                 var moveDistance = (this.isWide ? stageReference.stageWidth : stageReference.stageHeight - HEADER_HEIGHT) * 2 / 3;
                 this._addToMoveContainers(foundId);

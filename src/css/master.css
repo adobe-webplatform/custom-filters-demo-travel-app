@@ -2625,14 +2625,9 @@ html.is-first-route #header .tab:after {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  opacity: 0;
-  -webkit-transition: opacity 0.5s linear;
-  -moz-transition: opacity 0.5s linear;
-  -ms-transition: opacity 0.5s linear;
-  -o-transition: opacity 0.5s linear;
-  transition: opacity 0.5s linear;
+  overflow: visible;
 }
-/* line 66, ../scss/sections/_overview.scss */
+/* line 67, ../scss/sections/_overview.scss */
 .overview-wrapper .logo {
   display: inline-block;
   width: 161px;
@@ -2642,13 +2637,13 @@ html.is-first-route #header .tab:after {
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 66, ../scss/sections/_overview.scss */
+  /* line 67, ../scss/sections/_overview.scss */
   .overview-wrapper .logo {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 400px;
   }
 }
-/* line 74, ../scss/sections/_overview.scss */
+/* line 75, ../scss/sections/_overview.scss */
 .overview-wrapper .title {
   width: 100%;
   margin-top: 10px;
@@ -2658,104 +2653,127 @@ html.is-first-route #header .tab:after {
   color: #d14543;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
 }
-/* line 86, ../scss/sections/_overview.scss */
+/* line 87, ../scss/sections/_overview.scss */
 .overview-wrapper .description {
   font-size: 16px;
   line-height: 22px;
   padding-bottom: 80px;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
 }
-/* line 90, ../scss/sections/_overview.scss */
+/* line 91, ../scss/sections/_overview.scss */
 .overview-wrapper .description p {
   margin-bottom: 20px;
 }
 /* line 98, ../scss/sections/_overview.scss */
 .overview-wrapper.appear {
   display: table;
+}
+/* line 100, ../scss/sections/_overview.scss */
+.overview-wrapper.appear .logo-text {
+  -webkit-transform: perspective(500px) translate3d(0, 50px, 60px) rotateX(20deg);
+  -moz-transform: perspective(500px) translate3d(0, 50px, 60px) rotateX(20deg);
+  -ms-transform: perspective(500px) translate3d(0, 50px, 60px) rotateX(20deg);
+  -o-transform: perspective(500px) translate3d(0, 50px, 60px) rotateX(20deg);
+  transform: perspective(500px) translate3d(0, 50px, 60px) rotateX(20deg);
+}
+/* line 103, ../scss/sections/_overview.scss */
+.overview-wrapper.appear .title {
+  -webkit-transform: perspective(500px) translate3d(0, 75px, 60px) rotateX(20deg);
+  -moz-transform: perspective(500px) translate3d(0, 75px, 60px) rotateX(20deg);
+  -ms-transform: perspective(500px) translate3d(0, 75px, 60px) rotateX(20deg);
+  -o-transform: perspective(500px) translate3d(0, 75px, 60px) rotateX(20deg);
+  transform: perspective(500px) translate3d(0, 75px, 60px) rotateX(20deg);
+}
+/* line 106, ../scss/sections/_overview.scss */
+.overview-wrapper.appear .description {
+  -webkit-transform: perspective(500px) translate3d(0, 100px, 60px) rotateX(20deg);
+  -moz-transform: perspective(500px) translate3d(0, 100px, 60px) rotateX(20deg);
+  -ms-transform: perspective(500px) translate3d(0, 100px, 60px) rotateX(20deg);
+  -o-transform: perspective(500px) translate3d(0, 100px, 60px) rotateX(20deg);
+  transform: perspective(500px) translate3d(0, 100px, 60px) rotateX(20deg);
+}
+/* line 109, ../scss/sections/_overview.scss */
+.overview-wrapper.appear .logo-text, .overview-wrapper.appear .title, .overview-wrapper.appear .description {
   opacity: 0;
 }
-/* line 101, ../scss/sections/_overview.scss */
-.overview-wrapper.appear .logo-text, .overview-wrapper.appear .title, .overview-wrapper.appear .description {
-  -webkit-transform: translate3d(0, 20px, 0);
-  -moz-transform: translate3d(0, 20px, 0);
-  -ms-transform: translate3d(0, 20px, 0);
-  -o-transform: translate3d(0, 20px, 0);
-  transform: translate3d(0, 20px, 0);
-}
-/* line 105, ../scss/sections/_overview.scss */
-.overview-wrapper.show {
-  opacity: 1;
-}
-/* line 107, ../scss/sections/_overview.scss */
+/* line 114, ../scss/sections/_overview.scss */
 .overview-wrapper.show .logo-text {
-  -webkit-transition: -webkit-transform 0.3s ease-out;
-  -moz-transition: -moz-transform 0.3s ease-out;
-  -ms-transition: -ms-transform 0.3s ease-out;
-  -o-transition: -o-transform 0.3s ease-out;
-  transition: transform 0.3s ease-out;
+  -webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s linear;
+  -moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s linear;
+  -ms-transition: -ms-transform 0.3s ease-out, opacity 0.3s linear;
+  -o-transition: -o-transform 0.3s ease-out, opacity 0.3s linear;
+  transition: transform 0.3s ease-out, opacity 0.3s linear;
 }
-/* line 110, ../scss/sections/_overview.scss */
+/* line 117, ../scss/sections/_overview.scss */
 .overview-wrapper.show .title {
-  -webkit-transition: -webkit-transform 0.3s ease-out 0.1s;
-  -moz-transition: -moz-transform 0.3s ease-out 0.1s;
-  -ms-transition: -ms-transform 0.3s ease-out 0.1s;
-  -o-transition: -o-transform 0.3s ease-out 0.1s;
-  transition: transform 0.3s ease-out 0.1s;
-}
-/* line 113, ../scss/sections/_overview.scss */
-.overview-wrapper.show .description {
-  -webkit-transition: -webkit-transform 0.3s ease-out 0.2s;
-  -moz-transition: -moz-transform 0.3s ease-out 0.2s;
-  -ms-transition: -ms-transform 0.3s ease-out 0.2s;
-  -o-transition: -o-transform 0.3s ease-out 0.2s;
-  transition: transform 0.3s ease-out 0.2s;
-}
-/* line 116, ../scss/sections/_overview.scss */
-.overview-wrapper.show .logo-text, .overview-wrapper.show .title, .overview-wrapper.show .description {
-  -webkit-transform: translateZ(0);
-  -moz-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  -o-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transition: -webkit-transform 0.4s ease-out, opacity 0.4s linear;
+  -moz-transition: -moz-transform 0.4s ease-out, opacity 0.4s linear;
+  -ms-transition: -ms-transform 0.4s ease-out, opacity 0.4s linear;
+  -o-transition: -o-transform 0.4s ease-out, opacity 0.4s linear;
+  transition: transform 0.4s ease-out, opacity 0.4s linear;
 }
 /* line 120, ../scss/sections/_overview.scss */
-.overview-wrapper.hide {
+.overview-wrapper.show .description {
+  -webkit-transition: -webkit-transform 0.5s ease-out, opacity 0.5s linear;
+  -moz-transition: -moz-transform 0.5s ease-out, opacity 0.5s linear;
+  -ms-transition: -ms-transform 0.5s ease-out, opacity 0.5s linear;
+  -o-transition: -o-transform 0.5s ease-out, opacity 0.5s linear;
+  transition: transform 0.5s ease-out, opacity 0.5s linear;
+}
+/* line 123, ../scss/sections/_overview.scss */
+.overview-wrapper.show .logo-text, .overview-wrapper.show .title, .overview-wrapper.show .description {
+  opacity: 1;
+  -webkit-transform: perspective(500px) translate3d(0, 0, 0);
+  -moz-transform: perspective(500px) translate3d(0, 0, 0);
+  -ms-transform: perspective(500px) translate3d(0, 0, 0);
+  -o-transform: perspective(500px) translate3d(0, 0, 0);
+  transform: perspective(500px) translate3d(0, 0, 0);
+}
+/* line 129, ../scss/sections/_overview.scss */
+.overview-wrapper.hide .logo-text {
+  -webkit-transition: -webkit-transform 0.3s ease-in, opacity 0.3s linear;
+  -moz-transition: -moz-transform 0.3s ease-in, opacity 0.3s linear;
+  -ms-transition: -ms-transform 0.3s ease-in, opacity 0.3s linear;
+  -o-transition: -o-transform 0.3s ease-in, opacity 0.3s linear;
+  transition: transform 0.3s ease-in, opacity 0.3s linear;
+  -webkit-transform: perspective(500px) translate3d(0, -100px, 60px) rotateX(-20deg);
+  -moz-transform: perspective(500px) translate3d(0, -100px, 60px) rotateX(-20deg);
+  -ms-transform: perspective(500px) translate3d(0, -100px, 60px) rotateX(-20deg);
+  -o-transform: perspective(500px) translate3d(0, -100px, 60px) rotateX(-20deg);
+  transform: perspective(500px) translate3d(0, -100px, 60px) rotateX(-20deg);
+}
+/* line 133, ../scss/sections/_overview.scss */
+.overview-wrapper.hide .title {
+  -webkit-transition: -webkit-transform 0.4s ease-in, opacity 0.4s linear;
+  -moz-transition: -moz-transform 0.4s ease-in, opacity 0.4s linear;
+  -ms-transition: -ms-transform 0.4s ease-in, opacity 0.4s linear;
+  -o-transition: -o-transform 0.4s ease-in, opacity 0.4s linear;
+  transition: transform 0.4s ease-in, opacity 0.4s linear;
+  -webkit-transform: perspective(500px) translate3d(0, -75px, 60px) rotateX(-20deg);
+  -moz-transform: perspective(500px) translate3d(0, -75px, 60px) rotateX(-20deg);
+  -ms-transform: perspective(500px) translate3d(0, -75px, 60px) rotateX(-20deg);
+  -o-transform: perspective(500px) translate3d(0, -75px, 60px) rotateX(-20deg);
+  transform: perspective(500px) translate3d(0, -75px, 60px) rotateX(-20deg);
+}
+/* line 137, ../scss/sections/_overview.scss */
+.overview-wrapper.hide .description {
+  -webkit-transition: -webkit-transform 0.5s ease-in, opacity 0.5s linear;
+  -moz-transition: -moz-transform 0.5s ease-in, opacity 0.5s linear;
+  -ms-transition: -ms-transform 0.5s ease-in, opacity 0.5s linear;
+  -o-transition: -o-transform 0.5s ease-in, opacity 0.5s linear;
+  transition: transform 0.5s ease-in, opacity 0.5s linear;
+  -webkit-transform: perspective(500px) translate3d(0, -50px, 60px) rotateX(-20deg);
+  -moz-transform: perspective(500px) translate3d(0, -50px, 60px) rotateX(-20deg);
+  -ms-transform: perspective(500px) translate3d(0, -50px, 60px) rotateX(-20deg);
+  -o-transform: perspective(500px) translate3d(0, -50px, 60px) rotateX(-20deg);
+  transform: perspective(500px) translate3d(0, -50px, 60px) rotateX(-20deg);
+}
+/* line 141, ../scss/sections/_overview.scss */
+.overview-wrapper.hide .logo-text, .overview-wrapper.hide .title, .overview-wrapper.hide .description {
   opacity: 0;
 }
-/* line 122, ../scss/sections/_overview.scss */
-.overview-wrapper.hide .logo-text, .overview-wrapper.hide .title, .overview-wrapper.hide .description {
-  -webkit-transform: translate3d(0, -20px, 0);
-  -moz-transform: translate3d(0, -20px, 0);
-  -ms-transform: translate3d(0, -20px, 0);
-  -o-transform: translate3d(0, -20px, 0);
-  transform: translate3d(0, -20px, 0);
-}
-/* line 125, ../scss/sections/_overview.scss */
-.overview-wrapper.hide .logo-text {
-  -webkit-transition: -webkit-transform 0.3s ease-in;
-  -moz-transition: -moz-transform 0.3s ease-in;
-  -ms-transition: -ms-transform 0.3s ease-in;
-  -o-transition: -o-transform 0.3s ease-in;
-  transition: transform 0.3s ease-in;
-}
-/* line 128, ../scss/sections/_overview.scss */
-.overview-wrapper.hide .title {
-  -webkit-transition: -webkit-transform 0.3s ease-in 0.1s;
-  -moz-transition: -moz-transform 0.3s ease-in 0.1s;
-  -ms-transition: -ms-transform 0.3s ease-in 0.1s;
-  -o-transition: -o-transform 0.3s ease-in 0.1s;
-  transition: transform 0.3s ease-in 0.1s;
-}
-/* line 131, ../scss/sections/_overview.scss */
-.overview-wrapper.hide .description {
-  -webkit-transition: -webkit-transform 0.3s ease-in 0.2s;
-  -moz-transition: -moz-transform 0.3s ease-in 0.2s;
-  -ms-transition: -ms-transform 0.3s ease-in 0.2s;
-  -o-transition: -o-transform 0.3s ease-in 0.2s;
-  transition: transform 0.3s ease-in 0.2s;
-}
 
-/* line 139, ../scss/sections/_overview.scss */
+/* line 149, ../scss/sections/_overview.scss */
 .overview-bottom {
   display: none;
   position: absolute;
@@ -2769,7 +2787,7 @@ html.is-first-route #header .tab:after {
   -o-transition: opacity 0.5s linear;
   transition: opacity 0.5s linear;
 }
-/* line 149, ../scss/sections/_overview.scss */
+/* line 159, ../scss/sections/_overview.scss */
 .overview-bottom .line {
   position: absolute;
   top: 0;
@@ -2779,14 +2797,14 @@ html.is-first-route #header .tab:after {
   margin-left: -50px;
   background-color: #7e6f85;
 }
-/* line 159, ../scss/sections/_overview.scss */
+/* line 169, ../scss/sections/_overview.scss */
 .overview-bottom .item {
   display: inline-block;
   position: relative;
   width: 120px;
   height: 120px;
 }
-/* line 166, ../scss/sections/_overview.scss */
+/* line 176, ../scss/sections/_overview.scss */
 .overview-bottom .item .icon {
   position: relative;
   margin-left: auto;
@@ -2794,7 +2812,7 @@ html.is-first-route #header .tab:after {
   margin-top: 30px;
   margin-bottom: 13px;
 }
-/* line 174, ../scss/sections/_overview.scss */
+/* line 184, ../scss/sections/_overview.scss */
 .overview-bottom .item .text {
   font-family: "league-gothic-condensed", "Arial Narrow", sans-serif;
   text-transform: uppercase;
@@ -2802,7 +2820,7 @@ html.is-first-route #header .tab:after {
   letter-spacing: 1px;
   color: #e7e5e1;
 }
-/* line 184, ../scss/sections/_overview.scss */
+/* line 194, ../scss/sections/_overview.scss */
 .overview-bottom .favorites .icon {
   width: 41px;
   height: 36px;
@@ -2811,13 +2829,13 @@ html.is-first-route #header .tab:after {
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 184, ../scss/sections/_overview.scss */
+  /* line 194, ../scss/sections/_overview.scss */
   .overview-bottom .favorites .icon {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 400px;
   }
 }
-/* line 191, ../scss/sections/_overview.scss */
+/* line 201, ../scss/sections/_overview.scss */
 .overview-bottom .favorites .count {
   position: absolute;
   left: 28px;
@@ -2834,13 +2852,13 @@ html.is-first-route #header .tab:after {
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 191, ../scss/sections/_overview.scss */
+  /* line 201, ../scss/sections/_overview.scss */
   .overview-bottom .favorites .count {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 400px;
   }
 }
-/* line 208, ../scss/sections/_overview.scss */
+/* line 218, ../scss/sections/_overview.scss */
 .overview-bottom .schedule .icon {
   width: 37px;
   height: 37px;
@@ -2849,22 +2867,22 @@ html.is-first-route #header .tab:after {
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 208, ../scss/sections/_overview.scss */
+  /* line 218, ../scss/sections/_overview.scss */
   .overview-bottom .schedule .icon {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 400px;
   }
 }
-/* line 218, ../scss/sections/_overview.scss */
+/* line 228, ../scss/sections/_overview.scss */
 .overview-bottom.appear {
   display: table;
   opacity: 0;
 }
-/* line 222, ../scss/sections/_overview.scss */
+/* line 232, ../scss/sections/_overview.scss */
 .overview-bottom.show {
   opacity: 1;
 }
-/* line 225, ../scss/sections/_overview.scss */
+/* line 235, ../scss/sections/_overview.scss */
 .overview-bottom.hide {
   opacity: 0;
 }

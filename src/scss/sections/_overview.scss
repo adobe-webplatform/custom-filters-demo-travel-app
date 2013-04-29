@@ -60,8 +60,9 @@
     margin-right: auto;
 
     text-align: center;
+    overflow: visible;
 
-    opacity: 0;
+
 
     .logo {
         display: inline-block;
@@ -94,42 +95,51 @@
         text-shadow: 0 0 5px rgba(0,0,0,.8);
     }
 
-    @include transition(opacity .5s linear);
     &.appear {
         display: table;
-        opacity: 0;
+        .logo-text {
+            @include transform(perspective(500px) translate3d(0, 50px, 60px) rotateX(20deg));
+        }
+        .title {
+            @include transform(perspective(500px) translate3d(0, 75px, 60px) rotateX(20deg));
+        }
+        .description {
+            @include transform(perspective(500px) translate3d(0, 100px, 60px) rotateX(20deg));
+        }
         .logo-text, .title, .description {
-            @include transform(translate3d(0, 20px, 0));
+            opacity: 0;
         }
     }
     &.show{
-        opacity: 1;
         .logo-text {
-            @include transformTransition(.3s ease-out);
+            @include transformTransition(.3s ease-out, opacity .3s linear);
         }
         .title {
-            @include transformTransition(.3s ease-out .1s);
+            @include transformTransition(.4s ease-out, opacity .4s linear);
         }
         .description {
-            @include transformTransition(.3s ease-out .2s);
+            @include transformTransition(.5s ease-out, opacity .5s linear);
         }
         .logo-text, .title, .description {
-            @include cache;
+            opacity: 1;
+            @include transform(perspective(500px) translate3d(0, 0, 0));
         }
     }
     &.hide {
-        opacity: 0;
-        .logo-text, .title, .description {
-            @include transform(translate3d(0, -20px, 0));
-        }
         .logo-text {
-            @include transformTransition(.3s ease-in);
+            @include transformTransition(.3s ease-in, opacity .3s linear);
+            @include transform(perspective(500px) translate3d(0, -100px, 60px) rotateX(-20deg));
         }
         .title {
-            @include transformTransition(.3s ease-in .1s);
+            @include transformTransition(.4s ease-in, opacity .4s linear);
+            @include transform(perspective(500px) translate3d(0, -75px, 60px) rotateX(-20deg));
         }
         .description {
-            @include transformTransition(.3s ease-in .2s);
+            @include transformTransition(.5s ease-in, opacity .5s linear);
+            @include transform(perspective(500px) translate3d(0, -50px, 60px) rotateX(-20deg));
+        }
+        .logo-text, .title, .description {
+            opacity: 0;
         }
     }
 }

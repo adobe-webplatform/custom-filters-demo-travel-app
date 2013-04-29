@@ -32,8 +32,9 @@
         'inputController',
         'edankwan/loader/imageLoader',
         'mout/function/bind',
-        'stageReference'
-    ], function(config, $, AbstractSection, template, sectionController, locationController, scheduleController, inputController, imageLoader, bind, stageReference){
+        'stageReference',
+        'helpers/tweenHelper'
+    ], function(config, $, AbstractSection, template, sectionController, locationController, scheduleController, inputController, imageLoader, bind, stageReference, tweenHelper){
 
         function OverviewSection(){
             _super.constructor.call(this, 'overview', template);
@@ -52,6 +53,8 @@
         var _super = AbstractSection.prototype;
         var _p = OverviewSection.prototype = new AbstractSection();
         _p.constructor = OverviewSection;
+
+        var _transform3DStyle = config.transform3DStyle;
 
         function _initVariables(){
             this.wrapper = this.container.find('.overview-wrapper');
@@ -72,6 +75,7 @@
 
         function _initEvents(){
             inputController.add(this.scheduleBtn, 'click', bind(_onScheduleClick, this));
+            inputController.add(this.likeBtn, 'click', bind(_onLikeClick, this));
             inputController.add(this.container, 'up', bind(_onUp, this));
         }
 
@@ -89,6 +93,19 @@
 
         function _onScheduleClick(){
             scheduleController.showPrompt(this.locationId);
+        }
+
+        function _onLikeClick(){
+            if(!this.location.liked) {
+                var self = this;
+                this.location.like++;
+                this.likeCount.html(this.location.like);
+                this.location.liked = true;
+                tweenHelper.addDom(this.likeBtn[0], {}).to({}, 300).easing( tweenHelper.Easing.Back.Out).onUpdate(function(t){
+                    var scale = 1.4 - Math.abs(t * 2 - 1) * .4;
+                    self.likeCount[0].style[_transform3DStyle] = 'scale3d(' + scale + ',' + scale + ',1)';
+                }).start();
+            }
         }
 
         function _showSpinner(){

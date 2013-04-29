@@ -133,7 +133,7 @@
                     this.bottom.removeClass('appear hide');
                     setTimeout(function(){
                         self._updateLocation();
-                    });
+                    }, 800);
                 }
                 this.currentBg.css({
                     backgroundImage: 'url(' + this.images[this.location.mood] + ')',
@@ -193,9 +193,7 @@
                 this.useAnimation = true;
             }
             this._isShow = true;
-            setTimeout(function(){
-                self.appear.apply(self, [currentNodes]);
-            }, this.useAnimation ? 0 : 800);
+            self.appear.apply(self, [currentNodes]);
         }
 
         function hide(currentSection, currentNodes){

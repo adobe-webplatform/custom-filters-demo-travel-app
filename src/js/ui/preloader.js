@@ -50,8 +50,8 @@ define(
             _wrapper = _container.find('.wrapper');
             _wrapperStyle = _wrapper[0].style;
             _blocks = _wrapper.find('.block');
-            _leftBlockStyle = _blocks[0].style;
-            _rightBlockStyle = _blocks[1].style;
+            _leftBlockStyle = _blocks.filter('.left')[0].style;
+            _rightBlockStyle = _blocks.filter('.right')[0].style;
             _line = _blocks.find('.line');
             _lineStyle = _line[0].style;
             _yearMarks = _container.find('.year-mask');

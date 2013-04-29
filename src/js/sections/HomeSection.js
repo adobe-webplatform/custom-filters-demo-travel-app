@@ -183,6 +183,7 @@
                 tweenHelper.addDom(this.bottomContainer[0], self.isWide ? {x: moveDistance, y: 0} : {x: 0, y: moveDistance}).to({x: 0, y: 0}, 500).easing( tweenHelper.Easing.Sinusoidal.Out).onUpdate(tweenHelper.translateXY3DCallback).start();
 
                 setTimeout(function(){
+                    foundTarget.tearItem.resetShader();
                     self._removeFromMoveContainers();
                     self._setShown();
                 }, 900);

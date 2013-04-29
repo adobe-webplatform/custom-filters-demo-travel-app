@@ -20,6 +20,8 @@ define([
             this._initVariables();
             this._initEvents();
 
+            this.isFirstTime = true;
+
         }
 
         var _super = AbstractSection.prototype;
@@ -32,7 +34,6 @@ define([
 
         function _initVariables(){
             this.containerStyle = this.container[0].style;
-            this.bg = this.container.find('.splash-bg');
             this.cloth = new Cloth({});
             this.boundRender = bind(_render, this);
         }
@@ -106,7 +107,6 @@ define([
         }
 
         function show(currentNodes, previousSection, previousNodes){
-            this.container.removeClass('show');
             this.container.show();
             stageReference.onRender.add(_render, this);
             inputController.onMove.add(_onMove, this);
@@ -116,14 +116,10 @@ define([
                     this.container.addClass('intro');
                     setTimeout(bind(function(){
                         this.container.removeClass('intro');
-                        setTimeout(bind(function(){
-                            // in Chrome Canary v28, the custom filter won't work probably on the children with transform 3d.
-                            this.bg.css(_transform3DStyle, 'none');
-                            this._setShown();
-                        }, this), 3000);
+                        setTimeout(bind(_setShown, this), 3000);
                     }, this));
                 } else {
-                    setTimeout(bind(_setShown, sethislf));
+                    setTimeout(bind(_setShown, this));
                 }
             } else {
                 var params = this.cloth.params;
@@ -141,6 +137,16 @@ define([
         function _setShown(){
             this.container.addClass('show');
             this.needRender = false;
+            if(this.isFirstTime) {
+                var self = this;
+                // in Chrome Canary v28, the custom filter won't work probably on the children with transform 3d.
+                this.container.find('.splash-bg, .splash-container, .splash-container .title').css(_transform3DStyle, 'none');
+                this.isFirstTime = false;
+                setTimeout(function(){
+                    // in Chrome Canary v28, the custom filter won't work probably on the children with transform 3d.
+                    self.container.find('*').css(_transform3DStyle, 'none');
+                }, 400);
+            }
             _super._setShown.call(this);
         }
 
@@ -153,7 +159,6 @@ define([
             tweenHelper.add(params).to({toY: 0, downY: 1, translateY: -.25}, 400).easing( tweenHelper.Easing.Cubic.Out).onComplete(function(){
                 stageReference.onRender.remove(_render, self);
                 self.needRender = false;
-                self.container.removeClass('show');
                 self._setHidden();
             }).start();
         }

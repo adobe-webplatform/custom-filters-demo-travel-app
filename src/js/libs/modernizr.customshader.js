@@ -1,7 +1,5 @@
 (function(){
     Modernizr.addTest('customfilter', function () {
-        // it returns no prefixed filter in Chrome when we use Modernizr.prefix() and using un-prefixed filter doesn't work. For now just hardcode the Webkit vendor.
-        // var prop = Modernizr.prefixed('filter');
 
         var prop = 'filter';
         var prefixedProp = ['WebkitFilter', 'MozFilter', 'msFilter', 'OFilter', 'filter'];

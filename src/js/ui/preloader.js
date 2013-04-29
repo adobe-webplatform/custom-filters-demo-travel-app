@@ -108,8 +108,8 @@
 
         function _onAnimate(){
             var percent = _tweenObj.percent;
-            _yearMarks[0].style[_transform3DStyle] = 'translate3d(0,' + ((1 - percent) * -100) + 'px,0) scale3d(' + (.7 + percent * .3) + ',' + (.7 + percent * .3) + ',0)';
-            _yearMarks[1].style[_transform3DStyle] = 'translate3d(0,' + ((1 - percent) * 100) + 'px,0) scale3d(' + (1.3 - percent * .3) + ',' + (1.3 - percent * .3) + ',0)';
+            _yearMarks[0].style[_transform3DStyle] = 'translate3d(0,' + ((1 - percent) * -50) + 'px,0) scale3d(' + (.7 + percent * .3) + ',' + (.7 + percent * .3) + ',0)';
+            _yearMarks[1].style[_transform3DStyle] = 'translate3d(0,' + ((1 - percent) * 50) + 'px,0) scale3d(' + (1.3 - percent * .3) + ',' + (1.3 - percent * .3) + ',0)';
             _lineStyle.height = (percent * 100) + '%';
             _years.html(percent * YEAR | 0);
             if(percent == 1) {

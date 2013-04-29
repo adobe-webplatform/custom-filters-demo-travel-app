@@ -107,6 +107,7 @@
             _item.note = _noteInput.val();
             scheduleController.save(_item, true);
             scheduleController.hidePrompt();
+            return false;
         }
 
         function _onCancel(e){

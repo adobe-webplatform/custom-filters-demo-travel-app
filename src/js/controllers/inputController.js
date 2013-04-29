@@ -226,7 +226,7 @@
                 i = bubbleHistory.length;
                 while(i--) {
                     elem = bubbleHistory[i];
-                    if(elem.tagName === 'INPUT' || elem.tagName === 'VIDEO') {
+                    if(elem.tagName === 'INPUT' || elem.tagName === 'TEXTAREA' || elem.tagName === 'VIDEO') {
                         autoPreventDefault = false;
                         break;
                     }

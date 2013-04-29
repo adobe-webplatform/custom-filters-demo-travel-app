@@ -131,7 +131,6 @@
 
         function _onHashChange(newPath, oldPath){
             if(newPath === '') {
-                // TODO - replacing hasher with HTML5 history API
                 window.location.href = '#/' + sectionController.DEFAULT_PATH;
             }
             if (newPath == _latestPath) return;
@@ -221,7 +220,6 @@
         }
 
         function goTo(route){
-            // TODO - replacing hasher with HTML5 history API
             window.location.href = '#/' + route;
         }
 

@@ -44,7 +44,7 @@
             this._initEvents();
 
             this.isFirstTime = true;
-
+            this.isRendering = false;
         }
 
         var _super = AbstractSection.prototype;
@@ -82,14 +82,13 @@
             params.vX = 0;
             params.vY = 0;
             this.isDown = true;
+            this._startRender();
             sectionController.appearTarget('home');
         }
 
         function _onMove(e){
             if(!this.isDown || sectionController.isAnimating()) return;
             e.preventDefault();
-            this.needRender = true;
-
             var params = this.cloth.params;
             params.toX = e.x / this.width;
             params.toY = e.y / this.height;
@@ -103,25 +102,21 @@
             if(e.distanceY < -100) {
                 sectionController.goTo('home');
             } else {
+                var self = this;
                 var params = this.cloth.params;
-                tweenHelper.add(params).to({toX: params.downX, toY: 1, downY: 1}, 500).easing( tweenHelper.Easing.Elastic.InOut).start();
+                tweenHelper.add(params).to({toX: params.downX, toY: 1, downY: 1}, 500).easing( tweenHelper.Easing.Elastic.InOut).onComplete(function(){
+                    self._stopRender();
+                }).start();
             }
         }
 
         function _render(){
-            if(this.needRender) {
-                this.cloth.render();
-                if((sectionController.isAnimating() && (_renderToggle ^= 1)) || !sectionController.isAnimating()) {
-                    this.containerStyle[_filterStyle] = this.cloth.getStyle();
-                } else {
-                    this.containerStyle[_transform3DStyle] = 'translate3d(0,-' + (this.cloth.params.translateY / 2) + '%,0)';
-                }
+            this.cloth.render();
+            if((sectionController.isAnimating() && (_renderToggle ^= 1)) || !sectionController.isAnimating()) {
+                this.containerStyle[_filterStyle] = this.cloth.getStyle();
+            } else {
+                this.containerStyle[_transform3DStyle] = 'translate3d(0,-' + (this.cloth.params.translateY / 2) + '%,0)';
             }
-        }
-
-        function _reset(){
-            this.isDown = false;
-            this.needRender = false;
         }
 
         function _onResize(){
@@ -131,7 +126,7 @@
 
         function show(currentNodes, previousSection, previousNodes){
             this.container.show();
-            stageReference.onRender.add(_render, this);
+            this._startRender();
             inputController.onMove.add(_onMove, this);
             inputController.onUp.add(_onUp, this);
             var params = this.cloth.params;
@@ -151,7 +146,6 @@
                 params.toY = 0;
                 params.downY = 1;
                 params.translateY = - .25;//-stageReference.stageHeight / 4;
-                this.needRender = true;
                 this._renderToggle = 0;
                 this._render();
 
@@ -161,35 +155,42 @@
 
         function _setShown(){
             this.container.addClass('show');
-            this.needRender = false;
-            if(this.isFirstTime) {
-                var self = this;
+            this._stopRender();
+            var self = this;
+            // in Chrome Canary v28, the custom filter won't work probably on the children with transform 3d.
+            this.container.find('.splash-bg, .splash-container, .splash-container .title').css(_transform3DStyle, 'none');
+            this.isFirstTime = false;
+            setTimeout(function(){
                 // in Chrome Canary v28, the custom filter won't work probably on the children with transform 3d.
-                this.container.find('.splash-bg, .splash-container, .splash-container .title').css(_transform3DStyle, 'none');
-                this.isFirstTime = false;
-                setTimeout(function(){
-                    // in Chrome Canary v28, the custom filter won't work probably on the children with transform 3d.
-                    self.container.find('*').css(_transform3DStyle, 'none');
-                }, 400);
-            }
+                self.container.find('*').css(_transform3DStyle, 'none');
+            }, 400);
             _super._setShown.call(this);
         }
 
         function hide(currentSection, currentNodes){
             var self = this;
+            this._startRender();
             inputController.onMove.remove(_onMove, this);
             inputController.onUp.remove(_onUp, this);
             var params = this.cloth.params;
-            this.needRender = true;
             tweenHelper.add(params).to({toY: 0, downY: 1, translateY: -.25}, 800).easing( tweenHelper.Easing.Cubic.Out).onComplete(function(){
-                stageReference.onRender.remove(_render, self);
+                self._stopRender();
                 self.container.hide();
-                self.needRender = false;
                 self._setHidden();
             }).start();
         }
 
+        function _startRender(){
+            if(this.isRendering) return;
+            this.isRendering = true;
+            stageReference.onRender.add(_render, this);
+        }
 
+        function _stopRender(){
+            if(!this.isRendering) return;
+            this.isRendering = false;
+            stageReference.onRender.remove(_render, this);
+        }
 
         _p._initVariables = _initVariables;
         _p._initEvents = _initEvents;
@@ -198,7 +199,8 @@
         _p.show = show;
         _p._setShown = _setShown;
         _p.hide = hide;
-        _p._reset = _reset;
+        _p._startRender = _startRender;
+        _p._stopRender = _stopRender;
 
 
         return SplashSection;

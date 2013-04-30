@@ -71,28 +71,35 @@
 
         function show() {
             _updateShaderHeader();
-            if(!_isRendering) stageReference.onRender.add(_render);
             _container.show();
-            _isRendering = true;
             tweenHelper.kill(_roll.params);
             _roll.params.t = 0;
             tweenHelper.add(_roll.params).to({t: 1}, 1200).easing( tweenHelper.Easing.Sinusoidal.Out).onComplete(function(){
-                _isRendering = false;
-                stageReference.onRender.remove(_render);
+                _stopRender();
             }).start();
+            _startRender();
         }
 
         function hide() {
             _updateShaderHeader();
-            if(!_isRendering) stageReference.onRender.add(_render);
-            _isRendering = true;
-
             tweenHelper.add(_roll.params).to({t: 0}, 1200).easing( tweenHelper.Easing.Sinusoidal.Out).onComplete(function(){
-                _isRendering = false;
-                stageReference.onRender.remove(_render);
+                _stopRender();
                 _container.hide();
                 uiController.onTaskKilled();
             }).start();
+            _startRender();
+        }
+
+        function _startRender(){
+            if(_isRendering) return;
+            _isRendering = true;
+            stageReference.onRender.add(_render);
+        }
+
+        function _stopRender(){
+            if(!_isRendering) return;
+            _isRendering = false;
+            stageReference.onRender.remove(_render);
         }
 
         about.init = init;

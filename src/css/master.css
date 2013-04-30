@@ -1973,7 +1973,7 @@ html.is-first-route #header .tab:after {
   float: left;
   width: 50%;
   height: 90px;
-  background-color: #b6b6b6;
+  background-color: #67606b;
   font-style: italic;
   color: #fff;
   -webkit-transition: background-color 0.5s linear;
@@ -1988,7 +1988,7 @@ html.is-first-route #header .tab:after {
   font-size: 42px;
   font-weight: 300;
   line-height: 90px;
-  color: #fff;
+  color: #99939c;
 }
 @media all and (max-width: 603px) {
   /* line 83, ../scss/sections/_schedule.scss */
@@ -2035,8 +2035,8 @@ html.is-first-route #header .tab:after {
   margin-top: -25px;
   text-align: center;
   line-height: 50px;
-  color: #b6b6b6;
-  background-color: #fff;
+  color: #535054;
+  background-color: #88838b;
   border-radius: 25px;
   -webkit-transition: background-color 0.5s linear, color 0.5s linear;
   -moz-transition: background-color 0.5s linear, color 0.5s linear;
@@ -2065,22 +2065,30 @@ html.is-first-route #header .tab:after {
 }
 /* line 154, ../scss/sections/_schedule.scss */
 #schedule .tabs .tab.selected .text {
-  color: #b6b6b6;
+  color: #67606b;
 }
 /* line 158, ../scss/sections/_schedule.scss */
 #schedule .tabs .tab.selected .num {
-  background-color: #b6b6b6;
+  background-color: #67606b;
   color: #fff;
 }
+/* line 164, ../scss/sections/_schedule.scss */
+#schedule .tabs .tab.selected.my-plans .num {
+  background-color: #aa6f55;
+}
+/* line 170, ../scss/sections/_schedule.scss */
+#schedule .tabs .tab.selected.events .num {
+  background-color: #55aa74;
+}
 
-/* line 171, ../scss/sections/_schedule.scss */
+/* line 183, ../scss/sections/_schedule.scss */
 .schedule-item {
   float: left;
   position: relative;
   width: 100%;
   height: 80px;
 }
-/* line 177, ../scss/sections/_schedule.scss */
+/* line 189, ../scss/sections/_schedule.scss */
 .schedule-item.animate {
   -webkit-transition: -webkit-transform 0.3s ease-out;
   -moz-transition: -moz-transform 0.3s ease-out;
@@ -2088,7 +2096,7 @@ html.is-first-route #header .tab:after {
   -o-transition: -o-transform 0.3s ease-out;
   transition: transform 0.3s ease-out;
 }
-/* line 181, ../scss/sections/_schedule.scss */
+/* line 193, ../scss/sections/_schedule.scss */
 .schedule-item .text {
   margin-left: 47px;
   margin-right: 195px;
@@ -2101,7 +2109,7 @@ html.is-first-route #header .tab:after {
   text-overflow: ellipsis;
 }
 @media all and (max-width: 603px) {
-  /* line 181, ../scss/sections/_schedule.scss */
+  /* line 193, ../scss/sections/_schedule.scss */
   .schedule-item .text {
     margin-left: 20px;
     margin-right: 125px;
@@ -2109,7 +2117,7 @@ html.is-first-route #header .tab:after {
     letter-spacing: -1px;
   }
 }
-/* line 202, ../scss/sections/_schedule.scss */
+/* line 214, ../scss/sections/_schedule.scss */
 .schedule-item .prompt-btn {
   position: absolute;
   top: 0;
@@ -2122,7 +2130,7 @@ html.is-first-route #header .tab:after {
   color: rgba(255, 255, 255, 0.7);
 }
 @media all and (max-width: 603px) {
-  /* line 202, ../scss/sections/_schedule.scss */
+  /* line 214, ../scss/sections/_schedule.scss */
   .schedule-item .prompt-btn {
     width: 50px;
     right: 82px;
@@ -2131,7 +2139,7 @@ html.is-first-route #header .tab:after {
     text-align: center;
   }
 }
-/* line 223, ../scss/sections/_schedule.scss */
+/* line 235, ../scss/sections/_schedule.scss */
 .schedule-item .date {
   position: absolute;
   top: 0;
@@ -2144,7 +2152,7 @@ html.is-first-route #header .tab:after {
   color: rgba(0, 0, 0, 0.3);
 }
 @media all and (max-width: 603px) {
-  /* line 223, ../scss/sections/_schedule.scss */
+  /* line 235, ../scss/sections/_schedule.scss */
   .schedule-item .date {
     width: 60px;
     right: 24px;
@@ -2152,7 +2160,7 @@ html.is-first-route #header .tab:after {
     letter-spacing: 0px;
   }
 }
-/* line 243, ../scss/sections/_schedule.scss */
+/* line 255, ../scss/sections/_schedule.scss */
 .schedule-item .arrow {
   position: absolute;
   top: 50%;
@@ -2165,19 +2173,19 @@ html.is-first-route #header .tab:after {
   background-repeat: no-repeat;
 }
 @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-  /* line 243, ../scss/sections/_schedule.scss */
+  /* line 255, ../scss/sections/_schedule.scss */
   .schedule-item .arrow {
     background-image: url(../assets/images/ui_x2.png);
     background-size: 225px 400px;
   }
 }
 @media all and (max-width: 603px) {
-  /* line 243, ../scss/sections/_schedule.scss */
+  /* line 255, ../scss/sections/_schedule.scss */
   .schedule-item .arrow {
     right: 15px;
   }
 }
-/* line 258, ../scss/sections/_schedule.scss */
+/* line 270, ../scss/sections/_schedule.scss */
 .schedule-item .shader-shadow {
   display: none;
   position: absolute;
@@ -2191,7 +2199,7 @@ html.is-first-route #header .tab:after {
   border-bottom-style: solid;
   pointer-events: none;
 }
-/* line 275, ../scss/sections/_schedule.scss */
+/* line 287, ../scss/sections/_schedule.scss */
 .schedule-item.show {
   display: block;
 }

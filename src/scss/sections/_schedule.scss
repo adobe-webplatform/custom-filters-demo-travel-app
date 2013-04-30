@@ -71,7 +71,7 @@
             float: left;
             width: 50%;
             height: 90px;
-            background-color: #b6b6b6;
+            background-color: #67606b;
 
             font-style: italic;
 
@@ -86,7 +86,7 @@
                 font-weight: 300;
                 line-height: 90px;
 
-                color: #fff;
+                color: #99939c;
 
                 @media all and (max-width : 603px) {
                     margin-left: 20px;
@@ -126,9 +126,9 @@
                 margin-top: -25px;
                 text-align: center;
                 line-height: 50px;
-                color: #b6b6b6;
+                color: #535054;
 
-                background-color: #fff;
+                background-color: #88838b;
                 border-radius: 25px;
 
                 @include transition(background-color .5s linear, color .5s linear);
@@ -152,12 +152,24 @@
                 }
 
                 .text {
-                    color: #b6b6b6;
+                    color: #67606b;
                 }
 
                 .num {
-                    background-color: #b6b6b6;
+                    background-color: #67606b;
                     color: #fff;
+                }
+
+                &.my-plans {
+                    .num {
+                        background-color: #aa6f55;
+                    }
+                }
+
+                &.events {
+                    .num {
+                        background-color: #55aa74;
+                    }
                 }
 
             }

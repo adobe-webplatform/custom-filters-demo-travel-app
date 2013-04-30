@@ -25,9 +25,11 @@
         'exports',
         'config',
         'TWEEN',
-        'mout/object/mixIn'
+        'mout/object/mixIn',
+        'mout/function/bind',
+        'stageReference'
     ],
-    function( tweenHelper, config, TWEEN, mixIn){
+    function( tweenHelper, config, TWEEN, mixIn, bind,stageReference){
 
         var undef;
 
@@ -36,13 +38,22 @@
         function add(obj) {
             kill(obj);
             obj.__tween =  new TWEEN.Tween(obj);
+
+            //override TWEEN onComplete
+            obj.__tween.onComplete(bind(_onComplete, obj.__tween));
+            obj.__tween.onComplete = function(func){
+                this.__onComplete = func;
+                return this;
+            };
+            obj.__tween.__isAnimating = true;
+            _onStart();
             return obj.__tween;
         }
 
         function kill(obj) {
-            if(obj.__tween) {
+            if(obj.__tween && obj.__tween.__isAnimating) {
+                _onComplete.call(obj.__tween);
                 TWEEN.remove(obj.__tween);
-                obj.__tween = undef;
             }
         }
 
@@ -51,8 +62,26 @@
             dom.__tweenObj = dom.__tweenObj || {};
             if(!dom.__tweenObj.__dom) dom.__tweenObj.__dom = dom;
             if(defaultValues) mixIn(dom.__tweenObj, defaultValues);
-            dom.__tween =  new TWEEN.Tween(dom.__tweenObj);
+            dom.__tween =  add(dom.__tweenObj);
             return dom.__tween;
+        }
+
+        function _onStart(){
+            if(TWEEN.getAll().length === 0) {
+                stageReference.onRender.add(_onTWEENUpdate, null, null, null, -9999);
+            }
+        }
+
+        function _onComplete(){
+            if(this.__onComplete) this.__onComplete();
+            if(TWEEN.getAll().length === 1) {
+                stageReference.onRender.remove(_onTWEENUpdate, null, null, null, -9999);
+            }
+            this.__isAnimating = false;
+        }
+
+        function _onTWEENUpdate(){
+            TWEEN.update();
         }
 
         function translateXY3DCallback(){

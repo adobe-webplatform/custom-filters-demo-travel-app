@@ -32,10 +32,9 @@ define([
         'sectionController',
         'locationController',
         'preloaderController',
-        'stageReference',
-        'TWEEN'
+        'stageReference'
     ],
-    function(app, config, $, inputController, uiController, scheduleController, sectionController, locationController, preloaderController, stageReference, TWEEN) {
+    function(app, config, $, inputController, uiController, scheduleController, sectionController, locationController, preloaderController, stageReference) {
 
         app.container = null;
 
@@ -45,8 +44,6 @@ define([
             app.container = $('#app');
 
             stageReference.init();
-            stageReference.onRender.add(_onTWEENUpdate, null, null, null, -9999);
-            stageReference.startRender();
             stageReference.onResize.add(onResize);
             stageReference.onResize.dispatch();
 
@@ -55,16 +52,11 @@ define([
             locationController.init();
             scheduleController.init();
             sectionController.preInit();
-            //sectionController.init();
 
             preloaderController.init();
             preloaderController.add($('#app'));
 
             preloaderController.start(start);
-        }
-
-        function _onTWEENUpdate(){
-            TWEEN.update();
         }
 
         function onResize(){

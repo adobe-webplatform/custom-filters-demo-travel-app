@@ -13,7 +13,21 @@ define('stageReference',
         var onResize = new signals.Signal();
         var onRender = new signals.Signal();
 
-        var _isRendering = stageReference.isRendering = false;
+        var rAFId = 0;
+
+        // override onRender Signal
+        onRender.add = function(args){
+            signals.Signal.prototype.add.apply(onRender, arguments);
+            if(onRender._bindings.length === 1) {
+                _render();
+            }
+        };
+        onRender.remove = function(args){
+            signals.Signal.prototype.remove.apply(onRender, arguments);
+            if(onRender._bindings.length === 0) {
+                window.cancelAnimationFrame(rAFId);
+            }
+        };
 
         function init(){
             if('addEventListener' in window) {
@@ -41,31 +55,13 @@ define('stageReference',
         }
 
         function _render(){
-            if(_isRendering) {
-                window.requestAnimationFrame(_render);
-                onRender.dispatch();
-            }
-        }
-
-        function startRender() {
-            _isRendering = stageReference.isRendering = true;
-            _render();
-        }
-
-        function stopRender() {
-            _isRendering = stageReference.isRendering = false;
-        }
-
-        function renderOnce (){
+            rAFId = window.requestAnimationFrame(_render);
             onRender.dispatch();
         }
 
         stageReference.init = init;
         stageReference.onResize =  onResize;
         stageReference.onRender =  onRender;
-        stageReference.startRender = startRender;
-        stageReference.stopRender = stopRender;
-        stageReference.renderOnce = renderOnce;
 
         return stageReference;
 

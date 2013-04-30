@@ -83,7 +83,6 @@
             if(!_isInitialized) {
                 inputController.onMove.add(_onItemMove);
                 inputController.onUp.add(_onItemUp);
-                stageReference.onRender.add(_renderAll);
                 _isInitialized = true;
             }
         }
@@ -104,11 +103,15 @@
             this.render();
             this.render();
             needRenderItems.push(this);
+            if(needRenderItems.length == 1 ) stageReference.onRender.add(_renderAll);
         }
 
         function resetShader(){
             var index = indexOf(needRenderItems, this);
-            if(index > -1) needRenderItems.splice(index, 1);
+            if(index > -1) {
+                needRenderItems.splice(index, 1);
+                if(needRenderItems.length === 0 ) stageReference.onRender.remove(_renderAll);
+            }
             this.shadowStyle.display = 'none';
             this.foldParams.distance = 0;
             this.elemStyle[_transform3DStyle] = 'translateZ(0)';
@@ -160,7 +163,10 @@
                 if(this.onUnPeekCallback) this.onUnPeekCallback();
             } else if(params.distance === 1) {
                 var index = indexOf(needRenderItems, this);
-                if(index > -1) needRenderItems.splice(index, 1);
+                if(index > -1) {
+                    needRenderItems.splice(index, 1);
+                    if(needRenderItems.length === 0 ) stageReference.onRender.remove(_renderAll);
+                }
             }
         }
 

@@ -134,7 +134,10 @@
             stageReference.onRender.add(_render, this);
             inputController.onMove.add(_onMove, this);
             inputController.onUp.add(_onUp, this);
+            var params = this.cloth.params;
             if(!previousSection || previousNodes.length < 0) {
+                params.toY = 1;
+                params.downY = 1;
                 if(sectionController.isFirstRoute) {
                     this.container.addClass('intro');
                     setTimeout(bind(function(){
@@ -145,7 +148,6 @@
                     setTimeout(bind(_setShown, this));
                 }
             } else {
-                var params = this.cloth.params;
                 params.toY = 0;
                 params.downY = 1;
                 params.translateY = - .25;//-stageReference.stageHeight / 4;

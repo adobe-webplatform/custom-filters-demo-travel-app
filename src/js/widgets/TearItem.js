@@ -67,7 +67,6 @@
             if(!_isInitialized) {
                 inputController.onMove.add(_onItemMove);
                 inputController.onUp.add(_onItemUp);
-                stageReference.onRender.add(_renderAll);
                 _isInitialized = true;
             }
         }
@@ -95,12 +94,16 @@
             var params = this.tear.params;
             this.elemStyle.zIndex = this.$elem.siblings().length + 100;
             needRenderItems.push(this);
+            if(needRenderItems.length == 1 ) stageReference.onRender.add(_renderAll);
             this.render();
         }
 
         function resetShader(){
             var index = indexOf(needRenderItems, this);
-            if(index > -1) needRenderItems.splice(index, 1);
+            if(index > -1) {
+                needRenderItems.splice(index, 1);
+                if(needRenderItems.length === 0 ) stageReference.onRender.remove(_renderAll);
+            }
             this.tearParams.distance = this.tearParams.prevDistance = this.tearParams.bounce = 0;
             this.elemStyle[_filterStyle] = 'none';
             this.elemStyle.zIndex = 'auto';
@@ -111,6 +114,7 @@
         function resetDown(){
             var index = indexOf(_isDownItems, this);
             if(index > -1) _isDownItems.splice(index, 1);
+            if(needRenderItems.length === 0 ) stageReference.onRender.remove(_renderAll);
         }
 
         function setTo(distance){
@@ -158,7 +162,10 @@
                 this.resetShader();
             } else if(params.distance === 1) {
                 var index = indexOf(needRenderItems, this);
-                if(index > -1) needRenderItems.splice(index, 1);
+                if(index > -1) {
+                    needRenderItems.splice(index, 1);
+                    if(needRenderItems.length === 0 ) stageReference.onRender.remove(_renderAll);
+                }
             }
         }
 

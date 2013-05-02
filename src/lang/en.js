@@ -58,9 +58,8 @@
 
     "about" : {
         "logo_text" : "About the app",
-        "copy" : "It is a demo of CSS custom shader for mobile device by Adobe.",
-        "credits_title" : "CREDITS",
-        "credits_copy" : "Developed by <a href=\"mailto:edankwan@edankwan.com\">Edan Kwan</a><br>Designed by <a href=\"mailto:ddvale@gmail.com\">David Vale</a><br>",
+        "copy" : "Explore LA showcases UI experiences that become possible with Custom Filters that use GLSL Shaders. ",
+        "share_title" : "Share",
         "icons" : [
             {
                 "id" : "github",

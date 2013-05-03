@@ -59,7 +59,7 @@
     "about" : {
         "logo_text" : "About the app",
         "copy" : "Explore LA showcases UI experiences that become possible with Custom Filters that use GLSL Shaders. ",
-        "share_title" : "Share",
+        "share_title" : "FROM",
         "icons" : [
             {
                 "id" : "github",

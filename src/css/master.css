@@ -1319,14 +1319,14 @@ html.is-first-route #header .tab:after {
   font-style: italic;
 }
 /* line 54, ../scss/ui/_about.scss */
-#about .credits-title {
+#about .share-title {
   margin-top: 30px;
   font-family: 'league-gothic';
   font-size: 22px;
   font-weight: 400;
 }
 /* line 61, ../scss/ui/_about.scss */
-#about .credits-copy {
+#about .share-links {
   margin-top: 5px;
   font-size: 18px;
   font-weight: 300;
